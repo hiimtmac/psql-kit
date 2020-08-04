@@ -6,7 +6,7 @@ struct QueryBuilder {
     typealias Component = PSQLExpression
     
     static func buildBlock(_ components: Component...) -> Component {
-        PSQLList(components, separator: " ")
+        PSQLList(components, separator: PSQLRaw.space)
     }
     
     static func buildExpression(_ expression: Expression) -> Component {

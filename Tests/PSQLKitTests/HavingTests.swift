@@ -36,6 +36,7 @@ final class HavingTests: PSQLTestCase {
         XCTAssertEqual(serializer.psql, #"HAVING ("my_model"."name"="x"."name") AND ("x"."name"="my_model"."name") AND (("x"."name"!="x"."name") OR ("my_model"."name"!="my_model"."name"))"#)
     }
     
+    
     static var allTests = [
         ("testHaving1", testHaving1),
         ("testHaving2", testHaving2),

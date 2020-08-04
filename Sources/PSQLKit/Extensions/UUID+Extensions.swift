@@ -12,3 +12,7 @@ extension UUID: TypeComparable {
     typealias T = Self
     var select: PSQLExpression { self }
 }
+
+extension UUID: ExpressibleAsCompare {
+    var compare: PSQLExpression { self }
+}

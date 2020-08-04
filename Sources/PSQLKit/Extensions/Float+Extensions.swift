@@ -12,3 +12,7 @@ extension Float: TypeComparable {
     typealias T = Self
     var select: PSQLExpression { self }
 }
+
+extension Float: ExpressibleAsCompare {
+    var compare: PSQLExpression { self }
+}

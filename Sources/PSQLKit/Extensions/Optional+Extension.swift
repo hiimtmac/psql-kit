@@ -21,3 +21,7 @@ extension Optional: ExpressibleAsSelect where Wrapped: ExpressibleAsSelect & PSQ
 extension Optional: TypeComparable where Wrapped: TypeComparable & PSQLable {
     typealias T = Wrapped
 }
+
+extension Optional: ExpressibleAsCompare where Wrapped: ExpressibleAsCompare & PSQLable {
+    var compare: PSQLExpression { self }
+}

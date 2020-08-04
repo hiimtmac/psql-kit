@@ -29,6 +29,10 @@ extension SimpleDate: TypeComparable {
     var select: PSQLExpression { self }
 }
 
+extension SimpleDate: ExpressibleAsCompare {
+    var compare: PSQLExpression { self }
+}
+
 struct TimestampDate {
     let storage: Date
     
@@ -56,4 +60,8 @@ extension TimestampDate: PSQLable {
 extension TimestampDate: TypeComparable {
     typealias T = Self
     var select: PSQLExpression { self }
+}
+
+extension TimestampDate: ExpressibleAsCompare {
+    var compare: PSQLExpression { self }
 }

@@ -12,3 +12,7 @@ extension Double: TypeComparable {
     typealias T = Self
     var select: PSQLExpression { self }
 }
+
+extension Double: ExpressibleAsCompare {
+    var compare: PSQLExpression { self }
+}

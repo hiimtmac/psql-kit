@@ -14,3 +14,7 @@ extension String: TypeComparable {
     typealias T = Self
     var select: PSQLExpression { self }
 }
+
+extension String: ExpressibleAsCompare {
+    var compare: PSQLExpression { self }
+}

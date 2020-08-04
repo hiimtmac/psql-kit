@@ -50,6 +50,21 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(serializer.psql, #"WHERE ("x"."name" BETWEEN ('hello' AND 'hi'))"#)
     }
     
+    func testLiteral() {
+        let w = WHERE {
+            m.$name == "hello"
+            m.$name != "hello"
+            m.$age < 29
+            m.$age <= 29
+            m.$age > 29
+            m.$age >= 29
+            m.$age >><< (29, 30)
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.psql, #"WHERE ("x"."name"='hello') AND ("x"."name"!='hello') AND ("x"."age"<29) AND ("x"."age"<=29) AND ("x"."age">29) AND ("x"."age">=29) AND ("x"."age" BETWEEN (29 AND 30))"#)
+    }
+    
     func testWhereN() {
         let w = WHERE {
             MyModel.$name == m.$name
@@ -66,6 +81,7 @@ final class WhereTests: PSQLTestCase {
         ("testNotEqual", testNotEqual),
         ("testIn", testIn),
         ("testNotIn", testNotIn),
+        ("testLiteral", testLiteral),
         ("testWhereN", testWhereN)
     ]
 }

@@ -7,6 +7,7 @@ final class MyModel: Model, Table {
     
     @ID var id: UUID?
     @Field(key: "name") var name: String
+    @Field(key: "age") var age: Int
     
     init() {}
 }
