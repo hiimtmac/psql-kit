@@ -15,3 +15,10 @@ struct PSQLRaw: PSQLExpression {
         serializer.binds += self.binds
     }
 }
+
+extension PSQLRaw: ExpressibleByStringLiteral {
+    init(stringLiteral value: String) {
+        self.psql = value
+        self.binds = []
+    }
+}

@@ -22,15 +22,6 @@ struct PSQLSerializer {
     func bindPlaceholder(at position: Int) -> PSQLExpression {
         return PSQLRaw("$" + position.description)
     }
-
-    func literalBoolean(_ value: Bool) -> PSQLExpression {
-        switch value {
-        case false:
-            return PSQLRaw("false")
-        case true:
-            return PSQLRaw("true")
-        }
-    }
     
     mutating func writeSpace() {
         self.write(" ")

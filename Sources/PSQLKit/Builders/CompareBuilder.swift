@@ -6,7 +6,7 @@ struct CompareBuilder {
     typealias Component = PSQLExpression
     
     static func buildBlock(_ components: Component...) -> Component {
-        PSQLList(components, separator: PSQLRaw(" AND "))
+        PSQLList(components, separator: " AND ")
     }
     
     static func buildExpression(_ expression: Expression) -> Component {
