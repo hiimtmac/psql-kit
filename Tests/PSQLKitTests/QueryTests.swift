@@ -39,6 +39,14 @@ final class QueryTests: PSQLTestCase {
     
     func testQueryN() {
         let q = QUERY {
+            WITH {
+                QUERY {
+                    SELECT { m.$name }
+                    FROM { m.table }
+                }
+                .asWith("with")
+            }
+            
             SELECT {
                 m.$name
                 m.$name
@@ -49,7 +57,7 @@ final class QueryTests: PSQLTestCase {
         }
         
         q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT "x"."name"::text, "x"."name"::text FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" ASC"#)
+        XCTAssertEqual(serializer.psql, #"WITH "with" AS (SELECT "x"."name"::text FROM "my_model" AS "x") SELECT "x"."name"::text, "x"."name"::text FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" ASC"#)
     }
     
     static var allTests = [

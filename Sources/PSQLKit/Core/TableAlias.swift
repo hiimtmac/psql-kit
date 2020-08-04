@@ -15,6 +15,8 @@ struct TableAlias<T: Table> {
         let table = PSQLTableExpression(path: path, schema: T.schema)
         return .init(table: table, alias: alias)
     }
+    
+    var with: Self { self }
 }
 
 extension TableAlias {
@@ -113,23 +115,23 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - ParentProperty
-    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLTypedColumnExpression<U> {
+    subscript<U, V: PSQLable>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLTypedColumnExpression<V> {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.$id.key))
     }
     
-    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLOrderByExpression {
+    subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLOrderByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.$id.key))
     }
     
-    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLGroupByExpression {
+    subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLGroupByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.$id.key))
     }
     
-    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLSelectExpression {
+    subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLSelectExpression where U.IDValue: PSQLable {
         let field = T()[keyPath: keyPath]
-        return .init(selection: column(key: field.$id.key), type: U.psqlType, alias: nil)
+        return .init(selection: column(key: field.$id.key), type: U.IDValue.psqlType, alias: nil)
     }
 }

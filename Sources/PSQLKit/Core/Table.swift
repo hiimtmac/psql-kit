@@ -13,6 +13,10 @@ protocol Table: ExpressibleAsFrom {
 extension Table {
     typealias Column<Value: PSQLable> = ColumnProperty<Self, Value>
     
+    static var schema: String { "\(Self.self)" }
+    
+    static var with: Self.Type { Self.self }
+    
     static func column(key: String) -> PSQLPathColumnExpression {
         .init(
            alias: nil,

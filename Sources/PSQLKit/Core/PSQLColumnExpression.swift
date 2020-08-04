@@ -1,9 +1,20 @@
 import Foundation
+import FluentKit
 
 protocol PSQLColumnExpression: PSQLExpression {}
 
 struct PSQLTypedColumnExpression<T: PSQLable> {
     let column: PSQLColumnExpression
+}
+
+extension PSQLTypedColumnExpression where T == Date {
+    var simple: PSQLTypedColumnExpression<SimpleDate> {
+        .init(column: column)
+    }
+    
+    var timestamp: PSQLTypedColumnExpression<TimestampDate> {
+        .init(column: column)
+    }
 }
 
 extension PSQLTypedColumnExpression: TypeComparable {

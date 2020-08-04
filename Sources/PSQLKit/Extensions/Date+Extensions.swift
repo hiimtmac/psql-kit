@@ -1,5 +1,19 @@
 import Foundation
 
+extension Date {
+    var simple: SimpleDate { .init(self) }
+    var timestamp: TimestampDate { .init(self) }
+}
+
+extension Date: PSQLable {
+    static var psqlType: PSQLType { .date }
+    
+    func serialize(to serializer: inout PSQLSerializer) {
+        let simple = SimpleDate(self)
+        simple.serialize(to: &serializer)
+    }
+}
+
 struct SimpleDate {
     let storage: Date
     
