@@ -1,20 +1,15 @@
 import Foundation
 
 struct PSQLList: PSQLExpression {
-    let bounds: (PSQLExpression, PSQLExpression)?
     let expressions: [PSQLExpression]
     let separator: PSQLExpression
 
-    init(_ expressions: [PSQLExpression], separator: PSQLExpression = PSQLRaw(", "), bounds: (PSQLExpression, PSQLExpression)? = nil) {
-        self.bounds = bounds
+    init(_ expressions: [PSQLExpression], separator: PSQLExpression = PSQLRaw(", ")) {
         self.expressions = expressions
         self.separator = separator
     }
     
     func serialize(to serializer: inout PSQLSerializer) {
-        if let bounds = bounds {
-            bounds.0.serialize(to: &serializer)
-        }
         var first = true
         for el in self.expressions {
             if !first {
@@ -22,9 +17,6 @@ struct PSQLList: PSQLExpression {
             }
             first = false
             el.serialize(to: &serializer)
-        }
-        if let bounds = bounds {
-            bounds.1.serialize(to: &serializer)
         }
     }
 }

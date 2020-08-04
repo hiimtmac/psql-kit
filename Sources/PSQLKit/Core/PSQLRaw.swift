@@ -18,6 +18,4 @@ struct PSQLRaw: PSQLExpression {
 extension PSQLRaw {
     static var and: Self { .init(" AND ") }
     static var space: Self { .init(" ") }
-    static var openBracket: Self { .init("(") }
-    static var closedBracket: Self { .init(")") }
 }
