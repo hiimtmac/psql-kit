@@ -39,16 +39,19 @@ extension TableAlias {
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLOrderByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLGroupByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLSelectExpression {
         let field = T()[keyPath: keyPath]
         return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
@@ -78,16 +81,19 @@ extension TableAlias where T: Model {
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLOrderByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLGroupByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLSelectExpression {
         let field = T()[keyPath: keyPath]
         return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
@@ -99,16 +105,19 @@ extension TableAlias where T: Model {
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLOrderByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLGroupByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.key))
     }
     
+    @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLSelectExpression {
         let field = T()[keyPath: keyPath]
         return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
@@ -120,16 +129,19 @@ extension TableAlias where T: Model {
         return .init(column: column(key: field.$id.key))
     }
     
+    @_disfavoredOverload
     subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLOrderByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.$id.key))
     }
     
+    @_disfavoredOverload
     subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLGroupByExpression {
         let field = T()[keyPath: keyPath]
         return .init(column: column(key: field.$id.key))
     }
     
+    @_disfavoredOverload
     subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLSelectExpression where U.IDValue: PSQLable {
         let field = T()[keyPath: keyPath]
         return .init(selection: column(key: field.$id.key), type: U.IDValue.psqlType, alias: nil)
