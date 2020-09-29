@@ -1,51 +1,33 @@
 import Foundation
-import FluentKit
 
-protocol PSQLColumnExpression: PSQLExpression {}
-
-struct PSQLTypedColumnExpression<T: PSQLable> {
-    let column: PSQLColumnExpression
-}
-
-extension PSQLTypedColumnExpression where T == Date {
-    var simple: PSQLTypedColumnExpression<SimpleDate> {
-        .init(column: column)
-    }
-    
-    var timestamp: PSQLTypedColumnExpression<TimestampDate> {
-        .init(column: column)
-    }
-}
-
-extension PSQLTypedColumnExpression: TypeComparable {
-    var select: PSQLExpression { column }
-}
-
-extension PSQLTypedColumnExpression: ExpressibleAsCompare {
-    var compare: PSQLExpression { column }
-}
-
-struct PSQLPathColumnExpression: PSQLColumnExpression {
-    let alias: String?
-    let path: String?
-    let schema: String?
-    let column: String
+///
+/// ```
+/// "p"."name"
+/// "public"."people"."name"
+/// "raw_column"
+/// ```
+///
+struct PSQLColumnExpression: PSQLExpression {
+    let aliasName: String?
+    let pathName: String?
+    let schemaName: String?
+    let columnName: String
     
     func serialize(to serializer: inout PSQLSerializer) {
-        if let alias = alias {
+        if let alias = aliasName {
             serializer.writeQuote()
             serializer.write(alias)
             serializer.writeQuote()
             serializer.writePeriod()
         } else {
-            if let path = path {
+            if let path = pathName {
                 serializer.writeQuote()
                 serializer.write(path)
                 serializer.writeQuote()
                 serializer.writePeriod()
             }
             
-            if let schema = schema {
+            if let schema = schemaName {
                 serializer.writeQuote()
                 serializer.write(schema)
                 serializer.writeQuote()
@@ -54,51 +36,88 @@ struct PSQLPathColumnExpression: PSQLColumnExpression {
         }
         
         serializer.writeQuote()
-        serializer.write(column)
+        serializer.write(columnName)
         serializer.writeQuote()
     }
 }
 
-struct PSQLLiteralColumnExpression: PSQLColumnExpression {
-    let value: PSQLExpression
+protocol PSQLColumnSelectionExpression: PSQLExpression {}
+
+///
+/// ```
+/// "p"."name"::text AS "n"
+/// "public"."people"."name"::text
+/// "raw_column"::text
+/// ```
+///
+struct PSQLColumnColumnSelection: PSQLColumnSelectionExpression {
+    let aliasName: String?
+    let pathName: String?
+    let schemaName: String?
+    let columnName: String
+    let columnType: String
+    let columnAlias: String?
     
     func serialize(to serializer: inout PSQLSerializer) {
-        value.serialize(to: &serializer)
-    }
-}
-
-typealias COLUMN = PSQLRawColumnExpression
-
-struct PSQLRawColumnExpression<T: PSQLable>: PSQLColumnExpression {
-    let column: String
-    
-    init(_ raw: String) {
-        self.column = raw
-    }
-    
-    func serialize(to serializer: inout PSQLSerializer) {
-        serializer.writeQuote()
-        serializer.write(column)
-        serializer.writeQuote()
-        serializer.write("::")
-        serializer.write(T.psqlType.psqlValue)
-    }
-}
-
-extension PSQLRawColumnExpression: ExpressibleAsSelect {
-    var select: PSQLExpression { self }
-}
-
-extension PSQLRawColumnExpression: ExpressibleAsOrderBy {
-    struct OrderBy: PSQLExpression {
-        let column: String
-        
-        func serialize(to serializer: inout PSQLSerializer) {
+        if let alias = aliasName {
             serializer.writeQuote()
-            serializer.write(column)
+            serializer.write(alias)
+            serializer.writeQuote()
+            serializer.writePeriod()
+        } else {
+            if let path = pathName {
+                serializer.writeQuote()
+                serializer.write(path)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            }
+            
+            if let schema = schemaName {
+                serializer.writeQuote()
+                serializer.write(schema)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            }
+        }
+        
+        serializer.writeQuote()
+        serializer.write(columnName)
+        serializer.writeQuote()
+        
+        serializer.write("::")
+        serializer.write(columnType)
+        
+        if let alias = columnAlias {
+            serializer.write(" AS ")
+            serializer.writeQuote()
+            serializer.write(alias)
             serializer.writeQuote()
         }
     }
+}
+
+///
+/// ```
+/// 'raw_string'::text
+/// 3::integer
+/// TRUE::boolean AS "bool"
+/// ```
+///
+struct PSQLLiteralColumnSelection: PSQLColumnSelectionExpression {
+    let value: PSQLExpression
+    let type: String
+    let columnAlias: String?
     
-    var orderBy: PSQLExpression { OrderBy(column: column) }
+    func serialize(to serializer: inout PSQLSerializer) {
+        value.serialize(to: &serializer)
+        serializer.write("::")
+        serializer.write(type)
+        
+        if let alias = columnAlias {
+            serializer.write(" AS ")
+            serializer.writeQuote()
+            serializer.write(alias)
+            serializer.writeQuote()
+        }
+    }
 }

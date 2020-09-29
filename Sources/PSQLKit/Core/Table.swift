@@ -4,7 +4,7 @@ import FluentKit
 @dynamicMemberLookup
 protocol Table: ExpressibleAsFrom {
     init()
-    /// vapor `table`
+    /// fluent `table`
     static var schema: String { get }
     /// psql `schema`
     static var path: String? { get }
@@ -17,36 +17,35 @@ extension Table {
     
     static var with: Self.Type { Self.self }
     
-    static func column(key: String) -> PSQLPathColumnExpression {
-        .init(
-           alias: nil,
-           path: Self.path,
-           schema: Self.schema,
-           column: key
-       )
-    }
-    
-    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> PSQLTypedColumnExpression<T> {
+    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> PSQLKit.Column<T> {
         let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+        return PSQLKit.Column(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.key
+        )
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> PSQLOrderByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> PSQLGroupByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> PSQLSelectExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(selection: column(key: field.key), type: T.psqlType, alias: nil)
+//        let field = Self()[keyPath: keyPath]
+//        return .init(selection: column(key: field.key), type: T.psqlType, alias: nil)
+        fatalError()
     }
     
     static var path: String? { nil }
@@ -69,84 +68,99 @@ extension Table {
 }
 
 extension Table where Self: Model {
-    static func column(key: FieldKey) -> PSQLPathColumnExpression {
-        .init(
-           alias: nil,
-           path: Self.path,
-           schema: Self.schema,
-           column: key.description
-       )
-    }
-    
     // MARK: - FieldProperty
-    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> PSQLTypedColumnExpression<T> {
+    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> PSQLKit.Column<T> {
         let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+        return PSQLKit.Column(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.key.description
+        )
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> PSQLOrderByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> PSQLGroupByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> PSQLSelectExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(selection: column(key: field.key), type: T.psqlType, alias: nil)
+//        let field = Self()[keyPath: keyPath]
+//        return .init(selection: column(key: field.key), type: T.psqlType, alias: nil)
+        fatalError()
     }
     
     // MARK: - IDProperty
-    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> PSQLTypedColumnExpression<T> {
+    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> PSQLKit.Column<T> {
         let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+        return PSQLKit.Column(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.key.description
+        )
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> PSQLOrderByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> PSQLGroupByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> PSQLSelectExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(selection: column(key: field.key), type: T.psqlType, alias: nil)
+//        let field = Self()[keyPath: keyPath]
+//        return .init(selection: column(key: field.key), type: T.psqlType, alias: nil)
+        fatalError()
     }
     
     // MARK: - ParentProperty
-    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> PSQLTypedColumnExpression<T> {
+    static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> PSQLKit.Column<T> {
         let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.$id.key))
+        return PSQLKit.Column(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.$id.key.description
+        )
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> PSQLOrderByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.$id.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.$id.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> PSQLGroupByExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(column: column(key: field.$id.key))
+//        let field = Self()[keyPath: keyPath]
+//        return .init(column: column(key: field.$id.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     static subscript<T: PSQLable>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> PSQLSelectExpression {
-        let field = Self()[keyPath: keyPath]
-        return .init(selection: column(key: field.$id.key), type: T.psqlType, alias: nil)
+//        let field = Self()[keyPath: keyPath]
+//        return .init(selection: column(key: field.$id.key), type: T.psqlType, alias: nil)
+        fatalError()
     }
 }

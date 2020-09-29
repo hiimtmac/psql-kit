@@ -1,5 +1,5 @@
 import Foundation
 
-protocol TypeComparable: ExpressibleAsSelect {
+protocol TypeComparable {
     associatedtype T: PSQLable
 }

@@ -5,8 +5,8 @@ typealias MIN = MinExpression
 struct MinExpression: PSQLExpression, AggregateFunctionExpression {
     let column: PSQLColumnExpression
     
-    init<T>(_ column: PSQLTypedColumnExpression<T>) {
-        self.column = column.column
+    init<T>(_ column: Column<T>) {
+        self.column = column.columnExpression
     }
     
     func serialize(to serializer: inout PSQLSerializer) {
@@ -17,6 +17,6 @@ struct MinExpression: PSQLExpression, AggregateFunctionExpression {
     }
 }
 
-extension MinExpression: ExpressibleAsSelect {
-    var select: PSQLExpression { self }
+extension MinExpression: PSQLSelectExpression {
+    var psqlSelectExpression: PSQLExpression { self }
 }

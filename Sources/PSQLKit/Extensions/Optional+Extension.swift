@@ -14,8 +14,8 @@ extension Optional: PSQLable where Wrapped: PSQLable {
     static var psqlType: PSQLType { Wrapped.psqlType }
 }
 
-extension Optional: ExpressibleAsSelect where Wrapped: ExpressibleAsSelect & PSQLable {
-    var select: PSQLExpression { self }
+extension Optional: PSQLSelectExpression where Wrapped: PSQLSelectExpression & PSQLable {
+    var psqlSelectExpression: PSQLExpression { self }
 }
 
 extension Optional: TypeComparable where Wrapped: TypeComparable & PSQLable {

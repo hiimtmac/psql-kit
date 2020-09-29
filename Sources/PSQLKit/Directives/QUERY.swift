@@ -72,8 +72,8 @@ class QueryDirective: Directive {
     }
 }
 
-extension QueryDirective: ExpressibleAsSelect {
-    var select: PSQLExpression { self }
+extension QueryDirective: PSQLSelectExpression {
+    var psqlSelectExpression: PSQLExpression { self }
 }
 
 extension QueryDirective {

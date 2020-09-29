@@ -3,7 +3,9 @@ import FluentKit
 
 @dynamicMemberLookup
 struct TableAlias<T: Table> {
+    /// psql `schema`
     let path: String?
+    /// table alias
     let alias: String
     
     init(path: String?, alias: String) {
@@ -24,37 +26,36 @@ extension TableAlias {
         .init(path: schema, alias: alias)
     }
     
-    func column(key: String) -> PSQLPathColumnExpression {
-        .init(
-           alias: alias,
-           path: path,
-           schema: T.schema,
-           column: key
-       )
-    }
-    
     // MARK: - FieldProperty
-    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLTypedColumnExpression<U> {
+    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> Column<U> {
         let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+        return Column(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.key
+        )
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLOrderByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLGroupByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLSelectExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
+//        let field = T()[keyPath: keyPath]
+//        return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
+        fatalError()
     }
 }
 
@@ -66,84 +67,99 @@ extension TableAlias: ExpressibleAsFrom {
 }
 
 extension TableAlias where T: Model {
-    func column(key: FieldKey) -> PSQLPathColumnExpression {
-        .init(
-           alias: alias,
-           path: path,
-           schema: T.schema,
-           column: key.description
-       )
-    }
-    
     // MARK: - FieldProperty
-    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLTypedColumnExpression<U> {
+    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> Column<U> {
         let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+        return Column(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.key.description
+        )
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLOrderByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLGroupByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLSelectExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
+//        let field = T()[keyPath: keyPath]
+//        return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
+        fatalError()
     }
     
     // MARK: - IDProperty
-    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLTypedColumnExpression<U> {
+    subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> Column<U> {
         let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+        return Column(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.key.description
+        )
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLOrderByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLGroupByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U: PSQLable>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLSelectExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
+//        let field = T()[keyPath: keyPath]
+//        return .init(selection: column(key: field.key), type: U.psqlType, alias: nil)
+        fatalError()
     }
     
     // MARK: - ParentProperty
-    subscript<U, V: PSQLable>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLTypedColumnExpression<V> {
+    subscript<U, V: PSQLable>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> Column<V> {
         let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.$id.key))
+        return Column(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.$id.key.description
+        )
     }
     
     @_disfavoredOverload
     subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLOrderByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.$id.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.$id.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLGroupByExpression {
-        let field = T()[keyPath: keyPath]
-        return .init(column: column(key: field.$id.key))
+//        let field = T()[keyPath: keyPath]
+//        return .init(column: column(key: field.$id.key))
+        fatalError()
     }
     
     @_disfavoredOverload
     subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLSelectExpression where U.IDValue: PSQLable {
-        let field = T()[keyPath: keyPath]
-        return .init(selection: column(key: field.$id.key), type: U.IDValue.psqlType, alias: nil)
+//        let field = T()[keyPath: keyPath]
+//        return .init(selection: column(key: field.$id.key), type: U.IDValue.psqlType, alias: nil)
+        fatalError()
     }
 }

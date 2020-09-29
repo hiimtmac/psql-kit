@@ -32,15 +32,15 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(serializer.psql, #"SELECT SUM("x"."name")"#)
     }
     
-    func testConcat() {
-        let s = SELECT {
-            CONCAT(m.$name, " ", m.$name)
-            CONCAT(8, 8, 10)
-        }
-
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT CONCAT("x"."name", ' ', "x"."name"), CONCAT(8, 8, 10)"#)
-    }
+//    func testConcat() {
+//        let s = SELECT {
+//            CONCAT(m.$name, " ", m.$name)
+//            CONCAT(8, 8, 10)
+//        }
+//
+//        s.serialize(to: &serializer)
+//        XCTAssertEqual(serializer.psql, #"SELECT CONCAT("x"."name", ' ', "x"."name"), CONCAT(8, 8, 10)"#)
+//    }
     
     func testCoalesce() {
         let s = SELECT {
@@ -56,7 +56,7 @@ final class ExpressionTests: PSQLTestCase {
         ("testMax", testMax),
         ("testMin", testMin),
         ("testSum", testSum),
-        ("testConcat", testConcat),
+//        ("testConcat", testConcat),
         ("testCoalesce", testCoalesce)
     ]
 }

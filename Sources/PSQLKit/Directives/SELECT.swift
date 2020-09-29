@@ -2,23 +2,22 @@ import Foundation
 
 typealias SELECT = SelectDirective
 
-struct SelectDirective: Directive {
+protocol PSQLSelectExpression {
+    var psqlSelectExpression: PSQLExpression { get }
+}
+
+struct SelectDirective<Content>: PSQLExpression where Content: PSQLSelectExpression {
     let type: DistinctType
-    var psql: PSQLExpression
+    let content: Content
     
-    init(@SelectBuilder builder: () -> PSQLExpression) {
-        self.type = .default
-        self.psql = builder()
-    }
-    
-    init<T: ExpressibleAsSelect>(@SelectBuilder builder: () -> T) {
-        self.type = .default
-        self.psql = builder().select
+    init(@SelectBuilder builder: () -> Content) {
+        self.type = .none
+        self.content = builder()
     }
 
-    init(type: DistinctType, psql: PSQLExpression) {
+    init(type: DistinctType, content: Content) {
         self.type = type
-        self.psql = psql
+        self.content = content
     }
     
     func serialize(to serializer: inout PSQLSerializer) {
@@ -26,7 +25,7 @@ struct SelectDirective: Directive {
         serializer.writeSpace()
         
         switch type {
-        case .default:
+        case .none:
             break
         case .distinct:
             serializer.write("DISTINCT")
@@ -40,19 +39,21 @@ struct SelectDirective: Directive {
             serializer.writeSpace()
         }
         
-        psql.serialize(to: &serializer)
+        content.psqlSelectExpression.serialize(to: &serializer)
     }
     
     enum DistinctType {
-        case `default`
+        case none
         case distinct
         case on(PSQLExpression)
     }
 }
 
+extension SelectDirective: Directive {}
+
 extension SelectDirective {
     func distinct() -> Self {
-        .init(type: .distinct, psql: psql)
+        .init(type: .distinct, content: content)
     }
     
     /// ```
@@ -63,6 +64,6 @@ extension SelectDirective {
     /// ```
     ///
     func distinctOn(@SelectBuilder builder: () -> PSQLExpression) -> Self {
-        .init(type: .on(builder()), psql: psql)
+        .init(type: .on(builder()), content: content)
     }
 }

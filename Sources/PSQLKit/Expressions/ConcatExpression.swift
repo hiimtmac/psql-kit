@@ -9,12 +9,12 @@ struct ConcatExpression<T: PSQLable>: PSQLExpression, FunctionExpression {
         self.expressions = expressions
     }
     
-    init<U: TypeComparable, V: TypeComparable>(_ a: U, _ b: V) where U.T == T, V.T == T {
-        self.expressions = [a.select, b.select]
+    init<U: TypeComparable & ExpressibleAsColumn, V: TypeComparable & ExpressibleAsColumn>(_ a: U, _ b: V) where U.T == T, V.T == T {
+        self.expressions = [a.columnExpression, b.columnExpression]
     }
     
-    init<U: TypeComparable, V: TypeComparable, W: TypeComparable>(_ a: U, _ b: V, _ c: W) where U.T == T, V.T == T, W.T == T {
-        self.expressions = [a.select, b.select, c.select]
+    init<U: TypeComparable & ExpressibleAsColumn, V: TypeComparable & ExpressibleAsColumn, W: TypeComparable & ExpressibleAsColumn>(_ a: U, _ b: V, _ c: W) where U.T == T, V.T == T, W.T == T {
+        self.expressions = [a.columnExpression, b.columnExpression, c.columnExpression]
     }
     
     func serialize(to serializer: inout PSQLSerializer) {
@@ -25,6 +25,6 @@ struct ConcatExpression<T: PSQLable>: PSQLExpression, FunctionExpression {
     }
 }
 
-extension ConcatExpression: ExpressibleAsSelect {
-    var select: PSQLExpression { self }
+extension ConcatExpression: PSQLSelectExpression {
+    var psqlSelectExpression: PSQLExpression { self }
 }

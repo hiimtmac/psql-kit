@@ -1,5 +1,5 @@
 import XCTest
-@testable import PSQLKit
+@testable import ZZPSQLKit
 import FluentKit
 
 final class SelectTests: PSQLTestCase {

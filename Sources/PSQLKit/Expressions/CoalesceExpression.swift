@@ -6,8 +6,8 @@ struct CoalesceExpression<T: PSQLable>: PSQLExpression, FunctionExpression {
     let column: PSQLColumnExpression
     let `default`: PSQLExpression
     
-    init<U: TypeComparable, V: TypeComparable & PSQLExpression>(_ column: PSQLTypedColumnExpression<U>, _ default: V) where U.T == T, V.T == T {
-        self.column = column.column
+    init<U: TypeComparable, V: TypeComparable & PSQLExpression>(_ column: Column<U>, _ default: V) where U.T == T, V.T == T {
+        self.column = column.columnExpression
         self.default = `default`
     }
     
@@ -23,6 +23,6 @@ struct CoalesceExpression<T: PSQLable>: PSQLExpression, FunctionExpression {
 
 extension CoalesceExpression: TypeComparable {}
 
-extension CoalesceExpression: ExpressibleAsSelect {
-    var select: PSQLExpression { self }
+extension CoalesceExpression: PSQLSelectExpression {
+    var psqlSelectExpression: PSQLExpression { self }
 }

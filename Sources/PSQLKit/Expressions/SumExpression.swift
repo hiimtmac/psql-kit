@@ -5,8 +5,8 @@ typealias SUM = SumExpression
 struct SumExpression: PSQLExpression, AggregateFunctionExpression {
     let column: PSQLColumnExpression
     
-    init<T>(_ column: PSQLTypedColumnExpression<T>) {
-        self.column = column.column
+    init<T>(_ column: Column<T>) {
+        self.column = column.columnExpression
     }
     
     func serialize(to serializer: inout PSQLSerializer) {
@@ -17,6 +17,6 @@ struct SumExpression: PSQLExpression, AggregateFunctionExpression {
     }
 }
 
-extension SumExpression: ExpressibleAsSelect {
-    var select: PSQLExpression { self }
+extension SumExpression: PSQLSelectExpression {
+    var psqlSelectExpression: PSQLExpression { self }
 }
