@@ -51,6 +51,17 @@ extension TableAlias where T: Model {
         )
     }
     
+    // MARK: - OptionalFieldProperty
+    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, OptionalFieldProperty<T, U>>) -> ColumnExpression<U> {
+        let field = T()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.key.description
+        )
+    }
+    
 //    @_disfavoredOverload
 //    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLOrderByExpression {
 ////        let field = T()[keyPath: keyPath]

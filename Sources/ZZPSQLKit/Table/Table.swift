@@ -59,6 +59,17 @@ extension Table where Self: Model {
         )
     }
     
+    // MARK: - OptionalFieldProperty
+    static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, OptionalFieldProperty<Self, T>>) -> ColumnExpression<T> {
+        let field = Self()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.key.description
+        )
+    }
+    
 //    @_disfavoredOverload
 //    static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> PSQLOrderByExpression {
 ////        let field = Self()[keyPath: keyPath]

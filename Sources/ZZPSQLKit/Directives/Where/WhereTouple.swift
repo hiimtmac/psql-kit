@@ -71,7 +71,7 @@ extension WhereTouple: WhereSQLExpressible {
         let expressions: [SQLExpression]
         
         func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions).serialize(to: &serializer)
+            SQLList(expressions, separator: SQLRaw(" AND ")).serialize(to: &serializer)
         }
     }
 }

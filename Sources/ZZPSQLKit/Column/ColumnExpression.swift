@@ -174,3 +174,48 @@ extension ColumnExpression: OrderBySQLExpressible {
         }
     }
 }
+
+extension ColumnExpression: CompareSQLExpressible {
+    var compareSqlExpression: Compare {
+        .init(
+            aliasName: aliasName,
+            pathName: pathName,
+            schemaName: schemaName,
+            columnName: columnName
+        )
+    }
+    
+    struct Compare: SQLExpression {
+        let aliasName: String?
+        let pathName: String?
+        let schemaName: String?
+        let columnName: String
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            if let alias = aliasName {
+                serializer.writeQuote()
+                serializer.write(alias)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            } else {
+                if let path = pathName {
+                    serializer.writeQuote()
+                    serializer.write(path)
+                    serializer.writeQuote()
+                    serializer.writePeriod()
+                }
+                
+                if let schema = schemaName {
+                    serializer.writeQuote()
+                    serializer.write(schema)
+                    serializer.writeQuote()
+                    serializer.writePeriod()
+                }
+            }
+            
+            serializer.writeQuote()
+            serializer.write(columnName)
+            serializer.writeQuote()
+        }
+    }
+}
