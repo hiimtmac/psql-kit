@@ -1,5 +1,5 @@
 import XCTest
-@testable import PSQLKit
+@testable import ZZPSQLKit
 import FluentKit
 
 final class GroupByTests: PSQLTestCase {
@@ -11,7 +11,7 @@ final class GroupByTests: PSQLTestCase {
         }
         
         g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"GROUP BY "my_model"."name""#)
+        XCTAssertEqual(serializer.sql, #"GROUP BY "my_model"."name""#)
     }
     
     func testGroupModelAlias() {
@@ -20,7 +20,7 @@ final class GroupByTests: PSQLTestCase {
         }
         
         g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"GROUP BY "x"."name""#)
+        XCTAssertEqual(serializer.sql, #"GROUP BY "x"."name""#)
     }
     
     func testGroupBoth() {
@@ -30,7 +30,7 @@ final class GroupByTests: PSQLTestCase {
         }
         
         g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"GROUP BY "my_model"."name", "x"."name""#)
+        XCTAssertEqual(serializer.sql, #"GROUP BY "my_model"."name", "x"."name""#)
     }
     
     static var allTests = [
