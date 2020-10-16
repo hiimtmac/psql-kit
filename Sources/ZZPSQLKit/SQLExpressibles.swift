@@ -20,3 +20,23 @@ protocol OrderBySQLExpressible {
     associatedtype OrderBy: SQLExpression
     var orderBySqlExpression: OrderBy { get }
 }
+
+protocol CompareSQLExpressible {
+    associatedtype Compare: SQLExpression
+    var compareSqlExpression: Compare { get }
+}
+
+protocol JoinSQLExpressible {
+    associatedtype Join: SQLExpression
+    var joinSqlExpression: Join { get }
+}
+
+protocol WhereSQLExpressible {
+    associatedtype Where: SQLExpression
+    var whereSqlExpression: Where { get }
+}
+
+protocol HavingSQLExpressible {
+    associatedtype Having: SQLExpression
+    var havingSqlExpression: Having { get }
+}
