@@ -1,5 +1,6 @@
 import Foundation
 import FluentKit
+import SQLKit
 
 @dynamicMemberLookup
 struct TableAlias<T: Table> {
@@ -92,4 +93,43 @@ extension TableAlias where T: Model {
 ////        return .init(column: column(key: field.$id.key))
 //        fatalError()
 //    }
+}
+
+extension TableAlias: FromSQLExpressible {
+    var table: TableAlias { self }
+    
+    var fromSqlExpression: From {
+        .init(
+            aliasName: alias,
+            pathName: T.path,
+            schemaName: T.schema
+        )
+    }
+    
+    struct From: SQLExpression {
+        let aliasName: String
+        let pathName: String?
+        let schemaName: String
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            if let path = pathName {
+                serializer.writeQuote()
+                serializer.write(path)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            }
+            
+            serializer.writeQuote()
+            serializer.write(schemaName)
+            serializer.writeQuote()
+            
+            serializer.writeSpace()
+            serializer.write("AS")
+            serializer.writeSpace()
+            
+            serializer.writeQuote()
+            serializer.write(aliasName)
+            serializer.writeQuote()
+        }
+    }
 }

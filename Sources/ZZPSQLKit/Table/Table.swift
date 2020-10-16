@@ -1,8 +1,9 @@
 import Foundation
 import FluentKit
+import SQLKit
 
 @dynamicMemberLookup
-protocol Table {
+protocol Table: FromSQLExpressible {
     init()
     /// fluent `table`
     static var schema: String { get }
@@ -39,6 +40,10 @@ extension Table {
 extension Table {
     static func `as`(_ alias: String) -> TableAlias<Self> {
         .init(path: path, alias: alias)
+    }
+    
+    func `as`(_ alias: String) -> TableAlias<Self> {
+        .init(path: Self.path, alias: alias)
     }
 }
 
@@ -96,4 +101,34 @@ extension Table where Self: Model {
 ////        return .init(column: column(key: field.$id.key))
 //        fatalError()
 //    }
+}
+
+extension Table {
+    var fromSqlExpression: _From {
+        .init(
+            pathName: Self.path,
+            schemaName: Self.schema
+        )
+    }
+    
+    static var table: Self { Self() }
+//    static var table: Self { Self.Type.self as! Self.Type as! Self }
+}
+
+struct _From: SQLExpression {
+    let pathName: String?
+    let schemaName: String
+    
+    func serialize(to serializer: inout SQLSerializer) {
+        if let path = pathName {
+            serializer.writeQuote()
+            serializer.write(path)
+            serializer.writeQuote()
+            serializer.writePeriod()
+        }
+        
+        serializer.writeQuote()
+        serializer.write(schemaName)
+        serializer.writeQuote()
+    }
 }
