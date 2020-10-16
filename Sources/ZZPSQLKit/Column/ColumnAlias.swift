@@ -1,28 +1,20 @@
 import Foundation
 import SQLKit
 
-struct ColumnExpression<T> where T: PKExpressible {
-    let aliasName: String?
-    let pathName: String?
-    let schemaName: String?
-    let columnName: String
-    
-    public init(aliasName: String?, pathName: String?, schemaName: String, columnName: String) {
-        self.aliasName = aliasName
-        self.pathName = pathName
-        self.schemaName = schemaName
-        self.columnName = columnName
-    }
+struct ColumnAlias<T> where T: PKExpressible {
+    let column: ColumnExpression<T>
+    let alias: String
 }
 
-extension ColumnExpression: SelectSQLExpressible  {
+extension ColumnAlias: SelectSQLExpressible {
     var selectSqlExpression: Select {
         .init(
-            aliasName: aliasName,
-            pathName: pathName,
-            schemaName: schemaName,
-            columnName: columnName,
-            columnType: T.postgresColumnType
+            aliasName: column.aliasName,
+            pathName: column.pathName,
+            schemaName: column.schemaName,
+            columnName: column.columnName,
+            columnType: T.postgresColumnType,
+            columnAlias: alias
         )
     }
     
@@ -32,6 +24,7 @@ extension ColumnExpression: SelectSQLExpressible  {
         let schemaName: String?
         let columnName: String
         let columnType: SQLExpression
+        let columnAlias: String
         
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
@@ -61,12 +54,14 @@ extension ColumnExpression: SelectSQLExpressible  {
             
             serializer.write("::")
             columnType.serialize(to: &serializer)
+            
+            serializer.writeSpace()
+            serializer.write("AS")
+            serializer.writeSpace()
+            
+            serializer.writeQuote()
+            serializer.write(columnAlias)
+            serializer.writeQuote()
         }
-    }
-}
-
-extension ColumnExpression {
-    func `as`(_ alias: String) -> ColumnAlias<T> {
-        ColumnAlias(column: self, alias: alias)
     }
 }

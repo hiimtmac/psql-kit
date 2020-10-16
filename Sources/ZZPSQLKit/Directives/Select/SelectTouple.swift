@@ -5,10 +5,10 @@ struct SelectTouple<T> {
     let value: T
     let expressions: [SQLExpression]
     
-    init<T0, T1>( _ value: (
-        ColumnExpression<T0>,
-        ColumnExpression<T1>
-    )) {
+    init<T0, T1>( _ value: (T0, T1)) where
+        T0: SelectSQLExpressible,
+        T1: SelectSQLExpressible
+    {
         self.value = value as! T
         self.expressions = [
             value.0.selectSqlExpression,
@@ -16,11 +16,11 @@ struct SelectTouple<T> {
         ]
     }
     
-    init<T0, T1, T2>(_ value: (
-        ColumnExpression<T0>,
-        ColumnExpression<T1>,
-        ColumnExpression<T2>
-    )) {
+    init<T0, T1, T2>(_ value: (T0, T1, T2)) where
+        T0: SelectSQLExpressible,
+        T1: SelectSQLExpressible,
+        T2: SelectSQLExpressible
+    {
         self.value = value as! T
         self.expressions = [
             value.0.selectSqlExpression,
@@ -29,12 +29,12 @@ struct SelectTouple<T> {
         ]
     }
     
-    init<T0, T1, T2, T3>(_ value: (
-        ColumnExpression<T0>,
-        ColumnExpression<T1>,
-        ColumnExpression<T2>,
-        ColumnExpression<T3>
-    )) {
+    init<T0, T1, T2, T3>(_ value: (T0, T1, T2, T3)) where
+        T0: SelectSQLExpressible,
+        T1: SelectSQLExpressible,
+        T2: SelectSQLExpressible,
+        T3: SelectSQLExpressible
+    {
         self.value = value as! T
         self.expressions = [
             value.0.selectSqlExpression,
@@ -44,13 +44,13 @@ struct SelectTouple<T> {
         ]
     }
     
-    init<T0, T1, T2, T3, T4>(_ value: (
-        ColumnExpression<T0>,
-        ColumnExpression<T1>,
-        ColumnExpression<T2>,
-        ColumnExpression<T3>,
-        ColumnExpression<T4>
-    )) {
+    init<T0, T1, T2, T3, T4>(_ value: (T0, T1, T2, T3, T4)) where
+        T0: SelectSQLExpressible,
+        T1: SelectSQLExpressible,
+        T2: SelectSQLExpressible,
+        T3: SelectSQLExpressible,
+        T4: SelectSQLExpressible
+    {
         self.value = value as! T
         self.expressions = [
             value.0.selectSqlExpression,
