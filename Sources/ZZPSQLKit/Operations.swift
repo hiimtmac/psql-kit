@@ -1,6 +1,9 @@
 import Foundation
 import SQLKit
 
+infix operator ><: LogicalConjunctionPrecedence
+infix operator <>: LogicalConjunctionPrecedence
+
 func ==<T, U>(_ lhs: T, _ rhs: U)
 -> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
 {
@@ -43,7 +46,6 @@ func ||<T, U>(_ lhs: T, _ rhs: U)
     CompareExpression(lhs: lhs, operator: .or, rhs: rhs)
 }
 
-infix operator ><: LogicalConjunctionPrecedence
 func ><<T, U>(_ lhs: T, _ rhs: [U])
 -> CompareExpression<T, [U]> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
 {
@@ -56,7 +58,6 @@ func ><<T, U>(_ lhs: T, _ rhs: ClosedRange<U>)
     CompareExpression(lhs: lhs, operator: .between, rhs: rhs)
 }
 
-infix operator <>: LogicalConjunctionPrecedence
 func <><T, U>(_ lhs: T, _ rhs: [U])
 -> CompareExpression<T, [U]> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
 {

@@ -10,10 +10,6 @@ struct HavingDirective<Content>: SQLExpression where Content: HavingSQLExpressib
         self.content = builder()
     }
     
-    init(content: Content) {
-        self.content = content
-    }
-    
     func serialize(to serializer: inout SQLSerializer) {
         serializer.write("HAVING")
         serializer.writeSpace()

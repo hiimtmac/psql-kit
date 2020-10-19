@@ -10,10 +10,6 @@ struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQLExpress
         self.content = builder()
     }
     
-    init(content: Content) {
-        self.content = content
-    }
-    
     func serialize(to serializer: inout SQLSerializer) {
         serializer.write("GROUP BY")
         serializer.writeSpace()

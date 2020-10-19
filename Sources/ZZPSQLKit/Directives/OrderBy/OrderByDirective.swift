@@ -19,10 +19,6 @@ struct OrderByDirective<Content>: SQLExpression where Content: OrderBySQLExpress
         self.content = builder()
     }
     
-    init(content: Content) {
-        self.content = content
-    }
-    
     func serialize(to serializer: inout SQLSerializer) {
         serializer.write("ORDER BY")
         serializer.writeSpace()

@@ -10,10 +10,6 @@ struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpressible
         self.content = builder()
     }
     
-    init(content: Content) {
-        self.content = content
-    }
-    
     func serialize(to serializer: inout SQLSerializer) {
         serializer.write("WHERE")
         serializer.writeSpace()

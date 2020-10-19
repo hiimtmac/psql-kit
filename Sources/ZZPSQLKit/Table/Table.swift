@@ -123,7 +123,6 @@ extension Table {
     }
     
     static var table: Self { Self() }
-//    static var table: Self { Self.Type.self as! Self.Type as! Self }
 }
 
 struct _From: SQLExpression {

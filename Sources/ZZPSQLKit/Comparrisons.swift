@@ -52,3 +52,19 @@ extension CompareExpression: WhereSQLExpressible {
         .init(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
+
+extension CompareExpression: HavingSQLExpressible {
+    typealias Having = Compare
+    
+    var havingSqlExpression: Having {
+        .init(lhs: lhs, operator: `operator`, rhs: rhs)
+    }
+}
+
+extension CompareExpression: JoinSQLExpressible {
+    typealias Join = Compare
+    
+    var joinSqlExpression: Join {
+        .init(lhs: lhs, operator: `operator`, rhs: rhs)
+    }
+}

@@ -10,10 +10,6 @@ struct FromDirective<Content>: SQLExpression where Content: FromSQLExpressible {
         self.content = builder()
     }
     
-    init(content: Content) {
-        self.content = content
-    }
-    
     func serialize(to serializer: inout SQLSerializer) {
         serializer.write("FROM")
         serializer.writeSpace()
