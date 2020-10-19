@@ -17,10 +17,10 @@ final class MyModel: Model, Table {
 }
 
 class PSQLTestCase: XCTestCase {
-    var serializer = SQLSerializer(database: TestDatabase())
+    var serializer = SQLSerializer(database: TestSQLDatabase())
 }
 
-final class TestDatabase: SQLDatabase {
+final class TestSQLDatabase: SQLDatabase {
     let logger: Logger
     let eventLoop: EventLoop
     var results: [String]

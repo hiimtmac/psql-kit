@@ -1,6 +1,12 @@
 # PSQLKit
 
-Todo:
+PSQL query generation using for Fluent Models
+
+## Installation
+
+## Usage
+
+### Todo
+- [ ] JSON/JSONB
 - [ ] PARTITION BY
 - [ ] SELECT ROW_NUMBER() OVER (...)
-- [ ] Binds
