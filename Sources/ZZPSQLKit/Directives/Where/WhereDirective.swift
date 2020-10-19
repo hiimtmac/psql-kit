@@ -16,3 +16,7 @@ struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpressible
         content.whereSqlExpression.serialize(to: &serializer)
     }
 }
+
+extension WhereDirective: QuerySQLExpressible {
+    var querySqlExpression: Self { self }
+}

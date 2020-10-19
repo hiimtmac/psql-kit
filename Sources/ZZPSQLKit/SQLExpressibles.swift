@@ -44,3 +44,13 @@ protocol HavingSQLExpressible {
     associatedtype Having: SQLExpression
     var havingSqlExpression: Having { get }
 }
+
+protocol QuerySQLExpressible {
+    associatedtype Query: SQLExpression
+    var querySqlExpression: Query { get }
+}
+
+protocol WithSQLExpressible {
+    associatedtype With: SQLExpression
+    var withSqlExpression: With { get }
+}

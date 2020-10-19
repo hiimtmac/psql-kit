@@ -7,7 +7,6 @@ protocol PKExpressible: SQLExpression, TypeEquatable, CompareSQLExpressible {
 
 extension Bool: PKExpressible {
     typealias CompareType = Self
-    typealias Compare = Self
     static var postgresColumnType: PostgresColumnType { .boolean }
     
     public func serialize(to serializer: inout SQLSerializer) {
@@ -19,7 +18,6 @@ extension Bool: PKExpressible {
 
 extension Double: PKExpressible {
     typealias CompareType = Self
-    typealias Compare = Self
     static var postgresColumnType: PostgresColumnType { .decimal }
     
     public func serialize(to serializer: inout SQLSerializer) {
@@ -31,7 +29,6 @@ extension Double: PKExpressible {
 
 extension Float: PKExpressible {
     typealias CompareType = Self
-    typealias Compare = Self
     static var postgresColumnType: PostgresColumnType { .decimal }
     
     public func serialize(to serializer: inout SQLSerializer) {
@@ -43,7 +40,6 @@ extension Float: PKExpressible {
 
 extension Int: PKExpressible {
     typealias CompareType = Self
-    typealias Compare = Self
     static var postgresColumnType: PostgresColumnType { .integer }
     
     public func serialize(to serializer: inout SQLSerializer) {
@@ -55,7 +51,6 @@ extension Int: PKExpressible {
 
 extension String: PKExpressible {
     typealias CompareType = Self
-    typealias Compare = Self
     static var postgresColumnType: PostgresColumnType { .text }
     
     public func serialize(to serializer: inout SQLSerializer) {
@@ -69,7 +64,6 @@ extension String: PKExpressible {
 
 extension UUID: PKExpressible {
     typealias CompareType = Self
-    typealias Compare = Self
     static var postgresColumnType: PostgresColumnType { .uuid }
     
     public func serialize(to serializer: inout SQLSerializer) {

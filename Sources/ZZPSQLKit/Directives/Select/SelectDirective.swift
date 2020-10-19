@@ -40,10 +40,16 @@ struct DistinctModifier<Content>: SelectSQLExpressible where Content: SelectSQLE
 }
 
 extension SelectDirective {
+    /// ```
+    /// SELECT DISTINCT first_name, last_name
+    /// FROM people
+    /// ```
+    ///
     func distinct() -> SelectDirective<DistinctModifier<Content>> {
         .init(content: DistinctModifier(content: content))
     }
 }
+
 
 struct DistinctOnModifier<DistinctOn, Content>: SelectSQLExpressible where DistinctOn: SelectSQLExpressible, Content: SelectSQLExpressible {
     let distinctOn: DistinctOn
@@ -80,4 +86,8 @@ extension SelectDirective {
     func distinctOn<DistinctOn>(@SelectBuilder builder: () -> DistinctOn) -> SelectDirective<DistinctOnModifier<DistinctOn, Content>> where DistinctOn: SelectSQLExpressible {
         .init(content: DistinctOnModifier(distinctOn: builder(), content: content))
     }
+}
+
+extension SelectDirective: QuerySQLExpressible {
+    var querySqlExpression: Self { self }
 }

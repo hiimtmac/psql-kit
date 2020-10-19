@@ -16,3 +16,7 @@ struct HavingDirective<Content>: SQLExpression where Content: HavingSQLExpressib
         content.havingSqlExpression.serialize(to: &serializer)
     }
 }
+
+extension HavingDirective: QuerySQLExpressible {
+    var querySqlExpression: Self { self }
+}

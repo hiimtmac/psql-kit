@@ -45,3 +45,7 @@ struct OrderByModifier<Content>: OrderBySQLExpressible where Content: OrderBySQL
         .init(content: content, direction: direction)
     }
 }
+
+extension OrderByDirective: QuerySQLExpressible {
+    var querySqlExpression: Self { self }
+}

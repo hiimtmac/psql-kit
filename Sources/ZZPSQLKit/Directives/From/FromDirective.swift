@@ -16,3 +16,7 @@ struct FromDirective<Content>: SQLExpression where Content: FromSQLExpressible {
         content.fromSqlExpression.serialize(to: &serializer)
     }
 }
+
+extension FromDirective: QuerySQLExpressible {
+    var querySqlExpression: Self { self }
+}

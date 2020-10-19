@@ -28,13 +28,6 @@ extension Table {
             columnName: field.key
         )
     }
-    
-//    @_disfavoredOverload
-//    static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> PSQLOrderByExpression {
-////        let field = Self()[keyPath: keyPath]
-////        return .init(column: column(key: field.key))
-//        fatalError()
-//    }
 }
 
 extension Table {
@@ -70,13 +63,6 @@ extension Table where Self: Model {
         )
     }
     
-//    @_disfavoredOverload
-//    static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> PSQLOrderByExpression {
-////        let field = Self()[keyPath: keyPath]
-////        return .init(column: column(key: field.key))
-//        fatalError()
-//    }
-    
     // MARK: - IDProperty
     static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> ColumnExpression<T> {
         let field = Self()[keyPath: keyPath]
@@ -88,13 +74,6 @@ extension Table where Self: Model {
         )
     }
     
-//    @_disfavoredOverload
-//    static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> PSQLOrderByExpression {
-////        let field = Self()[keyPath: keyPath]
-////        return .init(column: column(key: field.key))
-//        fatalError()
-//    }
-    
     // MARK: - ParentProperty
     static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> ColumnExpression<T> {
         let field = Self()[keyPath: keyPath]
@@ -105,13 +84,6 @@ extension Table where Self: Model {
             columnName: field.$id.key.description
         )
     }
-    
-//    @_disfavoredOverload
-//    static subscript<T: PKExpressible>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> PSQLOrderByExpression {
-////        let field = Self()[keyPath: keyPath]
-////        return .init(column: column(key: field.$id.key))
-//        fatalError()
-//    }
 }
 
 extension Table {

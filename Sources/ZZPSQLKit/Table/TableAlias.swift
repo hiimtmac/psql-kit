@@ -30,13 +30,6 @@ extension TableAlias {
             columnName: field.key
         )
     }
-    
-//    @_disfavoredOverload
-//    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> PSQLOrderByExpression {
-////        let field = T()[keyPath: keyPath]
-////        return .init(column: column(key: field.key))
-//        fatalError()
-//    }
 }
 
 extension TableAlias where T: Model {
@@ -62,13 +55,6 @@ extension TableAlias where T: Model {
         )
     }
     
-//    @_disfavoredOverload
-//    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> PSQLOrderByExpression {
-////        let field = T()[keyPath: keyPath]
-////        return .init(column: column(key: field.key))
-//        fatalError()
-//    }
-    
     // MARK: - IDProperty
     subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
@@ -80,13 +66,6 @@ extension TableAlias where T: Model {
         )
     }
     
-//    @_disfavoredOverload
-//    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> PSQLOrderByExpression {
-////        let field = T()[keyPath: keyPath]
-////        return .init(column: column(key: field.key))
-//        fatalError()
-//    }
-    
     // MARK: - ParentProperty
     subscript<U, V: PKExpressible>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> ColumnExpression<V> {
         let field = T()[keyPath: keyPath]
@@ -97,13 +76,6 @@ extension TableAlias where T: Model {
             columnName: field.$id.key.description
         )
     }
-    
-//    @_disfavoredOverload
-//    subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> PSQLOrderByExpression {
-////        let field = T()[keyPath: keyPath]
-////        return .init(column: column(key: field.$id.key))
-//        fatalError()
-//    }
 }
 
 extension TableAlias: FromSQLExpressible {

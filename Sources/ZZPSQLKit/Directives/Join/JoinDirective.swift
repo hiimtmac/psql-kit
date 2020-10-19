@@ -26,3 +26,7 @@ struct JoinDirective<Table, Content>: SQLExpression where Table: FromSQLExpressi
         content.joinSqlExpression.serialize(to: &serializer)
     }
 }
+
+extension JoinDirective: QuerySQLExpressible {
+    var querySqlExpression: Self { self }
+}

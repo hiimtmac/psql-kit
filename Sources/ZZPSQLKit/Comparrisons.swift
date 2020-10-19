@@ -46,25 +46,19 @@ struct CompareExpression<T, U>: CompareSQLExpressible where T: CompareSQLExpress
 }
 
 extension CompareExpression: WhereSQLExpressible {
-    typealias Where = Compare
-    
-    var whereSqlExpression: Where {
+    var whereSqlExpression: Compare {
         .init(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
 extension CompareExpression: HavingSQLExpressible {
-    typealias Having = Compare
-    
-    var havingSqlExpression: Having {
+    var havingSqlExpression: Compare {
         .init(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
 extension CompareExpression: JoinSQLExpressible {
-    typealias Join = Compare
-    
-    var joinSqlExpression: Join {
+    var joinSqlExpression: Compare {
         .init(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }

@@ -16,3 +16,7 @@ struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQLExpress
         content.groupBySqlExpression.serialize(to: &serializer)
     }
 }
+
+extension GroupByDirective: QuerySQLExpressible {
+    var querySqlExpression: Self { self }
+}

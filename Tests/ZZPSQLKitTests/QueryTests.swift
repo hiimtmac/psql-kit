@@ -1,5 +1,5 @@
 import XCTest
-@testable import PSQLKit
+@testable import ZZPSQLKit
 import FluentKit
 
 final class QueryTests: PSQLTestCase {
@@ -12,7 +12,7 @@ final class QueryTests: PSQLTestCase {
         }
         
         q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT "x"."name"::text FROM "my_model" AS "x""#)
+        XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT FROM "my_model" AS "x""#)
     }
     
     func testQueryAsSub() {
@@ -20,10 +20,10 @@ final class QueryTests: PSQLTestCase {
             SELECT { m.$name }
             FROM { m.table }
         }
-        .asSub(MyModel.self)
+        .asSubquery(MyModel.table)
         
         q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"(SELECT "x"."name"::text FROM "my_model" AS "x") AS "my_model""#)
+        XCTAssertEqual(serializer.sql, #"(SELECT "x"."name"::TEXT FROM "my_model" AS "x") AS "my_model""#)
     }
     
     func testQueryAsWith() {
@@ -31,33 +31,25 @@ final class QueryTests: PSQLTestCase {
             SELECT { m.$name }
             FROM { m.table }
         }
-        .asWith(MyModel.self)
+        .asWith(m.table)
         
         q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #""my_model" AS (SELECT "x"."name"::text FROM "my_model" AS "x")"#)
+        XCTAssertEqual(serializer.sql, #""x" AS (SELECT "x"."name"::TEXT FROM "my_model" AS "x")"#)
     }
     
     func testQueryN() {
         let q = QUERY {
-            WITH {
-                QUERY {
-                    SELECT { m.$name }
-                    FROM { m.table }
-                }
-                .asWith("with")
-            }
-            
             SELECT {
                 m.$name
-                m.$name
+                m.$title
             }
             FROM { m.table }
             GROUPBY { m.$name }
-            ORDERBY { m.$name }
+            ORDERBY { m.$name.desc() }
         }
         
         q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"WITH "with" AS (SELECT "x"."name"::text FROM "my_model" AS "x") SELECT "x"."name"::text, "x"."name"::text FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" ASC"#)
+        XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT, "x"."title"::TEXT FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" DESC"#)
     }
     
     static var allTests = [
