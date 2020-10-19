@@ -1,33 +1,41 @@
 import Foundation
+import SQLKit
+import PostgresKit
 
-typealias GENERATE_SERIES = GenerateSeriesExpression
-
-struct GenerateSeriesExpression<T: PSQLable>: PSQLExpression, FunctionExpression {
-    let bottom: PSQLExpression
-    let top: PSQLExpression
-    let interval: PSQLExpression
+public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpressible & Comparable {
+    let content: ClosedRange<Content>
+    let interval: SQLExpression
     
-    init<U: PSQLable>(from: T, to: T, interval: U) {
-        self.bottom = from
-        self.top = to
+    public init(_ content: ClosedRange<Content>, interval: SQLExpression) {
+        self.content = content
         self.interval = interval
     }
     
-    func serialize(to serializer: inout PSQLSerializer) {
+    public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("GENERATE_SERIES")
         serializer.write("(")
-        bottom.serialize(to: &serializer)
+        content.lowerBound.selectSqlExpression.serialize(to: &serializer)
         serializer.write(",")
         serializer.writeSpace()
-        top.serialize(to: &serializer)
+        content.upperBound.selectSqlExpression.serialize(to: &serializer)
         serializer.write(",")
         serializer.writeSpace()
         interval.serialize(to: &serializer)
-        serializer.write("::interval")
+        serializer.write("::INTERVAL")
         serializer.write(")")
     }
 }
 
-extension GenerateSeriesExpression: ExpressibleAsFrom {
-    var from: PSQLExpression { self }
+extension GenerateSeriesExpression: SelectSQLExpressible {
+    public var selectSqlExpression: some SQLExpression { self }
+}
+
+extension GenerateSeriesExpression {
+    public func `as`(_ alias: String) -> ExpressionAlias<GenerateSeriesExpression<Content>> {
+        ExpressionAlias(expression: self, alias: alias)
+    }
+}
+
+extension GenerateSeriesExpression: FromSQLExpressible {
+    public var fromSqlExpression: some SQLExpression { self }
 }

@@ -1,28 +1,36 @@
 import Foundation
+import SQLKit
 
-typealias COALESCE = CoalesceExpression
-
-struct CoalesceExpression<T: PSQLable>: PSQLExpression, FunctionExpression {
-    let column: PSQLColumnExpression
-    let `default`: PSQLExpression
+public struct CoalesceExpression<Content, Default>: SQLExpression where Content: SelectSQLExpressible & TypeEquatable, Default: SelectSQLExpressible & TypeEquatable, Content.CompareType == Default.CompareType {
+    let content: Content
+    let `default`: Default
     
-    init<U: TypeComparable, V: TypeComparable & PSQLExpression>(_ column: Column<U>, _ default: V) where U.T == T, V.T == T {
-        self.column = column.columnExpression
+    public init(_ content: Content, _ default: Default) {
+        self.content = content
         self.default = `default`
     }
     
-    func serialize(to serializer: inout PSQLSerializer) {
+    public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("COALESCE")
         serializer.write("(")
-        column.serialize(to: &serializer)
-        serializer.write(", ")
-        `default`.serialize(to: &serializer)
+        content.selectSqlExpression.serialize(to: &serializer)
+        serializer.write(",")
+        serializer.writeSpace()
+        `default`.selectSqlExpression.serialize(to: &serializer)
         serializer.write(")")
     }
 }
 
-extension CoalesceExpression: TypeComparable {}
+extension CoalesceExpression: TypeEquatable {
+    public typealias CompareType = Content.CompareType
+}
 
-extension CoalesceExpression: PSQLSelectExpression {
-    var psqlSelectExpression: PSQLExpression { self }
+extension CoalesceExpression: SelectSQLExpressible {
+    public var selectSqlExpression: some SQLExpression { self }
+}
+
+extension CoalesceExpression {
+    public func `as`(_ alias: String) -> ExpressionAlias<CoalesceExpression<Content, Default>> {
+        ExpressionAlias(expression: self, alias: alias)
+    }
 }

@@ -9,8 +9,7 @@ let package = Package(
         .macOS(.v10_15), .iOS(.v13)
     ],
     products: [
-        .library(name: "PSQLKit", targets: ["PSQLKit"]),
-        .library(name: "ZZPSQLKit", targets: ["ZZPSQLKit"]),
+        .library(name: "PSQLKit", targets: ["PSQLKit"])
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0")
@@ -19,16 +18,9 @@ let package = Package(
         .target(name: "PSQLKit", dependencies: [
             .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")
         ]),
-        .target(name: "ZZPSQLKit", dependencies: [
-            .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")
-        ]),
         .testTarget(name: "PSQLKitTests", dependencies: [
             .target(name: "PSQLKit"),
             .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")
-        ]),
-        .testTarget(name: "ZZPSQLKitTests", dependencies: [
-            .target(name: "ZZPSQLKit"),
-            .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")
-        ]),
+        ])
     ]
 )
