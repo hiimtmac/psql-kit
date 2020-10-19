@@ -10,6 +10,9 @@ enum CompareOperator: String, SQLExpression {
     case lessThanOrEqual = "<="
     case greaterThan = ">"
     case greaterThanOrEqual = ">="
+    case between = "BETWEEN"
+    case notBetween = "NOT BETWEEN"
+    case or = "OR"
     
     func serialize(to serializer: inout SQLSerializer) {
         serializer.write(rawValue)
@@ -43,31 +46,9 @@ struct CompareExpression<T, U>: CompareSQLExpressible where T: CompareSQLExpress
 }
 
 extension CompareExpression: WhereSQLExpressible {
-    struct Where: SQLExpression {
-        let compare: Compare
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            compare.serialize(to: &serializer)
-        }
-    }
+    typealias Where = Compare
     
     var whereSqlExpression: Where {
-        .init(compare: compareSqlExpression)
-    }
-}
-
-extension Array: CompareSQLExpressible where Element: PKExpressible {
-    struct Compare: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("(")
-            SQLList(expressions).serialize(to: &serializer)
-            serializer.write(")")
-        }
-    }
-    
-    var compareSqlExpression: Compare {
-        .init(expressions: self)
+        .init(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }

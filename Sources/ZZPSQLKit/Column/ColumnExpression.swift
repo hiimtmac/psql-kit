@@ -175,7 +175,7 @@ extension ColumnExpression: OrderBySQLExpressible {
     }
 }
 
-extension ColumnExpression: CompareSQLExpressible {
+extension ColumnExpression: CompareSQLExpressible {    
     var compareSqlExpression: Compare {
         .init(
             aliasName: aliasName,
@@ -218,4 +218,8 @@ extension ColumnExpression: CompareSQLExpressible {
             serializer.writeQuote()
         }
     }
+}
+
+extension ColumnExpression: TypeEquatable {
+    typealias CompareType = T
 }

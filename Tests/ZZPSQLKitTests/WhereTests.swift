@@ -52,41 +52,45 @@ final class WhereTests: PSQLTestCase {
     }
     
     func testBetween() {
-        XCTFail("not implemented")
-//        let w = WHERE {
-//            m.$name >><< ("hello", "hi")
-//        }
-//
-//        w.serialize(to: &serializer)
-//        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" BETWEEN ('hello' AND 'hi'))"#)
+        let w = WHERE {
+            m.$age >< 20...30
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" BETWEEN (20 AND 30))"#)
+    }
+    
+    func testNotBetween() {
+        let w = WHERE {
+            m.$age <> 20...30
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" NOT BETWEEN (20 AND 30))"#)
     }
     
     func testLiteral() {
-        XCTFail("not implemented")
-//        let w = WHERE {
-//            m.$name == "hello"
-//            m.$name != "hello"
-//            m.$age < 29
-//            m.$age <= 29
-//            m.$age > 29
-//            m.$age >= 29
-//            m.$age >><< (29, 30)
-//        }
-//
-//        w.serialize(to: &serializer)
-//        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name"='hello') AND ("x"."name"!='hello') AND ("x"."age"<29) AND ("x"."age"<=29) AND ("x"."age">29) AND ("x"."age">=29) AND ("x"."age" BETWEEN (29 AND 30))"#)
+        let w = WHERE {
+            m.$name == "hello"
+            m.$name != "hello"
+            m.$age < 29
+            m.$age <= 29
+            m.$age > 29
+//            m.$age >= 29 // only can support 5 right now
+//            m.$age >< 29...30 // only can support 5 right now
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" = 'hello') AND ("x"."name" != 'hello') AND ("x"."age" < 29) AND ("x"."age" <= 29) AND ("x"."age" > 29)"#)
     }
     
-    func testWhereN() {
-        XCTFail("not implemented")
-//        let w = WHERE {
-//            MyModel.$name == m.$name
-//            m.$name == MyModel.$name
-//            m.$name <> ["name", "hi"] || MyModel.$name != MyModel.$name
-//        }
-//
-//        w.serialize(to: &serializer)
-//        XCTAssertEqual(serializer.sql, #"WHERE ("my_model"."name"="x"."name") AND ("x"."name"="my_model"."name") AND (("x"."name" NOT IN ('name', 'hi')) OR ("my_model"."name"!="my_model"."name"))"#)
+    func testWhereOr() {
+        let w = WHERE {
+            m.$name <> ["name", "hi"] || MyModel.$name != MyModel.$name
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE (("x"."name" NOT IN ('name', 'hi')) OR ("my_model"."name" != "my_model"."name"))"#)
     }
     
     static var allTests = [
@@ -96,6 +100,6 @@ final class WhereTests: PSQLTestCase {
         ("testIn", testIn),
         ("testNotIn", testNotIn),
         ("testLiteral", testLiteral),
-        ("testWhereN", testWhereN)
+        ("testWhereOr", testWhereOr)
     ]
 }
