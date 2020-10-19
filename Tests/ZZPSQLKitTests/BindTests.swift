@@ -12,7 +12,7 @@ final class BindTests: PSQLTestCase {
         }
         
         b.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" = $1) AND ("x"."age" > $1)"#)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" = $1) AND ("x"."age" > $2)"#)
         XCTAssertEqual(serializer.binds.first as! String, "tmac")
         XCTAssertEqual(serializer.binds.last as! Int, 8)
     }

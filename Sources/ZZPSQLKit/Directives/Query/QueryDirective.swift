@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias QUERY = QueryDirective
-
 struct QueryDirective<Content>: SQLExpression where Content: QuerySQLExpressible {
     let content: Content
     

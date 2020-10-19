@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias HAVING = HavingDirective
-
 struct HavingDirective<Content>: SQLExpression where Content: HavingSQLExpressible {
     let content: Content
     

@@ -26,10 +26,6 @@ protocol CompareSQLExpressible {
     var compareSqlExpression: Compare { get }
 }
 
-protocol TypeEquatable {
-    associatedtype CompareType
-}
-
 protocol JoinSQLExpressible {
     associatedtype Join: SQLExpression
     var joinSqlExpression: Join { get }

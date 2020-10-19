@@ -1,15 +1,18 @@
 import Foundation
 import SQLKit
 
-struct PSQLBind<T>: CompareSQLExpressible, TypeEquatable where T: PSQLExpressible & Encodable {
-    typealias CompareType = T
-    
+struct PSQLBind<T> where T: PSQLExpressible & Encodable {
     let bind: SQLBind
     
     init(_ value: T) {
         self.bind = SQLBind(value)
     }
-    
+}
+
+extension PSQLBind: CompareSQLExpressible {
     var compareSqlExpression: SQLBind { bind }
 }
 
+extension PSQLBind: TypeEquatable {
+    typealias CompareType = T
+}

@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias ORDERBY = OrderByDirective
-
 enum OrderByDirection: String, SQLExpression {
     case asc = "ASC"
     case desc = "DESC"

@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias SELECT = SelectDirective
-
 struct SelectDirective<Content>: SQLExpression where Content: SelectSQLExpressible {
     let content: Content
     
@@ -34,9 +32,7 @@ struct DistinctModifier<Content>: SelectSQLExpressible where Content: SelectSQLE
         }
     }
     
-    var selectSqlExpression: Select {
-        .init(content: content)
-    }
+    var selectSqlExpression: Select { .init(content: content) }
 }
 
 extension SelectDirective {
@@ -70,9 +66,7 @@ struct DistinctOnModifier<DistinctOn, Content>: SelectSQLExpressible where Disti
         }
     }
     
-    var selectSqlExpression: Select {
-        .init(distinctOn: distinctOn, content: content)
-    }
+    var selectSqlExpression: Select { .init(distinctOn: distinctOn, content: content) }
 }
 
 extension SelectDirective {

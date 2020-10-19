@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias GROUPBY = GroupByDirective
-
 struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQLExpressible {
     let content: Content
     

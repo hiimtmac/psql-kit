@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias WHERE = WhereDirective
-
 struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpressible {
     let content: Content
     

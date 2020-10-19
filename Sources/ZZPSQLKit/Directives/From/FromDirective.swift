@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias FROM = FromDirective
-
 struct FromDirective<Content>: SQLExpression where Content: FromSQLExpressible {
     let content: Content
     

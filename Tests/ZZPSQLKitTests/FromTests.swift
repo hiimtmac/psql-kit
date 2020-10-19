@@ -44,15 +44,16 @@ final class FromTests: PSQLTestCase {
     }
     
     func testFromGenerateSeries() {
-        XCTFail("Not implemented")
-//        let d = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!
-//        let f = FROM {
-//            GENERATE_SERIES(from: SimpleDate(d), to: SimpleDate(d), interval: "1 day")
-//            GENERATE_SERIES(from: 1, to: 5, interval: 1)
-//        }
-//
-//        f.serialize(to: &serializer)
-//        XCTAssertEqual(serializer.sql, #"FROM GENERATE_SERIES('2020-07-31', '2020-07-31', '1 day'::interval), GENERATE_SERIES(1, 5, 1::interval)"#)
+        let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
+        let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
+        
+        let f = FROM {
+            GENERATE_SERIES(date1...date2, interval: "1 day").as("dates")
+            GENERATE_SERIES(date1...date2, interval: "1 day")
+        }
+        
+        f.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"FROM GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::interval) AS "dates", GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::interval)"#)
     }
     
     static var allTests = [

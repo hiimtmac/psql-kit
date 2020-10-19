@@ -1,8 +1,6 @@
 import Foundation
 import SQLKit
 
-typealias JOIN = JoinDirective
-
 struct JoinDirective<Table, Content>: SQLExpression where Table: FromSQLExpressible, Content: JoinSQLExpressible {
     let table: Table
     let method: SQLJoinMethod

@@ -2,14 +2,16 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-struct RawColumn<T>: TypeEquatable where T: PSQLExpressible {
-    typealias CompareType = T
-    
+struct RawColumn<T> where T: PSQLExpressible {
     let column: String
     
     init(_ column: String) {
         self.column = column
     }
+}
+
+extension RawColumn: TypeEquatable {
+    typealias CompareType = T
 }
 
 extension RawColumn: SelectSQLExpressible {
