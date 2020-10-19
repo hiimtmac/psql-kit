@@ -43,10 +43,20 @@ final class JoinTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name") AND (("x"."name" = "my_model"."name") OR ("x"."name" != "x"."name"))"#)
     }
     
+    func testJoinRaw() {
+        let j = JOIN(RawTable("cool")) {
+            m.$name == m.$name
+        }
+        
+        j.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"INNER JOIN "cool" ON ("x"."name" = "x"."name")"#)
+    }
+    
     static var allTests = [
         ("testJoinModel", testJoinModel),
         ("testJoinModelAlias", testJoinModelAlias),
         ("testJoinBoth", testJoinBoth),
         ("testJoinN", testJoinN),
+        ("testJoinRaw", testJoinRaw)
     ]
 }

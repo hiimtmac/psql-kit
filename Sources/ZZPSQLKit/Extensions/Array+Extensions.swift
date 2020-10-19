@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-extension Array: CompareSQLExpressible where Element: PKExpressible {
+extension Array: CompareSQLExpressible where Element: PSQLExpressible {
     struct Compare: SQLExpression {
         let expressions: [SQLExpression]
         

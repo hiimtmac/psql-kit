@@ -93,6 +93,24 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"WHERE (("x"."name" NOT IN ('name', 'hi')) OR ("my_model"."name" != "my_model"."name"))"#)
     }
     
+    func testWhereRaw() {
+        let w = WHERE {
+            m.$name == RawColumn<String>("cool")
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" = "cool")"#)
+    }
+    
+    func testWhereBind() {
+        let w = WHERE {
+            RawColumn<String>("cool") == PSQLBind("yes")
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("cool" = $1)"#)
+    }
+    
     static var allTests = [
         ("testEqual", testEqual),
         ("testMultiple", testMultiple),
@@ -100,6 +118,8 @@ final class WhereTests: PSQLTestCase {
         ("testIn", testIn),
         ("testNotIn", testNotIn),
         ("testLiteral", testLiteral),
-        ("testWhereOr", testWhereOr)
+        ("testWhereOr", testWhereOr),
+        ("testWhereRaw", testWhereRaw),
+        ("testWhereBind", testWhereBind)
     ]
 }

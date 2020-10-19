@@ -46,10 +46,20 @@ final class OrderByTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"ORDER BY "x"."name", "my_model"."name" ASC, "my_model"."name" DESC, "x"."name" ASC"#)
     }
     
+    func testOrderRaw() {
+        let o = ORDERBY {
+            RawColumn<String>("cool").desc()
+        }
+        
+        o.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"ORDER BY "cool" DESC"#)
+    }
+    
     static var allTests = [
         ("testOrderModel", testOrderModel),
         ("testOrderModelAlias", testOrderModelAlias),
         ("testOrderMultiple", testOrderMultiple),
-        ("testOrderDirections", testOrderDirections)
+        ("testOrderDirections", testOrderDirections),
+        ("testOrderRaw", testOrderRaw)
     ]
 }

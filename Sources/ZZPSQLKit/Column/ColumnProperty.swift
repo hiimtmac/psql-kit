@@ -1,7 +1,7 @@
 import Foundation
 
 @propertyWrapper
-struct ColumnProperty<Model: Table, Value: PKExpressible> {
+struct ColumnProperty<Model: Table, Value: PSQLExpressible> {
     let key: String
     
     init(key: String) {

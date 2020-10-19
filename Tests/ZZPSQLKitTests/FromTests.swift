@@ -34,6 +34,15 @@ final class FromTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
     }
     
+    func testFromRaw() {
+        let f = FROM {
+            RawTable("tableName")
+        }
+        
+        f.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"FROM "tableName""#)
+    }
+    
     func testFromGenerateSeries() {
         XCTFail("Not implemented")
 //        let d = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!
@@ -50,6 +59,7 @@ final class FromTests: PSQLTestCase {
         ("testFromModel", testFromModel),
         ("testFromModelAlias", testFromModelAlias),
         ("testFromBoth", testFromBoth),
+        ("testFromRaw", testFromRaw),
         ("testFromGenerateSeries", testFromGenerateSeries)
     ]
 }

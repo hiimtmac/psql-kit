@@ -80,12 +80,22 @@ final class SelectTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"SELECT "my_model"."name"::TEXT AS "nam", "x"."name"::TEXT AS "nam", "x"."id"::UUID"#)
     }
     
+    func testSelectRaw() {
+        let s = SELECT {
+            RawColumn<String>("cool")
+        }
+
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT "cool"::TEXT"#)
+    }
+    
     static var allTests = [
         ("testSelectModel", testSelectModel),
         ("testSelectModelAlias", testSelectModelAlias),
         ("testSelectBoth", testSelectBoth),
         ("testSelectDistinctOn", testSelectDistinctOn),
         ("testSelectAliasSingle", testSelectAliasSingle),
-        ("testSelectAliasMultiple", testSelectAliasMultiple)
+        ("testSelectAliasMultiple", testSelectAliasMultiple),
+        ("testSelectRaw", testSelectRaw)
     ]
 }

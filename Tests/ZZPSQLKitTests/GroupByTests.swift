@@ -33,9 +33,19 @@ final class GroupByTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"GROUP BY "my_model"."name", "x"."name""#)
     }
     
+    func testGroupRaw() {
+        let g = GROUPBY {
+            RawColumn<String>("cool")
+        }
+        
+        g.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"GROUP BY "cool""#)
+    }
+    
     static var allTests = [
         ("testGroupModel", testGroupModel),
         ("testGroupModelAlias", testGroupModelAlias),
-        ("testGroupBoth", testGroupBoth)
+        ("testGroupBoth", testGroupBoth),
+        ("testGroupRaw", testGroupRaw)
     ]
 }

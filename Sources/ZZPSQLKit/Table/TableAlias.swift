@@ -21,7 +21,7 @@ extension TableAlias {
     }
     
     // MARK: - FieldProperty
-    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> ColumnExpression<U> {
+    subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -34,7 +34,7 @@ extension TableAlias {
 
 extension TableAlias where T: Model {
     // MARK: - FieldProperty
-    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> ColumnExpression<U> {
+    subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -45,7 +45,7 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - OptionalFieldProperty
-    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, OptionalFieldProperty<T, U>>) -> ColumnExpression<U> {
+    subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, OptionalFieldProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -56,7 +56,7 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - IDProperty
-    subscript<U: PKExpressible>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> ColumnExpression<U> {
+    subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -67,7 +67,7 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - ParentProperty
-    subscript<U, V: PKExpressible>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> ColumnExpression<V> {
+    subscript<U, V: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> ColumnExpression<V> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,

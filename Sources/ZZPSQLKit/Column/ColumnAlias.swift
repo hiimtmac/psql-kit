@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-struct ColumnAlias<T> where T: PKExpressible {
+struct ColumnAlias<T> where T: PSQLExpressible {
     let column: ColumnExpression<T>
     let alias: String
 }

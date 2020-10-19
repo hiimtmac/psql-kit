@@ -1,9 +1,8 @@
 import XCTest
-@testable import PSQLKit
+@testable import ZZPSQLKit
 import FluentKit
 
 final class AdvancedTests: PSQLTestCase {
-    
 //    final class Pet: Model, Table {
 //        static let schema = "pet"
 //        

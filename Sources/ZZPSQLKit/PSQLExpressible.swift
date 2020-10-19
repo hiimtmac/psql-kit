@@ -1,11 +1,11 @@
 import Foundation
 import PostgresKit
 
-protocol PKExpressible: SQLExpression, TypeEquatable, CompareSQLExpressible {
+protocol PSQLExpressible: SQLExpression, TypeEquatable, CompareSQLExpressible {
     static var postgresColumnType: PostgresColumnType { get }
 }
 
-extension Bool: PKExpressible {
+extension Bool: PSQLExpressible {
     typealias CompareType = Self
     static var postgresColumnType: PostgresColumnType { .boolean }
     
@@ -16,7 +16,7 @@ extension Bool: PKExpressible {
     var compareSqlExpression: Bool { self }
 }
 
-extension Double: PKExpressible {
+extension Double: PSQLExpressible {
     typealias CompareType = Self
     static var postgresColumnType: PostgresColumnType { .decimal }
     
@@ -27,7 +27,7 @@ extension Double: PKExpressible {
     var compareSqlExpression: Double { self }
 }
 
-extension Float: PKExpressible {
+extension Float: PSQLExpressible {
     typealias CompareType = Self
     static var postgresColumnType: PostgresColumnType { .decimal }
     
@@ -38,7 +38,7 @@ extension Float: PKExpressible {
     var compareSqlExpression: Float { self }
 }
 
-extension Int: PKExpressible {
+extension Int: PSQLExpressible {
     typealias CompareType = Self
     static var postgresColumnType: PostgresColumnType { .integer }
     
@@ -49,7 +49,7 @@ extension Int: PKExpressible {
     var compareSqlExpression: Int { self }
 }
 
-extension String: PKExpressible {
+extension String: PSQLExpressible {
     typealias CompareType = Self
     static var postgresColumnType: PostgresColumnType { .text }
     
@@ -62,7 +62,7 @@ extension String: PKExpressible {
     var compareSqlExpression: String { self }
 }
 
-extension UUID: PKExpressible {
+extension UUID: PSQLExpressible {
     typealias CompareType = Self
     static var postgresColumnType: PostgresColumnType { .uuid }
     
@@ -93,6 +93,6 @@ extension Optional: TypeEquatable where Wrapped: TypeEquatable {
     typealias CompareType = Wrapped
 }
 
-extension Optional: PKExpressible where Wrapped: PKExpressible {
+extension Optional: PSQLExpressible where Wrapped: PSQLExpressible {
     static var postgresColumnType: PostgresColumnType { Wrapped.postgresColumnType }
 }
