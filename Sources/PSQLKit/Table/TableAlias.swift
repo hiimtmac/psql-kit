@@ -20,8 +20,21 @@ extension TableAlias {
         .init(path: schema, alias: alias)
     }
     
-    // MARK: - FieldProperty
+    public var table: TableAlias { self }
+    
+    // MARK: - ColumnProperty
     public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> ColumnExpression<U> {
+        let field = T()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.key
+        )
+    }
+    
+    // MARK: - OptionalColumnProperty
+    public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, OptionalColumnProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -79,8 +92,6 @@ extension TableAlias where T: Model {
 }
 
 extension TableAlias: FromSQLExpressible {
-    public var table: TableAlias { self }
-    
     public var fromSqlExpression: some SQLExpression {
         _From(
             aliasName: alias,
@@ -88,31 +99,31 @@ extension TableAlias: FromSQLExpressible {
             schemaName: T.schema
         )
     }
-}
-
-private struct _From: SQLExpression {
-    let aliasName: String
-    let pathName: String?
-    let schemaName: String
     
-    func serialize(to serializer: inout SQLSerializer) {
-        if let path = pathName {
+    private struct _From: SQLExpression {
+        let aliasName: String
+        let pathName: String?
+        let schemaName: String
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            if let path = pathName {
+                serializer.writeQuote()
+                serializer.write(path)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            }
+            
             serializer.writeQuote()
-            serializer.write(path)
+            serializer.write(schemaName)
             serializer.writeQuote()
-            serializer.writePeriod()
+            
+            serializer.writeSpace()
+            serializer.write("AS")
+            serializer.writeSpace()
+            
+            serializer.writeQuote()
+            serializer.write(aliasName)
+            serializer.writeQuote()
         }
-        
-        serializer.writeQuote()
-        serializer.write(schemaName)
-        serializer.writeQuote()
-        
-        serializer.writeSpace()
-        serializer.write("AS")
-        serializer.writeSpace()
-        
-        serializer.writeQuote()
-        serializer.write(aliasName)
-        serializer.writeQuote()
     }
 }

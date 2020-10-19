@@ -34,8 +34,19 @@ final class AdvancedTests: PSQLTestCase {
     }
     
     struct OwnerDateSeries: Table {
-        @Column(key: "id") var id: UUID?
+        @OptionalColumn(key: "id") var id: UUID?
         @Column(key: "date") var date: PSQLKit.Date
+    }
+    
+    func testTypesCompile() {
+        let _ = WHERE {
+            // Custom UUID vs Custom UUID?
+            OwnerFilter.$id == OwnerDateSeries.$id
+            // Fluent UUID? vs Custom UUID?
+            Owner.$id == OwnerDateSeries.$id
+            // Fluent UUID? vs Custom UUID
+            Owner.$id == OwnerFilter.$id
+        }
     }
     
     func testExample() {

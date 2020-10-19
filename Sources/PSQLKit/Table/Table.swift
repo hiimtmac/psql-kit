@@ -13,12 +13,31 @@ public protocol Table: FromSQLExpressible {
 
 extension Table {
     public typealias Column<Value: PSQLExpressible> = ColumnProperty<Self, Value>
+    public typealias OptionalColumn<Value: PSQLExpressible> = OptionalColumnProperty<Self, Value>
     
     /// fluent `table`
     public static var schema: String { "\(Self.self)" }
     /// psql `schema`
     public static var path: String? { nil }
+
+    public static func `as`(_ alias: String) -> TableAlias<Self> {
+        .init(path: path, alias: alias)
+    }
     
+    public func `as`(_ alias: String) -> TableAlias<Self> {
+        .init(path: Self.path, alias: alias)
+    }
+
+    public static var table: Self { Self() }
+    
+    public var fromSqlExpression: some SQLExpression {
+        _From(
+            pathName: Self.path,
+            schemaName: Self.schema
+        )
+    }
+    
+    // MARK: - ColumnProperty
     public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> ColumnExpression<T> {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
@@ -28,15 +47,16 @@ extension Table {
             columnName: field.key
         )
     }
-}
-
-extension Table {
-    public static func `as`(_ alias: String) -> TableAlias<Self> {
-        .init(path: path, alias: alias)
-    }
     
-    public func `as`(_ alias: String) -> TableAlias<Self> {
-        .init(path: Self.path, alias: alias)
+    // MARK: - OptionalColumnProperty
+    public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, OptionalColumn<T>>) -> ColumnExpression<T> {
+        let field = Self()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.key
+        )
     }
 }
 
@@ -84,17 +104,6 @@ extension Table where Self: Model {
             columnName: field.$id.key.description
         )
     }
-}
-
-extension Table {
-    public var fromSqlExpression: some SQLExpression {
-        _From(
-            pathName: Self.path,
-            schemaName: Self.schema
-        )
-    }
-    
-    public static var table: Self { Self() }
 }
 
 private struct _From: SQLExpression {
