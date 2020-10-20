@@ -1,6 +1,10 @@
 import Foundation
 import FluentKit
 
+extension FluentKit.Database {
+    
+}
+
 //extension Database {
 //    public func query<T>(query: T) {
 //        

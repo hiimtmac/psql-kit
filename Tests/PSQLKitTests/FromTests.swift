@@ -56,11 +56,25 @@ final class FromTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"FROM GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates", GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL)"#)
     }
     
+    func testSubquery() {
+        let f = FROM {
+            QUERY {
+                SELECT { m.$age }
+                FROM { m.table }
+            }
+            .asSubquery(m.table)
+        }
+        
+        f.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"FROM (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#)
+    }
+    
     static var allTests = [
         ("testFromModel", testFromModel),
         ("testFromModelAlias", testFromModelAlias),
         ("testFromBoth", testFromBoth),
         ("testFromRaw", testFromRaw),
-        ("testFromGenerateSeries", testFromGenerateSeries)
+        ("testFromGenerateSeries", testFromGenerateSeries),
+        ("testSubquery", testSubquery)
     ]
 }

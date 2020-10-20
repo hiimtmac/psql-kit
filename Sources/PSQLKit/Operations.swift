@@ -1,9 +1,6 @@
 import Foundation
 import SQLKit
 
-infix operator ><: LogicalConjunctionPrecedence
-infix operator <>: LogicalConjunctionPrecedence
-
 public func ==<T, U>(_ lhs: T, _ rhs: U)
 -> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
 {

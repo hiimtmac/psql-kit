@@ -5,6 +5,7 @@ public typealias GENERATE_SERIES = GenerateSeriesExpression
 public typealias MAX = MaxExpression
 public typealias MIN = MinExpression
 public typealias SUM = SumExpression
+public typealias COUNT = CountExpression
 
 public typealias CONCAT = ConcatExpression
 public typealias CONCAT3 = ConcatExpression3

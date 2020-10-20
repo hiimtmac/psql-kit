@@ -10,7 +10,7 @@ final class SQLExpressionTests: XCTestCase {
     }
     
     func testExpressionRaw() {
-        let q: some SQLExpression = QUERY {
+        let q: some PSQLQuery = QUERY {
             SELECT {
                 Thing.$id
                 Thing.$name

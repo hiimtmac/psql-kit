@@ -30,6 +30,10 @@ extension Table {
 
     public static var table: Self { Self() }
     
+    public static postfix func .*(table: Self) -> AllTableSelection<Self> {
+        .init(table: table)
+    }
+    
     public var fromSqlExpression: some SQLExpression {
         _From(
             pathName: Self.path,

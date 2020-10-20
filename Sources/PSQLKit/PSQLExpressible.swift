@@ -5,6 +5,12 @@ public protocol PSQLExpressible: SQLExpression, TypeEquatable {
     static var postgresColumnType: PostgresColumnType { get }
 }
 
+extension PSQLExpressible where Self: Encodable {
+    public func asBind() -> PSQLBind<Self> {
+        .init(self)
+    }
+}
+
 struct PrimativeSelect<T>: SQLExpression where T: PSQLExpressible {
     let value: T
     

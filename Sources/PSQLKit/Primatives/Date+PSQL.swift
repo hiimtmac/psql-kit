@@ -41,7 +41,7 @@ public struct PSQLDate: PSQLDateTime {
 }
 
 extension PSQLDate: PSQLExpressible {
-    public typealias CompareType = Date
+    public typealias CompareType = Self
     public static var postgresColumnType: PostgresColumnType { .date }
 }
 
@@ -62,7 +62,7 @@ public struct PSQLTime: PSQLDateTime {
 }
 
 extension PSQLTime: PSQLExpressible {
-    public typealias CompareType = Date
+    public typealias CompareType = Self
     public static var postgresColumnType: PostgresColumnType { .time }
 }
 
@@ -87,7 +87,7 @@ extension PSQLTimestamp: SelectSQLExpressible {
 }
 
 extension PSQLTimestamp: PSQLExpressible {
-    public typealias CompareType = Date
+    public typealias CompareType = Self
     public static var postgresColumnType: PostgresColumnType { .timestamp }
 }
 
@@ -104,7 +104,7 @@ public struct PSQLTimestampZ: PSQLDateTime {
 }
 
 extension PSQLTimestampZ: PSQLExpressible {
-    public typealias CompareType = Date
+    public typealias CompareType = Self
     public static var postgresColumnType: PostgresColumnType { .timestamptz }
 }
 

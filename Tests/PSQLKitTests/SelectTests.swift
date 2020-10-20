@@ -89,6 +89,29 @@ final class SelectTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"SELECT "cool"::TEXT"#)
     }
     
+    func testSelectSubquery() {
+        let s = SELECT {
+            QUERY {
+                SELECT { m.$age }
+                FROM { m.table }
+            }
+            .asSubquery(m.table)
+        }
+        
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#)
+    }
+    
+    func testPostfix() {
+        let s = SELECT {
+            MyModel.table.*
+            m.table.*
+        }
+
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."*", "x"."*""#)
+    }
+    
     static var allTests = [
         ("testSelectModel", testSelectModel),
         ("testSelectModelAlias", testSelectModelAlias),
@@ -96,6 +119,8 @@ final class SelectTests: PSQLTestCase {
         ("testSelectDistinctOn", testSelectDistinctOn),
         ("testSelectAliasSingle", testSelectAliasSingle),
         ("testSelectAliasMultiple", testSelectAliasMultiple),
-        ("testSelectRaw", testSelectRaw)
+        ("testSelectRaw", testSelectRaw),
+        ("testSelectSubquery", testSelectSubquery),
+        ("testPostfix", testPostfix)
     ]
 }

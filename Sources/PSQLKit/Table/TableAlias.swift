@@ -22,6 +22,10 @@ extension TableAlias {
     
     public var table: TableAlias { self }
     
+    public static postfix func .*(_ alias: Self) -> AllTableAliasSelection<T> {
+        .init(tableAlias: alias)
+    }
+    
     // MARK: - ColumnProperty
     public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]

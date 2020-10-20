@@ -1,10 +1,14 @@
 import Foundation
-import FluentKit
-import PostgresKit
 import SQLKit
+import FluentKit
 import NIO
+import PostgresKit
 
-extension SQLExpression {
+public protocol PSQLQuery: SQLExpression { }
+
+extension QueryDirective: PSQLQuery { }
+
+extension PSQLQuery {
     public func raw(database: SQLDatabase = Self.testDB) -> (sql: String, binds: [Encodable]) {
         var serializer = SQLSerializer(database: database)
         self.serialize(to: &serializer)
@@ -12,6 +16,23 @@ extension SQLExpression {
     }
     
     public static var testDB: SQLDatabase { TestSQLDatabase() }
+    
+    public func query(on database: Database) -> PSQLQueryFetcher {
+        let psqlDatabase = database as! PostgresDatabase
+        let sqlDatabase = psqlDatabase.sql()
+        
+        return PSQLQueryFetcher(query: self, database: sqlDatabase)
+    }
+}
+
+public final class PSQLQueryFetcher: SQLQueryFetcher {
+    public var query: SQLExpression
+    public var database: SQLDatabase
+    
+    init(query: SQLExpression, database: SQLDatabase) {
+        self.query = query
+        self.database = database
+    }
 }
 
 final class TestSQLDatabase: SQLDatabase {

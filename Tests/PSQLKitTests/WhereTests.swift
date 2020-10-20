@@ -57,7 +57,7 @@ final class WhereTests: PSQLTestCase {
         }
 
         w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" BETWEEN (20 AND 30))"#)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" BETWEEN 20 AND 30)"#)
     }
     
     func testNotBetween() {
@@ -66,7 +66,7 @@ final class WhereTests: PSQLTestCase {
         }
 
         w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" NOT BETWEEN (20 AND 30))"#)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" NOT BETWEEN 20 AND 30)"#)
     }
     
     func testLiteral() {

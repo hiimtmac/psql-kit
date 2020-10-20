@@ -1,14 +1,14 @@
 import Foundation
 import SQLKit
 
-struct ColumnAlias<T> where T: PSQLExpressible {
+public struct ColumnAlias<T> where T: PSQLExpressible {
     let column: ColumnExpression<T>
     let alias: String
 }
 
 extension ColumnAlias: SelectSQLExpressible {
-    var selectSqlExpression: Select {
-        .init(
+    public var selectSqlExpression: some SQLExpression {
+        _Select(
             aliasName: column.aliasName,
             pathName: column.pathName,
             schemaName: column.schemaName,
@@ -18,7 +18,7 @@ extension ColumnAlias: SelectSQLExpressible {
         )
     }
     
-    struct Select: SQLExpression {
+    private struct _Select: SQLExpression {
         let aliasName: String?
         let pathName: String?
         let schemaName: String?

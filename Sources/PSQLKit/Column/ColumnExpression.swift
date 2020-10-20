@@ -66,7 +66,7 @@ extension ColumnExpression: SelectSQLExpressible  {
 }
 
 extension ColumnExpression {
-    func `as`(_ alias: String) -> ColumnAlias<T> {
+    public func `as`(_ alias: String) -> ColumnAlias<T> {
         ColumnAlias(column: self, alias: alias)
     }
 }

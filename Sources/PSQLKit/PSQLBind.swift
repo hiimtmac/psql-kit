@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct PSQLBind<T> where T: PSQLExpressible & Encodable & Comparable {
+public struct PSQLBind<T> where T: PSQLExpressible & Encodable {
     let value: T
     
     public init(_ value: T) {
@@ -9,23 +9,27 @@ public struct PSQLBind<T> where T: PSQLExpressible & Encodable & Comparable {
     }
 }
 
-extension PSQLBind: CompareSQLExpressible {
-    public var compareSqlExpression: some SQLExpression {
-        SQLBind(value)
+extension PSQLBind: SQLExpression {
+    public func serialize(to serializer: inout SQLSerializer) {
+        SQLBind(value).serialize(to: &serializer)
     }
+}
+
+extension PSQLBind: CompareSQLExpressible {
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension PSQLBind: SelectSQLExpressible {
-    public var selectSqlExpression: some SQLExpression {
-        SQLBind(value)
-    }
+    public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension PSQLBind: Comparable {
+extension PSQLBind: Equatable where T: Equatable {
     public static func ==(lhs: Self, rhs: Self) -> Bool {
         lhs.value == rhs.value
     }
-    
+}
+
+extension PSQLBind: Comparable where T: Comparable {
     public static func <(lhs: Self, rhs: Self) -> Bool {
         lhs.value < rhs.value
     }

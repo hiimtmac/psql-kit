@@ -25,6 +25,16 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"SELECT MIN("x"."name"::TEXT), MIN("x"."age"::INTEGER) AS "age""#)
     }
     
+    func testCount() {
+        let s = SELECT {
+            COUNT(m.$name)
+            COUNT(m.$age).as("age")
+        }
+        
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT COUNT("x"."name"::TEXT), COUNT("x"."age"::INTEGER) AS "age""#)
+    }
+    
     func testSum() {
         let s = SELECT {
             SUM(m.$name)
@@ -71,6 +81,7 @@ final class ExpressionTests: PSQLTestCase {
     static var allTests = [
         ("testMax", testMax),
         ("testMin", testMin),
+        ("testCount", testCount),
         ("testSum", testSum),
         ("testGenerateSeries", testGenerateSeries),
         ("testConcat", testConcat),
