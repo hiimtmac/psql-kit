@@ -2,12 +2,12 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-protocol PSQLDate: Comparable, PSQLExpressible, Decodable, Encodable {
-    var storage: Foundation.Date { get }
+protocol PSQLDateTime: Comparable, PSQLExpressible, Decodable, Encodable {
+    var storage: Date { get }
     static var defaultFormatter: DateFormatter { get }
 }
 
-extension PSQLDate {
+extension PSQLDateTime {
     public static func <(lhs: Self, rhs: Self) -> Bool {
         lhs.storage < rhs.storage
     }
@@ -19,17 +19,17 @@ extension PSQLDate {
     }
 }
 
-extension Foundation.Date {
-    public var psqlDate: Date { .init(self) }
-    public var psqlTime: Time { .init(self) }
-    public var psqlTimestamp: Timestamp { .init(self) }
-    public var psqlTimestampZ: TimestampZ { .init(self) }
+extension Date {
+    public var psqlDate: PSQLDate { .init(self) }
+    public var psqlTime: PSQLTime { .init(self) }
+    public var psqlTimestamp: PSQLTimestamp { .init(self) }
+    public var psqlTimestampZ: PSQLTimestampZ { .init(self) }
 }
 
-public struct Date: PSQLDate {
-    let storage: Foundation.Date
+public struct PSQLDate: PSQLDateTime {
+    let storage: Date
     
-    init(_ date: Foundation.Date = .init()) {
+    init(_ date: Date = .init()) {
         self.storage = date
     }
     
@@ -40,19 +40,19 @@ public struct Date: PSQLDate {
     }()
 }
 
-extension Date: PSQLExpressible {
-    public typealias CompareType = Self
+extension PSQLDate: PSQLExpressible {
+    public typealias CompareType = Date
     public static var postgresColumnType: PostgresColumnType { .date }
 }
 
-extension Date: SelectSQLExpressible {
+extension PSQLDate: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-public struct Time: PSQLDate {
-    let storage: Foundation.Date
+public struct PSQLTime: PSQLDateTime {
+    let storage: Date
     
-    public init(_ date: Foundation.Date = .init()) {
+    public init(_ date: Date = .init()) {
         self.storage = date
     }
     
@@ -61,19 +61,19 @@ public struct Time: PSQLDate {
     }()
 }
 
-extension Time: PSQLExpressible {
-    public typealias CompareType = Self
+extension PSQLTime: PSQLExpressible {
+    public typealias CompareType = Date
     public static var postgresColumnType: PostgresColumnType { .time }
 }
 
-extension Time: SelectSQLExpressible {
+extension PSQLTime: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-public struct Timestamp: PSQLDate {
-    let storage: Foundation.Date
+public struct PSQLTimestamp: PSQLDateTime {
+    let storage: Date
     
-    public init(_ date: Foundation.Date = .init()) {
+    public init(_ date: Date = .init()) {
         self.storage = date
     }
     
@@ -82,19 +82,19 @@ public struct Timestamp: PSQLDate {
     }()
 }
 
-extension Timestamp: SelectSQLExpressible {
+extension PSQLTimestamp: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension Timestamp: PSQLExpressible {
-    public typealias CompareType = Self
+extension PSQLTimestamp: PSQLExpressible {
+    public typealias CompareType = Date
     public static var postgresColumnType: PostgresColumnType { .timestamp }
 }
 
-public struct TimestampZ: PSQLDate {
-    let storage: Foundation.Date
+public struct PSQLTimestampZ: PSQLDateTime {
+    let storage: Date
     
-    public init(_ date: Foundation.Date = .init()) {
+    public init(_ date: Date = .init()) {
         self.storage = date
     }
     
@@ -103,11 +103,11 @@ public struct TimestampZ: PSQLDate {
     }()
 }
 
-extension TimestampZ: PSQLExpressible {
-    public typealias CompareType = Self
+extension PSQLTimestampZ: PSQLExpressible {
+    public typealias CompareType = Date
     public static var postgresColumnType: PostgresColumnType { .timestamptz }
 }
 
-extension TimestampZ: SelectSQLExpressible {
+extension PSQLTimestampZ: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
 }

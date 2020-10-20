@@ -19,14 +19,14 @@ final class AdvancedTests: PSQLTestCase {
         @ID var id: UUID?
         @Field(key: "name") var name: String
         @Field(key: "age") var age: Int
-        @Field(key: "bday") var bday: PSQLKit.Date
+        @Field(key: "bday") var bday: PSQLDate
         
         init() {}
     }
     
     struct DateRange: Table {
         static let schema: String = "date_range"
-        @Column(key: "date") var date: PSQLKit.Date
+        @Column(key: "date") var date: PSQLDate
     }
     
     struct OwnerFilter: Table {
@@ -35,7 +35,7 @@ final class AdvancedTests: PSQLTestCase {
     
     struct OwnerDateSeries: Table {
         @OptionalColumn(key: "id") var id: UUID?
-        @Column(key: "date") var date: PSQLKit.Date
+        @Column(key: "date") var date: PSQLDate
     }
     
     func testTypesCompile() {
@@ -53,7 +53,7 @@ final class AdvancedTests: PSQLTestCase {
         let d1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 31).date!
         let d2 = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!
         let r = DateRange.as("r")
-        let dateCol = RawColumn<PSQLKit.Date>("date")
+        let dateCol = RawColumn<PSQLDate>("date")
         let p = Pet.as("p")
         let o = Owner.as("o")
         let f = OwnerFilter.as("f")
