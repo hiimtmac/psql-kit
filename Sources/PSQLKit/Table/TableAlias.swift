@@ -93,6 +93,17 @@ extension TableAlias where T: Model {
             columnName: field.$id.key.description
         )
     }
+    
+    // MARK: - OptionalParentProperty
+    public subscript<U, V: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, OptionalParentProperty<T, U>>) -> ColumnExpression<V> {
+        let field = T()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.$id.key.description
+        )
+    }
 }
 
 extension TableAlias: FromSQLExpressible {

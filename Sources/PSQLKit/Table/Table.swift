@@ -99,7 +99,18 @@ extension Table where Self: Model {
     }
     
     // MARK: - ParentProperty
-    public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> ColumnExpression<T> {
+    public static subscript<T: Model, U: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> ColumnExpression<U> {
+        let field = Self()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.$id.key.description
+        )
+    }
+    
+    // MARK: - OptionalParentProperty
+    public static subscript<T: Model, U: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, OptionalParentProperty<Self, T>>) -> ColumnExpression<U> {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
