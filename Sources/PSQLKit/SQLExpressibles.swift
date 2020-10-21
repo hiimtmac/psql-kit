@@ -50,3 +50,8 @@ public protocol WithSQLExpressible {
     associatedtype With: SQLExpression
     var withSqlExpression: With { get }
 }
+
+public protocol UnionSQLExpressible {
+    associatedtype Union: SQLExpression
+    var unionSqlExpression: Union { get }
+}

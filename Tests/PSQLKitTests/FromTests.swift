@@ -48,8 +48,8 @@ final class FromTests: PSQLTestCase {
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
         
         let f = FROM {
-            GENERATE_SERIES(date1...date2, interval: "1 day").as("dates")
-            GENERATE_SERIES(date1...date2, interval: "1 day")
+            GENERATE_SERIES(from: date1, to: date2, interval: "1 day").as("dates")
+            GENERATE_SERIES(from: date1, to: date2, interval: "1 day")
         }
         
         f.serialize(to: &serializer)

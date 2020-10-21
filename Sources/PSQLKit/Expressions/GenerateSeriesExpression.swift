@@ -2,22 +2,24 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpressible & Comparable {
-    let content: ClosedRange<Content>
+public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpressible {
+    let lower: Content
+    let upper: Content
     let interval: SQLExpression
     
-    public init(_ content: ClosedRange<Content>, interval: SQLExpression) {
-        self.content = content
+    public init(from lower: Content, to upper: Content, interval: SQLExpression) {
+        self.lower = lower
+        self.upper = upper
         self.interval = interval
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("GENERATE_SERIES")
         serializer.write("(")
-        content.lowerBound.selectSqlExpression.serialize(to: &serializer)
+        lower.selectSqlExpression.serialize(to: &serializer)
         serializer.write(",")
         serializer.writeSpace()
-        content.upperBound.selectSqlExpression.serialize(to: &serializer)
+        upper.selectSqlExpression.serialize(to: &serializer)
         serializer.write(",")
         serializer.writeSpace()
         interval.serialize(to: &serializer)

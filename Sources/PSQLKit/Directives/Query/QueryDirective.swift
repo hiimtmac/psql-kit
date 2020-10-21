@@ -17,6 +17,10 @@ public struct QueryDirective<Content>: SQLExpression where Content: QuerySQLExpr
     }
 }
 
+extension QueryDirective: UnionSQLExpressible {
+    public var unionSqlExpression: some SQLExpression { self }
+}
+
 // MARK: - SubqueryModifier
 public struct SubqueryModifier<Content> where Content: QuerySQLExpressible {
     let name: String

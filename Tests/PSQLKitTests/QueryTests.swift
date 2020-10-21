@@ -52,10 +52,24 @@ final class QueryTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT, "x"."title"::TEXT FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" DESC"#)
     }
     
+    func testUnion() {
+        let q = QUERY {
+            UNION {
+                QUERY { SELECT { m.$name } }
+                QUERY { SELECT { m.$name } }
+                QUERY { SELECT { m.$name } }
+            }
+        }
+        
+        q.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT"#)
+    }
+    
     static var allTests = [
         ("testQuery", testQuery),
         ("testQueryAsSub", testQueryAsSub),
         ("testQueryAsWith", testQueryAsWith),
-        ("testQueryN", testQueryN)
+        ("testQueryN", testQueryN),
+        ("testUnion", testUnion)
     ]
 }

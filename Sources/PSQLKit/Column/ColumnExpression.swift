@@ -69,6 +69,10 @@ extension ColumnExpression {
     public func `as`(_ alias: String) -> ColumnAlias<T> {
         ColumnAlias(column: self, alias: alias)
     }
+    
+    public func transform<U>(to type: U.Type) -> ColumnTransform<T, U> {
+        ColumnTransform<T, U>(column: self)
+    }
 }
 
 extension ColumnExpression: GroupBySQLExpressible {

@@ -31,6 +31,10 @@ extension ConcatExpression: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
+extension ConcatExpression: GroupBySQLExpressible {
+    public var groupBySqlExpression: some SQLExpression { self }
+}
+
 extension ConcatExpression {
     public func `as`(_ alias: String) -> ExpressionAlias<ConcatExpression<T0, T1>> {
         ExpressionAlias(expression: self, alias: alias)
@@ -70,6 +74,10 @@ T2: SelectSQLExpressible
 
 extension ConcatExpression3: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
+}
+
+extension ConcatExpression3: GroupBySQLExpressible {
+    public var groupBySqlExpression: some SQLExpression { self }
 }
 
 extension ConcatExpression3 {
@@ -116,6 +124,10 @@ T3: SelectSQLExpressible
 
 extension ConcatExpression4: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
+}
+
+extension ConcatExpression4: GroupBySQLExpressible {
+    public var groupBySqlExpression: some SQLExpression { self }
 }
 
 extension ConcatExpression4 {
@@ -167,6 +179,10 @@ T4: SelectSQLExpressible
 
 extension ConcatExpression5: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression { self }
+}
+
+extension ConcatExpression5: GroupBySQLExpressible {
+    public var groupBySqlExpression: some SQLExpression { self }
 }
 
 extension ConcatExpression5 {

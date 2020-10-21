@@ -50,8 +50,8 @@ final class ExpressionTests: PSQLTestCase {
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
                 
         let s = SELECT {
-            GENERATE_SERIES(8...20, interval: 10)
-            GENERATE_SERIES(date1...date2, interval: "1 day").as("dates")
+            GENERATE_SERIES(from: 8, to: 20, interval: 10)
+            GENERATE_SERIES(from: date1, to: date2, interval: "1 day").as("dates")
         }
 
         s.serialize(to: &serializer)

@@ -2,6 +2,9 @@ import XCTest
 @testable import PSQLKit
 import FluentKit
 
+// needed because https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5
+infix operator ...: LogicalConjunctionPrecedence
+
 final class BindTests: PSQLTestCase {
     let m = MyModel.as("x")
     

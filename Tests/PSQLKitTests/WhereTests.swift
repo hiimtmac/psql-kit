@@ -2,6 +2,10 @@ import XCTest
 @testable import PSQLKit
 import FluentKit
 
+// needed because https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5
+infix operator ~~: ComparisonPrecedence
+infix operator ...: LogicalConjunctionPrecedence
+
 final class WhereTests: PSQLTestCase {
     let m = MyModel.as("x")
     
@@ -53,16 +57,17 @@ final class WhereTests: PSQLTestCase {
     
     func testBetween() {
         let w = WHERE {
-            m.$age >< 20...30
+            m.$age >< (20...30)
+            m.$age >< ((m.$age)...(m.$age))
         }
 
         w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" BETWEEN 20 AND 30)"#)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."age" BETWEEN 20 AND 30) AND ("x"."age" BETWEEN "x"."age" AND "x"."age")"#)
     }
     
     func testNotBetween() {
         let w = WHERE {
-            m.$age <> 20...30
+            m.$age <> (20...30)
         }
 
         w.serialize(to: &serializer)
@@ -76,8 +81,6 @@ final class WhereTests: PSQLTestCase {
             m.$age < 29
             m.$age <= 29
             m.$age > 29
-//            m.$age >= 29 // only can support 5 right now
-//            m.$age >< 29...30 // only can support 5 right now
         }
 
         w.serialize(to: &serializer)
@@ -111,6 +114,29 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"WHERE ("cool" = $1)"#)
     }
     
+    func testWhereLikes() {
+        let w = WHERE {
+            m.$name ~~ "like"
+            m.$name !~~ "not like"
+            m.$name ~~* "ilike"
+            m.$name !~~* "not ilike"
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" LIKE 'like') AND ("x"."name" NOT LIKE 'not like') AND ("x"."name" ILIKE 'ilike') AND ("x"."name" NOT ILIKE 'not ilike')"#)
+    }
+    
+    func testWhereTransforms() {
+        let w = WHERE {
+            m.$name == "hi"
+            m.$name.transform(to: Int.self) == 8
+            m.$name.transform(to: Int.self) >< (8...9)
+        }
+
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" = 'hi') AND ("x"."name" = 8) AND ("x"."name" BETWEEN 8 AND 9)"#)
+    }
+    
     static var allTests = [
         ("testEqual", testEqual),
         ("testMultiple", testMultiple),
@@ -120,6 +146,8 @@ final class WhereTests: PSQLTestCase {
         ("testLiteral", testLiteral),
         ("testWhereOr", testWhereOr),
         ("testWhereRaw", testWhereRaw),
-        ("testWhereBind", testWhereBind)
+        ("testWhereBind", testWhereBind),
+        ("testWhereLikes", testWhereLikes),
+        ("testWhereTransforms", testWhereTransforms)
     ]
 }

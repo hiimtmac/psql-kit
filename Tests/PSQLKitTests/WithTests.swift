@@ -52,6 +52,24 @@ final class WithTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#)
     }
     
+    func testWithErased() {
+        let w: some PSQLQuery = QUERY {
+            SELECT { MyModel.$name }
+            FROM { MyModel.table }
+        }
+        
+        let q = QUERY {
+            WITH {
+                w.asWith(MyModel.table)
+            }
+            SELECT { MyModel.$name }
+            FROM { MyModel.table }
+        }
+        
+        q.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#)
+    }
+    
     static var allTests = [
         ("testWith1", testWith1),
         ("testWith2", testWith2)

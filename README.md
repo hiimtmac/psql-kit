@@ -10,3 +10,4 @@ PSQL query generation using for Fluent Models
 - [ ] JSON/JSONB
 - [ ] PARTITION BY
 - [ ] SELECT ROW_NUMBER() OVER (...)
+- [ ] Add `ESCAPE` to `LIKE/ILIKE/ETC`

@@ -62,7 +62,7 @@ final class AdvancedTests: PSQLTestCase {
             WITH {
                 QUERY {
                     SELECT { dateCol }
-                    FROM { GENERATE_SERIES(PSQLBind(d1.psqlDate)...PSQLBind(d2.psqlDate), interval: "1 day") }
+                    FROM { GENERATE_SERIES(from: PSQLBind(d1.psqlDate), to: d2.psqlDate.asBind(), interval: "1 day") }
                     ORDERBY { dateCol }
                 }
                 .asWith(r.table) // access the results from this query using r.$...

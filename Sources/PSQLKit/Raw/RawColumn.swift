@@ -10,6 +10,12 @@ public struct RawColumn<T> where T: PSQLExpressible {
     }
 }
 
+extension RawColumn {
+    public func `as`(_ alias: String) -> RawColumnAlias<T> {
+        RawColumnAlias(column: self, alias: alias)
+    }
+}
+
 extension RawColumn: TypeEquatable {
     public typealias CompareType = T
 }

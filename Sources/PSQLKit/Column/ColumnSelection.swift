@@ -22,9 +22,7 @@ extension AllTableSelection: SelectSQLExpressible {
             serializer.write(schemaName)
             serializer.writeQuote()
             serializer.writePeriod()
-            serializer.writeQuote()
             serializer.write("*")
-            serializer.writeQuote()
         }
     }
     
@@ -46,9 +44,7 @@ extension AllTableAliasSelection: SelectSQLExpressible {
             serializer.write(aliasName)
             serializer.writeQuote()
             serializer.writePeriod()
-            serializer.writeQuote()
             serializer.write("*")
-            serializer.writeQuote()
         }
     }
     

@@ -4,9 +4,11 @@ import FluentKit
 import NIO
 import PostgresKit
 
-public protocol PSQLQuery: SQLExpression { }
+public protocol PSQLQuery: SQLExpression, QuerySQLExpressible { }
 
-extension QueryDirective: PSQLQuery { }
+extension QueryDirective: PSQLQuery {
+    public var querySqlExpression: some SQLExpression { self }
+}
 
 extension PSQLQuery {
     public func raw(database: SQLDatabase = Self.testDB) -> (sql: String, binds: [Encodable]) {
@@ -22,6 +24,18 @@ extension PSQLQuery {
         let sqlDatabase = psqlDatabase.sql()
         
         return PSQLQueryFetcher(query: self, database: sqlDatabase)
+    }
+    
+    public func asWith<T>(_ table: T) -> QueryDirective<WithModifier<Self>> where T: Table {
+        .init(content: WithModifier(name: type(of: table).schema, content: self))
+    }
+    
+    public func asWith<T>(_ alias: TableAlias<T>) -> QueryDirective<WithModifier<Self>> where T: Table {
+        .init(content: WithModifier(name: alias.alias, content: self))
+    }
+    
+    public func asWith(_ name: String) -> QueryDirective<WithModifier<Self>> {
+        .init(content: WithModifier(name: name, content: self))
     }
 }
 

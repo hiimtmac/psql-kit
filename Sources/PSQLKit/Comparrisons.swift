@@ -13,6 +13,10 @@ enum CompareOperator: String, SQLExpression {
     case between = "BETWEEN"
     case notBetween = "NOT BETWEEN"
     case or = "OR"
+    case like = "LIKE"
+    case notLike = "NOT LIKE"
+    case iLike = "ILIKE"
+    case notILike = "NOT ILIKE"
     
     func serialize(to serializer: inout SQLSerializer) {
         serializer.write(rawValue)
@@ -23,6 +27,10 @@ public struct CompareExpression<T, U> where T: CompareSQLExpressible, U: Compare
     let lhs: T
     let `operator`: CompareOperator
     let rhs: U
+}
+
+extension CompareExpression: TypeEquatable {
+    public typealias CompareType = Any
 }
 
 extension CompareExpression: CompareSQLExpressible {

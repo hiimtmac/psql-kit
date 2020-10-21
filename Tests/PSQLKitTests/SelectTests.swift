@@ -83,10 +83,12 @@ final class SelectTests: PSQLTestCase {
     func testSelectRaw() {
         let s = SELECT {
             RawColumn<String>("cool")
+            RawColumn<String>("cool").as("yes")
+            8.as("cool")
         }
 
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "cool"::TEXT"#)
+        XCTAssertEqual(serializer.sql, #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER AS "cool""#)
     }
     
     func testSelectSubquery() {
@@ -109,7 +111,7 @@ final class SelectTests: PSQLTestCase {
         }
 
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."*", "x"."*""#)
+        XCTAssertEqual(serializer.sql, #"SELECT "my_model".*, "x".*"#)
     }
     
     static var allTests = [
