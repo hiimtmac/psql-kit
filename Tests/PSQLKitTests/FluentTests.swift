@@ -39,17 +39,29 @@ final class FluentTests: PSQLTestCase {
         let o = Owner.as("o")
         let t = Thing.as("t")
         
-        let b = WHERE {
-            p.$owner == o.$id
-            t.$parent == o.$id
-            Pet.$owner == Owner.$id
-            Thing.$parent == Owner.$id
-            p.$owner == Owner.$id
-            t.$parent == Owner.$id
+        let b = QUERY {
+            SELECT {
+                p.$owner
+                Pet.$owner
+            }
+            WHERE {
+                p.$owner == o.$id
+                t.$parent == o.$id
+                Pet.$owner == Owner.$id
+                Thing.$parent == Owner.$id
+                p.$owner == Owner.$id
+                t.$parent == Owner.$id
+            }
+            GROUPBY {
+                p.$owner
+                Pet.$owner
+                Thing.$parent
+                t.$parent
+            }
         }
         
         b.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("p"."owner_id" = "o"."id") AND ("t"."parent_id" = "o"."id") AND ("pet"."owner_id" = "owner"."id") AND ("pet"."parent_id" = "owner"."id") AND ("p"."owner_id" = "owner"."id") AND ("t"."parent_id" = "owner"."id")"#)
+        XCTAssertEqual(serializer.sql, #"SELECT "p"."owner_id"::UUID, "pet"."owner_id"::UUID WHERE ("p"."owner_id" = "o"."id") AND ("t"."parent_id" = "o"."id") AND ("pet"."owner_id" = "owner"."id") AND ("pet"."parent_id" = "owner"."id") AND ("p"."owner_id" = "owner"."id") AND ("t"."parent_id" = "owner"."id") GROUP BY "p"."owner_id", "pet"."owner_id", "pet"."parent_id", "t"."parent_id""#)
     }
     
     static var allTests = [

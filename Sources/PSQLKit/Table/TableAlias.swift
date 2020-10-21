@@ -51,7 +51,7 @@ extension TableAlias {
 
 extension TableAlias where T: Model {
     // MARK: - FieldProperty
-    public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> ColumnExpression<U> where U: PSQLExpressible {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -62,7 +62,7 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - OptionalFieldProperty
-    public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, OptionalFieldProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(dynamicMember keyPath: KeyPath<T, OptionalFieldProperty<T, U>>) -> ColumnExpression<U> where U: PSQLExpressible {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -73,7 +73,7 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - IDProperty
-    public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> ColumnExpression<U> where U: PSQLExpressible {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -84,7 +84,7 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - ParentProperty
-    public subscript<U, V: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> ColumnExpression<V> {
+    public subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> ColumnExpression<U.IDValue> where U: Model, U.IDValue: PSQLExpressible {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -95,7 +95,7 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - OptionalParentProperty
-    public subscript<U, V: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, OptionalParentProperty<T, U>>) -> ColumnExpression<V> {
+    public subscript<U>(dynamicMember keyPath: KeyPath<T, OptionalParentProperty<T, U>>) -> ColumnExpression<U.IDValue> where T: Model, U.IDValue: PSQLExpressible {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,

@@ -42,7 +42,7 @@ extension Table {
     }
     
     // MARK: - ColumnProperty
-    public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> ColumnExpression<T> {
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, Column<T>>) -> ColumnExpression<T> where T: PSQLExpressible {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
@@ -53,7 +53,7 @@ extension Table {
     }
     
     // MARK: - OptionalColumnProperty
-    public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, OptionalColumn<T>>) -> ColumnExpression<T> {
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, OptionalColumn<T>>) -> ColumnExpression<T> where T: PSQLExpressible {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
@@ -66,7 +66,7 @@ extension Table {
 
 extension Table where Self: Model {
     // MARK: - FieldProperty
-    public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> ColumnExpression<T> {
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>) -> ColumnExpression<T> where T: PSQLExpressible {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
@@ -77,7 +77,7 @@ extension Table where Self: Model {
     }
     
     // MARK: - OptionalFieldProperty
-    public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, OptionalFieldProperty<Self, T>>) -> ColumnExpression<T> {
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, OptionalFieldProperty<Self, T>>) -> ColumnExpression<T> where T: PSQLExpressible {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
@@ -88,7 +88,7 @@ extension Table where Self: Model {
     }
     
     // MARK: - IDProperty
-    public static subscript<T: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> ColumnExpression<T> {
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>) -> ColumnExpression<T> where T: PSQLExpressible {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
@@ -99,7 +99,7 @@ extension Table where Self: Model {
     }
     
     // MARK: - ParentProperty
-    public static subscript<T: Model, U: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> ColumnExpression<U> {
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>) -> ColumnExpression<T.IDValue> where T: Model, T.IDValue: PSQLExpressible {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
@@ -110,7 +110,7 @@ extension Table where Self: Model {
     }
     
     // MARK: - OptionalParentProperty
-    public static subscript<T: Model, U: PSQLExpressible>(dynamicMember keyPath: KeyPath<Self, OptionalParentProperty<Self, T>>) -> ColumnExpression<U> {
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, OptionalParentProperty<Self, T>>) -> ColumnExpression<T.IDValue> where T: Model, T.IDValue: PSQLExpressible {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
