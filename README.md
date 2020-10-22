@@ -677,7 +677,7 @@ LEFT JOIN "owner" AS "o" ON ("f"."id" = "o"."id")
 INNER JOIN "OwnerDateSeries" ON ("o"."bday" = "OwnerDateSeries"."date")
 ```
 
-### Todo
+## Todo
 
 Hopefully people smarter than me (most people) are interested in adding features to this package, and helping make things more elegant. There's a lot of boilerplate cause types are hard.
 
@@ -687,3 +687,10 @@ Hopefully people smarter than me (most people) are interested in adding features
 - [ ] SELECT ROW_NUMBER() OVER (...)
 - [ ] Add `ESCAPE` to `LIKE/ILIKE/ETC`
 - [ ] Add `ALL` to `UNION` (and probable change the way `UNION` works)
+
+## Contributing
+
+PR's with new functionality, or fixing dumb stuff I did is welcome. I'm an idiot and do things wrong often. Help me be better. Keep me accountible.
+
+Rules:
+- Dont be mean to anyone, only me. Ill take that weight.
