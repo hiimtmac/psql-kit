@@ -78,6 +78,16 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"SELECT COALESCE("x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, COALESCE("x"."name"::TEXT, 'hello'::TEXT))"#)
     }
     
+    func testJsonExtractPathText() {
+        let s = SELECT {
+            JSON_EXTRACT_PATH_TEXT(m.$json, "hello").as("cool")
+            JSON_EXTRACT_PATH_TEXT(m.$json, "hello", "cool")
+        }
+
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT JSON_EXTRACT_PATH_TEXT("x"."json"::JSON, 'hello') AS "cool", JSON_EXTRACT_PATH_TEXT("x"."json"::JSON, 'hello', 'cool')"#)
+    }
+    
     static var allTests = [
         ("testMax", testMax),
         ("testMin", testMin),
@@ -85,6 +95,7 @@ final class ExpressionTests: PSQLTestCase {
         ("testSum", testSum),
         ("testGenerateSeries", testGenerateSeries),
         ("testConcat", testConcat),
-        ("testCoalesce", testCoalesce)
+        ("testCoalesce", testCoalesce),
+        ("testJsonExtractPathText", testJsonExtractPathText)
     ]
 }
