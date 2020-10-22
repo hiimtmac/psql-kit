@@ -126,15 +126,15 @@ extension ColumnExpression: GroupBySQLExpressible {
 }
 
 extension ColumnExpression {
-    func asc() -> OrderByModifier<ColumnExpression<T>> {
+    public func asc() -> OrderByModifier<ColumnExpression<T>> {
         order(.asc)
     }
 
-    func desc() -> OrderByModifier<ColumnExpression<T>> {
+    public func desc() -> OrderByModifier<ColumnExpression<T>> {
         order(.desc)
     }
 
-    func order(_ direction: OrderByDirection) -> OrderByModifier<ColumnExpression<T>> {
+    public func order(_ direction: OrderByDirection) -> OrderByModifier<ColumnExpression<T>> {
         OrderByModifier(content: self, direction: direction)
     }
 }

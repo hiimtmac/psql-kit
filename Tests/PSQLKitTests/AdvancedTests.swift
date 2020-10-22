@@ -127,6 +127,7 @@ final class AdvancedTests: PSQLTestCase {
         ].joined(separator: " ")
         
         XCTAssertEqual(serializer.sql, compare)
+        print(serializer.sql)
     }
     
     static var allTests = [
