@@ -568,7 +568,7 @@ You can do most of the same stuff as above!
 
 ## Advanced Example
 
-Heres an advanced example if you need a real world example and you have no imagination. Id give a better example, but theyre all in work stuff and that cant be shared 👎🏻.
+Heres an advanced example if you need a real world example and you have no imagination. Id give a better example, but theyre all in work stuff and that cant be shared 👎🏻. There's lots of tests, you can check for functionality there.
 
 ```swift
 final class Pet: Model, Table {
