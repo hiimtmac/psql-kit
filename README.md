@@ -80,7 +80,7 @@ struct MyModel: Codable {
     let name: String
 }
 
-func index(_ req: Request) throws -> EventLoopFuture<MyModel> {
+func index(_ req: Request) throws -> EventLoopFuture<[MyModel]> {
     QUERY {
         SELECT { Moon.$name }
         FROM { Moon.table }
@@ -89,6 +89,8 @@ func index(_ req: Request) throws -> EventLoopFuture<MyModel> {
     .all(decoding: MyModel.self)
 }
 ```
+
+> I didnt test this specific example (so might not compile or be exactly right), but its worked in other projects where I am using this
 
 ### Alias
 
