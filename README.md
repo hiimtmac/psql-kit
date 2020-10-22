@@ -484,6 +484,27 @@ INNER JOIN "planets" AS "p" ON ("p"."id" = "m"."planet_id") AND ("p"."id" = "m".
 
 Things not mentioned:
 
+Support for custom schema path:
+Add optional `static var path: String? { get }` to your model for path support
+
+```swift
+final class MyModel: Model, Table {
+    static let schema = "my_model"
+    static let path: String? = "custom_path"
+    @ID var id: UUID?
+    @Field(key: "name") var name: String
+}
+let m = MyModel.as("m")
+QUERY {
+    SELECT { m.* }
+    FROM { m.table }
+}
+```
+
+```sql
+SELECT "m".* FROM "custom_path"."my_model" AS "m"
+```
+
 Support for `UNION` (not `UNION ALL` yet):
 
 ```swift
@@ -695,4 +716,5 @@ Hopefully people smarter than me (most people) are interested in adding features
 PR's with new functionality, or fixing dumb stuff I did is welcome. I'm an idiot and do things wrong often. Help me be better. Keep me accountible.
 
 Rules:
+
 - Dont be mean to anyone, only me. Ill take that weight.

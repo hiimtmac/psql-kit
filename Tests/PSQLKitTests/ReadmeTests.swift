@@ -312,6 +312,22 @@ QUERY {
         .serialize(to: &serializer)
         print(serializer.sql)
     }
+    
+    func testSchema() {
+final class MyModel: Model, Table {
+    static let schema = "my_model"
+    static let path: String? = "custom_path"
+    @ID var id: UUID?
+    @Field(key: "name") var name: String
+}
+let m = MyModel.as("m")
+QUERY {
+    SELECT { m.* }
+    FROM { m.table }
+}
+        .serialize(to: &serializer)
+        print(serializer.sql)
+    }
 }
 
 extension Galaxy: Table {}
