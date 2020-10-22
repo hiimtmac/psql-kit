@@ -8,6 +8,7 @@ public typealias SUM = SumExpression
 public typealias COUNT = CountExpression
 public typealias AVG = AverageExpression
 public typealias JSON_EXTRACT_PATH_TEXT = JsonExtractPathTextExpression
+public typealias JSONB_EXTRACT_PATH_TEXT = JsonbExtractPathTextExpression
 
 public typealias CONCAT = ConcatExpression
 public typealias CONCAT3 = ConcatExpression3

@@ -179,14 +179,6 @@ public struct HavingTouple<T> {
 
 extension HavingTouple: HavingSQLExpressible {
     public var havingSqlExpression: some SQLExpression {
-        _Having(expressions: expressions)
-    }
-    
-    private struct _Having: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions, separator: SQLRaw(" AND ")).serialize(to: &serializer)
-        }
+        SQLList(expressions, separator: SQLRaw(" AND "))
     }
 }

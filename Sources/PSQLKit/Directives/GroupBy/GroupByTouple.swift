@@ -179,14 +179,6 @@ public struct GroupByTouple<T> {
 
 extension GroupByTouple: GroupBySQLExpressible {
     public var groupBySqlExpression: some SQLExpression {
-        _GroupBy(expressions: expressions)
-    }
-    
-    private struct _GroupBy: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions).serialize(to: &serializer)
-        }
+        SQLList(expressions)
     }
 }

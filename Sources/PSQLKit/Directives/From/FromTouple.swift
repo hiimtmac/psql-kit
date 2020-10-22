@@ -179,14 +179,6 @@ public struct FromTouple<T> {
 
 extension FromTouple: FromSQLExpressible {
     public var fromSqlExpression: some SQLExpression {
-        _From(expressions: expressions)
-    }
-    
-    private struct _From: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions).serialize(to: &serializer)
-        }
+        SQLList(expressions)
     }
 }

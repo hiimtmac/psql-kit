@@ -179,14 +179,6 @@ public struct WhereTouple<T> {
 
 extension WhereTouple: WhereSQLExpressible {
     public var whereSqlExpression: some SQLExpression {
-        _Where(expressions: expressions)
-    }
-    
-    private struct _Where: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions, separator: SQLRaw(" AND ")).serialize(to: &serializer)
-        }
+        SQLList(expressions, separator: SQLRaw(" AND "))
     }
 }

@@ -179,14 +179,6 @@ public struct OrderByTouple<T> {
 
 extension OrderByTouple: OrderBySQLExpressible {
     public var orderBySqlExpression: some SQLExpression {
-        _OrderBy(expressions: expressions)
-    }
-    
-    private struct _OrderBy: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions).serialize(to: &serializer)
-        }
+        SQLList(expressions)
     }
 }

@@ -64,14 +64,6 @@ public struct UnionTouple<T> {
 
 extension UnionTouple: UnionSQLExpressible {
     public var unionSqlExpression: some SQLExpression {
-        _Union(expressions: expressions)
-    }
-    
-    private struct _Union: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions, separator: SQLRaw(" UNION ")).serialize(to: &serializer)
-        }
+        SQLList(expressions, separator: SQLRaw(" UNION "))
     }
 }

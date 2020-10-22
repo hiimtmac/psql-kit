@@ -179,14 +179,6 @@ public struct SelectTouple<T> {
 
 extension SelectTouple: SelectSQLExpressible {
     public var selectSqlExpression: some SQLExpression {
-        _Select(expressions: expressions)
-    }
-    
-    private struct _Select: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions).serialize(to: &serializer)
-        }
+        SQLList(expressions)
     }
 }

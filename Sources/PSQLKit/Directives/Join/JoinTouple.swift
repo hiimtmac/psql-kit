@@ -179,14 +179,6 @@ public struct JoinTouple<T> {
 
 extension JoinTouple: JoinSQLExpressible {
     public var joinSqlExpression: some SQLExpression {
-        _Join(expressions: expressions)
-    }
-    
-    private struct _Join: SQLExpression {
-        let expressions: [SQLExpression]
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            SQLList(expressions, separator: SQLRaw(" AND ")).serialize(to: &serializer)
-        }
+        SQLList(expressions, separator: SQLRaw(" AND "))
     }
 }
