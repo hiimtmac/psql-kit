@@ -7,11 +7,11 @@ final class HavingTests: PSQLTestCase {
     
     func testHaving1() {
         let h = HAVING {
-            MyModel.$name == MyModel.$name
+            MyModel.$name == MyModel.$title
         }
         
         h.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"HAVING ("my_model"."name"="my_model"."name")"#)
+        XCTAssertEqual(serializer.sql, #"HAVING ("my_model"."name" = "my_model"."title")"#)
     }
     
     func testHaving2() {
@@ -20,7 +20,7 @@ final class HavingTests: PSQLTestCase {
         }
         
         h.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"HAVING ("x"."name"!="x"."name")"#)
+        XCTAssertEqual(serializer.sql, #"HAVING ("x"."name" != "x"."name")"#)
     }
     
     func testHavingN() {
@@ -33,9 +33,8 @@ final class HavingTests: PSQLTestCase {
         }
         
         h.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"HAVING ("my_model"."name"="x"."name") AND ("x"."name"="my_model"."name") AND (("x"."name"!="x"."name") OR ("my_model"."name"!="my_model"."name"))"#)
+        XCTAssertEqual(serializer.sql, #"HAVING ("my_model"."name" = "x"."name") AND ("x"."name" = "my_model"."name") AND (("x"."name" != "x"."name") OR ("my_model"."name" != "my_model"."name"))"#)
     }
-    
     
     static var allTests = [
         ("testHaving1", testHaving1),

@@ -6,21 +6,23 @@ import PackageDescription
 let package = Package(
     name: "PSQLKit",
     platforms: [
-        .macOS(.v10_15)
+        .macOS(.v10_15), .iOS(.v13)
     ],
     products: [
-        .library(name: "PSQLKit", targets: ["PSQLKit"]),
+        .library(name: "PSQLKit", targets: ["PSQLKit"])
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0")
+        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.0.0"),
+        .package(url: "https://github.com/vapor/postgres-kit.git", from: "2.0.0")
     ],
     targets: [
         .target(name: "PSQLKit", dependencies: [
-            .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")
+            .product(name: "FluentKit", package: "fluent-kit"),
+            .product(name: "PostgresKit", package: "postgres-kit"),
         ]),
         .testTarget(name: "PSQLKitTests", dependencies: [
-            "PSQLKit",
-            .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")
-        ]),
+            .target(name: "PSQLKit"),
+            .product(name: "FluentBenchmark", package: "fluent-kit")
+        ])
     ]
 )

@@ -1,9 +1,8 @@
 import XCTest
-@testable import PSQLKit
+import PSQLKit
 import FluentKit
 
 final class AdvancedTests: PSQLTestCase {
-    
     final class Pet: Model, Table {
         static let schema = "pet"
         
@@ -20,14 +19,14 @@ final class AdvancedTests: PSQLTestCase {
         @ID var id: UUID?
         @Field(key: "name") var name: String
         @Field(key: "age") var age: Int
-        @Field(key: "bday") var bday: Date
+        @Field(key: "bday") var bday: PSQLDate
         
         init() {}
     }
     
     struct DateRange: Table {
         static let schema: String = "date_range"
-        @Column(key: "date") var date: Date
+        @Column(key: "date") var date: PSQLDate
     }
     
     struct OwnerFilter: Table {
@@ -35,15 +34,26 @@ final class AdvancedTests: PSQLTestCase {
     }
     
     struct OwnerDateSeries: Table {
-        @Column(key: "id") var id: UUID?
-        @Column(key: "date") var date: Date
+        @OptionalColumn(key: "id") var id: UUID?
+        @Column(key: "date") var date: PSQLDate
+    }
+    
+    func testTypesCompile() {
+        let _ = WHERE {
+            // Custom UUID vs Custom UUID?
+            OwnerFilter.$id == OwnerDateSeries.$id
+            // Fluent UUID? vs Custom UUID?
+            Owner.$id == OwnerDateSeries.$id
+            // Fluent UUID? vs Custom UUID
+            Owner.$id == OwnerFilter.$id
+        }
     }
     
     func testExample() {
         let d1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 31).date!
         let d2 = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!
         let r = DateRange.as("r")
-        let dateCol = COLUMN<SimpleDate>("date")
+        let dateCol = RawColumn<PSQLDate>("date")
         let p = Pet.as("p")
         let o = Owner.as("o")
         let f = OwnerFilter.as("f")
@@ -52,10 +62,10 @@ final class AdvancedTests: PSQLTestCase {
             WITH {
                 QUERY {
                     SELECT { dateCol }
-                    FROM { GENERATE_SERIES(from: d1.simple, to: d2.simple, interval: "1 day") }
+                    FROM { GENERATE_SERIES(from: PSQLBind(d1.psqlDate), to: d2.psqlDate.asBind(), interval: "1 day") }
                     ORDERBY { dateCol }
                 }
-                .asWith(r.with) // access the results from this query using r.$...
+                .asWith(r.table) // access the results from this query using r.$...
                 QUERY {
                     SELECT { o.$id }.distinct()
                     FROM { p.table }
@@ -65,16 +75,16 @@ final class AdvancedTests: PSQLTestCase {
                         p.$name == "dog"
                     }
                 }
-                .asWith(f.with) // access the results from this query using f.$...
+                .asWith(f.table) // access the results from this query using f.$...
                 QUERY {
                     SELECT {
                         r.$date
                         f.$id
                     }
                     FROM { f.table }
-                    JOIN(r.table) { 1 == 1 }
+                    JOIN(r.table) { true }
                 }
-                .asWith(OwnerDateSeries.with) // not using alias to access results with full type...
+                .asWith(OwnerDateSeries.table) // not using alias to access results with full type...
             }
             
             SELECT {
@@ -82,11 +92,42 @@ final class AdvancedTests: PSQLTestCase {
                 o.$name
             }
             FROM { f.table }
-            JOIN(o.table, type: .left) { f.$id == o.$id }
-            JOIN(OwnerDateSeries.table) { o.$bday.simple == OwnerDateSeries.$date.simple }
+            JOIN(o.table, method: .left) { f.$id == o.$id }
+            JOIN(OwnerDateSeries.table) { o.$bday == OwnerDateSeries.$date }
         }
         query.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"WITH "r" AS (SELECT "date"::date FROM GENERATE_SERIES('2020-01-31', '2020-07-31', '1 day'::interval) ORDER BY "date"), "f" AS (SELECT DISTINCT "o"."id"::uuid FROM "pet" AS "p" INNER JOIN "owner" AS "o" ON ("o"."id"="p"."owner_id") WHERE ("o"."age">20) AND ("p"."name"='dog')), "OwnerDateSeries" AS (SELECT "r"."date"::date, "f"."id"::uuid FROM "OwnerFilter" AS "f" INNER JOIN "date_range" AS "r" ON (1=1)) SELECT "OwnerDateSeries"."date"::date, "o"."name"::text FROM "OwnerFilter" AS "f" LEFT JOIN "owner" AS "o" ON ("f"."id"="o"."id") INNER JOIN "OwnerDateSeries" ON ("o"."bday"="OwnerDateSeries"."date")"#)
+        
+        let sub1 = [
+            #"SELECT "date"::DATE"#,
+            #"FROM GENERATE_SERIES($1, $2, '1 day'::INTERVAL)"#,
+            #"ORDER BY "date""#
+        ].joined(separator: " ")
+        
+        let sub2 = [
+            #"SELECT DISTINCT "o"."id"::UUID FROM "pet" AS "p""#,
+            #"INNER JOIN "owner" AS "o" ON ("o"."id" = "p"."owner_id")"#,
+            #"WHERE ("o"."age" > 20) AND ("p"."name" = 'dog')"#
+        ].joined(separator: " ")
+        
+        let sub3 = [
+            #"SELECT "r"."date"::DATE, "f"."id"::UUID"#,
+            #"FROM "OwnerFilter" AS "f""#,
+            #"INNER JOIN "date_range" AS "r" ON true"#
+        ].joined(separator: " ")
+        
+        let compare = [
+            "WITH",
+            #""r" AS (\#(sub1)),"#,
+            #""f" AS (\#(sub2)),"#,
+            #""OwnerDateSeries" AS (\#(sub3))"#,
+            #"SELECT "OwnerDateSeries"."date"::DATE, "o"."name"::TEXT"#,
+            #"FROM "OwnerFilter" AS "f""#,
+            #"LEFT JOIN "owner" AS "o" ON ("f"."id" = "o"."id")"#,
+            #"INNER JOIN "OwnerDateSeries" ON ("o"."bday" = "OwnerDateSeries"."date")"#
+        ].joined(separator: " ")
+        
+        XCTAssertEqual(serializer.sql, compare)
+        print(serializer.sql)
     }
     
     static var allTests = [

@@ -1,22 +1,54 @@
 import Foundation
+import SQLKit
 
-typealias MIN = MinExpression
-
-struct MinExpression: PSQLExpression, AggregateFunctionExpression {
-    let column: PSQLColumnExpression
+public struct MinExpression<Content>: AggregateExpression {
+    let content: Content
     
-    init<T>(_ column: PSQLTypedColumnExpression<T>) {
-        self.column = column.column
-    }
-    
-    func serialize(to serializer: inout PSQLSerializer) {
-        serializer.write("MIN")
-        serializer.write("(")
-        column.serialize(to: &serializer)
-        serializer.write(")")
+    public init(_ content: Content) {
+        self.content = content
     }
 }
 
-extension MinExpression: ExpressibleAsSelect {
-    var select: PSQLExpression { self }
+extension MinExpression: SelectSQLExpressible where Content: SelectSQLExpressible {
+    public var selectSqlExpression: some SQLExpression {
+        _Select(content: content)
+    }
+    
+    private struct _Select: SQLExpression {
+        let content: Content
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            serializer.write("MIN")
+            serializer.write("(")
+            content.selectSqlExpression.serialize(to: &serializer)
+            serializer.write(")")
+        }
+    }
+}
+
+extension MinExpression: CompareSQLExpressible where Content: CompareSQLExpressible {
+    public var compareSqlExpression: some SQLExpression {
+        _Compare(content: content)
+    }
+    
+    private struct _Compare: SQLExpression {
+        let content: Content
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            serializer.write("MIN")
+            serializer.write("(")
+            content.compareSqlExpression.serialize(to: &serializer)
+            serializer.write(")")
+        }
+    }
+}
+
+extension MinExpression: TypeEquatable where Content: TypeEquatable {
+    public typealias CompareType = Content.CompareType
+}
+
+extension MinExpression {
+    public func `as`(_ alias: String) -> ExpressionAlias<MinExpression<Content>> {
+        ExpressionAlias(expression: self, alias: alias)
+    }
 }

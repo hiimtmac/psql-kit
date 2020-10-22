@@ -11,7 +11,7 @@ final class JoinTests: PSQLTestCase {
         }
 
         j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"INNER JOIN "my_model" ON ("my_model"."name"="my_model"."name")"#)
+        XCTAssertEqual(serializer.sql, #"INNER JOIN "my_model" ON ("my_model"."name" = "my_model"."name")"#)
     }
     
     func testJoinModelAlias() {
@@ -20,28 +20,17 @@ final class JoinTests: PSQLTestCase {
         }
         
         j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"INNER JOIN "my_model" AS "x" ON ("x"."name"="x"."name")"#)
+        XCTAssertEqual(serializer.sql, #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name")"#)
     }
     
     func testJoinBoth() {
-        let j = JOIN(m.table, type: .left) {
+        let j = JOIN(m.table, method: .left) {
             m.$name == MyModel.$name
             MyModel.$name == m.$name
         }
         
         j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"LEFT JOIN "my_model" AS "x" ON ("x"."name"="my_model"."name") AND ("my_model"."name"="x"."name")"#)
-    }
-    
-    func testJoinDir() {
-        let j = JOIN(m.table) {
-            m.$name == MyModel.$name
-            MyModel.$name == m.$name
-        }
-        .type(.outer)
-        
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"OUTER JOIN "my_model" AS "x" ON ("x"."name"="my_model"."name") AND ("my_model"."name"="x"."name")"#)
+        XCTAssertEqual(serializer.sql, #"LEFT JOIN "my_model" AS "x" ON ("x"."name" = "my_model"."name") AND ("my_model"."name" = "x"."name")"#)
     }
     
     func testJoinN() {
@@ -51,14 +40,23 @@ final class JoinTests: PSQLTestCase {
         }
         
         j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"INNER JOIN "my_model" AS "x" ON ("x"."name"="x"."name") AND (("x"."name"="my_model"."name") OR ("x"."name"!="x"."name"))"#)
+        XCTAssertEqual(serializer.sql, #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name") AND (("x"."name" = "my_model"."name") OR ("x"."name" != "x"."name"))"#)
+    }
+    
+    func testJoinRaw() {
+        let j = JOIN(RawTable("cool")) {
+            m.$name == m.$name
+        }
+        
+        j.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"INNER JOIN "cool" ON ("x"."name" = "x"."name")"#)
     }
     
     static var allTests = [
         ("testJoinModel", testJoinModel),
         ("testJoinModelAlias", testJoinModelAlias),
         ("testJoinBoth", testJoinBoth),
-        ("testJoinDir", testJoinDir),
         ("testJoinN", testJoinN),
+        ("testJoinRaw", testJoinRaw)
     ]
 }

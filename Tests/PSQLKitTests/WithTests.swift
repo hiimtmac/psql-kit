@@ -9,11 +9,11 @@ final class WithTests: PSQLTestCase {
                 SELECT { MyModel.$name }
                 FROM { MyModel.table }
             }
-            .asWith(MyModel.self)
+            .asWith(MyModel.table)
         }
     
         w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"WITH "my_model" AS (SELECT "my_model"."name"::text FROM "my_model")"#)
+        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model")"#)
     }
     
     func testWith2() {
@@ -23,25 +23,55 @@ final class WithTests: PSQLTestCase {
                 SELECT { MyModel.$name }
                 FROM { MyModel.table }
             }
-            .asWith(MyModel.self)
+            .asWith(MyModel.table)
             QUERY {
-                SELECT { MyModel.$name }
-                FROM { MyModel.table }
+                SELECT { m.$title }
+                FROM { m.table }
             }
-            .asWith(m)
+            .asWith(m.table)
         }
         
         w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"WITH "my_model" AS (SELECT "my_model"."name"::text FROM "my_model"), "x" AS (SELECT "my_model"."name"::text FROM "my_model")"#)
+        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model"), "x" AS (SELECT "x"."title"::TEXT FROM "my_model" AS "x")"#)
     }
     
-    func testWithN() {
-
+    func testWithInQuery() {
+        let q = QUERY {
+            WITH {
+                QUERY {
+                    SELECT { MyModel.$name }
+                    FROM { MyModel.table }
+                }
+                .asWith(MyModel.table)
+            }
+            SELECT { MyModel.$name }
+            FROM { MyModel.table }
+        }
+        
+        q.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#)
+    }
+    
+    func testWithErased() {
+        let w: some PSQLQuery = QUERY {
+            SELECT { MyModel.$name }
+            FROM { MyModel.table }
+        }
+        
+        let q = QUERY {
+            WITH {
+                w.asWith(MyModel.table)
+            }
+            SELECT { MyModel.$name }
+            FROM { MyModel.table }
+        }
+        
+        q.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#)
     }
     
     static var allTests = [
         ("testWith1", testWith1),
-        ("testWith2", testWith2),
-        ("testWithN", testWithN)
+        ("testWith2", testWith2)
     ]
 }

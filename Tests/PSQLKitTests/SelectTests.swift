@@ -11,7 +11,7 @@ final class SelectTests: PSQLTestCase {
         }
         
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT "my_model"."name"::text"#)
+        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."name"::TEXT"#)
     }
     
     func testSelectModelAlias() {
@@ -20,7 +20,7 @@ final class SelectTests: PSQLTestCase {
         }
         
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT "x"."name"::text"#)
+        XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT"#)
     }
     
     func testSelectBoth() {
@@ -30,7 +30,7 @@ final class SelectTests: PSQLTestCase {
         }
         
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT "my_model"."name"::text, "x"."name"::text"#)
+        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."name"::TEXT, "x"."name"::TEXT"#)
     }
     
     func testSelectDistinctOn() {
@@ -38,24 +38,80 @@ final class SelectTests: PSQLTestCase {
             MyModel.$name
         }
         .distinctOn {
-            m.$name
+            MyModel.$name
             m.$id
         }
         
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT DISTINCT ON ("x"."name"::text, "x"."id"::uuid) "my_model"."name"::text"#)
+        XCTAssertEqual(serializer.sql, #"SELECT DISTINCT ON ("my_model"."name"::TEXT, "x"."id"::UUID) "my_model"."name"::TEXT"#)
     }
     
-    func testSelectAlias() {
+    func testSelectDistinct() {
+        let s = SELECT {
+            MyModel.$name
+            m.$name
+        }
+        .distinct()
+        
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT DISTINCT "my_model"."name"::TEXT, "x"."name"::TEXT"#)
+    }
+    
+    func testSelectAliasSingle() {
+        let s = SELECT {
+            MyModel.$name
+                .as("nam")
+        }
+
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."name"::TEXT AS "nam""#)
+    }
+    
+    func testSelectAliasMultiple() {
         let s = SELECT {
             MyModel.$name
                 .as("nam")
             m.$name
                 .as("nam")
+            m.$id
+        }
+
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."name"::TEXT AS "nam", "x"."name"::TEXT AS "nam", "x"."id"::UUID"#)
+    }
+    
+    func testSelectRaw() {
+        let s = SELECT {
+            RawColumn<String>("cool")
+            RawColumn<String>("cool").as("yes")
+            8.as("cool")
+        }
+
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER AS "cool""#)
+    }
+    
+    func testSelectSubquery() {
+        let s = SELECT {
+            QUERY {
+                SELECT { m.$age }
+                FROM { m.table }
+            }
+            .asSubquery(m.table)
         }
         
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"SELECT "my_model"."name"::text AS "nam", "x"."name"::text AS "nam""#)
+        XCTAssertEqual(serializer.sql, #"SELECT (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#)
+    }
+    
+    func testPostfix() {
+        let s = SELECT {
+            MyModel.table.*
+            m.table.*
+        }
+
+        s.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"SELECT "my_model".*, "x".*"#)
     }
     
     static var allTests = [
@@ -63,6 +119,10 @@ final class SelectTests: PSQLTestCase {
         ("testSelectModelAlias", testSelectModelAlias),
         ("testSelectBoth", testSelectBoth),
         ("testSelectDistinctOn", testSelectDistinctOn),
-        ("testSelectAlias", testSelectAlias)
+        ("testSelectAliasSingle", testSelectAliasSingle),
+        ("testSelectAliasMultiple", testSelectAliasMultiple),
+        ("testSelectRaw", testSelectRaw),
+        ("testSelectSubquery", testSelectSubquery),
+        ("testPostfix", testPostfix)
     ]
 }

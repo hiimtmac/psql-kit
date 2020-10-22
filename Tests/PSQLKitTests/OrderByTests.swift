@@ -11,45 +11,55 @@ final class OrderByTests: PSQLTestCase {
         }
 
         o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"ORDER BY "my_model"."name" ASC"#)
+        XCTAssertEqual(serializer.sql, #"ORDER BY "my_model"."name""#)
     }
     
     func testOrderModelAlias() {
         let o = ORDERBY {
-            m.$name
+            m.$name.asc()
         }
 
         o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"ORDER BY "x"."name" ASC"#)
+        XCTAssertEqual(serializer.sql, #"ORDER BY "x"."name" ASC"#)
     }
     
-    func testOrderBoth() {
+    func testOrderMultiple() {
         let o = ORDERBY {
-            MyModel.$name
-            m.$name
-                .direction(.desc)
+            MyModel.$name.asc()
+            m.$name.desc()
+            m.$id
         }
         
         o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"ORDER BY "my_model"."name" ASC, "x"."name" DESC"#)
+        XCTAssertEqual(serializer.sql, #"ORDER BY "my_model"."name" ASC, "x"."name" DESC, "x"."id""#)
     }
-    
-    func testOrderN() {
+
+    func testOrderDirections() {
         let o = ORDERBY {
             m.$name
-            MyModel.$name
-            m.$name
-                .direction(.desc)
+            MyModel.$name.asc()
+            MyModel.$name.desc()
+            m.$name.order(.asc)
         }
         
         o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.psql, #"ORDER BY "x"."name" ASC, "my_model"."name" ASC, "x"."name" DESC"#)
+        XCTAssertEqual(serializer.sql, #"ORDER BY "x"."name", "my_model"."name" ASC, "my_model"."name" DESC, "x"."name" ASC"#)
+    }
+    
+    func testOrderRaw() {
+        let o = ORDERBY {
+            RawColumn<String>("cool").desc()
+        }
+        
+        o.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"ORDER BY "cool" DESC"#)
     }
     
     static var allTests = [
         ("testOrderModel", testOrderModel),
         ("testOrderModelAlias", testOrderModelAlias),
-        ("testOrderBoth", testOrderBoth),
-        ("testOrderN", testOrderN)
+        ("testOrderMultiple", testOrderMultiple),
+        ("testOrderDirections", testOrderDirections),
+        ("testOrderRaw", testOrderRaw)
     ]
 }
