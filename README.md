@@ -1,6 +1,6 @@
 # PSQLKit
 
-PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit.git) models (and others). This package is purely additive and allows to still you to use Fluent ORM but drop down to strongly typed builders for more complex raw queries (and allows you to avoid string queries 👍🏻).
+PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit.git) models (and others). This package is purely additive and allows you to use Fluent ORM still but drop down to strongly typed builders for more complex queries (and avoid string queries 👍🏻).
 
 ## Installation
 
@@ -54,7 +54,7 @@ SELECT "moons"."name"::TEXT, "moons"."craters"::INTEGER FROM "moons"
 
 ### `PSQLQuery`
 
-The query builders store all your types as you build them up. For example, the above type is `QueryDirective<QueryTouple<(SelectDirective<SelectTouple<(ColumnExpression<String>, ColumnExpression<Int>)>>, FromDirective<Moon>)>>`. This is obviously nasty if you want to pass it around as functions. To combat this, you can return a `QUERY` as `some PSQLQuery`. This will also give you some added functionality for executing and debugging (`QUERY` can also be executed or debugged).
+The query builders store all your types as you build them up. For example, the above type is `QueryDirective<QueryTouple<(SelectDirective<SelectTouple<(ColumnExpression<String>, ColumnExpression<Int>)>>, FromDirective<Moon>)>>`. This is obviously nasty if you want to pass it around as functions. To combat this, you can return a `QUERY` as `some PSQLQuery`. This will also give you some added functionality for executing and debugging (`QUERY` can also be executed or inspected).
 
 `.raw()` can be used to inspect your query
 
@@ -212,7 +212,7 @@ WHERE
 (("m"."name" ILIKE '%moon') OR ("m"."name" NOT ILIKE '%moon'))
 ```
 
-> **Warning** importing custom operators from a package which override something existing has been toubling, you might have to re-declare them in your project [Discussion](https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5)
+> **Warning** importing custom operators from a package which override something existing has been toubling, you might have to re-declare them in your project see [discussion](https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5)
 
 ```swift
 infix operator ~~: ComparisonPrecedence
@@ -251,7 +251,7 @@ GROUP BY "m"."name", "m"."craters", "m"."planet_id"
 
 #### ORDER BY
 
-You can append `.asc()`, `.desc()`, or `.order(_ direction: )` to change the direction of the `ORDERBY`. Or leave it blank if you're an animal and wanna make people guess.
+You can append `.asc()`, `.desc()`, or `.order(_ direction: )` to change the direction of the `ORDERBY`. Or leave it blank if you wanna make people guess.
 
 ```swift
 let m = Moon.as("m")
@@ -420,7 +420,7 @@ SELECT "raw_column"::TEXT, "raw_column"::INTEGER AS "rawer", 7::INTEGER, 666::IN
 
 ### Binding
 
-Dont be vulnerable to SQL injection with user inputted data. Im a moron so I probably didnt do this right but I tried my best. You can use `PSQLBind(_ value: T)` to sanitize and bind your variables to the query. Additionaly, you can add the `.asBind()` modifier (sometimes you need to do it with variables to make compiler happy. IDK why but its more safe that way anyways I guess?)
+Dont be vulnerable to SQL injection with user inputted data. You can use `PSQLBind(_ value: T)` to sanitize and bind your variables to the query. Additionaly, you can add the `.asBind()` modifier (sometimes you need to do it with variables to make compiler happy. IDK why but its more safe that way anyways I guess?)
 
 ```swift
 let m = Moon.as("m")
@@ -435,11 +435,9 @@ SQL: WHERE ("m"."name" = $1) AND ("m"."comets" > $2)
 BINDS: ["the moon", 8]
 ```
 
-Use binds everywhere. They should work. If they don't work somewhere that they should, we can fix them. Whats a PR among friends.
-
 ### Groupings
 
-Function builders are tricky. I think I did an ok job but there was a lot of boilerplate to retain types but be versatile. All builders support 10 expressions within. If you need more, you can use the group-ers provided. See example and mapping:
+Function builders are tricky. There is a lot of boilerplate to retain types but be versatile. All builders support 10 expressions within. If you need more, you can use the group-ers provided. See example and mapping:
 
 ```swift
 let m = Moon.as("m")
@@ -591,7 +589,7 @@ You can do most of the same stuff as above!
 
 ## Advanced Example
 
-Heres an advanced example if you need a real world example and you have no imagination. Id give a better example, but theyre all in work stuff and that cant be shared 👎🏻. There's lots of tests, you can check for functionality there.
+Heres an advanced example. Id give a real one, but they're all in work stuff and that cant be shared 👎🏻. There's lots of tests, you can check for functionality there.
 
 ```swift
 final class Pet: Model, Table {
@@ -702,7 +700,7 @@ INNER JOIN "OwnerDateSeries" ON ("o"."bday" = "OwnerDateSeries"."date")
 
 ## Todo
 
-Hopefully people smarter than me (most people) are interested in adding features to this package, and helping make things more elegant. There's a lot of boilerplate cause types are hard.
+Hopefully people smarter than me (most people) are interested in adding features to this package, and helping make things more elegant. PR's with new functionality, or fixing bugs/dumb stuff I did is welcome.
 
 - [ ] JSON/JSONB functions (and maybe operators)
 - [ ] PARTITION BY
@@ -710,11 +708,3 @@ Hopefully people smarter than me (most people) are interested in adding features
 - [ ] SELECT ROW_NUMBER() OVER (...)
 - [ ] Add `ESCAPE` to `LIKE/ILIKE/ETC`
 - [ ] Add `ALL` to `UNION` (and probable change the way `UNION` works)
-
-## Contributing
-
-PR's with new functionality, or fixing dumb stuff I did is welcome. I'm an idiot and do things wrong often. Help me be better. Keep me accountible.
-
-Rules:
-
-- Dont be mean to anyone, only me. Ill take that weight.
