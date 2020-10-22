@@ -7,7 +7,7 @@ public struct ColumnExpression<T> where T: PSQLExpressible {
     let schemaName: String?
     let columnName: String
     
-    public init(aliasName: String?, pathName: String?, schemaName: String, columnName: String) {
+    public init(aliasName: String?, pathName: String?, schemaName: String?, columnName: String) {
         self.aliasName = aliasName
         self.pathName = pathName
         self.schemaName = schemaName
@@ -70,8 +70,13 @@ extension ColumnExpression {
         ColumnAlias(column: self, alias: alias)
     }
     
-    public func transform<U>(to type: U.Type) -> ColumnTransform<T, U> {
-        ColumnTransform<T, U>(column: self)
+    public func transform<U>(to type: U.Type) -> ColumnExpression<U> where U: PSQLExpressible {
+        ColumnExpression<U>(
+            aliasName: aliasName,
+            pathName: pathName,
+            schemaName: schemaName,
+            columnName: columnName
+        )
     }
 }
 

@@ -2,6 +2,25 @@ import Foundation
 import SQLKit
 import PostgresKit
 
+extension Date: PSQLExpressible {
+    public typealias CompareType = Self
+    public static var postgresColumnType: PostgresColumnType { .timestamp }
+    
+    public func serialize(to serializer: inout SQLSerializer) {
+        serializer.write("'\(self)'")
+    }
+}
+
+extension Date: SelectSQLExpressible {
+    public var selectSqlExpression: some SQLExpression {
+        PrimativeSelect(value: self)
+    }
+}
+
+extension Date: CompareSQLExpressible {
+    public var compareSqlExpression: some SQLExpression { self }
+}
+
 protocol PSQLDateTime: Comparable, PSQLExpressible, Decodable, Encodable {
     var storage: Date { get }
     static var defaultFormatter: DateFormatter { get }
