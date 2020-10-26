@@ -29,7 +29,7 @@ extension Date {
     public var psqlTimestamp: PSQLTimestamp { .init(self) }
 }
 
-public protocol PSQLDateTime: Comparable, PSQLExpression, Decodable, Encodable {
+public protocol PSQLDateTime: Comparable, PSQLExpression, Decodable, Encodable, TypeEquatable where CompareType == Date {
     var storage: Date { get }
     static var defaultFormatter: DateFormatter { get }
 }
@@ -62,10 +62,6 @@ public struct PSQLDate: PSQLDateTime {
 
 extension PSQLDate: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .date }
-}
-
-extension PSQLDate: TypeEquatable {
-    public typealias CompareType = Date
 }
 
 extension PSQLDate: SelectSQLExpression {
@@ -101,8 +97,4 @@ extension PSQLTimestamp: CompareSQLExpression {
 
 extension PSQLTimestamp: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .timestamp }
-}
-
-extension PSQLTimestamp: TypeEquatable {
-    public typealias CompareType = Date
 }
