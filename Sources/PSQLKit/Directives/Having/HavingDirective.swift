@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct HavingDirective<Content>: SQLExpression where Content: HavingSQLExpressible {
+public struct HavingDirective<Content>: SQLExpression where Content: HavingSQLExpression {
     let content: Content
     
     public init(@HavingBuilder builder: () -> Content) {
@@ -15,6 +15,6 @@ public struct HavingDirective<Content>: SQLExpression where Content: HavingSQLEx
     }
 }
 
-extension HavingDirective: QuerySQLExpressible {
+extension HavingDirective: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression { self }
 }

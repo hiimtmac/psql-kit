@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct SelectDirective<Content>: SQLExpression where Content: SelectSQLExpressible {
+public struct SelectDirective<Content>: SQLExpression where Content: SelectSQLExpression {
     let content: Content
     
     public init(@SelectBuilder builder: () -> Content) {
@@ -19,7 +19,7 @@ public struct SelectDirective<Content>: SQLExpression where Content: SelectSQLEx
     }
 }
 
-public struct DistinctModifier<Content>: SelectSQLExpressible where Content: SelectSQLExpressible {
+public struct DistinctModifier<Content>: SelectSQLExpression where Content: SelectSQLExpression {
     let content: Content
     
     private struct _Select: SQLExpression {
@@ -49,7 +49,7 @@ extension SelectDirective {
 }
 
 
-public struct DistinctOnModifier<DistinctOn, Content>: SelectSQLExpressible where DistinctOn: SelectSQLExpressible, Content: SelectSQLExpressible {
+public struct DistinctOnModifier<DistinctOn, Content>: SelectSQLExpression where DistinctOn: SelectSQLExpression, Content: SelectSQLExpression {
     let distinctOn: DistinctOn
     let content: Content
     
@@ -81,11 +81,11 @@ extension SelectDirective {
     /// ORDER BY address_id, purchased_at DESC
     /// ```
     ///
-    public func distinctOn<DistinctOn>(@SelectBuilder builder: () -> DistinctOn) -> SelectDirective<DistinctOnModifier<DistinctOn, Content>> where DistinctOn: SelectSQLExpressible {
+    public func distinctOn<DistinctOn>(@SelectBuilder builder: () -> DistinctOn) -> SelectDirective<DistinctOnModifier<DistinctOn, Content>> where DistinctOn: SelectSQLExpression {
         .init(content: DistinctOnModifier(distinctOn: builder(), content: content))
     }
 }
 
-extension SelectDirective: QuerySQLExpressible {
+extension SelectDirective: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression { self }
 }

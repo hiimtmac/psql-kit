@@ -2,8 +2,7 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-extension String: PSQLExpressible {
-    public typealias CompareType = Self
+extension String: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .text }
     
     public func serialize(to serializer: inout SQLSerializer) {
@@ -13,10 +12,16 @@ extension String: PSQLExpressible {
     }
 }
 
-extension String: SelectSQLExpressible {
-    public var selectSqlExpression: some SQLExpression { PrimativeSelect(value: self) }
+extension String: TypeEquatable {
+    public typealias CompareType = Self
 }
 
-extension String: CompareSQLExpressible {
+extension String: SelectSQLExpression {
+    public var selectSqlExpression: some SQLExpression {
+        RawValue(self)
+    }
+}
+
+extension String: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }

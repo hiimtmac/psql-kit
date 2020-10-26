@@ -6,8 +6,8 @@ public struct HavingTouple<T> {
     let expressions: [SQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -17,9 +17,9 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2>(_ value: (T0, T1, T2)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -30,10 +30,10 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2, T3>(_ value: (T0, T1, T2, T3)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible,
-        T3: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression,
+        T3: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -45,11 +45,11 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4>(_ value: (T0, T1, T2, T3, T4)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible,
-        T3: HavingSQLExpressible,
-        T4: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression,
+        T3: HavingSQLExpression,
+        T4: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -62,12 +62,12 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5>(_ value: (T0, T1, T2, T3, T4, T5)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible,
-        T3: HavingSQLExpressible,
-        T4: HavingSQLExpressible,
-        T5: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression,
+        T3: HavingSQLExpression,
+        T4: HavingSQLExpression,
+        T5: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -81,13 +81,13 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6>(_ value: (T0, T1, T2, T3, T4, T5, T6)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible,
-        T3: HavingSQLExpressible,
-        T4: HavingSQLExpressible,
-        T5: HavingSQLExpressible,
-        T6: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression,
+        T3: HavingSQLExpression,
+        T4: HavingSQLExpression,
+        T5: HavingSQLExpression,
+        T6: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -102,14 +102,14 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible,
-        T3: HavingSQLExpressible,
-        T4: HavingSQLExpressible,
-        T5: HavingSQLExpressible,
-        T6: HavingSQLExpressible,
-        T7: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression,
+        T3: HavingSQLExpression,
+        T4: HavingSQLExpression,
+        T5: HavingSQLExpression,
+        T6: HavingSQLExpression,
+        T7: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -125,15 +125,15 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible,
-        T3: HavingSQLExpressible,
-        T4: HavingSQLExpressible,
-        T5: HavingSQLExpressible,
-        T6: HavingSQLExpressible,
-        T7: HavingSQLExpressible,
-        T8: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression,
+        T3: HavingSQLExpression,
+        T4: HavingSQLExpression,
+        T5: HavingSQLExpression,
+        T6: HavingSQLExpression,
+        T7: HavingSQLExpression,
+        T8: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -150,16 +150,16 @@ public struct HavingTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)) where
-        T0: HavingSQLExpressible,
-        T1: HavingSQLExpressible,
-        T2: HavingSQLExpressible,
-        T3: HavingSQLExpressible,
-        T4: HavingSQLExpressible,
-        T5: HavingSQLExpressible,
-        T6: HavingSQLExpressible,
-        T7: HavingSQLExpressible,
-        T8: HavingSQLExpressible,
-        T9: HavingSQLExpressible
+        T0: HavingSQLExpression,
+        T1: HavingSQLExpression,
+        T2: HavingSQLExpression,
+        T3: HavingSQLExpression,
+        T4: HavingSQLExpression,
+        T5: HavingSQLExpression,
+        T6: HavingSQLExpression,
+        T7: HavingSQLExpression,
+        T8: HavingSQLExpression,
+        T9: HavingSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -177,7 +177,7 @@ public struct HavingTouple<T> {
     }
 }
 
-extension HavingTouple: HavingSQLExpressible {
+extension HavingTouple: HavingSQLExpression {
     public var havingSqlExpression: some SQLExpression {
         SQLList(expressions, separator: SQLRaw(" AND "))
     }

@@ -6,8 +6,8 @@ public struct JoinTouple<T> {
     let expressions: [SQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -17,9 +17,9 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2>(_ value: (T0, T1, T2)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -30,10 +30,10 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2, T3>(_ value: (T0, T1, T2, T3)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible,
-        T3: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression,
+        T3: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -45,11 +45,11 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4>(_ value: (T0, T1, T2, T3, T4)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible,
-        T3: JoinSQLExpressible,
-        T4: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression,
+        T3: JoinSQLExpression,
+        T4: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -62,12 +62,12 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5>(_ value: (T0, T1, T2, T3, T4, T5)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible,
-        T3: JoinSQLExpressible,
-        T4: JoinSQLExpressible,
-        T5: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression,
+        T3: JoinSQLExpression,
+        T4: JoinSQLExpression,
+        T5: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -81,13 +81,13 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6>(_ value: (T0, T1, T2, T3, T4, T5, T6)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible,
-        T3: JoinSQLExpressible,
-        T4: JoinSQLExpressible,
-        T5: JoinSQLExpressible,
-        T6: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression,
+        T3: JoinSQLExpression,
+        T4: JoinSQLExpression,
+        T5: JoinSQLExpression,
+        T6: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -102,14 +102,14 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible,
-        T3: JoinSQLExpressible,
-        T4: JoinSQLExpressible,
-        T5: JoinSQLExpressible,
-        T6: JoinSQLExpressible,
-        T7: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression,
+        T3: JoinSQLExpression,
+        T4: JoinSQLExpression,
+        T5: JoinSQLExpression,
+        T6: JoinSQLExpression,
+        T7: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -125,15 +125,15 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible,
-        T3: JoinSQLExpressible,
-        T4: JoinSQLExpressible,
-        T5: JoinSQLExpressible,
-        T6: JoinSQLExpressible,
-        T7: JoinSQLExpressible,
-        T8: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression,
+        T3: JoinSQLExpression,
+        T4: JoinSQLExpression,
+        T5: JoinSQLExpression,
+        T6: JoinSQLExpression,
+        T7: JoinSQLExpression,
+        T8: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -150,16 +150,16 @@ public struct JoinTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)) where
-        T0: JoinSQLExpressible,
-        T1: JoinSQLExpressible,
-        T2: JoinSQLExpressible,
-        T3: JoinSQLExpressible,
-        T4: JoinSQLExpressible,
-        T5: JoinSQLExpressible,
-        T6: JoinSQLExpressible,
-        T7: JoinSQLExpressible,
-        T8: JoinSQLExpressible,
-        T9: JoinSQLExpressible
+        T0: JoinSQLExpression,
+        T1: JoinSQLExpression,
+        T2: JoinSQLExpression,
+        T3: JoinSQLExpression,
+        T4: JoinSQLExpression,
+        T5: JoinSQLExpression,
+        T6: JoinSQLExpression,
+        T7: JoinSQLExpression,
+        T8: JoinSQLExpression,
+        T9: JoinSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -177,7 +177,7 @@ public struct JoinTouple<T> {
     }
 }
 
-extension JoinTouple: JoinSQLExpressible {
+extension JoinTouple: JoinSQLExpression {
     public var joinSqlExpression: some SQLExpression {
         SQLList(expressions, separator: SQLRaw(" AND "))
     }

@@ -1,39 +1,49 @@
 import Foundation
 import SQLKit
 
-enum CompareOperator: String, SQLExpression {
-    case equal = "="
-    case notEqual = "!="
-    case `in` = "IN"
-    case notIn = "NOT IN"
-    case lessThan = "<"
-    case lessThanOrEqual = "<="
-    case greaterThan = ">"
-    case greaterThanOrEqual = ">="
-    case between = "BETWEEN"
-    case notBetween = "NOT BETWEEN"
-    case or = "OR"
-    case like = "LIKE"
-    case notLike = "NOT LIKE"
-    case iLike = "ILIKE"
-    case notILike = "NOT ILIKE"
+public struct CompareOperator: SQLExpression {
+    let value: String
     
-    func serialize(to serializer: inout SQLSerializer) {
-        serializer.write(rawValue)
+    public init(_ value: String) {
+        self.value = value
+    }
+    
+    public static let equal = CompareOperator("=")
+    public static let notEqual = CompareOperator("!=")
+    public static let `in` = CompareOperator("IN")
+    public static let notIn = CompareOperator("NOT IN")
+    public static let lessThan = CompareOperator("<")
+    public static let lessThanOrEqual = CompareOperator("<=")
+    public static let greaterThan = CompareOperator(">")
+    public static let greaterThanOrEqual = CompareOperator(">=")
+    public static let between = CompareOperator("BETWEEN")
+    public static let notBetween = CompareOperator("NOT BETWEEN")
+    public static let or = CompareOperator("OR")
+    public static let like = CompareOperator("LIKE")
+    public static let notLike = CompareOperator("NOT LIKE")
+    public static let iLike = CompareOperator("ILIKE")
+    public static let notILike = CompareOperator("NOT ILIKE")
+    public static let `is` = CompareOperator("IS")
+    public static let isNot = CompareOperator("IS NOT")
+    
+    public func serialize(to serializer: inout SQLSerializer) {
+        serializer.write(value)
     }
 }
 
-public struct CompareExpression<T, U> where T: CompareSQLExpressible, U: CompareSQLExpressible {
+public struct CompareExpression<T, U> where T: CompareSQLExpression, U: CompareSQLExpression {
     let lhs: T
     let `operator`: CompareOperator
     let rhs: U
+    
+    public init(lhs: T, operator: CompareOperator, rhs: U) {
+        self.lhs = lhs
+        self.operator = `operator`
+        self.rhs = rhs
+    }
 }
 
-extension CompareExpression: TypeEquatable {
-    public typealias CompareType = Any
-}
-
-extension CompareExpression: CompareSQLExpressible {
+extension CompareExpression: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
@@ -55,19 +65,19 @@ extension CompareExpression: CompareSQLExpressible {
     }
 }
 
-extension CompareExpression: WhereSQLExpressible {
+extension CompareExpression: WhereSQLExpression {
     public var whereSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
-extension CompareExpression: HavingSQLExpressible {
+extension CompareExpression: HavingSQLExpression {
     public var havingSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
-extension CompareExpression: JoinSQLExpressible {
+extension CompareExpression: JoinSQLExpression {
     public var joinSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }

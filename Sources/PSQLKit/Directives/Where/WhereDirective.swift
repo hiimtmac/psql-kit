@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpressible {
+public struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpression {
     let content: Content
     
     public init(@WhereBuilder builder: () -> Content) {
@@ -15,6 +15,6 @@ public struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpr
     }
 }
 
-extension WhereDirective: QuerySQLExpressible {
+extension WhereDirective: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression { self }
 }

@@ -1,26 +1,46 @@
 import Foundation
 import SQLKit
+import FluentKit
+
+public typealias PSQLEquatable = PSQLExpression & Equatable
+public typealias PSQLComparable = PSQLExpression & Comparable
 
 // MARK: - ==
 /// lhs = rhs
 public func ==<T, U>(_ lhs: T, _ rhs: U)
--> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLEquatable, T.CompareType == U.CompareType
 {
     CompareExpression(lhs: lhs, operator: .equal, rhs: rhs)
+}
+
+// MARK: - ===
+/// lhs IS rhs
+public func ===<T, U>(_ lhs: T, _ rhs: U)
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLEquatable, T.CompareType == U.CompareType
+{
+    CompareExpression(lhs: lhs, operator: .is, rhs: rhs)
 }
 
 // MARK: - !=
 /// lhs != rhs
 public func !=<T, U>(_ lhs: T, _ rhs: U)
--> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLEquatable, T.CompareType == U.CompareType
 {
     CompareExpression(lhs: lhs, operator: .notEqual, rhs: rhs)
+}
+
+// MARK: - !==
+/// lhs IS NOT rhs
+public func !==<T, U>(_ lhs: T, _ rhs: U)
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLEquatable, T.CompareType == U.CompareType
+{
+    CompareExpression(lhs: lhs, operator: .isNot, rhs: rhs)
 }
 
 // MARK: - <
 /// lhs < rhs
 public func <<T, U>(_ lhs: T, _ rhs: U)
--> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLComparable, T.CompareType == U.CompareType
 {
     CompareExpression(lhs: lhs, operator: .lessThan, rhs: rhs)
 }
@@ -28,7 +48,7 @@ public func <<T, U>(_ lhs: T, _ rhs: U)
 // MARK: - <=
 /// lhs <= rhs
 public func <=<T, U>(_ lhs: T, _ rhs: U)
--> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLComparable, T.CompareType == U.CompareType
 {
     CompareExpression(lhs: lhs, operator: .lessThanOrEqual, rhs: rhs)
 }
@@ -36,7 +56,7 @@ public func <=<T, U>(_ lhs: T, _ rhs: U)
 // MARK: - >
 /// lhs > rhs
 public func ><T, U>(_ lhs: T, _ rhs: U)
--> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLComparable, T.CompareType == U.CompareType
 {
     CompareExpression(lhs: lhs, operator: .greaterThan, rhs: rhs)
 }
@@ -44,7 +64,7 @@ public func ><T, U>(_ lhs: T, _ rhs: U)
 // MARK: - >=
 /// lhs >= rhs
 public func >=<T, U>(_ lhs: T, _ rhs: U)
--> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType
+-> CompareExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType: PSQLComparable, T.CompareType == U.CompareType
 {
     CompareExpression(lhs: lhs, operator: .greaterThanOrEqual, rhs: rhs)
 }

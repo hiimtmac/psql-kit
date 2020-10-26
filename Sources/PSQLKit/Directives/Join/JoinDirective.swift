@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct JoinDirective<Table, Content>: SQLExpression where Table: FromSQLExpressible, Content: JoinSQLExpressible {
+public struct JoinDirective<Table, Content>: SQLExpression where Table: FromSQLExpression, Content: JoinSQLExpression {
     let table: Table
     let method: SQLJoinMethod
     let content: Content
@@ -25,6 +25,6 @@ public struct JoinDirective<Table, Content>: SQLExpression where Table: FromSQLE
     }
 }
 
-extension JoinDirective: QuerySQLExpressible {
+extension JoinDirective: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression { self }
 }

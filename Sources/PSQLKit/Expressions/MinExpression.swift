@@ -9,7 +9,7 @@ public struct MinExpression<Content>: AggregateExpression {
     }
 }
 
-extension MinExpression: SelectSQLExpressible where Content: SelectSQLExpressible {
+extension MinExpression: SelectSQLExpression where Content: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(content: content)
     }
@@ -26,7 +26,7 @@ extension MinExpression: SelectSQLExpressible where Content: SelectSQLExpressibl
     }
 }
 
-extension MinExpression: CompareSQLExpressible where Content: CompareSQLExpressible {
+extension MinExpression: CompareSQLExpression where Content: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression {
         _Compare(content: content)
     }

@@ -3,7 +3,7 @@ import FluentKit
 import SQLKit
 
 @dynamicMemberLookup
-public protocol Table: FromSQLExpressible {
+public protocol Table: FromSQLExpression {
     init()
     /// fluent `table`
     static var schema: String { get }
@@ -12,8 +12,8 @@ public protocol Table: FromSQLExpressible {
 }
 
 extension Table {
-    public typealias Column<Value: PSQLExpressible> = ColumnProperty<Self, Value>
-    public typealias OptionalColumn<Value: PSQLExpressible> = OptionalColumnProperty<Self, Value>
+    public typealias Column<Value: PSQLExpression> = ColumnProperty<Self, Value>
+    public typealias OptionalColumn<Value: PSQLExpression> = OptionalColumnProperty<Self, Value>
     
     /// fluent `table`
     public static var schema: String { "\(Self.self)" }

@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct ColumnExpression<T> where T: PSQLExpressible {
+public struct ColumnExpression<T> where T: PSQLExpression {
     let aliasName: String?
     let pathName: String?
     let schemaName: String?
@@ -15,7 +15,7 @@ public struct ColumnExpression<T> where T: PSQLExpressible {
     }
 }
 
-extension ColumnExpression: SelectSQLExpressible  {
+extension ColumnExpression: SelectSQLExpression  {
     public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: aliasName,
@@ -70,7 +70,7 @@ extension ColumnExpression {
         ColumnAlias(column: self, alias: alias)
     }
     
-    public func transform<U>(to type: U.Type) -> ColumnExpression<U> where U: PSQLExpressible {
+    public func transform<U>(to type: U.Type) -> ColumnExpression<U> where U: PSQLExpression {
         ColumnExpression<U>(
             aliasName: aliasName,
             pathName: pathName,
@@ -80,7 +80,7 @@ extension ColumnExpression {
     }
 }
 
-extension ColumnExpression: GroupBySQLExpressible {
+extension ColumnExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
         _GroupBy(
             aliasName: aliasName,
@@ -139,7 +139,7 @@ extension ColumnExpression {
     }
 }
 
-extension ColumnExpression: OrderBySQLExpressible {
+extension ColumnExpression: OrderBySQLExpression {
     public var orderBySqlExpression: some SQLExpression {
         _OrderBy(
             aliasName: aliasName,
@@ -184,7 +184,7 @@ extension ColumnExpression: OrderBySQLExpressible {
     }
 }
 
-extension ColumnExpression: CompareSQLExpressible {    
+extension ColumnExpression: CompareSQLExpression {    
     public var compareSqlExpression: some SQLExpression {
         _Compare(
             aliasName: aliasName,
