@@ -11,6 +11,7 @@ final class MyModel: Model, Table {
     @OptionalField(key: "name") var name: String?
     @Field(key: "title") var title: String
     @Field(key: "age") var age: Int
+    @Field(key: "birthday") var birthday: Date
     @Field(key: "json") var json: JsonObject
     
     init() {}

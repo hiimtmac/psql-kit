@@ -35,6 +35,18 @@ final class BindTests: PSQLTestCase {
         XCTAssertEqual(serializer.binds[4] as! Int, 3)
     }
     
+    func testBindDate() {
+        let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
+        
+        let b = WHERE {
+            m.$birthday == date.psqlDate.asBind()
+        }
+        
+        b.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."birthday" = $1)"#)
+        XCTAssertEqual((serializer.binds[0] as! PSQLDate).storage, date)
+    }
+    
     static var allTests = [
         ("testBindSimple", testBindSimple),
         ("testBindComplex", testBindComplex),

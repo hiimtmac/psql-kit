@@ -35,6 +35,6 @@ extension PSQLBind: Comparable where T: Comparable {
     }
 }
 
-extension PSQLBind: TypeEquatable {
-    public typealias CompareType = T
+extension PSQLBind: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
 }
