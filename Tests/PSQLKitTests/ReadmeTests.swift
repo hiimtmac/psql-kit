@@ -217,8 +217,16 @@ final class MyModel: Model, Table {
 }
 
 let m = MyModel.as("m")
-WHERE {
-    m.$createdAt.transform(to: PSQLDate.self) >< (Date().psqlDate...Date().psqlDate)
+QUERY {
+    SELECT {
+        m.$id
+        m.$id.transform(to: Int.self)
+        m.$createdAt.as(PSQLDate.self)
+    }
+    WHERE {
+        m.$id.transform(to: Int.self) == 7
+        m.$createdAt >< (Date().psqlDate...Date().psqlDate)
+    }
 }
         .serialize(to: &serializer)
         print(serializer.sql)

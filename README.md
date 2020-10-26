@@ -384,20 +384,30 @@ final class MyModel: Model, Table {
 }
 
 let m = MyModel.as("m")
-WHERE {
-    m.$createdAt.transform(to: PSQLDate.self) >< (Date().psqlDate...Date().psqlDate)
+QUERY {
+    SELECT {
+        m.$id
+        m.$id.transform(to: Int.self)
+        m.$createdAt.as(PSQLDate.self)
+    }
+    WHERE {
+        m.$id.transform(to: Int.self) == 7
+        m.$createdAt >< (Date().psqlDate...Date().psqlDate)
+    }
 }
 ```
 
 ```sql
-WHERE ("m"."created_at" BETWEEN '2020-10-22'::DATE AND '2020-10-22'::DATE)
+SELECT "m"."id"::UUID, "m"."id"::INTEGER, "m"."created_at"::DATE WHERE ("m"."id" = 7) AND ("m"."created_at" BETWEEN '2020-10-26'::DATE AND '2020-10-26'::DATE)
 ```
 
-In this case we had to do funky magic because we want the date to be treated as a `PSQLDate` to get the formatting `yyyy-MM-dd` and be of type `::Date`. So we needed the right hand side to be using `PSQLDate`. But then the left hand side is a `Date` so `Date != PSQLDate`. Hence the transform to make compiler be happy.
+We want the date to be selected as a `::DATE` to get the formatting `yyyy-MM-dd`. So we needed to tranform the selection to be using `PSQLDate`. 
+
+If we wanted to compare a `UUID` against an `Int` (bad example) then we `transform(to: T.Type)`. Then it can be compared against an `Int` in the `WHERE` statement.
 
 ### Dates
 
-Dates are tricky and idk what im doing with them. Included are 2 types `PSQLDate` and `PSQLTimestamp` each with have a formatter for serializing for the query.
+Dates are tricky. Included are 2 types `PSQLDate` and `PSQLTimestamp` each with have a formatter for serializing for the query (both comform to `PSQLDateTime`). `ColumnExpression where T == Date` have a function `.as<T: PSQLDateTime>(_ psqlDateTimeType: T.Type)` which can transform the column to `::DATE` time or `::TIMESTAMP` formatting.
 
 ### Raw
 

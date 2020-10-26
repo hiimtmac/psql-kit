@@ -229,6 +229,17 @@ extension ColumnExpression: CompareSQLExpression {
     }
 }
 
-extension ColumnExpression: TypeEquatable {
-    public typealias CompareType = T
+extension ColumnExpression: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
+}
+
+extension ColumnExpression where T == Date {
+    public func `as`<U>(_ psqlDateTimeType: U.Type) -> ColumnExpression<U> where U: PSQLDateTime {
+        ColumnExpression<U>(
+            aliasName: aliasName,
+            pathName: pathName,
+            schemaName: schemaName,
+            columnName: columnName
+        )
+    }
 }
