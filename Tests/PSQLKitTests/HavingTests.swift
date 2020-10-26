@@ -3,15 +3,15 @@ import XCTest
 import FluentKit
 
 final class HavingTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let m = FluentModel.as("x")
     
     func testHaving1() {
         let h = HAVING {
-            MyModel.$name == MyModel.$title
+            FluentModel.$name == FluentModel.$title
         }
         
-        h.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"HAVING ("my_model"."name" = "my_model"."title")"#)
+        h.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"HAVING ("my_model"."name" = "my_model"."title")"#)
     }
     
     func testHaving2() {
@@ -19,21 +19,21 @@ final class HavingTests: PSQLTestCase {
             m.$name != m.$name
         }
         
-        h.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"HAVING ("x"."name" != "x"."name")"#)
+        h.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"HAVING ("x"."name" != "x"."name")"#)
     }
     
     func testHavingN() {
-        let m = MyModel.as("x")
+        let m = FluentModel.as("x")
         
         let h = HAVING {
-            MyModel.$name == m.$name
-            m.$name == MyModel.$name
-            m.$name != m.$name || MyModel.$name != MyModel.$name
+            FluentModel.$name == m.$name
+            m.$name == FluentModel.$name
+            m.$name != m.$name || FluentModel.$name != FluentModel.$name
         }
         
-        h.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"HAVING ("my_model"."name" = "x"."name") AND ("x"."name" = "my_model"."name") AND (("x"."name" != "x"."name") OR ("my_model"."name" != "my_model"."name"))"#)
+        h.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"HAVING ("my_model"."name" = "x"."name") AND ("x"."name" = "my_model"."name") AND (("x"."name" != "x"."name") OR ("my_model"."name" != "my_model"."name"))"#)
     }
     
     static var allTests = [

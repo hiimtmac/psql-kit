@@ -29,3 +29,18 @@ public struct OptionalColumnProperty<Model: Table, WrappedValue: PSQLExpression>
         fatalError("Not to be accessed. Query only")
     }
 }
+
+@propertyWrapper
+public struct NestedObjectProperty<Model: Table, Nested: TableObject> {
+    let key: String
+
+    public init(key: String) {
+        self.key = key
+    }
+
+    public var projectedValue: Self { self }
+
+    public var wrappedValue: Nested {
+        fatalError("Not to be accessed. Query only")
+    }
+}

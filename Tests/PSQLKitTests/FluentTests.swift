@@ -61,8 +61,8 @@ final class FluentTests: PSQLTestCase {
             }
         }
         
-        b.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "p"."owner_id"::UUID, "pet"."owner_id"::UUID WHERE ("p"."owner_id" = "o"."id") AND ("t"."parent_id" = "o"."id") AND ("pet"."owner_id" = "owner"."id") AND ("pet"."parent_id" = "owner"."id") AND ("p"."owner_id" = "owner"."id") AND ("t"."parent_id" = "owner"."id") GROUP BY "p"."owner_id", "pet"."owner_id", "pet"."parent_id", "t"."parent_id""#)
+        b.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "p"."owner_id"::UUID, "pet"."owner_id"::UUID WHERE ("p"."owner_id" = "o"."id") AND ("t"."parent_id" = "o"."id") AND ("pet"."owner_id" = "owner"."id") AND ("pet"."parent_id" = "owner"."id") AND ("p"."owner_id" = "owner"."id") AND ("t"."parent_id" = "owner"."id") GROUP BY "p"."owner_id", "pet"."owner_id", "pet"."parent_id", "t"."parent_id""#)
     }
     
     func testDates() {
@@ -84,8 +84,8 @@ final class FluentTests: PSQLTestCase {
             }
         }
         
-        b.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30 06:00 AM'::TIMESTAMP) AND ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30'::DATE) GROUP BY "p"."created_at""#)
+        b.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30 06:00 AM'::TIMESTAMP) AND ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30'::DATE) GROUP BY "p"."created_at""#)
     }
     
     static var allTests = [

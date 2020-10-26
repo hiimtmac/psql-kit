@@ -3,75 +3,122 @@ import XCTest
 import FluentKit
 
 final class WithTests: PSQLTestCase {
-    func testWith1() {
-        let w = WITH {
-            QUERY {
-                SELECT { MyModel.$name }
-                FROM { MyModel.table }
-            }
-            .asWith(MyModel.table)
-        }
+    let f = FluentModel.as("x")
+    let p = PSQLModel.as("x")
     
-        w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model")"#)
+    func testWith1() {
+        WITH {
+            QUERY {
+                SELECT { FluentModel.$name }
+                FROM { FluentModel.table }
+            }
+            .asWith(FluentModel.table)
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WITH {
+            QUERY {
+                SELECT { PSQLModel.$name }
+                FROM { PSQLModel.table }
+            }
+            .asWith(FluentModel.table)
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testWith2() {
-        let m = MyModel.as("x")
-        let w = WITH {
+        WITH {
             QUERY {
-                SELECT { MyModel.$name }
-                FROM { MyModel.table }
+                SELECT { f.$title }
+                FROM { f.table }
             }
-            .asWith(MyModel.table)
-            QUERY {
-                SELECT { m.$title }
-                FROM { m.table }
-            }
-            .asWith(m.table)
+            .asWith(f.table)
         }
+        .serialize(to: &fluentSerializer)
         
-        w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model"), "x" AS (SELECT "x"."title"::TEXT FROM "my_model" AS "x")"#)
+        WITH {
+            QUERY {
+                SELECT { p.$title }
+                FROM { p.table }
+            }
+            .asWith(p.table)
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "x" AS (SELECT "x"."title"::TEXT FROM "my_model" AS "x")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testWithInQuery() {
-        let q = QUERY {
+        QUERY {
             WITH {
                 QUERY {
-                    SELECT { MyModel.$name }
-                    FROM { MyModel.table }
+                    SELECT { FluentModel.$name }
+                    FROM { FluentModel.table }
                 }
-                .asWith(MyModel.table)
+                .asWith(FluentModel.table)
             }
-            SELECT { MyModel.$name }
-            FROM { MyModel.table }
+            SELECT { FluentModel.$name }
+            FROM { FluentModel.table }
         }
+        .serialize(to: &fluentSerializer)
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#)
+        QUERY {
+            WITH {
+                QUERY {
+                    SELECT { PSQLModel.$name }
+                    FROM { PSQLModel.table }
+                }
+                .asWith(PSQLModel.table)
+            }
+            SELECT { PSQLModel.$name }
+            FROM { PSQLModel.table }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testWithErased() {
-        let w: some PSQLQuery = QUERY {
-            SELECT { MyModel.$name }
-            FROM { MyModel.table }
+        let f: some PSQLQuery = QUERY {
+            SELECT { FluentModel.$name }
+            FROM { FluentModel.table }
         }
         
-        let q = QUERY {
-            WITH {
-                w.asWith(MyModel.table)
-            }
-            SELECT { MyModel.$name }
-            FROM { MyModel.table }
+        QUERY {
+            WITH { f.asWith(FluentModel.table) }
+            SELECT { FluentModel.$name }
+            FROM { FluentModel.table }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        let p: some PSQLQuery = QUERY {
+            SELECT { FluentModel.$name }
+            FROM { FluentModel.table }
         }
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#)
+        QUERY {
+            WITH { p.asWith(FluentModel.table) }
+            SELECT { FluentModel.$name }
+            FROM { FluentModel.table }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     static var allTests = [
         ("testWith1", testWith1),
-        ("testWith2", testWith2)
+        ("testWith2", testWith2),
+        ("testWithErased", testWithErased)
     ]
 }

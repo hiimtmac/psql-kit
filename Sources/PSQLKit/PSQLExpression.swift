@@ -1,11 +1,11 @@
 import Foundation
 import PostgresKit
 
-public protocol PSQLExpression: SQLExpression {
+public protocol PSQLExpression {
     static var postgresColumnType: PostgresColumnType { get }
 }
 
-extension PSQLExpression {
+extension PSQLExpression where Self: SQLExpression {
     public func `as`(_ alias: String) -> RawValueAlias<Self> {
         RawValueAlias(value: self, alias: alias)
     }

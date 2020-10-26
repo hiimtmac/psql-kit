@@ -7,7 +7,6 @@ public typealias MIN = MinExpression
 public typealias SUM = SumExpression
 public typealias COUNT = CountExpression
 public typealias AVG = AverageExpression
-public typealias JSON_EXTRACT_PATH_TEXT = JsonExtractPathTextExpression
 public typealias JSONB_EXTRACT_PATH_TEXT = JsonbExtractPathTextExpression
 
 public typealias COALESCE = CoalesceExpression

@@ -3,7 +3,7 @@ import XCTest
 import FluentKit
 
 final class NullTests: PSQLTestCase {
-    let m = MyModel.as("m")
+    let m = FluentModel.as("m")
     
     func testNullEqual() {
         let val = nil as String?
@@ -15,8 +15,8 @@ final class NullTests: PSQLTestCase {
             m.$name == Optional<String>.none
         }
 
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("m"."name" = 'hi') AND ("m"."name" = 'hi') AND ("m"."name" = NULL) AND ("m"."name" = 'hi') AND ("m"."name" = NULL)"#)
+        j.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"WHERE ("m"."name" = 'hi') AND ("m"."name" = 'hi') AND ("m"."name" = NULL) AND ("m"."name" = 'hi') AND ("m"."name" = NULL)"#)
     }
     
     func testNullIs() {
@@ -29,8 +29,8 @@ final class NullTests: PSQLTestCase {
             m.$name === Optional<String>.none
         }
 
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("m"."name" IS 'hi') AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL) AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL)"#)
+        j.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"WHERE ("m"."name" IS 'hi') AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL) AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL)"#)
     }
     
     func testNullNotEqual() {
@@ -43,8 +43,8 @@ final class NullTests: PSQLTestCase {
             m.$name != Optional<String>.none
         }
 
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("m"."name" != 'hi') AND ("m"."name" != 'hi') AND ("m"."name" != NULL) AND ("m"."name" != 'hi') AND ("m"."name" != NULL)"#)
+        j.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"WHERE ("m"."name" != 'hi') AND ("m"."name" != 'hi') AND ("m"."name" != NULL) AND ("m"."name" != 'hi') AND ("m"."name" != NULL)"#)
     }
     
     func testNullIsNot() {
@@ -57,8 +57,8 @@ final class NullTests: PSQLTestCase {
             m.$name !== Optional<String>.none
         }
 
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"WHERE ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT NULL) AND ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT NULL)"#)
+        j.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"WHERE ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT NULL) AND ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT NULL)"#)
     }
     
     static var allTests = [

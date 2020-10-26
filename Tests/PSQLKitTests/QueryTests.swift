@@ -3,7 +3,7 @@ import XCTest
 import FluentKit
 
 final class QueryTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let m = FluentModel.as("x")
     
     func testQuery() {
         let q = QUERY {
@@ -11,8 +11,8 @@ final class QueryTests: PSQLTestCase {
             FROM { m.table }
         }
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT FROM "my_model" AS "x""#)
+        q.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "x"."name"::TEXT FROM "my_model" AS "x""#)
     }
     
     func testQueryAsSub() {
@@ -20,10 +20,10 @@ final class QueryTests: PSQLTestCase {
             SELECT { m.$name }
             FROM { m.table }
         }
-        .asSubquery(MyModel.table)
+        .asSubquery(FluentModel.table)
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"(SELECT "x"."name"::TEXT FROM "my_model" AS "x") AS "my_model""#)
+        q.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"(SELECT "x"."name"::TEXT FROM "my_model" AS "x") AS "my_model""#)
     }
     
     func testQueryAsWith() {
@@ -33,8 +33,8 @@ final class QueryTests: PSQLTestCase {
         }
         .asWith(m.table)
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #""x" AS (SELECT "x"."name"::TEXT FROM "my_model" AS "x")"#)
+        q.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #""x" AS (SELECT "x"."name"::TEXT FROM "my_model" AS "x")"#)
     }
     
     func testQueryN() {
@@ -48,8 +48,8 @@ final class QueryTests: PSQLTestCase {
             ORDERBY { m.$name.desc() }
         }
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT, "x"."title"::TEXT FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" DESC"#)
+        q.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "x"."name"::TEXT, "x"."title"::TEXT FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" DESC"#)
     }
     
     func testUnion() {
@@ -61,8 +61,8 @@ final class QueryTests: PSQLTestCase {
             }
         }
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT"#)
+        q.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT"#)
     }
     
     static var allTests = [

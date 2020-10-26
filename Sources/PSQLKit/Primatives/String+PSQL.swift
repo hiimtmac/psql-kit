@@ -4,7 +4,9 @@ import PostgresKit
 
 extension String: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .text }
-    
+}
+
+extension String: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("'")
         serializer.write("\(self)")

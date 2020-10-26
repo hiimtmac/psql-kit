@@ -3,15 +3,15 @@ import XCTest
 import FluentKit
 
 final class GroupByTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let m = FluentModel.as("x")
     
     func testGroupModel() {
         let g = GROUPBY {
-            MyModel.$name
+            FluentModel.$name
         }
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "my_model"."name""#)
+        g.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"GROUP BY "my_model"."name""#)
     }
     
     func testGroupModelAlias() {
@@ -19,18 +19,18 @@ final class GroupByTests: PSQLTestCase {
             m.$name
         }
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "x"."name""#)
+        g.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"GROUP BY "x"."name""#)
     }
     
     func testGroupBoth() {
         let g = GROUPBY {
-            MyModel.$name
+            FluentModel.$name
             m.$name
         }
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "my_model"."name", "x"."name""#)
+        g.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"GROUP BY "my_model"."name", "x"."name""#)
     }
     
     func testGroupRaw() {
@@ -38,8 +38,8 @@ final class GroupByTests: PSQLTestCase {
             RawColumn<String>("cool")
         }
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "cool""#)
+        g.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"GROUP BY "cool""#)
     }
     
     static var allTests = [

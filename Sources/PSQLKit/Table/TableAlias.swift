@@ -115,6 +115,17 @@ extension TableAlias where T: Model {
             columnName: field.$timestamp.key.description
         )
     }
+    
+    // MARK: - GroupProperty
+    public subscript<U>(dynamicMember keyPath: KeyPath<T, GroupProperty<T, U>>) -> ColumnExpression<U> where T: Model {
+        let field = T()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.key.description
+        )
+    }
 }
 
 extension TableAlias: FromSQLExpression {

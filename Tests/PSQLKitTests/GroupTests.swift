@@ -3,33 +3,33 @@ import XCTest
 import FluentKit
 
 final class GroupTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let m = FluentModel.as("x")
     
     func testGroups() {
         let q = QUERY {
             SELECT {
-                MyModel.$id
+                FluentModel.$id
                 
                 SELECTGROUP {
-                    MyModel.$id
-                    MyModel.$age
+                    FluentModel.$id
+                    FluentModel.$age
                 }
                 SELECTGROUP {
-                    MyModel.$id
-                    MyModel.$age
+                    FluentModel.$id
+                    FluentModel.$age
                 }
             }
             FROM {
-                MyModel.table
+                FluentModel.table
                 FROMGROUP {
-                    MyModel.table
-                    MyModel.table
+                    FluentModel.table
+                    FluentModel.table
                 }
             }
-            JOIN(MyModel.table) { true }
+            JOIN(FluentModel.table) { true }
             QUERYGROUP {
-                JOIN(MyModel.table) { true }
-                JOIN(MyModel.table) {
+                JOIN(FluentModel.table) { true }
+                JOIN(FluentModel.table) {
                     JOINGROUP {
                         true
                         true
@@ -37,46 +37,46 @@ final class GroupTests: PSQLTestCase {
                 }
             }
             WHERE {
-                MyModel.$id == MyModel.$id
+                FluentModel.$id == FluentModel.$id
                 
                 WHEREGROUP {
-                    MyModel.$id == MyModel.$id
-                    MyModel.$id == MyModel.$id
+                    FluentModel.$id == FluentModel.$id
+                    FluentModel.$id == FluentModel.$id
                 }
             }
         }
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."id"::UUID, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER FROM "my_model", "my_model", "my_model" INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true AND true WHERE ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id")"#)
+        q.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "my_model"."id"::UUID, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER FROM "my_model", "my_model", "my_model" INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true AND true WHERE ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id")"#)
     }
     
     func testLength() {
         let w = SELECT {
             SELECTGROUP {
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
             }
 
             SELECTGROUP {
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
             }
         }
         
-        w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#)
+        w.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#)
     }
     
     static var allTests = [

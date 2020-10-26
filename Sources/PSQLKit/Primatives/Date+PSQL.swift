@@ -4,7 +4,9 @@ import PostgresKit
 
 extension Date: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .timestamp }
-    
+}
+
+extension Date: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("'\(self)'")
     }
@@ -29,7 +31,7 @@ extension Date {
     public var psqlTimestamp: PSQLTimestamp { .init(self) }
 }
 
-public protocol PSQLDateTime: Comparable, PSQLExpression, Decodable, Encodable, TypeEquatable where CompareType == Date {
+public protocol PSQLDateTime: Comparable, SQLExpression, PSQLExpression, Decodable, Encodable, TypeEquatable where CompareType == Date {
     var storage: Date { get }
     static var defaultFormatter: DateFormatter { get }
 }

@@ -2,7 +2,7 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-public struct RawValueAlias<T> where T: PSQLExpression {
+public struct RawValueAlias<T> where T: PSQLExpression & SQLExpression {
     let value: T
     let alias: String
     

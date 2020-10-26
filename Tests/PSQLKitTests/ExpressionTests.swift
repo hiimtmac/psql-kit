@@ -3,7 +3,7 @@ import XCTest
 import FluentKit
 
 final class ExpressionTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let m = FluentModel.as("x")
     
     func testMax() {
         let s = SELECT {
@@ -11,8 +11,8 @@ final class ExpressionTests: PSQLTestCase {
             MAX(m.$age).as("age")
         }
         
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT MAX("x"."name"::TEXT), MAX("x"."age"::INTEGER) AS "age""#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT MAX("x"."name"::TEXT), MAX("x"."age"::INTEGER) AS "age""#)
     }
 
     func testMin() {
@@ -21,8 +21,8 @@ final class ExpressionTests: PSQLTestCase {
             MIN(m.$age).as("age")
         }
         
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT MIN("x"."name"::TEXT), MIN("x"."age"::INTEGER) AS "age""#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT MIN("x"."name"::TEXT), MIN("x"."age"::INTEGER) AS "age""#)
     }
     
     func testCount() {
@@ -31,8 +31,8 @@ final class ExpressionTests: PSQLTestCase {
             COUNT(m.$age).as("age")
         }
         
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT COUNT("x"."name"::TEXT), COUNT("x"."age"::INTEGER) AS "age""#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT COUNT("x"."name"::TEXT), COUNT("x"."age"::INTEGER) AS "age""#)
     }
     
     func testSum() {
@@ -41,8 +41,8 @@ final class ExpressionTests: PSQLTestCase {
             SUM(m.$age).as("age")
         }
         
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT SUM("x"."name"::TEXT), SUM("x"."age"::INTEGER) AS "age""#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT SUM("x"."name"::TEXT), SUM("x"."age"::INTEGER) AS "age""#)
     }
     
     func testGenerateSeries() {
@@ -54,8 +54,8 @@ final class ExpressionTests: PSQLTestCase {
             GENERATE_SERIES(from: date1, to: date2, interval: "1 day").as("dates")
         }
 
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT GENERATE_SERIES(8::INTEGER, 20::INTEGER, 10::INTERVAL), GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates""#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT GENERATE_SERIES(8::INTEGER, 20::INTEGER, 10::INTERVAL), GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates""#)
     }
     
     func testConcat() {
@@ -66,8 +66,8 @@ final class ExpressionTests: PSQLTestCase {
             CONCAT(8, 8).as("cool")
         }
 
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT, "x"."age"::INTEGER), CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT) AS "cool", CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT), CONCAT(8::INTEGER, 8::INTEGER) AS "cool""#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT, "x"."age"::INTEGER), CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT) AS "cool", CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT), CONCAT(8::INTEGER, 8::INTEGER) AS "cool""#)
     }
     
     func testCoalesce() {
@@ -79,18 +79,19 @@ final class ExpressionTests: PSQLTestCase {
             COALESCE(m.$name, COALESCE(m.$name, "hello"))
         }
 
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT COALESCE("x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, COALESCE("x"."name"::TEXT, 'hello'::TEXT))"#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT COALESCE("x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, COALESCE("x"."name"::TEXT, 'hello'::TEXT))"#)
     }
     
     func testJsonExtractPathText() {
+        let ok = JSONB_EXTRACT_PATH_TEXT(m.$pet, "hello", "cool")
         let s = SELECT {
-            JSON_EXTRACT_PATH_TEXT(m.$json, "hello").as("cool")
-            JSON_EXTRACT_PATH_TEXT(m.$json, "hello", "cool")
+            JSONB_EXTRACT_PATH_TEXT(m.$pet, "hello").as("cool")
+            JSONB_EXTRACT_PATH_TEXT(m.$pet, "hello", "cool")
         }
 
-        s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT JSON_EXTRACT_PATH_TEXT("x"."json"::JSON, 'hello') AS "cool", JSON_EXTRACT_PATH_TEXT("x"."json"::JSON, 'hello', 'cool')"#)
+        s.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'hello') AS "cool", JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'hello', 'cool')"#)
     }
     
     static var allTests = [

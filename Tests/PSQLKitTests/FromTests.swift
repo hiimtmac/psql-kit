@@ -3,15 +3,15 @@ import XCTest
 import FluentKit
 
 final class FromTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let m = FluentModel.as("x")
     
     func testFromModel() {
         let f = FROM {
-            MyModel.table
+            FluentModel.table
         }
         
-        f.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"FROM "my_model""#)
+        f.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"FROM "my_model""#)
     }
     
     func testFromModelAlias() {
@@ -19,19 +19,19 @@ final class FromTests: PSQLTestCase {
             m.table
         }
         
-        f.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"FROM "my_model" AS "x""#)
+        f.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"FROM "my_model" AS "x""#)
     }
     
     func testFromBoth() {
         let f = FROM {
             m.table
-            MyModel.table
-            MyModel.table.as("cool")
+            FluentModel.table
+            FluentModel.table.as("cool")
         }
         
-        f.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
+        f.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
     }
     
     func testFromRaw() {
@@ -39,8 +39,8 @@ final class FromTests: PSQLTestCase {
             RawTable("tableName")
         }
         
-        f.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"FROM "tableName""#)
+        f.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"FROM "tableName""#)
     }
     
     func testFromGenerateSeries() {
@@ -52,8 +52,8 @@ final class FromTests: PSQLTestCase {
             GENERATE_SERIES(from: date1, to: date2, interval: "1 day")
         }
         
-        f.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"FROM GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates", GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL)"#)
+        f.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"FROM GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates", GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL)"#)
     }
     
     func testSubquery() {
@@ -65,8 +65,8 @@ final class FromTests: PSQLTestCase {
             .asSubquery(m.table)
         }
         
-        f.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"FROM (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#)
+        f.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"FROM (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#)
     }
     
     static var allTests = [

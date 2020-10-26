@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct RawValue<T>: SQLExpression where T: PSQLExpression {
+public struct RawValue<T>: SQLExpression where T: PSQLExpression & SQLExpression {
     let value: T
     
     public init(_ value: T) {

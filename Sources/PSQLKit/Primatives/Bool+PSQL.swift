@@ -4,7 +4,9 @@ import SQLKit
 
 extension Bool: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .boolean }
-    
+}
+
+extension Bool: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("\(self)")
     }

@@ -14,6 +14,7 @@ public protocol Table: FromSQLExpression {
 extension Table {
     public typealias Column<Value: PSQLExpression> = ColumnProperty<Self, Value>
     public typealias OptionalColumn<Value: PSQLExpression> = OptionalColumnProperty<Self, Value>
+    public typealias NestedColumn<Value: TableObject> = NestedObjectProperty<Self, Value>
     
     /// fluent `table`
     public static var schema: String { "\(Self.self)" }
@@ -128,6 +129,17 @@ extension Table where Self: Model {
             pathName: Self.path,
             schemaName: Self.schema,
             columnName: field.$timestamp.key.description
+        )
+    }
+    
+    // MARK: - GroupProperty
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, GroupProperty<Self, T>>) -> ColumnExpression<T> {
+        let field = Self()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.key.description
         )
     }
 }

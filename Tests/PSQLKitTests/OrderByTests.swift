@@ -3,15 +3,15 @@ import XCTest
 import FluentKit
 
 final class OrderByTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let m = FluentModel.as("x")
     
     func testOrderModel() {
         let o = ORDERBY {
-            MyModel.$name
+            FluentModel.$name
         }
 
-        o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"ORDER BY "my_model"."name""#)
+        o.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"ORDER BY "my_model"."name""#)
     }
     
     func testOrderModelAlias() {
@@ -19,31 +19,31 @@ final class OrderByTests: PSQLTestCase {
             m.$name.asc()
         }
 
-        o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"ORDER BY "x"."name" ASC"#)
+        o.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"ORDER BY "x"."name" ASC"#)
     }
     
     func testOrderMultiple() {
         let o = ORDERBY {
-            MyModel.$name.asc()
+            FluentModel.$name.asc()
             m.$name.desc()
             m.$id
         }
         
-        o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"ORDER BY "my_model"."name" ASC, "x"."name" DESC, "x"."id""#)
+        o.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"ORDER BY "my_model"."name" ASC, "x"."name" DESC, "x"."id""#)
     }
 
     func testOrderDirections() {
         let o = ORDERBY {
             m.$name
-            MyModel.$name.asc()
-            MyModel.$name.desc()
+            FluentModel.$name.asc()
+            FluentModel.$name.desc()
             m.$name.order(.asc)
         }
         
-        o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"ORDER BY "x"."name", "my_model"."name" ASC, "my_model"."name" DESC, "x"."name" ASC"#)
+        o.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"ORDER BY "x"."name", "my_model"."name" ASC, "my_model"."name" DESC, "x"."name" ASC"#)
     }
     
     func testOrderRaw() {
@@ -51,8 +51,8 @@ final class OrderByTests: PSQLTestCase {
             RawColumn<String>("cool").desc()
         }
         
-        o.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"ORDER BY "cool" DESC"#)
+        o.serialize(to: &fluentSerializer)
+        XCTAssertEqual(fluentSerializer.sql, #"ORDER BY "cool" DESC"#)
     }
     
     static var allTests = [
