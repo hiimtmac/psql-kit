@@ -1,11 +1,15 @@
 import Foundation
 import SQLKit
 
-public struct PSQLRange<T> where T: CompareSQLExpression {
+public struct PSQLRange<T, U> where
+    T: CompareSQLExpression & TypeEquatable,
+    U: CompareSQLExpression & TypeEquatable,
+    T.CompareType == U.CompareType
+{
     let lower: T
-    let upper: T
+    let upper: U
     
-    public init(from: T, to: T) {
+    public init(from: T, to: U) {
         self.lower = from
         self.upper = to
     }
@@ -22,7 +26,7 @@ extension PSQLRange: SQLExpression {
 }
 
 extension PSQLRange: TypeEquatable {
-    public typealias CompareType = T
+    public typealias CompareType = T.CompareType
 }
 
 extension PSQLRange: CompareSQLExpression {

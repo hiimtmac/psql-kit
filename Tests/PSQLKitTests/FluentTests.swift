@@ -67,16 +67,17 @@ final class FluentTests: PSQLTestCase {
     
     func testDates() {
         let p = Pet.as("p")
-        let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
-        let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
-        
+        let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
+        let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!
+                
         let b = QUERY {
             SELECT {
                 Pet.$createdAt
-                p.$createdAt
+                p.$createdAt.as(PSQLDate.self)
             }
             WHERE {
-                p.$createdAt.transform(to: PSQLDate.self) >< PSQLRange(from: date1, to: date2)
+                p.$createdAt >< PSQLRange(from: date1.psqlDate, to: date2.psqlTimestamp)
+                p.$createdAt >< PSQLRange(from: date1.psqlDate, to: date2.psqlDate)
             }
             GROUPBY {
                 p.$createdAt
@@ -84,7 +85,7 @@ final class FluentTests: PSQLTestCase {
         }
         
         b.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::TIMESTAMP WHERE ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30'::DATE) GROUP BY "p"."created_at""#)
+        XCTAssertEqual(serializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30 06:00 AM'::TIMESTAMP) AND ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30'::DATE) GROUP BY "p"."created_at""#)
     }
     
     static var allTests = [

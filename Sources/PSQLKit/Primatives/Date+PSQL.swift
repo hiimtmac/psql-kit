@@ -24,7 +24,12 @@ extension Date: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
 
-protocol PSQLDateTime: Comparable, PSQLExpression, Decodable, Encodable {
+extension Date {
+    public var psqlDate: PSQLDate { .init(self) }
+    public var psqlTimestamp: PSQLTimestamp { .init(self) }
+}
+
+public protocol PSQLDateTime: Comparable, PSQLExpression, Decodable, Encodable {
     var storage: Date { get }
     static var defaultFormatter: DateFormatter { get }
 }
@@ -41,19 +46,14 @@ extension PSQLDateTime {
     }
 }
 
-extension Date {
-    public var psqlDate: PSQLDate { .init(self) }
-    public var psqlTimestamp: PSQLTimestamp { .init(self) }
-}
-
 public struct PSQLDate: PSQLDateTime {
-    let storage: Date
+    public let storage: Date
     
     init(_ date: Date = .init()) {
         self.storage = date
     }
     
-    static let defaultFormatter: DateFormatter = {
+    public static let defaultFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
         return f
@@ -65,7 +65,7 @@ extension PSQLDate: PSQLExpression {
 }
 
 extension PSQLDate: TypeEquatable {
-    public typealias CompareType = Self
+    public typealias CompareType = Date
 }
 
 extension PSQLDate: SelectSQLExpression {
@@ -77,13 +77,13 @@ extension PSQLDate: CompareSQLExpression {
 }
 
 public struct PSQLTimestamp: PSQLDateTime {
-    let storage: Date
+    public let storage: Date
     
     public init(_ date: Date = .init()) {
         self.storage = date
     }
     
-    static let defaultFormatter: DateFormatter = {
+    public static let defaultFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd hh:mm a"
         f.timeZone = TimeZone(abbreviation: "UTC")
@@ -104,5 +104,5 @@ extension PSQLTimestamp: PSQLExpression {
 }
 
 extension PSQLTimestamp: TypeEquatable {
-    public typealias CompareType = Self
+    public typealias CompareType = Date
 }
