@@ -29,3 +29,7 @@ extension Optional: SelectSQLExpression where Wrapped: SQLExpression & SelectSQL
 extension Optional: CompareSQLExpression where Wrapped: SQLExpression & CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
+
+extension Optional: WhereSQLExpression where Wrapped: SQLExpression & WhereSQLExpression {
+    public var whereSqlExpression: some SQLExpression { self }
+}

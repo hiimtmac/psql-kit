@@ -175,6 +175,14 @@ public struct SelectTouple<T> {
             value.9.selectSqlExpression
         ]
     }
+    
+    public static func buildEither<Content>(first: Content) -> Content where Content: SelectSQLExpression {
+        first
+    }
+
+    public static func buildEither<Content>(second: Content) -> Content where Content: SelectSQLExpression {
+        second
+    }
 }
 
 extension SelectTouple: SelectSQLExpression {

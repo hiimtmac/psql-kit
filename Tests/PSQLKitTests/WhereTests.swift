@@ -137,6 +137,70 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(serializer.sql, #"WHERE ("x"."name" = 'hi') AND ("x"."name" = 8) AND ("x"."name" BETWEEN 8 AND 9)"#)
     }
     
+    func testAnyComparrison() {
+        let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
+        
+        let w = WHERE {
+            AnyCompareExpression(
+                lhs: m.$birthday,
+                operator: .between,
+                rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
+            )
+        }
+        
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."birthday" BETWEEN '2020-01-01'::DATE AND '2020-01-01'::DATE)"#)
+    }
+    
+    func testWhereControlFlow() {
+        let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
+        
+        enum Type {
+            case current
+            case missing
+        }
+        
+        let t1 = Type.current
+        let t2 = Type.missing
+        
+        let w = WHERE {
+            m.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
+            
+            switch t1 {
+            case .current:
+                AnyCompareExpression(
+                    lhs: m.$birthday,
+                    operator: .between,
+                    rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
+                )
+            case .missing:
+                AnyCompareExpression(
+                    lhs: m.$birthday,
+                    operator: .between,
+                    rhs: PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
+                )
+            }
+            
+            switch t2 {
+            case .current:
+                AnyCompareExpression(
+                    lhs: m.$birthday,
+                    operator: .between,
+                    rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
+                )
+            case .missing:
+                AnyCompareExpression(
+                    lhs: m.$birthday,
+                    operator: .between,
+                    rhs: PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
+                )
+            }
+        }
+        
+        w.serialize(to: &serializer)
+        XCTAssertEqual(serializer.sql, #"WHERE ("x"."birthday" BETWEEN '2020-01-01'::DATE AND '2020-01-01'::DATE) AND ("x"."birthday" BETWEEN '2020-01-01'::DATE AND '2020-01-01'::DATE) AND ("x"."birthday" BETWEEN '2020-01-01 06:00 AM'::TIMESTAMP AND '2020-01-01 06:00 AM'::TIMESTAMP)"#)
+    }
+    
     static var allTests = [
         ("testEqual", testEqual),
         ("testMultiple", testMultiple),
@@ -148,6 +212,7 @@ final class WhereTests: PSQLTestCase {
         ("testWhereRaw", testWhereRaw),
         ("testWhereBind", testWhereBind),
         ("testWhereLikes", testWhereLikes),
-        ("testWhereTransforms", testWhereTransforms)
+        ("testWhereTransforms", testWhereTransforms),
+        ("testWhereControlFlow", testWhereControlFlow)
     ]
 }
