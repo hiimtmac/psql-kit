@@ -15,7 +15,7 @@ final class MyModel: Model, Table {
     
     init() {}
     
-    struct JsonObject: Codable, PSQLExpressible {
+    struct JsonObject: Codable, PSQLExpression {
         let name: String
         
         func serialize(to serializer: inout SQLSerializer) {

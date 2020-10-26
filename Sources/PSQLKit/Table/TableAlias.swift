@@ -27,7 +27,7 @@ extension TableAlias {
     }
     
     // MARK: - ColumnProperty
-    public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U: PSQLExpression>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -38,7 +38,7 @@ extension TableAlias {
     }
     
     // MARK: - OptionalColumnProperty
-    public subscript<U: PSQLExpressible>(dynamicMember keyPath: KeyPath<T, OptionalColumnProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U: PSQLExpression>(dynamicMember keyPath: KeyPath<T, OptionalColumnProperty<T, U>>) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -117,7 +117,7 @@ extension TableAlias where T: Model {
     }
 }
 
-extension TableAlias: FromSQLExpressible {
+extension TableAlias: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression {
         _From(
             aliasName: alias,

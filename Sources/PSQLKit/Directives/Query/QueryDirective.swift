@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct QueryDirective<Content>: SQLExpression where Content: QuerySQLExpressible {
+public struct QueryDirective<Content>: SQLExpression where Content: QuerySQLExpression {
     let content: Content
     
     public init(@QueryBuilder builder: () -> Content) {
@@ -17,17 +17,17 @@ public struct QueryDirective<Content>: SQLExpression where Content: QuerySQLExpr
     }
 }
 
-extension QueryDirective: UnionSQLExpressible {
+extension QueryDirective: UnionSQLExpression {
     public var unionSqlExpression: some SQLExpression { self }
 }
 
 // MARK: - SubqueryModifier
-public struct SubqueryModifier<Content> where Content: QuerySQLExpressible {
+public struct SubqueryModifier<Content> where Content: QuerySQLExpression {
     let name: String
     let content: Content
 }
 
-extension SubqueryModifier: QuerySQLExpressible {
+extension SubqueryModifier: QuerySQLExpression {
     private struct _Query: SQLExpression {
         let name: String
         let content: Content
@@ -64,12 +64,12 @@ extension QueryDirective {
     }
 }
 
-extension SubqueryModifier: FromSQLExpressible {
+extension SubqueryModifier: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression { querySqlExpression }
 }
 
-extension QueryDirective: FromSQLExpressible where Content: FromSQLExpressible {
-    private struct _From<Content>: SQLExpression where Content: FromSQLExpressible {
+extension QueryDirective: FromSQLExpression where Content: FromSQLExpression {
+    private struct _From<Content>: SQLExpression where Content: FromSQLExpression {
         let content: Content
         
         func serialize(to serializer: inout SQLSerializer) {
@@ -82,12 +82,12 @@ extension QueryDirective: FromSQLExpressible where Content: FromSQLExpressible {
     }
 }
 
-extension SubqueryModifier: SelectSQLExpressible {
+extension SubqueryModifier: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { querySqlExpression }
 }
 
-extension QueryDirective: SelectSQLExpressible where Content: SelectSQLExpressible {
-    private struct _Select<Content>: SQLExpression where Content: SelectSQLExpressible {
+extension QueryDirective: SelectSQLExpression where Content: SelectSQLExpression {
+    private struct _Select<Content>: SQLExpression where Content: SelectSQLExpression {
         let content: Content
         
         func serialize(to serializer: inout SQLSerializer) {
@@ -101,12 +101,12 @@ extension QueryDirective: SelectSQLExpressible where Content: SelectSQLExpressib
 }
 
 // MARK: - WithModifier
-public struct WithModifier<Content> where Content: QuerySQLExpressible {
+public struct WithModifier<Content> where Content: QuerySQLExpression {
     let name: String
     let content: Content
 }
 
-extension WithModifier: QuerySQLExpressible {
+extension WithModifier: QuerySQLExpression {
     private struct _Query: SQLExpression {
         let name: String
         let content: Content
@@ -143,12 +143,12 @@ extension QueryDirective {
     }
 }
 
-extension WithModifier: WithSQLExpressible {
+extension WithModifier: WithSQLExpression {
     public var withSqlExpression: some SQLExpression { querySqlExpression }
 }
 
-extension QueryDirective: WithSQLExpressible where Content: WithSQLExpressible {
-    private struct _With<Content>: SQLExpression where Content: WithSQLExpressible {
+extension QueryDirective: WithSQLExpression where Content: WithSQLExpression {
+    private struct _With<Content>: SQLExpression where Content: WithSQLExpression {
         let content: Content
         
         func serialize(to serializer: inout SQLSerializer) {

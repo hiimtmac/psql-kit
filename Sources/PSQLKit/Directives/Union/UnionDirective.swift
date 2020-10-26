@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct UnionDirective<Content>: SQLExpression where Content: UnionSQLExpressible {
+public struct UnionDirective<Content>: SQLExpression where Content: UnionSQLExpression {
     let content: Content
     
     public init(@UnionBuilder builder: () -> Content) {
@@ -13,6 +13,6 @@ public struct UnionDirective<Content>: SQLExpression where Content: UnionSQLExpr
     }
 }
 
-extension UnionDirective: QuerySQLExpressible {
+extension UnionDirective: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression { self }
 }

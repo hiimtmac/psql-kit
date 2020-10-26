@@ -6,8 +6,8 @@ public struct WhereTouple<T> {
     let expressions: [SQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -17,9 +17,9 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2>(_ value: (T0, T1, T2)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -30,10 +30,10 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2, T3>(_ value: (T0, T1, T2, T3)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible,
-        T3: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression,
+        T3: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -45,11 +45,11 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4>(_ value: (T0, T1, T2, T3, T4)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible,
-        T3: WhereSQLExpressible,
-        T4: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression,
+        T3: WhereSQLExpression,
+        T4: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -62,12 +62,12 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5>(_ value: (T0, T1, T2, T3, T4, T5)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible,
-        T3: WhereSQLExpressible,
-        T4: WhereSQLExpressible,
-        T5: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression,
+        T3: WhereSQLExpression,
+        T4: WhereSQLExpression,
+        T5: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -81,13 +81,13 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6>(_ value: (T0, T1, T2, T3, T4, T5, T6)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible,
-        T3: WhereSQLExpressible,
-        T4: WhereSQLExpressible,
-        T5: WhereSQLExpressible,
-        T6: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression,
+        T3: WhereSQLExpression,
+        T4: WhereSQLExpression,
+        T5: WhereSQLExpression,
+        T6: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -102,14 +102,14 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible,
-        T3: WhereSQLExpressible,
-        T4: WhereSQLExpressible,
-        T5: WhereSQLExpressible,
-        T6: WhereSQLExpressible,
-        T7: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression,
+        T3: WhereSQLExpression,
+        T4: WhereSQLExpression,
+        T5: WhereSQLExpression,
+        T6: WhereSQLExpression,
+        T7: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -125,15 +125,15 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible,
-        T3: WhereSQLExpressible,
-        T4: WhereSQLExpressible,
-        T5: WhereSQLExpressible,
-        T6: WhereSQLExpressible,
-        T7: WhereSQLExpressible,
-        T8: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression,
+        T3: WhereSQLExpression,
+        T4: WhereSQLExpression,
+        T5: WhereSQLExpression,
+        T6: WhereSQLExpression,
+        T7: WhereSQLExpression,
+        T8: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -150,16 +150,16 @@ public struct WhereTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)) where
-        T0: WhereSQLExpressible,
-        T1: WhereSQLExpressible,
-        T2: WhereSQLExpressible,
-        T3: WhereSQLExpressible,
-        T4: WhereSQLExpressible,
-        T5: WhereSQLExpressible,
-        T6: WhereSQLExpressible,
-        T7: WhereSQLExpressible,
-        T8: WhereSQLExpressible,
-        T9: WhereSQLExpressible
+        T0: WhereSQLExpression,
+        T1: WhereSQLExpression,
+        T2: WhereSQLExpression,
+        T3: WhereSQLExpression,
+        T4: WhereSQLExpression,
+        T5: WhereSQLExpression,
+        T6: WhereSQLExpression,
+        T7: WhereSQLExpression,
+        T8: WhereSQLExpression,
+        T9: WhereSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -177,7 +177,7 @@ public struct WhereTouple<T> {
     }
 }
 
-extension WhereTouple: WhereSQLExpressible {
+extension WhereTouple: WhereSQLExpression {
     public var whereSqlExpression: some SQLExpression {
         SQLList(expressions, separator: SQLRaw(" AND "))
     }

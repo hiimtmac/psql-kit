@@ -4,7 +4,7 @@ import FluentKit
 import NIO
 import PostgresKit
 
-public protocol PSQLQuery: SQLExpression, QuerySQLExpressible { }
+public protocol PSQLQuery: SQLExpression, QuerySQLExpression { }
 
 extension QueryDirective: PSQLQuery {
     public var querySqlExpression: some SQLExpression { self }

@@ -6,7 +6,7 @@ public struct ExpressionAlias<Expression> {
     let alias: String
 }
 
-extension ExpressionAlias: SelectSQLExpressible where Expression: SelectSQLExpressible {
+extension ExpressionAlias: SelectSQLExpression where Expression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(expression: expression, alias: alias)
     }
@@ -29,7 +29,7 @@ extension ExpressionAlias: SelectSQLExpressible where Expression: SelectSQLExpre
     }
 }
 
-extension ExpressionAlias: FromSQLExpressible where Expression: FromSQLExpressible {
+extension ExpressionAlias: FromSQLExpression where Expression: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression {
         _From(expression: expression, alias: alias)
     }

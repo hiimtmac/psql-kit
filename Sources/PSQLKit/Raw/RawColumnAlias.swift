@@ -2,7 +2,7 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-public struct RawColumnAlias<T> where T: PSQLExpressible {
+public struct RawColumnAlias<T> where T: PSQLExpression {
     let column: RawColumn<T>
     let alias: String
     
@@ -12,7 +12,7 @@ public struct RawColumnAlias<T> where T: PSQLExpressible {
     }
 }
 
-extension RawColumnAlias: SelectSQLExpressible {
+extension RawColumnAlias: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let column: RawColumn<T>
         let alias: String

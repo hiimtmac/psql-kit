@@ -2,21 +2,26 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-extension UUID: PSQLExpressible {
-    public typealias CompareType = Self
+extension UUID: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .uuid }
     
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("'")
-        serializer.write("\(self)")
+        serializer.write("\(self.uuidString)")
         serializer.write("'")
     }
 }
 
-extension UUID: SelectSQLExpressible {
-    public var selectSqlExpression: some SQLExpression { PrimativeSelect(value: self) }
+extension UUID: TypeEquatable {
+    public typealias CompareType = Self
 }
 
-extension UUID: CompareSQLExpressible {
+extension UUID: SelectSQLExpression {
+    public var selectSqlExpression: some SQLExpression {
+        RawValue(self)
+    }
+}
+
+extension UUID: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }

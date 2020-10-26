@@ -1,12 +1,12 @@
 import Foundation
 import SQLKit
 
-public struct ColumnAlias<T> where T: PSQLExpressible {
+public struct ColumnAlias<T> where T: PSQLExpression {
     let column: ColumnExpression<T>
     let alias: String
 }
 
-extension ColumnAlias: SelectSQLExpressible {
+extension ColumnAlias: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: column.aliasName,

@@ -567,7 +567,7 @@ If you are not using models that conform to `Model` from `Fluent`/`FluentKit`, y
 | `@Field(key: "name") var name: String`                       | `@Column(key: "name") var name: String`         |                               |
 | `@OptionalField(key: "name") var name: String`               | `@OptionalColumn(key: "name") var name: String` |                               |
 | `@Parent(key: "parent_id") var parent: ParentModel`          | `@Column(key: "parent_id") var parentId: UUID`  | Foreign keys without `Fluent` |
-| `@OptionalParent(key: "parent_id") var parent: ParentModel?` | `@Column(key: "parent_id") var parentId: UUID?` | Foreign keys without `Fluent` |
+| `@OptionalParent(key: "parent_id") var parent: ParentModel?` | `@OptionalColumn(key: "parent_id") var parentId: UUID?` | Foreign keys without `Fluent` |
 
 Example without `Model` conformance
 

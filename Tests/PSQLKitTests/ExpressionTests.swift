@@ -60,22 +60,27 @@ final class ExpressionTests: PSQLTestCase {
     
     func testConcat() {
         let s = SELECT {
+            CONCAT5(m.$name, " ", m.$title, " ", m.$age)
+            CONCAT4(m.$name, " ", m.$title, " ").as("cool")
             CONCAT3(m.$name, " ", m.$title)
             CONCAT(8, 8).as("cool")
         }
 
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT), CONCAT(8::INTEGER, 8::INTEGER) AS "cool""#)
+        XCTAssertEqual(serializer.sql, #"SELECT CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT, "x"."age"::INTEGER), CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT) AS "cool", CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT), CONCAT(8::INTEGER, 8::INTEGER) AS "cool""#)
     }
     
     func testCoalesce() {
         let s = SELECT {
+            COALESCE5(m.$name, m.$name, m.$name, m.$name, "hello").as("cool")
+            COALESCE4(m.$name, m.$name, m.$name, "hello").as("cool")
+            COALESCE3(m.$name, m.$name, "hello").as("cool")
             COALESCE(m.$name, "hello").as("cool")
             COALESCE(m.$name, COALESCE(m.$name, "hello"))
         }
 
         s.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT COALESCE("x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, COALESCE("x"."name"::TEXT, 'hello'::TEXT))"#)
+        XCTAssertEqual(serializer.sql, #"SELECT COALESCE("x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, "x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, "x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, 'hello'::TEXT) AS "cool", COALESCE("x"."name"::TEXT, COALESCE("x"."name"::TEXT, 'hello'::TEXT))"#)
     }
     
     func testJsonExtractPathText() {

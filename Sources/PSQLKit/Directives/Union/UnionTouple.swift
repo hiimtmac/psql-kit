@@ -6,8 +6,8 @@ public struct UnionTouple<T> {
     let expressions: [SQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
-        T0: UnionSQLExpressible,
-        T1: UnionSQLExpressible
+        T0: UnionSQLExpression,
+        T1: UnionSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -17,9 +17,9 @@ public struct UnionTouple<T> {
     }
     
     init<T0, T1, T2>( _ value: (T0, T1, T2)) where
-        T0: UnionSQLExpressible,
-        T1: UnionSQLExpressible,
-        T2: UnionSQLExpressible
+        T0: UnionSQLExpression,
+        T1: UnionSQLExpression,
+        T2: UnionSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -30,10 +30,10 @@ public struct UnionTouple<T> {
     }
     
     init<T0, T1, T2, T3>( _ value: (T0, T1, T2, T3)) where
-        T0: UnionSQLExpressible,
-        T1: UnionSQLExpressible,
-        T2: UnionSQLExpressible,
-        T3: UnionSQLExpressible
+        T0: UnionSQLExpression,
+        T1: UnionSQLExpression,
+        T2: UnionSQLExpression,
+        T3: UnionSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -45,11 +45,11 @@ public struct UnionTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4>( _ value: (T0, T1, T2, T3, T4)) where
-        T0: UnionSQLExpressible,
-        T1: UnionSQLExpressible,
-        T2: UnionSQLExpressible,
-        T3: UnionSQLExpressible,
-        T4: UnionSQLExpressible
+        T0: UnionSQLExpression,
+        T1: UnionSQLExpression,
+        T2: UnionSQLExpression,
+        T3: UnionSQLExpression,
+        T4: UnionSQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -62,7 +62,7 @@ public struct UnionTouple<T> {
     }
 }
 
-extension UnionTouple: UnionSQLExpressible {
+extension UnionTouple: UnionSQLExpression {
     public var unionSqlExpression: some SQLExpression {
         SQLList(expressions, separator: SQLRaw(" UNION "))
     }

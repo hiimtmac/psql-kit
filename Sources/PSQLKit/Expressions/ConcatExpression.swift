@@ -1,9 +1,10 @@
 import Foundation
 import SQLKit
 
+// MARK: ConcatExpression
 public struct ConcatExpression<T0, T1>: SQLExpression where
-T0: SelectSQLExpressible,
-T1: SelectSQLExpressible
+    T0: SelectSQLExpression,
+    T1: SelectSQLExpression
 {
     let t0: T0
     let t1: T1
@@ -27,11 +28,11 @@ T1: SelectSQLExpressible
     }
 }
 
-extension ConcatExpression: SelectSQLExpressible {
+extension ConcatExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension ConcatExpression: GroupBySQLExpressible {
+extension ConcatExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression { self }
 }
 
@@ -41,10 +42,11 @@ extension ConcatExpression {
     }
 }
 
+// MARK: ConcatExpression3
 public struct ConcatExpression3<T0, T1, T2>: SQLExpression where
-T0: SelectSQLExpressible,
-T1: SelectSQLExpressible,
-T2: SelectSQLExpressible
+    T0: SelectSQLExpression,
+    T1: SelectSQLExpression,
+    T2: SelectSQLExpression
 {
     let t0: T0
     let t1: T1
@@ -72,11 +74,11 @@ T2: SelectSQLExpressible
     }
 }
 
-extension ConcatExpression3: SelectSQLExpressible {
+extension ConcatExpression3: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension ConcatExpression3: GroupBySQLExpressible {
+extension ConcatExpression3: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression { self }
 }
 
@@ -86,11 +88,12 @@ extension ConcatExpression3 {
     }
 }
 
+// MARK: ConcatExpression4
 public struct ConcatExpression4<T0, T1, T2, T3>: SQLExpression where
-T0: SelectSQLExpressible,
-T1: SelectSQLExpressible,
-T2: SelectSQLExpressible,
-T3: SelectSQLExpressible
+    T0: SelectSQLExpression,
+    T1: SelectSQLExpression,
+    T2: SelectSQLExpression,
+    T3: SelectSQLExpression
 {
     let t0: T0
     let t1: T1
@@ -122,11 +125,11 @@ T3: SelectSQLExpressible
     }
 }
 
-extension ConcatExpression4: SelectSQLExpressible {
+extension ConcatExpression4: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension ConcatExpression4: GroupBySQLExpressible {
+extension ConcatExpression4: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression { self }
 }
 
@@ -136,12 +139,13 @@ extension ConcatExpression4 {
     }
 }
 
+// MARK: ConcatExpression5
 public struct ConcatExpression5<T0, T1, T2, T3, T4>: SQLExpression where
-T0: SelectSQLExpressible,
-T1: SelectSQLExpressible,
-T2: SelectSQLExpressible,
-T3: SelectSQLExpressible,
-T4: SelectSQLExpressible
+    T0: SelectSQLExpression,
+    T1: SelectSQLExpression,
+    T2: SelectSQLExpression,
+    T3: SelectSQLExpression,
+    T4: SelectSQLExpression
 {
     let t0: T0
     let t1: T1
@@ -177,11 +181,11 @@ T4: SelectSQLExpressible
     }
 }
 
-extension ConcatExpression5: SelectSQLExpressible {
+extension ConcatExpression5: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension ConcatExpression5: GroupBySQLExpressible {
+extension ConcatExpression5: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression { self }
 }
 

@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct PSQLBind<T> where T: PSQLExpressible & Encodable {
+public struct PSQLBind<T> where T: PSQLExpression & Encodable {
     let value: T
     
     public init(_ value: T) {
@@ -15,11 +15,11 @@ extension PSQLBind: SQLExpression {
     }
 }
 
-extension PSQLBind: CompareSQLExpressible {
+extension PSQLBind: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
 
-extension PSQLBind: SelectSQLExpressible {
+extension PSQLBind: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 

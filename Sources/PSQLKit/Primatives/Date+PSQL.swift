@@ -2,8 +2,7 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-extension Date: PSQLExpressible {
-    public typealias CompareType = Self
+extension Date: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .timestamp }
     
     public func serialize(to serializer: inout SQLSerializer) {
@@ -11,17 +10,21 @@ extension Date: PSQLExpressible {
     }
 }
 
-extension Date: SelectSQLExpressible {
+extension Date: TypeEquatable {
+    public typealias CompareType = Self
+}
+
+extension Date: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        PrimativeSelect(value: self)
+        RawValue(self)
     }
 }
 
-extension Date: CompareSQLExpressible {
+extension Date: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
 
-protocol PSQLDateTime: Comparable, PSQLExpressible, Decodable, Encodable {
+protocol PSQLDateTime: Comparable, PSQLExpression, Decodable, Encodable {
     var storage: Date { get }
     static var defaultFormatter: DateFormatter { get }
 }
@@ -57,16 +60,19 @@ public struct PSQLDate: PSQLDateTime {
     }()
 }
 
-extension PSQLDate: PSQLExpressible {
-    public typealias CompareType = Self
+extension PSQLDate: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .date }
 }
 
-extension PSQLDate: SelectSQLExpressible {
+extension PSQLDate: TypeEquatable {
+    public typealias CompareType = Self
+}
+
+extension PSQLDate: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension PSQLDate: CompareSQLExpressible {
+extension PSQLDate: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
 
@@ -85,15 +91,18 @@ public struct PSQLTimestamp: PSQLDateTime {
     }()
 }
 
-extension PSQLTimestamp: SelectSQLExpressible {
+extension PSQLTimestamp: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
-extension PSQLTimestamp: CompareSQLExpressible {
+extension PSQLTimestamp: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
 
-extension PSQLTimestamp: PSQLExpressible {
-    public typealias CompareType = Self
+extension PSQLTimestamp: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .timestamp }
+}
+
+extension PSQLTimestamp: TypeEquatable {
+    public typealias CompareType = Self
 }

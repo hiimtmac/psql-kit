@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQLExpressible {
+public struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQLExpression {
     let content: Content
     
     public init(@GroupByBuilder builder: () -> Content) {
@@ -15,6 +15,6 @@ public struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQL
     }
 }
 
-extension GroupByDirective: QuerySQLExpressible {
+extension GroupByDirective: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression { self }
 }

@@ -2,7 +2,7 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-public struct RawColumn<T> where T: PSQLExpressible {
+public struct RawColumn<T> where T: PSQLExpression {
     let column: String
     
     public init(_ column: String) {
@@ -20,7 +20,7 @@ extension RawColumn: TypeEquatable {
     public typealias CompareType = T
 }
 
-extension RawColumn: SelectSQLExpressible {
+extension RawColumn: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let column: String
         let type: PostgresColumnType
@@ -39,7 +39,7 @@ extension RawColumn: SelectSQLExpressible {
     }
 }
 
-extension RawColumn: GroupBySQLExpressible {
+extension RawColumn: GroupBySQLExpression {
     private struct _GroupBy: SQLExpression {
         let column: String
         
@@ -55,7 +55,7 @@ extension RawColumn: GroupBySQLExpressible {
     }
 }
 
-extension RawColumn: OrderBySQLExpressible {
+extension RawColumn: OrderBySQLExpression {
     private struct _OrderBy: SQLExpression {
         let column: String
         
@@ -83,7 +83,7 @@ extension RawColumn: OrderBySQLExpressible {
     }
 }
 
-extension RawColumn: CompareSQLExpressible {
+extension RawColumn: CompareSQLExpression {
     private struct _Compare: SQLExpression {
         let column: String
         

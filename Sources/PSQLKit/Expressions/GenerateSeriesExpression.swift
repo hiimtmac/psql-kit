@@ -2,7 +2,7 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpressible {
+public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpression {
     let lower: Content
     let upper: Content
     let interval: SQLExpression
@@ -28,7 +28,7 @@ public struct GenerateSeriesExpression<Content>: SQLExpression where Content: Se
     }
 }
 
-extension GenerateSeriesExpression: SelectSQLExpressible {
+extension GenerateSeriesExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
@@ -38,6 +38,6 @@ extension GenerateSeriesExpression {
     }
 }
 
-extension GenerateSeriesExpression: FromSQLExpressible {
+extension GenerateSeriesExpression: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression { self }
 }

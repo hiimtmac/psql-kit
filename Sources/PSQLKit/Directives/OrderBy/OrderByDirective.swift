@@ -10,7 +10,7 @@ public enum OrderByDirection: String, SQLExpression {
     }
 }
 
-public struct OrderByDirective<Content>: SQLExpression where Content: OrderBySQLExpressible {
+public struct OrderByDirective<Content>: SQLExpression where Content: OrderBySQLExpression {
     let content: Content
     
     public init(@OrderByBuilder builder: () -> Content) {
@@ -24,7 +24,7 @@ public struct OrderByDirective<Content>: SQLExpression where Content: OrderBySQL
     }
 }
 
-public struct OrderByModifier<Content>: OrderBySQLExpressible where Content: OrderBySQLExpressible {
+public struct OrderByModifier<Content>: OrderBySQLExpression where Content: OrderBySQLExpression {
     let content: Content
     let direction: OrderByDirection
     
@@ -44,6 +44,6 @@ public struct OrderByModifier<Content>: OrderBySQLExpressible where Content: Ord
     }
 }
 
-extension OrderByDirective: QuerySQLExpressible {
+extension OrderByDirective: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression { self }
 }

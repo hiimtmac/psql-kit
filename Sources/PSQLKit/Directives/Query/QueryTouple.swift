@@ -6,8 +6,8 @@ public struct QueryTouple<T> {
     let expressions: [SQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -17,9 +17,9 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2>(_ value: (T0, T1, T2)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -30,10 +30,10 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2, T3>(_ value: (T0, T1, T2, T3)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible,
-        T3: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression,
+        T3: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -45,11 +45,11 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4>(_ value: (T0, T1, T2, T3, T4)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible,
-        T3: QuerySQLExpressible,
-        T4: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression,
+        T3: QuerySQLExpression,
+        T4: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -62,12 +62,12 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5>(_ value: (T0, T1, T2, T3, T4, T5)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible,
-        T3: QuerySQLExpressible,
-        T4: QuerySQLExpressible,
-        T5: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression,
+        T3: QuerySQLExpression,
+        T4: QuerySQLExpression,
+        T5: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -81,13 +81,13 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6>(_ value: (T0, T1, T2, T3, T4, T5, T6)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible,
-        T3: QuerySQLExpressible,
-        T4: QuerySQLExpressible,
-        T5: QuerySQLExpressible,
-        T6: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression,
+        T3: QuerySQLExpression,
+        T4: QuerySQLExpression,
+        T5: QuerySQLExpression,
+        T6: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -102,14 +102,14 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible,
-        T3: QuerySQLExpressible,
-        T4: QuerySQLExpressible,
-        T5: QuerySQLExpressible,
-        T6: QuerySQLExpressible,
-        T7: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression,
+        T3: QuerySQLExpression,
+        T4: QuerySQLExpression,
+        T5: QuerySQLExpression,
+        T6: QuerySQLExpression,
+        T7: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -125,15 +125,15 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible,
-        T3: QuerySQLExpressible,
-        T4: QuerySQLExpressible,
-        T5: QuerySQLExpressible,
-        T6: QuerySQLExpressible,
-        T7: QuerySQLExpressible,
-        T8: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression,
+        T3: QuerySQLExpression,
+        T4: QuerySQLExpression,
+        T5: QuerySQLExpression,
+        T6: QuerySQLExpression,
+        T7: QuerySQLExpression,
+        T8: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -150,16 +150,16 @@ public struct QueryTouple<T> {
     }
     
     init<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(_ value: (T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)) where
-        T0: QuerySQLExpressible,
-        T1: QuerySQLExpressible,
-        T2: QuerySQLExpressible,
-        T3: QuerySQLExpressible,
-        T4: QuerySQLExpressible,
-        T5: QuerySQLExpressible,
-        T6: QuerySQLExpressible,
-        T7: QuerySQLExpressible,
-        T8: QuerySQLExpressible,
-        T9: QuerySQLExpressible
+        T0: QuerySQLExpression,
+        T1: QuerySQLExpression,
+        T2: QuerySQLExpression,
+        T3: QuerySQLExpression,
+        T4: QuerySQLExpression,
+        T5: QuerySQLExpression,
+        T6: QuerySQLExpression,
+        T7: QuerySQLExpression,
+        T8: QuerySQLExpression,
+        T9: QuerySQLExpression
     {
         self.value = value as! T
         self.expressions = [
@@ -177,7 +177,7 @@ public struct QueryTouple<T> {
     }
 }
 
-extension QueryTouple: QuerySQLExpressible {
+extension QueryTouple: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression {
         SQLList(expressions, separator: SQLRaw(" "))
     }

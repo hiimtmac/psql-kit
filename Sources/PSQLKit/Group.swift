@@ -2,7 +2,7 @@ import Foundation
 import SQLKit
 
 public typealias SELECTGROUP = SelectGrouping
-public struct SelectGrouping<Content>: SelectSQLExpressible where Content: SelectSQLExpressible {
+public struct SelectGrouping<Content>: SelectSQLExpression where Content: SelectSQLExpression {
     let content: Content
     
     public init(@SelectBuilder builder: () -> Content) {
@@ -15,7 +15,7 @@ public struct SelectGrouping<Content>: SelectSQLExpressible where Content: Selec
 }
 
 public typealias FROMGROUP = FromGrouping
-public struct FromGrouping<Content>: FromSQLExpressible where Content: FromSQLExpressible {
+public struct FromGrouping<Content>: FromSQLExpression where Content: FromSQLExpression {
     let content: Content
     
     public init(@FromBuilder builder: () -> Content) {
@@ -28,7 +28,7 @@ public struct FromGrouping<Content>: FromSQLExpressible where Content: FromSQLEx
 }
 
 public typealias GROUPBYGROUP = GroupByGrouping
-public struct GroupByGrouping<Content>: GroupBySQLExpressible where Content: GroupBySQLExpressible {
+public struct GroupByGrouping<Content>: GroupBySQLExpression where Content: GroupBySQLExpression {
     let content: Content
     
     public init(@GroupByBuilder builder: () -> Content) {
@@ -41,7 +41,7 @@ public struct GroupByGrouping<Content>: GroupBySQLExpressible where Content: Gro
 }
 
 public typealias HAVINGGROUP = HavingGrouping
-public struct HavingGrouping<Content>: HavingSQLExpressible where Content: HavingSQLExpressible {
+public struct HavingGrouping<Content>: HavingSQLExpression where Content: HavingSQLExpression {
     let content: Content
     
     public init(@HavingBuilder builder: () -> Content) {
@@ -54,7 +54,7 @@ public struct HavingGrouping<Content>: HavingSQLExpressible where Content: Havin
 }
 
 public typealias JOINGROUP = JoinGrouping
-public struct JoinGrouping<Content>: JoinSQLExpressible where Content: JoinSQLExpressible {
+public struct JoinGrouping<Content>: JoinSQLExpression where Content: JoinSQLExpression {
     let content: Content
     
     public init(@JoinBuilder builder: () -> Content) {
@@ -67,7 +67,7 @@ public struct JoinGrouping<Content>: JoinSQLExpressible where Content: JoinSQLEx
 }
 
 public typealias ORDERBYGROUP = OrderByGrouping
-public struct OrderByGrouping<Content>: OrderBySQLExpressible where Content: OrderBySQLExpressible {
+public struct OrderByGrouping<Content>: OrderBySQLExpression where Content: OrderBySQLExpression {
     let content: Content
     
     public init(@OrderByBuilder builder: () -> Content) {
@@ -80,7 +80,7 @@ public struct OrderByGrouping<Content>: OrderBySQLExpressible where Content: Ord
 }
 
 public typealias QUERYGROUP = QueryGrouping
-public struct QueryGrouping<Content>: QuerySQLExpressible where Content: QuerySQLExpressible {
+public struct QueryGrouping<Content>: QuerySQLExpression where Content: QuerySQLExpression {
     let content: Content
     
     public init(@QueryBuilder builder: () -> Content) {
@@ -93,7 +93,7 @@ public struct QueryGrouping<Content>: QuerySQLExpressible where Content: QuerySQ
 }
 
 public typealias WHEREGROUP = WhereGrouping
-public struct WhereGrouping<Content>: WhereSQLExpressible where Content: WhereSQLExpressible {
+public struct WhereGrouping<Content>: WhereSQLExpression where Content: WhereSQLExpression {
     let content: Content
     
     public init(@WhereBuilder builder: () -> Content) {
@@ -106,7 +106,7 @@ public struct WhereGrouping<Content>: WhereSQLExpressible where Content: WhereSQ
 }
 
 public typealias WITHGROUP = WithGrouping
-public struct WithGrouping<Content>: WithSQLExpressible where Content: WithSQLExpressible {
+public struct WithGrouping<Content>: WithSQLExpression where Content: WithSQLExpression {
     let content: Content
     
     public init(@WithBuilder builder: () -> Content) {

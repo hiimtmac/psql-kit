@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct JsonExtractPathTextExpression<Content>: SQLExpression where Content: SelectSQLExpressible {
+public struct JsonExtractPathTextExpression<Content>: SQLExpression where Content: SelectSQLExpression {
     let content: Content
     let pathElements: [String]
     
@@ -21,7 +21,7 @@ public struct JsonExtractPathTextExpression<Content>: SQLExpression where Conten
     }
 }
 
-extension JsonExtractPathTextExpression: SelectSQLExpressible {
+extension JsonExtractPathTextExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
@@ -35,7 +35,7 @@ extension JsonExtractPathTextExpression: TypeEquatable {
     public typealias CompareType = Self
 }
 
-public struct JsonbExtractPathTextExpression<Content>: SQLExpression where Content: SelectSQLExpressible {
+public struct JsonbExtractPathTextExpression<Content>: SQLExpression where Content: SelectSQLExpression {
     let content: Content
     let pathElements: [String]
     
@@ -55,7 +55,7 @@ public struct JsonbExtractPathTextExpression<Content>: SQLExpression where Conte
     }
 }
 
-extension JsonbExtractPathTextExpression: SelectSQLExpressible {
+extension JsonbExtractPathTextExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self }
 }
 
