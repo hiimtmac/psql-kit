@@ -95,7 +95,7 @@ final class AdvancedTests: PSQLTestCase {
             JOIN(o.table, method: .left) { f.$id == o.$id }
             JOIN(OwnerDateSeries.table) { o.$bday == OwnerDateSeries.$date }
         }
-        query.serialize(to: &serializer)
+        query.serialize(to: &fluentSerializer)
         
         let sub1 = [
             #"SELECT "date"::DATE"#,
@@ -126,8 +126,8 @@ final class AdvancedTests: PSQLTestCase {
             #"INNER JOIN "OwnerDateSeries" ON ("o"."bday" = "OwnerDateSeries"."date")"#
         ].joined(separator: " ")
         
-        XCTAssertEqual(serializer.sql, compare)
-        print(serializer.sql)
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        print(fluentSerializer.sql)
     }
     
     static var allTests = [

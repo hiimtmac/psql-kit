@@ -3,33 +3,31 @@ import XCTest
 import FluentKit
 
 final class GroupTests: PSQLTestCase {
-    let m = MyModel.as("x")
-    
     func testGroups() {
-        let q = QUERY {
+        QUERY {
             SELECT {
-                MyModel.$id
+                FluentModel.$id
                 
                 SELECTGROUP {
-                    MyModel.$id
-                    MyModel.$age
+                    FluentModel.$id
+                    FluentModel.$age
                 }
                 SELECTGROUP {
-                    MyModel.$id
-                    MyModel.$age
+                    FluentModel.$id
+                    FluentModel.$age
                 }
             }
             FROM {
-                MyModel.table
+                FluentModel.table
                 FROMGROUP {
-                    MyModel.table
-                    MyModel.table
+                    FluentModel.table
+                    FluentModel.table
                 }
             }
-            JOIN(MyModel.table) { true }
+            JOIN(FluentModel.table) { true }
             QUERYGROUP {
-                JOIN(MyModel.table) { true }
-                JOIN(MyModel.table) {
+                JOIN(FluentModel.table) { true }
+                JOIN(FluentModel.table) {
                     JOINGROUP {
                         true
                         true
@@ -37,46 +35,116 @@ final class GroupTests: PSQLTestCase {
                 }
             }
             WHERE {
-                MyModel.$id == MyModel.$id
+                FluentModel.$id == FluentModel.$id
                 
                 WHEREGROUP {
-                    MyModel.$id == MyModel.$id
-                    MyModel.$id == MyModel.$id
+                    FluentModel.$id == FluentModel.$id
+                    FluentModel.$id == FluentModel.$id
                 }
             }
         }
+        .serialize(to: &fluentSerializer)
         
-        q.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."id"::UUID, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER FROM "my_model", "my_model", "my_model" INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true AND true WHERE ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id")"#)
+        QUERY {
+            SELECT {
+                PSQLModel.$id
+                
+                SELECTGROUP {
+                    PSQLModel.$id
+                    PSQLModel.$age
+                }
+                SELECTGROUP {
+                    PSQLModel.$id
+                    PSQLModel.$age
+                }
+            }
+            FROM {
+                PSQLModel.table
+                FROMGROUP {
+                    PSQLModel.table
+                    PSQLModel.table
+                }
+            }
+            JOIN(PSQLModel.table) { true }
+            QUERYGROUP {
+                JOIN(PSQLModel.table) { true }
+                JOIN(PSQLModel.table) {
+                    JOINGROUP {
+                        true
+                        true
+                    }
+                }
+            }
+            WHERE {
+                PSQLModel.$id == PSQLModel.$id
+                
+                WHEREGROUP {
+                    PSQLModel.$id == PSQLModel.$id
+                    PSQLModel.$id == PSQLModel.$id
+                }
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT "my_model"."id"::UUID, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER FROM "my_model", "my_model", "my_model" INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true INNER JOIN "my_model" ON true AND true WHERE ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id") AND ("my_model"."id" = "my_model"."id")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testLength() {
-        let w = SELECT {
+        SELECT {
             SELECTGROUP {
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
             }
 
             SELECTGROUP {
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
-                MyModel.$name
-                MyModel.$id
-                MyModel.$age
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
+                FluentModel.$name
+                FluentModel.$id
+                FluentModel.$age
             }
         }
+        .serialize(to: &fluentSerializer)
         
-        w.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#)
+        SELECT {
+            SELECTGROUP {
+                PSQLModel.$id
+                PSQLModel.$age
+                PSQLModel.$name
+                PSQLModel.$id
+                PSQLModel.$age
+                PSQLModel.$name
+                PSQLModel.$id
+                PSQLModel.$age
+            }
+
+            SELECTGROUP {
+                PSQLModel.$id
+                PSQLModel.$age
+                PSQLModel.$name
+                PSQLModel.$id
+                PSQLModel.$age
+                PSQLModel.$name
+                PSQLModel.$id
+                PSQLModel.$age
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     static var allTests = [

@@ -12,6 +12,10 @@ public struct RawColumnAlias<T> where T: PSQLExpression {
     }
 }
 
+extension RawColumnAlias: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
+}
+
 extension RawColumnAlias: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let column: RawColumn<T>

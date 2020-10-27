@@ -4,7 +4,9 @@ import PostgresKit
 
 extension Float: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .decimal }
-    
+}
+
+extension Float: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("\(self)")
     }

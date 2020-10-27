@@ -2,7 +2,7 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-public struct RawValueAlias<T> where T: PSQLExpression {
+public struct RawValueAlias<T> where T: PSQLExpression & SQLExpression {
     let value: T
     let alias: String
     
@@ -35,4 +35,8 @@ extension RawValueAlias: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(value: value, alias: alias)
     }
+}
+
+extension RawValueAlias: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
 }

@@ -6,6 +6,10 @@ public struct ExpressionAlias<Expression> {
     let alias: String
 }
 
+extension ExpressionAlias: TypeEquatable where Expression: TypeEquatable {
+    public typealias CompareType = Expression.CompareType
+}
+
 extension ExpressionAlias: SelectSQLExpression where Expression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(expression: expression, alias: alias)

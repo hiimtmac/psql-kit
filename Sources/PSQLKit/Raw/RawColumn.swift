@@ -16,8 +16,8 @@ extension RawColumn {
     }
 }
 
-extension RawColumn: TypeEquatable {
-    public typealias CompareType = T
+extension RawColumn: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
 }
 
 extension RawColumn: SelectSQLExpression {

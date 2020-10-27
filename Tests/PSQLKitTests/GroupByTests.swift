@@ -3,43 +3,73 @@ import XCTest
 import FluentKit
 
 final class GroupByTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let f = FluentModel.as("x")
+    let p = PSQLModel.as("x")
     
     func testGroupModel() {
-        let g = GROUPBY {
-            MyModel.$name
+        GROUPBY {
+            FluentModel.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "my_model"."name""#)
+        GROUPBY {
+            PSQLModel.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "my_model"."name""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testGroupModelAlias() {
-        let g = GROUPBY {
-            m.$name
+        GROUPBY {
+            f.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "x"."name""#)
+        GROUPBY {
+            p.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "x"."name""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testGroupBoth() {
-        let g = GROUPBY {
-            MyModel.$name
-            m.$name
+        GROUPBY {
+            FluentModel.$name
+            f.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "my_model"."name", "x"."name""#)
+        GROUPBY {
+            PSQLModel.$name
+            p.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "my_model"."name", "x"."name""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testGroupRaw() {
-        let g = GROUPBY {
+        GROUPBY {
             RawColumn<String>("cool")
         }
+        .serialize(to: &fluentSerializer)
         
-        g.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"GROUP BY "cool""#)
+        GROUPBY {
+            RawColumn<String>("cool")
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "cool""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     static var allTests = [

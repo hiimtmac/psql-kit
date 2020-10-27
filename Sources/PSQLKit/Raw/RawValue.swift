@@ -1,7 +1,7 @@
 import Foundation
 import SQLKit
 
-public struct RawValue<T>: SQLExpression where T: PSQLExpression {
+public struct RawValue<T>: SQLExpression where T: PSQLExpression & SQLExpression {
     let value: T
     
     public init(_ value: T) {
@@ -13,4 +13,8 @@ public struct RawValue<T>: SQLExpression where T: PSQLExpression {
         serializer.write("::")
         T.postgresColumnType.serialize(to: &serializer)
     }
+}
+
+extension RawValue: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
 }

@@ -3,53 +3,93 @@ import XCTest
 import FluentKit
 
 final class JoinTests: PSQLTestCase {
-    let m = MyModel.as("x")
+    let f = FluentModel.as("x")
+    let p = PSQLModel.as("x")
     
     func testJoinModel() {
-        let j = JOIN(MyModel.table) {
-            MyModel.$name == MyModel.$name
+        JOIN(FluentModel.table) {
+            FluentModel.$name == FluentModel.$name
         }
-
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"INNER JOIN "my_model" ON ("my_model"."name" = "my_model"."name")"#)
+        .serialize(to: &fluentSerializer)
+        
+        JOIN(PSQLModel.table) {
+            PSQLModel.$name == PSQLModel.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"INNER JOIN "my_model" ON ("my_model"."name" = "my_model"."name")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testJoinModelAlias() {
-        let j = JOIN(m.table) {
-            m.$name == m.$name
+        JOIN(f.table) {
+            f.$name == f.$name
         }
+    
+        .serialize(to: &fluentSerializer)
         
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name")"#)
+        JOIN(p.table) {
+            p.$name == p.$name
+        }
+    
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testJoinBoth() {
-        let j = JOIN(m.table, method: .left) {
-            m.$name == MyModel.$name
-            MyModel.$name == m.$name
+        JOIN(f.table, method: .left) {
+            f.$name == FluentModel.$name
+            FluentModel.$name == f.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"LEFT JOIN "my_model" AS "x" ON ("x"."name" = "my_model"."name") AND ("my_model"."name" = "x"."name")"#)
+        JOIN(p.table, method: .left) {
+            p.$name == PSQLModel.$name
+            PSQLModel.$name == p.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"LEFT JOIN "my_model" AS "x" ON ("x"."name" = "my_model"."name") AND ("my_model"."name" = "x"."name")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testJoinN() {
-        let j = JOIN(m.table) {
-            m.$name == m.$name
-            m.$name == MyModel.$name || m.$name != m.$name
+        JOIN(f.table) {
+            f.$name == f.$name
+            f.$name == FluentModel.$name || f.$name != f.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name") AND (("x"."name" = "my_model"."name") OR ("x"."name" != "x"."name"))"#)
+        JOIN(p.table) {
+            p.$name == p.$name
+            p.$name == PSQLModel.$name || p.$name != p.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name") AND (("x"."name" = "my_model"."name") OR ("x"."name" != "x"."name"))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testJoinRaw() {
-        let j = JOIN(RawTable("cool")) {
-            m.$name == m.$name
+        JOIN(RawTable("cool")) {
+            f.$name == f.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        j.serialize(to: &serializer)
-        XCTAssertEqual(serializer.sql, #"INNER JOIN "cool" ON ("x"."name" = "x"."name")"#)
+        JOIN(RawTable("cool")) {
+            p.$name == p.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"INNER JOIN "cool" ON ("x"."name" = "x"."name")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     static var allTests = [

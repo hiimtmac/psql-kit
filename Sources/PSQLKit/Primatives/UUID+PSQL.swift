@@ -4,7 +4,9 @@ import PostgresKit
 
 extension UUID: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .uuid }
-    
+}
+
+extension UUID: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("'")
         serializer.write("\(self.uuidString)")

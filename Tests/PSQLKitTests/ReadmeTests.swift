@@ -16,9 +16,9 @@ QUERY {
     }
     FROM { Moon.table }
 }
-        .serialize(to: &serializer)
+        .serialize(to: &fluentSerializer)
         
-        print(serializer.sql)
+        print(fluentSerializer.sql)
     }
     
     func testExecute() {
@@ -40,8 +40,8 @@ print(binding)
 SELECT {
     Moon.$name.as("moon_name")
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testTableAlias() {
@@ -50,8 +50,8 @@ SELECT {
     m.$name
     m.$craters.as("crater_count")
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testSelect() {
@@ -61,8 +61,8 @@ SELECT {
     m.$name
     m.$craters
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testFrom() {
@@ -70,8 +70,8 @@ let m = Moon.as("m")
 FROM {
     m.table
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testJoin() {
@@ -86,8 +86,8 @@ QUERY {
         m.$planet == p.$id
     }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testWhere() {
@@ -96,8 +96,8 @@ WHERE {
     m.$name == "the moon"
     m.$craters > 3
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testComparrisons() {
@@ -110,9 +110,11 @@ WHERE {
     m.$craters >< (3...5) || m.$craters <> (3...5) // BETWEEN / NOT BETWEEN
     m.$name ~~ "%moon" || m.$name !~~ "%moon" // LIKE / NOT LIKE
     m.$name ~~* "%moon" || m.$name !~~* "%moon" // ILIKE / NOT ILIKE
+    m.$name === "moon" || m.$name !== "moon" // IS / IS NOT
+    m.$name === Optional<String>.none
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testHaving() {
@@ -120,8 +122,8 @@ let m = Moon.as("m")
 HAVING {
     AVG(m.$craters) > 1
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testGroupBy() {
@@ -131,8 +133,8 @@ GROUPBY {
     m.$craters
     m.$planet
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testOrderBy() {
@@ -143,8 +145,8 @@ ORDERBY {
     m.$craters.asc()
     m.$planet.order(.desc)
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testQuery() {
@@ -153,8 +155,8 @@ QUERY {
     SELECT { m.* }
     FROM { m.table }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testWith() {
@@ -166,8 +168,8 @@ WITH {
     }
     .asWith(m.table)
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     
@@ -189,8 +191,8 @@ QUERY {
         .asSubquery("y")
     }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testExpressions() {
@@ -205,18 +207,18 @@ SELECT {
     CONCAT(m.$name, " is a cool planet").as("annotated")
     GENERATE_SERIES(from: 1, to: 5, interval: 1)
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testTransform() {
-final class MyModel: Model, Table {
+final class FluentModel: Model, Table {
     static let schema = "my_model"
     @ID var id: UUID?
     @Timestamp(key: "created_at", on: .create) var createdAt: Date?
 }
 
-let m = MyModel.as("m")
+let m = FluentModel.as("m")
 QUERY {
     SELECT {
         m.$id
@@ -228,8 +230,8 @@ QUERY {
         m.$createdAt >< (Date().psqlDate...Date().psqlDate)
     }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testRaw() {
@@ -239,8 +241,8 @@ SELECT {
     7
     666.as("number_of_the_beast")
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testBinding() {
@@ -249,9 +251,9 @@ WHERE {
     m.$name == "the moon".asBind()
     m.$comets > PSQLBind(8)
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
-        print(serializer.binds)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+        print(fluentSerializer.binds)
     }
     
     func testGroupings() {
@@ -273,8 +275,8 @@ QUERY {
         }
     }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testUnion() {
@@ -290,8 +292,8 @@ UNION {
         FROM { p.table }
     }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testDistinct() {
@@ -317,24 +319,24 @@ QUERY {
         .asWith("y")
     }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
     
     func testSchema() {
-final class MyModel: Model, Table {
+final class FluentModel: Model, Table {
     static let schema = "my_model"
     static let path: String? = "custom_path"
     @ID var id: UUID?
     @Field(key: "name") var name: String
 }
-let m = MyModel.as("m")
+let m = FluentModel.as("m")
 QUERY {
     SELECT { m.* }
     FROM { m.table }
 }
-        .serialize(to: &serializer)
-        print(serializer.sql)
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
     }
 }
 
