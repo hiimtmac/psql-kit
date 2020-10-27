@@ -6,7 +6,7 @@ PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.1.0")
+    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.5.0")
 ],
 ```
 
@@ -448,6 +448,8 @@ WHERE {
 SQL: WHERE ("m"."name" = $1) AND ("m"."comets" > $2)
 BINDS: ["the moon", 8]
 ```
+
+> Binds dont work nice with `PSQLDate` or `PSQLTimestamp`, however they have to be a swift `Date` object at some point so that should escape all injection possibliity from strings there.
 
 ### Groupings
 

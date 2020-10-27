@@ -78,9 +78,9 @@ final class BindTests: PSQLTestCase {
         let timestamp = PSQLTimestamp(swift)
         
         let encodeDate = try JSONEncoder().encode(date)
-        XCTAssertEqual(String(decoding: encodeDate, as: UTF8.self), "\"2020-01-01\"")
+        XCTAssertEqual(String(decoding: encodeDate, as: UTF8.self), "599551200")
         let encodeTimestamp = try JSONEncoder().encode(timestamp)
-        XCTAssertEqual(String(decoding: encodeTimestamp, as: UTF8.self), "\"2020-01-01 06:00 AM\"")
+        XCTAssertEqual(String(decoding: encodeTimestamp, as: UTF8.self), "599551200")
         
         let decodeDate = try JSONDecoder().decode(PSQLDate.self, from: encodeDate)
         XCTAssertEqual("\(decodeDate.storage)", "2020-01-01 00:00:00 +0000")

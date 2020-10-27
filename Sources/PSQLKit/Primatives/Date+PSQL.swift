@@ -48,19 +48,14 @@ extension PSQLDateTime {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        let value = Self.defaultFormatter.string(from: storage)
-        try container.encode(value)
+        try container.encode(storage)
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let string = try container.decode(String.self)
-        guard let date = Self.defaultFormatter.date(from: string) else {
-            throw DecodingError.dataCorruptedError(
-                in: container,
-                debugDescription: "Date string does not match format: \(String(describing: Self.defaultFormatter.dateFormat))"
-            )
-        }
+        let decoded = try container.decode(Date.self)
+        let string = Self.defaultFormatter.string(from: decoded)
+        let date = Self.defaultFormatter.date(from: string)! // should not fail as it was encoded using same
         self.init(date)
     }
 }
