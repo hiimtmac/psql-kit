@@ -163,6 +163,28 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testNestedJsonExtract() {
+        SELECT {
+            COALESCE(
+                JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$name),
+                JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$type)
+            )
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            COALESCE(
+                JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$name),
+                JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$type)
+            )
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT COALESCE(JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'name'), JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'type'))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testMax", testMax),
         ("testMin", testMin),
