@@ -71,8 +71,26 @@ final class BindTests: PSQLTestCase {
         XCTAssertEqual((fluentSerializer.binds[0] as! PSQLDate).storage, date)
     }
     
+    func testDateBindCodable() throws {
+        let swift = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
+        
+        let date = PSQLDate(swift)
+        let timestamp = PSQLTimestamp(swift)
+        
+        let encodeDate = try JSONEncoder().encode(date)
+        XCTAssertEqual(String(decoding: encodeDate, as: UTF8.self), "\"2020-01-01\"")
+        let encodeTimestamp = try JSONEncoder().encode(timestamp)
+        XCTAssertEqual(String(decoding: encodeTimestamp, as: UTF8.self), "\"2020-01-01 06:00 AM\"")
+        
+        let decodeDate = try JSONDecoder().decode(PSQLDate.self, from: encodeDate)
+        XCTAssertEqual("\(decodeDate.storage)", "2020-01-01 00:00:00 +0000")
+        let decodeTimestamp = try JSONDecoder().decode(PSQLTimestamp.self, from: encodeTimestamp)
+        XCTAssertEqual("\(decodeTimestamp.storage)", "2020-01-01 06:00:00 +0000")
+    }
+    
     static var allTests = [
         ("testBindSimple", testBindSimple),
         ("testBindComplex", testBindComplex),
+        ("testDateBindCodable", testDateBindCodable)
     ]
 }

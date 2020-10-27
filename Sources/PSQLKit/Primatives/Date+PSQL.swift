@@ -33,6 +33,7 @@ extension Date {
 
 public protocol PSQLDateTime: Comparable, SQLExpression, PSQLExpression, Decodable, Encodable, TypeEquatable where CompareType == Date {
     var storage: Date { get }
+    init(_ date: Date)
     static var defaultFormatter: DateFormatter { get }
 }
 
@@ -47,7 +48,20 @@ extension PSQLDateTime {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(storage)
+        let value = Self.defaultFormatter.string(from: storage)
+        try container.encode(value)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let string = try container.decode(String.self)
+        guard let date = Self.defaultFormatter.date(from: string) else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Date string does not match format: \(String(describing: Self.defaultFormatter.dateFormat))"
+            )
+        }
+        self.init(date)
     }
 }
 
@@ -56,11 +70,6 @@ public struct PSQLDate: PSQLDateTime {
     
     public init(_ date: Date = .init()) {
         self.storage = date
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.storage = try container.decode(Date.self)
     }
     
     public static let defaultFormatter: DateFormatter = {
@@ -90,11 +99,6 @@ public struct PSQLTimestamp: PSQLDateTime {
     
     public init(_ date: Date = .init()) {
         self.storage = date
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.storage = try container.decode(Date.self)
     }
     
     public static let defaultFormatter: DateFormatter = {
