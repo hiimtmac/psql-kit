@@ -44,6 +44,11 @@ extension PSQLDateTime {
     public func serialize(to serializer: inout SQLSerializer) {
         Self.defaultFormatter.string(from: storage).serialize(to: &serializer)
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(storage)
+    }
 }
 
 public struct PSQLDate: PSQLDateTime {
@@ -51,6 +56,11 @@ public struct PSQLDate: PSQLDateTime {
     
     public init(_ date: Date = .init()) {
         self.storage = date
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.storage = try container.decode(Date.self)
     }
     
     public static let defaultFormatter: DateFormatter = {
@@ -80,6 +90,11 @@ public struct PSQLTimestamp: PSQLDateTime {
     
     public init(_ date: Date = .init()) {
         self.storage = date
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.storage = try container.decode(Date.self)
     }
     
     public static let defaultFormatter: DateFormatter = {
