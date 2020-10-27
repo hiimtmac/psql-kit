@@ -18,7 +18,7 @@ extension Date: TypeEquatable {
 
 extension Date: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue(self)
+        RawValue(self).selectSqlExpression
     }
 }
 
@@ -43,8 +43,6 @@ extension PSQLDateTime {
     
     public func serialize(to serializer: inout SQLSerializer) {
         Self.defaultFormatter.string(from: storage).serialize(to: &serializer)
-        serializer.write("::")
-        Self.postgresColumnType.serialize(to: &serializer)
     }
 }
 
@@ -58,6 +56,7 @@ public struct PSQLDate: PSQLDateTime {
     public static let defaultFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = TimeZone(abbreviation: "UTC")
         return f
     }()
 }
@@ -67,7 +66,9 @@ extension PSQLDate: PSQLExpression {
 }
 
 extension PSQLDate: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { self }
+    public var selectSqlExpression: some SQLExpression {
+        RawValue(self).selectSqlExpression
+    }
 }
 
 extension PSQLDate: CompareSQLExpression {
@@ -90,7 +91,9 @@ public struct PSQLTimestamp: PSQLDateTime {
 }
 
 extension PSQLTimestamp: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { self }
+    public var selectSqlExpression: some SQLExpression {
+        RawValue(self).selectSqlExpression
+    }
 }
 
 extension PSQLTimestamp: CompareSQLExpression {

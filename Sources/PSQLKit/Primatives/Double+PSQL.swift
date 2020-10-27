@@ -18,7 +18,7 @@ extension Double: TypeEquatable {
 
 extension Double: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue(self)
+        RawValue(self).selectSqlExpression
     }
 }
 

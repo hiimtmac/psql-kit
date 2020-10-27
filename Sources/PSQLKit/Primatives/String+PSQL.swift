@@ -20,7 +20,7 @@ extension String: TypeEquatable {
 
 extension String: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue(self)
+        RawValue(self).selectSqlExpression
     }
 }
 

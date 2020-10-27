@@ -18,7 +18,7 @@ extension Bool: TypeEquatable {
 
 extension Bool: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue(self)
+        RawValue(self).selectSqlExpression
     }
 }
 

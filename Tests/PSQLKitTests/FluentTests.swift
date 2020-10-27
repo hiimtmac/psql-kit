@@ -85,7 +85,7 @@ final class FluentTests: PSQLTestCase {
         }
         
         b.serialize(to: &fluentSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30 06:00 AM'::TIMESTAMP) AND ("p"."created_at" BETWEEN '2020-01-01'::DATE AND '2020-01-30'::DATE) GROUP BY "p"."created_at""#)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30 06:00 AM') AND ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30') GROUP BY "p"."created_at""#)
     }
     
     static var allTests = [

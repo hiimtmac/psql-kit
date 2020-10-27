@@ -20,7 +20,7 @@ extension UUID: TypeEquatable {
 
 extension UUID: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue(self)
+        RawValue(self).selectSqlExpression
     }
 }
 

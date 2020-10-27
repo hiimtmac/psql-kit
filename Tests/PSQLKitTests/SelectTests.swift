@@ -137,21 +137,35 @@ final class SelectTests: PSQLTestCase {
     }
     
     func testSelectRaw() {
+        let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
+        
         SELECT {
             RawColumn<String>("cool")
             RawColumn<String>("cool").as("yes")
+            8
             8.as("cool")
+            PSQLDate(date)
+            RawValue(PSQLDate(date))
+            date.psqlDate
+            date.psqlDate.as("date_alias")
+            RawValue(date.psqlDate).as("raw_date_alias")
         }
         .serialize(to: &fluentSerializer)
         
         SELECT {
             RawColumn<String>("cool")
             RawColumn<String>("cool").as("yes")
+            8
             8.as("cool")
+            PSQLDate(date)
+            RawValue(PSQLDate(date))
+            date.psqlDate
+            date.psqlDate.as("date_alias")
+            RawValue(date.psqlDate).as("raw_date_alias")
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER AS "cool""#
+        let compare = #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER, 8::INTEGER AS "cool", '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE AS "date_alias", '2020-01-01'::DATE AS "raw_date_alias""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

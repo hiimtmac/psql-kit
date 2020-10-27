@@ -261,7 +261,7 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01'::DATE AND '2020-01-01'::DATE)"#
+        let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
@@ -347,7 +347,7 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01'::DATE AND '2020-01-01'::DATE) AND ("x"."birthday" BETWEEN '2020-01-01'::DATE AND '2020-01-01'::DATE) AND ("x"."birthday" BETWEEN '2020-01-01 06:00 AM'::TIMESTAMP AND '2020-01-01 06:00 AM'::TIMESTAMP)"#
+        let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01 06:00 AM' AND '2020-01-01 06:00 AM')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

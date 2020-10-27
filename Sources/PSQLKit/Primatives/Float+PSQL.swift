@@ -18,7 +18,7 @@ extension Float: TypeEquatable {
 
 extension Float: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue(self)
+        RawValue(self).selectSqlExpression
     }
 }
 
