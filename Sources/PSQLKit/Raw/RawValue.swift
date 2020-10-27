@@ -14,3 +14,7 @@ public struct RawValue<T>: SQLExpression where T: PSQLExpression & SQLExpression
         T.postgresColumnType.serialize(to: &serializer)
     }
 }
+
+extension RawValue: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
+}

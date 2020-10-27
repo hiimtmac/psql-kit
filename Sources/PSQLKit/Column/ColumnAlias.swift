@@ -6,6 +6,10 @@ public struct ColumnAlias<T> where T: PSQLExpression {
     let alias: String
 }
 
+extension ColumnAlias: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
+}
+
 extension ColumnAlias: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(

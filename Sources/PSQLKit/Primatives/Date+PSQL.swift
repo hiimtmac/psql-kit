@@ -51,7 +51,7 @@ extension PSQLDateTime {
 public struct PSQLDate: PSQLDateTime {
     public let storage: Date
     
-    init(_ date: Date = .init()) {
+    public init(_ date: Date = .init()) {
         self.storage = date
     }
     

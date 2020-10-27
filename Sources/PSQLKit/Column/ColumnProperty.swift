@@ -1,7 +1,7 @@
 import Foundation
 
 @propertyWrapper
-public struct ColumnProperty<Model: Table, Value: PSQLExpression> {
+public struct ColumnProperty<Table, Value> {
     let key: String
     
     public init(key: String) {
@@ -16,7 +16,7 @@ public struct ColumnProperty<Model: Table, Value: PSQLExpression> {
 }
 
 @propertyWrapper
-public struct OptionalColumnProperty<Model: Table, WrappedValue: PSQLExpression> {
+public struct OptionalColumnProperty<Table, WrappedValue> {
     let key: String
     
     public init(key: String) {
@@ -31,7 +31,7 @@ public struct OptionalColumnProperty<Model: Table, WrappedValue: PSQLExpression>
 }
 
 @propertyWrapper
-public struct NestedObjectProperty<Model: Table, Nested: TableObject> {
+public struct NestedObjectProperty<Table, Nested> {
     let key: String
 
     public init(key: String) {

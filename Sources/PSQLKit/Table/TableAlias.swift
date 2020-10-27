@@ -47,6 +47,17 @@ extension TableAlias {
             columnName: field.key
         )
     }
+    
+    // MARK: - NestedColumnProperty
+    public subscript<U: PSQLExpression>(dynamicMember keyPath: KeyPath<T, NestedObjectProperty<T, U>>) -> ColumnExpression<U> {
+        let field = T()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: alias,
+            pathName: path,
+            schemaName: T.schema,
+            columnName: field.key
+        )
+    }
 }
 
 extension TableAlias where T: Model {

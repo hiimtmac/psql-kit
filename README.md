@@ -198,6 +198,8 @@ WHERE {
     m.$craters >< (3...5) || m.$craters <> (3...5) // BETWEEN / NOT BETWEEN
     m.$name ~~ "%moon" || m.$name !~~ "%moon" // LIKE / NOT LIKE
     m.$name ~~* "%moon" || m.$name !~~* "%moon" // ILIKE / NOT ILIKE
+    m.$name === "moon" || m.$name !== "moon" // IS / IS NOT
+    m.$name === Optional<String>.none
 }
 ```
 
@@ -209,7 +211,9 @@ WHERE
 (("m"."craters" IN (3, 4, 5)) OR ("m"."craters" NOT IN (3, 4, 5))) AND
 (("m"."craters" BETWEEN 3 AND 5) OR ("m"."craters" NOT BETWEEN 3 AND 5)) AND
 (("m"."name" LIKE '%moon') OR ("m"."name" NOT LIKE '%moon')) AND
-(("m"."name" ILIKE '%moon') OR ("m"."name" NOT ILIKE '%moon'))
+(("m"."name" ILIKE '%moon') OR ("m"."name" NOT ILIKE '%moon')) AND
+(("m"."name" IS 'moon') OR ("m"."name" IS NOT 'moon')) AND
+("m"."name" IS NULL)
 ```
 
 > **Warning** importing custom operators from a package which override something existing has been toubling, you might have to re-declare them in your project see [discussion](https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5)
@@ -339,7 +343,7 @@ The following expressions have been included:
 - `MAX`
 - `COUNT`
 - `SUM`
-- `JSON(B)\_EXTRACT_PATH_TEXT`
+- `JSONB_EXTRACT_PATH_TEXT`
 - `COALESCE`
 - `CONCAT`/`CONCAT3`/`CONCAT4`/`CONCAT5`
 - `GENERATE_SERIES`
@@ -401,7 +405,7 @@ QUERY {
 SELECT "m"."id"::UUID, "m"."id"::INTEGER, "m"."created_at"::DATE WHERE ("m"."id" = 7) AND ("m"."created_at" BETWEEN '2020-10-26'::DATE AND '2020-10-26'::DATE)
 ```
 
-We want the date to be selected as a `::DATE` to get the formatting `yyyy-MM-dd`. So we needed to tranform the selection to be using `PSQLDate`. 
+We want the date to be selected as a `::DATE` to get the formatting `yyyy-MM-dd`. So we needed to tranform the selection to be using `PSQLDate`.
 
 If we wanted to compare a `UUID` against an `Int` (bad example) then we `transform(to: T.Type)`. Then it can be compared against an `Int` in the `WHERE` statement.
 
@@ -571,13 +575,14 @@ WITH "x" AS (SELECT DISTINCT ON ("m"."name"::TEXT, "m"."id"::UUID) "m"."name"::T
 
 If you are not using models that conform to `Model` from `Fluent`/`FluentKit`, you can still use this library... although it might not have as many features. Like above, still conform your models to `Table`. From here you will have access to some property wrappers similar to `@ID`/`@Field`/`@OptionalField`. This can be useful for intermediate query tables if you use the `WITH` psql feature. They are listed below along with their use in comparrison to `Fluent` wrappers.
 
-| `X: Model, Table`                                            | `X: Table`                                      | Notes                         |
-| ------------------------------------------------------------ | ----------------------------------------------- | ----------------------------- |
-| `@ID var id: UUID?`                                          | `@Column(key: "id") var id: UUID?`              |                               |
-| `@Field(key: "name") var name: String`                       | `@Column(key: "name") var name: String`         |                               |
-| `@OptionalField(key: "name") var name: String`               | `@OptionalColumn(key: "name") var name: String` |                               |
-| `@Parent(key: "parent_id") var parent: ParentModel`          | `@Column(key: "parent_id") var parentId: UUID`  | Foreign keys without `Fluent` |
-| `@OptionalParent(key: "parent_id") var parent: ParentModel?` | `@OptionalColumn(key: "parent_id") var parentId: UUID?` | Foreign keys without `Fluent` |
+| `X: Model, Table`                                            | `X: Table`                                              | Notes                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------- | ------------------------------------- |
+| `@ID var id: UUID?`                                          | `@Column(key: "id") var id: UUID?`                      |                                       |
+| `@Field(key: "name") var name: String`                       | `@Column(key: "name") var name: String`                 |                                       |
+| `@OptionalField(key: "name") var name: String`               | `@OptionalColumn(key: "name") var name: String`         |                                       |
+| `@Parent(key: "parent_id") var parent: ParentModel`          | `@Column(key: "parent_id") var parentId: UUID`          | Foreign keys without `Fluent`         |
+| `@OptionalParent(key: "parent_id") var parent: ParentModel?` | `@OptionalColumn(key: "parent_id") var parentId: UUID?` | Foreign keys without `Fluent`         |
+| `@Group(key: "group") var group: Group`                      | `@NestedColumn(key: "group") var group: Group`          | `Group: TableObject` without `Fluent` |
 
 Example without `Model` conformance
 
@@ -599,7 +604,7 @@ You can do most of the same stuff as above!
 
 ## Advanced Example
 
-Heres an advanced example. Id give a real one, but they're all in work stuff and that cant be shared 👎🏻. There's lots of tests, you can check for functionality there.
+Heres a contrived advanced example. There's lots of tests, you can also check for functionality there.
 
 ```swift
 final class Pet: Model, Table {

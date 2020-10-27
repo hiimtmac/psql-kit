@@ -3,37 +3,59 @@ import XCTest
 import FluentKit
 
 final class HavingTests: PSQLTestCase {
-    let m = FluentModel.as("x")
+    let f = FluentModel.as("x")
+    let p = PSQLModel.as("x")
     
     func testHaving1() {
-        let h = HAVING {
+        HAVING {
             FluentModel.$name == FluentModel.$title
         }
+        .serialize(to: &fluentSerializer)
         
-        h.serialize(to: &fluentSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"HAVING ("my_model"."name" = "my_model"."title")"#)
+        HAVING {
+            PSQLModel.$name == PSQLModel.$title
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("my_model"."name" = "my_model"."title")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testHaving2() {
-        let h = HAVING {
-            m.$name != m.$name
+        HAVING {
+            f.$name != f.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        h.serialize(to: &fluentSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"HAVING ("x"."name" != "x"."name")"#)
+        HAVING {
+            p.$name != p.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("x"."name" != "x"."name")"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testHavingN() {
-        let m = FluentModel.as("x")
-        
-        let h = HAVING {
-            FluentModel.$name == m.$name
-            m.$name == FluentModel.$name
-            m.$name != m.$name || FluentModel.$name != FluentModel.$name
+        HAVING {
+            FluentModel.$name == f.$name
+            f.$name == FluentModel.$name
+            f.$name != f.$name || FluentModel.$name != FluentModel.$name
         }
+        .serialize(to: &fluentSerializer)
         
-        h.serialize(to: &fluentSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"HAVING ("my_model"."name" = "x"."name") AND ("x"."name" = "my_model"."name") AND (("x"."name" != "x"."name") OR ("my_model"."name" != "my_model"."name"))"#)
+        HAVING {
+            PSQLModel.$name == p.$name
+            p.$name == PSQLModel.$name
+            p.$name != p.$name || PSQLModel.$name != PSQLModel.$name
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("my_model"."name" = "x"."name") AND ("x"."name" = "my_model"."name") AND (("x"."name" != "x"."name") OR ("my_model"."name" != "my_model"."name"))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     static var allTests = [

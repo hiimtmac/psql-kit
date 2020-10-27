@@ -36,3 +36,7 @@ extension RawValueAlias: SelectSQLExpression {
         _Select(value: value, alias: alias)
     }
 }
+
+extension RawValueAlias: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
+}

@@ -110,6 +110,8 @@ WHERE {
     m.$craters >< (3...5) || m.$craters <> (3...5) // BETWEEN / NOT BETWEEN
     m.$name ~~ "%moon" || m.$name !~~ "%moon" // LIKE / NOT LIKE
     m.$name ~~* "%moon" || m.$name !~~* "%moon" // ILIKE / NOT ILIKE
+    m.$name === "moon" || m.$name !== "moon" // IS / IS NOT
+    m.$name === Optional<String>.none
 }
         .serialize(to: &fluentSerializer)
         print(fluentSerializer.sql)

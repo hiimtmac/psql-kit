@@ -12,13 +12,14 @@ public protocol Table: FromSQLExpression {
 }
 
 extension Table {
-    public typealias Column<Value: PSQLExpression> = ColumnProperty<Self, Value>
-    public typealias OptionalColumn<Value: PSQLExpression> = OptionalColumnProperty<Self, Value>
-    public typealias NestedColumn<Value: TableObject> = NestedObjectProperty<Self, Value>
+    public typealias Column<Value> = ColumnProperty<Self, Value>
+    public typealias OptionalColumn<Value> = OptionalColumnProperty<Self, Value>
+    public typealias NestedColumn<Value> = NestedObjectProperty<Self, Value>
     
-    /// fluent `table`
+    /// Table Name
     public static var schema: String { "\(Self.self)" }
-    /// psql `schema`
+    
+    /// Path/Schema Name
     public static var path: String? { nil }
 
     public static func `as`(_ alias: String) -> TableAlias<Self> {
@@ -36,10 +37,7 @@ extension Table {
     }
     
     public var fromSqlExpression: some SQLExpression {
-        _From(
-            pathName: Self.path,
-            schemaName: Self.schema
-        )
+        _From(pathName: Self.path, schemaName: Self.schema)
     }
     
     // MARK: - ColumnProperty
@@ -55,6 +53,17 @@ extension Table {
     
     // MARK: - OptionalColumnProperty
     public static subscript<T>(dynamicMember keyPath: KeyPath<Self, OptionalColumn<T>>) -> ColumnExpression<T> {
+        let field = Self()[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: nil,
+            pathName: Self.path,
+            schemaName: Self.schema,
+            columnName: field.key
+        )
+    }
+    
+    // MARK: - NestedColumnProperty
+    public static subscript<T>(dynamicMember keyPath: KeyPath<Self, NestedObjectProperty<Self, T>>) -> ColumnExpression<T> {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,

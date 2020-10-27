@@ -7,4 +7,7 @@ public protocol TableObject: PSQLExpression {
 
 extension TableObject {
     public static var postgresColumnType: PostgresColumnType { .jsonb }
+    public typealias Column<Value> = ColumnProperty<Self, Value>
+    public typealias OptionalColumn<Value> = OptionalColumnProperty<Self, Value>
+    public typealias NestedColumn<Value> = NestedObjectProperty<Self, Value>
 }
