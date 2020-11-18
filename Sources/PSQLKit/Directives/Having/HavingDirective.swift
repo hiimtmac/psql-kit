@@ -9,6 +9,8 @@ public struct HavingDirective<Content>: SQLExpression where Content: HavingSQLEx
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        if content is EmptyExpression { return }
+        
         serializer.write("HAVING")
         serializer.writeSpace()
         content.havingSqlExpression.serialize(to: &serializer)

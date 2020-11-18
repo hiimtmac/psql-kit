@@ -6,6 +6,17 @@ final class GroupByTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testGroupEmpty() {
+        GROUPBY {}
+        .serialize(to: &fluentSerializer)
+        
+        GROUPBY {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #""#)
+        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+    }
+    
     func testGroupModel() {
         GROUPBY {
             FluentModel.$name
@@ -73,6 +84,7 @@ final class GroupByTests: PSQLTestCase {
     }
     
     static var allTests = [
+        ("testGroupEmpty", testGroupEmpty),
         ("testGroupModel", testGroupModel),
         ("testGroupModelAlias", testGroupModelAlias),
         ("testGroupBoth", testGroupBoth),

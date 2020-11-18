@@ -6,6 +6,17 @@ final class JoinTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testJoinEmpty() {
+        JOIN(f.table) {}
+        .serialize(to: &fluentSerializer)
+        
+        JOIN(p.table) {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #""#)
+        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+    }
+    
     func testJoinModel() {
         JOIN(FluentModel.table) {
             FluentModel.$name == FluentModel.$name
@@ -93,6 +104,7 @@ final class JoinTests: PSQLTestCase {
     }
     
     static var allTests = [
+        ("testJoinEmpty", testJoinEmpty),
         ("testJoinModel", testJoinModel),
         ("testJoinModelAlias", testJoinModelAlias),
         ("testJoinBoth", testJoinBoth),

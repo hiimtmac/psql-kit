@@ -13,6 +13,8 @@ public struct JoinDirective<Table, Content>: SQLExpression where Table: FromSQLE
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        if content is EmptyExpression { return }
+        
         method.serialize(to: &serializer)
         serializer.writeSpace()
         serializer.write("JOIN")

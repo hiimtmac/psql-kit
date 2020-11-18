@@ -6,6 +6,17 @@ final class WithTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testWithEmpty() {
+        WITH {}
+        .serialize(to: &fluentSerializer)
+        
+        WITH {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #""#)
+        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+    }
+    
     func testWith1() {
         WITH {
             QUERY {
@@ -117,6 +128,7 @@ final class WithTests: PSQLTestCase {
     }
     
     static var allTests = [
+        ("testWithEmpty", testWithEmpty),
         ("testWith1", testWith1),
         ("testWith2", testWith2),
         ("testWithErased", testWithErased)

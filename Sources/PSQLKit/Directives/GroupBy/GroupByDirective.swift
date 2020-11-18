@@ -9,6 +9,8 @@ public struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQL
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        if content is EmptyExpression { return }
+        
         serializer.write("GROUP BY")
         serializer.writeSpace()
         content.groupBySqlExpression.serialize(to: &serializer)

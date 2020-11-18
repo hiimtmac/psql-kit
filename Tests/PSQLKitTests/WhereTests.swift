@@ -10,6 +10,17 @@ final class WhereTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testEmpty() {
+        WHERE {}
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #""#)
+        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+    }
+    
     func testEqual() {
         WHERE {
             FluentModel.$name == FluentModel.$title
@@ -353,6 +364,7 @@ final class WhereTests: PSQLTestCase {
     }
     
     static var allTests = [
+        ("testEmpty", testEmpty),
         ("testEqual", testEqual),
         ("testMultiple", testMultiple),
         ("testNotEqual", testNotEqual),

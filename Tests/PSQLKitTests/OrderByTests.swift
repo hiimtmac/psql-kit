@@ -6,6 +6,17 @@ final class OrderByTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testOrderEmpty() {
+        ORDERBY {}
+        .serialize(to: &fluentSerializer)
+        
+        ORDERBY {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #""#)
+        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+    }
+    
     func testOrderModel() {
         ORDERBY {
             FluentModel.$name
@@ -97,6 +108,7 @@ final class OrderByTests: PSQLTestCase {
     }
     
     static var allTests = [
+        ("testOrderEmpty", testOrderEmpty),
         ("testOrderModel", testOrderModel),
         ("testOrderModelAlias", testOrderModelAlias),
         ("testOrderMultiple", testOrderMultiple),

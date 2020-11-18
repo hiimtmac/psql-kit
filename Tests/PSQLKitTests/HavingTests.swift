@@ -6,6 +6,17 @@ final class HavingTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testHavingEmpty() {
+        HAVING {}
+        .serialize(to: &fluentSerializer)
+        
+        HAVING {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #""#)
+        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+    }
+    
     func testHaving1() {
         HAVING {
             FluentModel.$name == FluentModel.$title
@@ -59,6 +70,7 @@ final class HavingTests: PSQLTestCase {
     }
     
     static var allTests = [
+        ("testHavingEmpty", testHavingEmpty),
         ("testHaving1", testHaving1),
         ("testHaving2", testHaving2),
         ("testHavingN", testHavingN)

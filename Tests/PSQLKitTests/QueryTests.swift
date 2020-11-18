@@ -6,6 +6,17 @@ final class QueryTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testEmpty() {
+        QUERY {}
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #""#)
+        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+    }
+    
     func testQuery() {
         QUERY {
             SELECT { f.$name }
@@ -117,6 +128,7 @@ final class QueryTests: PSQLTestCase {
     }
     
     static var allTests = [
+        ("testEmpty", testEmpty),
         ("testQuery", testQuery),
         ("testQueryAsSub", testQueryAsSub),
         ("testQueryAsWith", testQueryAsWith),

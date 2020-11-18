@@ -13,6 +13,8 @@ public struct QueryDirective<Content>: SQLExpression where Content: QuerySQLExpr
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        if content is EmptyExpression { return }
+        
         content.querySqlExpression.serialize(to: &serializer)
     }
 }

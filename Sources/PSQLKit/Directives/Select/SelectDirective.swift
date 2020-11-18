@@ -13,6 +13,8 @@ public struct SelectDirective<Content>: SQLExpression where Content: SelectSQLEx
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        if content is EmptyExpression { return }
+        
         serializer.write("SELECT")
         serializer.writeSpace()
         content.selectSqlExpression.serialize(to: &serializer)

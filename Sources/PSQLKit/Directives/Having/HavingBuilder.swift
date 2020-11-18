@@ -2,6 +2,10 @@ import Foundation
 
 @_functionBuilder
 public struct HavingBuilder {
+    public static func buildBlock() -> EmptyExpression {
+        .init()
+    }
+    
     public static func buildBlock<Content>(_ content: Content) -> Content where Content: HavingSQLExpression {
         content
     }
