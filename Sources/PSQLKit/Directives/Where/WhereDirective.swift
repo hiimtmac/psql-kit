@@ -9,8 +9,6 @@ public struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpr
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        if content is EmptyExpression { return }
-        
         serializer.write("WHERE")
         serializer.writeSpace()
         content.whereSqlExpression.serialize(to: &serializer)

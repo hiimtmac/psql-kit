@@ -9,8 +9,6 @@ public struct WithDirective<Content>: SQLExpression where Content: WithSQLExpres
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        if content is EmptyExpression { return }
-        
         serializer.write("WITH")
         serializer.writeSpace()
         content.withSqlExpression.serialize(to: &serializer)

@@ -9,8 +9,6 @@ public struct FromDirective<Content>: SQLExpression where Content: FromSQLExpres
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        if content is EmptyExpression { return }
-        
         serializer.write("FROM")
         serializer.writeSpace()
         content.fromSqlExpression.serialize(to: &serializer)

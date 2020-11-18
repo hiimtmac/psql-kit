@@ -18,8 +18,6 @@ public struct OrderByDirective<Content>: SQLExpression where Content: OrderBySQL
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        if content is EmptyExpression { return }
-        
         serializer.write("ORDER BY")
         serializer.writeSpace()
         content.orderBySqlExpression.serialize(to: &serializer)

@@ -6,16 +6,40 @@ public struct SelectBuilder {
         .init()
     }
     
-    public static func buildBlock<Content>(_ content: Content) -> Content where Content: SelectSQLExpression {
+    public static func buildBlock<Content>(
+        _ content: Content
+    ) -> Content where
+        Content: SelectSQLExpression
+    {
         content
     }
-    
-    public static func buildEither<Content>(first: Content) -> Content where Content: SelectSQLExpression {
-        first
-    }
 
-    public static func buildEither<Content>(second: Content) -> Content where Content: SelectSQLExpression {
-        second
+    public static func buildOptional<Content>(
+        _ component: Content?
+    ) -> _ConditionalExpression<Content, EmptyExpression> where
+        Content: SelectSQLExpression
+    {
+        if let component = component {
+            return .init(first: component)
+        } else {
+            return .init(second: .init())
+        }
+    }
+    
+    public static func buildEither<TrueContent, FalseContent>(
+        first: TrueContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: SelectSQLExpression, FalseContent: SelectSQLExpression
+    {
+        .init(first: first)
+    }
+    
+    public static func buildEither<TrueContent, FalseContent>(
+        second: FalseContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: SelectSQLExpression, FalseContent: SelectSQLExpression
+    {
+        .init(second: second)
     }
 }
 
