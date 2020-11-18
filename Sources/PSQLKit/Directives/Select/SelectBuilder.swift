@@ -6,6 +6,16 @@ public struct SelectBuilder {
         content
     }
     
+    public static func buildEither<Content>(first: Content) -> Content where Content: SelectSQLExpression {
+        first
+    }
+
+    public static func buildEither<Content>(second: Content) -> Content where Content: SelectSQLExpression {
+        second
+    }
+}
+
+extension SelectBuilder {
     public static func buildBlock<T0, T1>(
         _ t0: T0,
         _ t1: T1

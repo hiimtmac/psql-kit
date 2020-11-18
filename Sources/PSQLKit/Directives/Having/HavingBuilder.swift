@@ -6,6 +6,16 @@ public struct HavingBuilder {
         content
     }
     
+    public static func buildEither<Content>(first: Content) -> Content where Content: HavingSQLExpression {
+        first
+    }
+
+    public static func buildEither<Content>(second: Content) -> Content where Content: HavingSQLExpression {
+        second
+    }
+}
+ 
+extension HavingBuilder {
     public static func buildBlock<T0, T1>(
         _ t0: T0,
         _ t1: T1
@@ -166,13 +176,5 @@ public struct HavingBuilder {
         T9: HavingSQLExpression
     {
         .init((t0, t1, t2, t3, t4, t5, t6, t7, t8, t9))
-    }
-    
-    public static func buildEither<Content>(first: Content) -> Content where Content: HavingSQLExpression {
-        first
-    }
-
-    public static func buildEither<Content>(second: Content) -> Content where Content: HavingSQLExpression {
-        second
     }
 }
