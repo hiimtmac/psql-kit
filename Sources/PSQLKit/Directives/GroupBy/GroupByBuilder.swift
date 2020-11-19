@@ -6,16 +6,28 @@ public struct GroupByBuilder {
         .init()
     }
     
-    public static func buildBlock<Content>(_ content: Content) -> Content where Content: GroupBySQLExpression {
+    public static func buildBlock<Content>(
+        _ content: Content
+    ) -> Content where
+        Content: GroupBySQLExpression
+    {
         content
     }
     
-    public static func buildEither<Content>(first: Content) -> Content where Content: GroupBySQLExpression {
-        first
+    public static func buildEither<TrueContent, FalseContent>(
+        first: TrueContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: GroupBySQLExpression, FalseContent: GroupBySQLExpression
+    {
+        .init(first: first)
     }
-
-    public static func buildEither<Content>(second: Content) -> Content where Content: GroupBySQLExpression {
-        second
+    
+    public static func buildEither<TrueContent, FalseContent>(
+        second: FalseContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: GroupBySQLExpression, FalseContent: GroupBySQLExpression
+    {
+        .init(second: second)
     }
 }
 

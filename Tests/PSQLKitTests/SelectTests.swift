@@ -13,8 +13,8 @@ final class SelectTests: PSQLTestCase {
         SELECT {}
         .serialize(to: &psqlkitSerializer)
         
-        XCTAssertEqual(fluentSerializer.sql, #""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "#)
+        XCTAssertEqual(psqlkitSerializer.sql, #"SELECT "#)
     }
     
     func testSelectModel() {
@@ -223,44 +223,48 @@ final class SelectTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
-    func testIfTrue() {
+    func testIfElseTrue() {
         let bool = true
         SELECT {
             if bool {
                 f.$name
+            } else {
+                f.$age
             }
-            f.$age
         }
         .serialize(to: &fluentSerializer)
         
         SELECT {
             if bool {
                 p.$name
+            } else {
+                p.$age
             }
-            p.$age
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"SELECT "x"."name"::TEXT, "x"."age"::INTEGER"#
+        let compare = #"SELECT "x"."name"::TEXT"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
-    func testIfFalse() {
+    func testIfElseFalse() {
         let bool = false
         SELECT {
             if bool {
                 f.$name
+            } else {
+                f.$age
             }
-            f.$age
         }
         .serialize(to: &fluentSerializer)
         
         SELECT {
             if bool {
                 p.$name
+            } else {
+                p.$age
             }
-            p.$age
         }
         .serialize(to: &psqlkitSerializer)
         
@@ -269,62 +273,40 @@ final class SelectTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
-    func testIfElseTrue() {
-        let bool = true
-//        SELECT {
-//            if true {
-//                FluentModel.table.*
-//            } else {
-//                f.table.*
-//            }
-//        }
-//        .serialize(to: &fluentSerializer)
-        
-        let ok = SELECT {
-            if bool {
-                PSQLModel.table.*
-                p.table.*
-            } else {
-                PSQLModel.table.*
-            }
-            p.table.*
-        }
-//        .serialize(to: &psqlkitSerializer)
-        
-        let compare = #"SELECT "my_model".*, "x".*"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
-    }
-    
-    func testIfElseFalse() {
-        let bool = false
-//        SELECT {
-//            if true {
-//                FluentModel.table.*
-//            } else {
-//                f.table.*
-//            }
-//        }
-//        .serialize(to: &fluentSerializer)
-        
-        let ok = SELECT {
-            if bool {
-                PSQLModel.table.*
-                p.table.*
-            } else {
-                PSQLModel.table.*
-            }
-            p.table.*
-        }
-//        .serialize(to: &psqlkitSerializer)
-        
-        let compare = #"SELECT "my_model".*, "x".*"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
-    }
-    
     func testSwitch() {
+        enum Test {
+            case one
+            case two
+            case three
+        }
         
+        let option = Test.two
+        
+        SELECT {
+            switch option {
+            case .one: f.$name
+            case .two: f.$age
+            case .three:
+                f.$age
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            switch option {
+            case .one: p.$name
+            case .two: p.$age
+            case .three:
+                p.$age
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT "x"."age"::INTEGER"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     static var allTests = [
@@ -337,6 +319,9 @@ final class SelectTests: PSQLTestCase {
         ("testSelectAliasMultiple", testSelectAliasMultiple),
         ("testSelectRaw", testSelectRaw),
         ("testSelectSubquery", testSelectSubquery),
-        ("testPostfix", testPostfix)
+        ("testPostfix", testPostfix),
+        ("testIfElseTrue", testIfElseTrue),
+        ("testIfElseFalse", testIfElseFalse),
+        ("testSwitch", testSwitch)
     ]
 }

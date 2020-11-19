@@ -6,16 +6,28 @@ public struct QueryBuilder {
         .init()
     }
     
-    public static func buildBlock<Content>(_ content: Content) -> Content where Content: QuerySQLExpression {
+    public static func buildBlock<Content>(
+        _ content: Content
+    ) -> Content where
+        Content: QuerySQLExpression
+    {
         content
     }
     
-    public static func buildEither<Content>(first: Content) -> Content where Content: QuerySQLExpression {
-        first
+    public static func buildEither<TrueContent, FalseContent>(
+        first: TrueContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: QuerySQLExpression, FalseContent: QuerySQLExpression
+    {
+        .init(first: first)
     }
-
-    public static func buildEither<Content>(second: Content) -> Content where Content: QuerySQLExpression {
-        second
+    
+    public static func buildEither<TrueContent, FalseContent>(
+        second: FalseContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: QuerySQLExpression, FalseContent: QuerySQLExpression
+    {
+        .init(second: second)
     }
 }
 

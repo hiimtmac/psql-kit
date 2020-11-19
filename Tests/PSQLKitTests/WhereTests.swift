@@ -17,8 +17,8 @@ final class WhereTests: PSQLTestCase {
         WHERE {}
         .serialize(to: &psqlkitSerializer)
         
-        XCTAssertEqual(fluentSerializer.sql, #""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+        XCTAssertEqual(fluentSerializer.sql, #"WHERE "#)
+        XCTAssertEqual(psqlkitSerializer.sql, #"WHERE "#)
     }
     
     func testEqual() {
@@ -363,6 +363,92 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfElseTrue() {
+        let bool = true
+        WHERE {
+            if bool {
+                f.$name == "tmac"
+            } else {
+                f.$age == 29
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            if bool {
+                p.$name == "tmac"
+            } else {
+                p.$age == 29
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE ("x"."name" = 'tmac')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfElseFalse() {
+        let bool = false
+        WHERE {
+            if bool {
+                f.$name == "tmac"
+            } else {
+                f.$age == 29
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            if bool {
+                p.$name == "tmac"
+            } else {
+                p.$age == 29
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testSwitch() {
+        enum Test {
+            case one
+            case two
+            case three
+        }
+        
+        let option = Test.two
+        
+        WHERE {
+            switch option {
+            case .one: f.$name == "tmac"
+            case .two: f.$age == 29
+            case .three:
+                f.$age == 29
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            switch option {
+            case .one: p.$name == "tmac"
+            case .two: p.$age == 29
+            case .three:
+                p.$age == 29
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testEmpty", testEmpty),
         ("testEqual", testEqual),
@@ -376,6 +462,9 @@ final class WhereTests: PSQLTestCase {
         ("testWhereBind", testWhereBind),
         ("testWhereLikes", testWhereLikes),
         ("testWhereTransforms", testWhereTransforms),
-        ("testWhereControlFlow", testWhereControlFlow)
+        ("testWhereControlFlow", testWhereControlFlow),
+        ("testIfElseTrue", testIfElseTrue),
+        ("testIfElseFalse", testIfElseFalse),
+        ("testSwitch", testSwitch)
     ]
 }

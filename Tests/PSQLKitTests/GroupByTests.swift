@@ -13,8 +13,8 @@ final class GroupByTests: PSQLTestCase {
         GROUPBY {}
         .serialize(to: &psqlkitSerializer)
         
-        XCTAssertEqual(fluentSerializer.sql, #""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+        XCTAssertEqual(fluentSerializer.sql, #"GROUP BY "#)
+        XCTAssertEqual(psqlkitSerializer.sql, #"GROUP BY "#)
     }
     
     func testGroupModel() {
@@ -83,11 +83,100 @@ final class GroupByTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfElseTrue() {
+        let bool = true
+        GROUPBY {
+            if bool {
+                f.$name
+            } else {
+                f.$age
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        GROUPBY {
+            if bool {
+                p.$name
+            } else {
+                p.$age
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "x"."name""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfElseFalse() {
+        let bool = false
+        GROUPBY {
+            if bool {
+                f.$name
+            } else {
+                f.$age
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        GROUPBY {
+            if bool {
+                p.$name
+            } else {
+                p.$age
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "x"."age""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testSwitch() {
+        enum Test {
+            case one
+            case two
+            case three
+        }
+        
+        let option = Test.two
+        
+        GROUPBY {
+            switch option {
+            case .one: f.$name
+            case .two: f.$age
+            case .three:
+                f.$age
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        GROUPBY {
+            switch option {
+            case .one: p.$name
+            case .two: p.$age
+            case .three:
+                p.$age
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "x"."age""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testGroupEmpty", testGroupEmpty),
         ("testGroupModel", testGroupModel),
         ("testGroupModelAlias", testGroupModelAlias),
         ("testGroupBoth", testGroupBoth),
-        ("testGroupRaw", testGroupRaw)
+        ("testGroupRaw", testGroupRaw),
+        ("testIfElseTrue", testIfElseTrue),
+        ("testIfElseFalse", testIfElseFalse),
+        ("testSwitch", testSwitch)
     ]
 }

@@ -13,8 +13,8 @@ final class WithTests: PSQLTestCase {
         WITH {}
         .serialize(to: &psqlkitSerializer)
         
-        XCTAssertEqual(fluentSerializer.sql, #""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+        XCTAssertEqual(fluentSerializer.sql, #"WITH "#)
+        XCTAssertEqual(psqlkitSerializer.sql, #"WITH "#)
     }
     
     func testWith1() {
@@ -127,10 +127,99 @@ final class WithTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfElseTrue() {
+        let bool = true
+        WITH {
+            if bool {
+                QUERY { SELECT { f.$title } }.asWith(f.table)
+            } else {
+                QUERY { SELECT { f.$age } }.asWith(f.table)
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WITH {
+            if bool {
+                QUERY { SELECT { p.$title } }.asWith(p.table)
+            } else {
+                QUERY { SELECT { p.$age } }.asWith(p.table)
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "x" AS (SELECT "x"."title"::TEXT)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfElseFalse() {
+        let bool = false
+        WITH {
+            if bool {
+                QUERY { SELECT { f.$title } }.asWith(f.table)
+            } else {
+                QUERY { SELECT { f.$age } }.asWith(f.table)
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WITH {
+            if bool {
+                QUERY { SELECT { p.$title } }.asWith(p.table)
+            } else {
+                QUERY { SELECT { p.$age } }.asWith(p.table)
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "x" AS (SELECT "x"."age"::INTEGER)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testSwitch() {
+        enum Test {
+            case one
+            case two
+            case three
+        }
+        
+        let option = Test.two
+        
+        WITH {
+            switch option {
+            case .one: QUERY { SELECT { f.$title } }.asWith(f.table)
+            case .two: QUERY { SELECT { f.$age } }.asWith(f.table)
+            case .three:
+                QUERY { SELECT { f.$title } }.asWith(f.table)
+                QUERY { SELECT { f.$age } }.asWith(f.table)
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WITH {
+            switch option {
+            case .one: QUERY { SELECT { p.$title } }.asWith(p.table)
+            case .two: QUERY { SELECT { p.$age } }.asWith(p.table)
+            case .three:
+                QUERY { SELECT { p.$title } }.asWith(p.table)
+                QUERY { SELECT { p.$age } }.asWith(p.table)
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "x" AS (SELECT "x"."age"::INTEGER)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testWithEmpty", testWithEmpty),
         ("testWith1", testWith1),
         ("testWith2", testWith2),
-        ("testWithErased", testWithErased)
+        ("testWithErased", testWithErased),
+        ("testIfElseTrue", testIfElseTrue),
+        ("testIfElseFalse", testIfElseFalse),
+        ("testSwitch", testSwitch)
     ]
 }

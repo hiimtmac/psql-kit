@@ -13,8 +13,8 @@ final class HavingTests: PSQLTestCase {
         HAVING {}
         .serialize(to: &psqlkitSerializer)
         
-        XCTAssertEqual(fluentSerializer.sql, #""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #""#)
+        XCTAssertEqual(fluentSerializer.sql, #"HAVING "#)
+        XCTAssertEqual(psqlkitSerializer.sql, #"HAVING "#)
     }
     
     func testHaving1() {
@@ -69,10 +69,99 @@ final class HavingTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfElseTrue() {
+        let bool = true
+        HAVING {
+            if bool {
+                f.$name == "tmac"
+            } else {
+                f.$age == 29
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        HAVING {
+            if bool {
+                p.$name == "tmac"
+            } else {
+                p.$age == 29
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("x"."name" = 'tmac')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfElseFalse() {
+        let bool = false
+        HAVING {
+            if bool {
+                f.$name == "tmac"
+            } else {
+                f.$age == 29
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        HAVING {
+            if bool {
+                p.$name == "tmac"
+            } else {
+                p.$age == 29
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testSwitch() {
+        enum Test {
+            case one
+            case two
+            case three
+        }
+        
+        let option = Test.two
+        
+        HAVING {
+            switch option {
+            case .one: f.$name == "tmac"
+            case .two: f.$age == 29
+            case .three:
+                f.$age == 29
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        HAVING {
+            switch option {
+            case .one: p.$name == "tmac"
+            case .two: p.$age == 29
+            case .three:
+                p.$age == 29
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testHavingEmpty", testHavingEmpty),
         ("testHaving1", testHaving1),
         ("testHaving2", testHaving2),
-        ("testHavingN", testHavingN)
+        ("testHavingN", testHavingN),
+        ("testIfElseTrue", testIfElseTrue),
+        ("testIfElseFalse", testIfElseFalse),
+        ("testSwitch", testSwitch)
     ]
 }

@@ -13,18 +13,6 @@ public struct SelectBuilder {
     {
         content
     }
-
-    public static func buildOptional<Content>(
-        _ component: Content?
-    ) -> _ConditionalExpression<Content, EmptyExpression> where
-        Content: SelectSQLExpression
-    {
-        if let component = component {
-            return .init(first: component)
-        } else {
-            return .init(second: .init())
-        }
-    }
     
     public static func buildEither<TrueContent, FalseContent>(
         first: TrueContent

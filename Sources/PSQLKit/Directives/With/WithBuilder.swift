@@ -6,16 +6,28 @@ public struct WithBuilder {
         .init()
     }
     
-    public static func buildBlock<Content>(_ content: Content) -> Content where Content: WithSQLExpression {
+    public static func buildBlock<Content>(
+        _ content: Content
+    ) -> Content where
+        Content: WithSQLExpression
+    {
         content
     }
     
-    public static func buildEither<Content>(first: Content) -> Content where Content: WithSQLExpression {
-        first
+    public static func buildEither<TrueContent, FalseContent>(
+        first: TrueContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: WithSQLExpression, FalseContent: WithSQLExpression
+    {
+        .init(first: first)
     }
-
-    public static func buildEither<Content>(second: Content) -> Content where Content: WithSQLExpression {
-        second
+    
+    public static func buildEither<TrueContent, FalseContent>(
+        second: FalseContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: WithSQLExpression, FalseContent: WithSQLExpression
+    {
+        .init(second: second)
     }
 }
 
