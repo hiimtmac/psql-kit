@@ -6,6 +6,17 @@ final class OrderByTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
+    func testOrderEmpty() {
+        ORDERBY {}
+        .serialize(to: &fluentSerializer)
+        
+        ORDERBY {}
+        .serialize(to: &psqlkitSerializer)
+        
+        XCTAssertEqual(fluentSerializer.sql, #"ORDER BY "#)
+        XCTAssertEqual(psqlkitSerializer.sql, #"ORDER BY "#)
+    }
+    
     func testOrderModel() {
         ORDERBY {
             FluentModel.$name
@@ -96,11 +107,101 @@ final class OrderByTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfElseTrue() {
+        let bool = true
+        ORDERBY {
+            if bool {
+                f.$name
+            } else {
+                f.$age
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        ORDERBY {
+            if bool {
+                p.$name
+            } else {
+                p.$age
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"ORDER BY "x"."name""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfElseFalse() {
+        let bool = false
+        ORDERBY {
+            if bool {
+                f.$name
+            } else {
+                f.$age
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        ORDERBY {
+            if bool {
+                p.$name
+            } else {
+                p.$age
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"ORDER BY "x"."age""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testSwitch() {
+        enum Test {
+            case one
+            case two
+            case three
+        }
+        
+        let option = Test.two
+        
+        ORDERBY {
+            switch option {
+            case .one: f.$name
+            case .two: f.$age
+            case .three:
+                f.$age
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        ORDERBY {
+            switch option {
+            case .one: p.$name
+            case .two: p.$age
+            case .three:
+                p.$age
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"ORDER BY "x"."age""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
+        ("testOrderEmpty", testOrderEmpty),
         ("testOrderModel", testOrderModel),
         ("testOrderModelAlias", testOrderModelAlias),
         ("testOrderMultiple", testOrderMultiple),
         ("testOrderDirections", testOrderDirections),
-        ("testOrderRaw", testOrderRaw)
+        ("testOrderRaw", testOrderRaw),
+        ("testIfElseTrue", testIfElseTrue),
+        ("testIfElseFalse", testIfElseFalse),
+        ("testSwitch", testSwitch)
     ]
 }

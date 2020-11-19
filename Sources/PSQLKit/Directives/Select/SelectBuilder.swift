@@ -2,10 +2,36 @@ import Foundation
 
 @_functionBuilder
 public struct SelectBuilder {
-    public static func buildBlock<Content>(_ content: Content) -> Content where Content: SelectSQLExpression {
+    public static func buildBlock() -> EmptyExpression {
+        .init()
+    }
+    
+    public static func buildBlock<Content>(
+        _ content: Content
+    ) -> Content where
+        Content: SelectSQLExpression
+    {
         content
     }
     
+    public static func buildEither<TrueContent, FalseContent>(
+        first: TrueContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: SelectSQLExpression, FalseContent: SelectSQLExpression
+    {
+        .init(first: first)
+    }
+    
+    public static func buildEither<TrueContent, FalseContent>(
+        second: FalseContent
+    ) -> _ConditionalExpression<TrueContent, FalseContent> where
+        TrueContent: SelectSQLExpression, FalseContent: SelectSQLExpression
+    {
+        .init(second: second)
+    }
+}
+
+extension SelectBuilder {
     public static func buildBlock<T0, T1>(
         _ t0: T0,
         _ t1: T1
