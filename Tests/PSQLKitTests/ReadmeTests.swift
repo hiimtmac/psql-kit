@@ -17,7 +17,6 @@ QUERY {
     FROM { Moon.table }
 }
         .serialize(to: &fluentSerializer)
-        
         print(fluentSerializer.sql)
     }
     

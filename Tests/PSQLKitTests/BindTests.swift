@@ -88,9 +88,26 @@ final class BindTests: PSQLTestCase {
         XCTAssertEqual("\(decodeTimestamp.storage)", "2020-01-01 06:00:00 +0000")
     }
     
+    func testBindArray() throws {
+        WHERE {
+            f.$name >< ["tmac", "taylor"].map { $0.asBind() }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            p.$name >< ["tmac", "taylor"].map { $0.asBind() }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE ("x"."name" IN ($1, $2))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testBindSimple", testBindSimple),
         ("testBindComplex", testBindComplex),
-        ("testDateBindCodable", testDateBindCodable)
+        ("testDateBindCodable", testDateBindCodable),
+        ("testBindArray", testBindArray)
     ]
 }
