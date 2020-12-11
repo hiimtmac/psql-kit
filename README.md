@@ -73,7 +73,7 @@ print(sql) // SELECT "moons"."name"::TEXT, "moons"."craters"::INTEGER FROM "moon
 print(binding) // []
 ```
 
-`.query(on database: Database)` can be used to run your query, from here you have access to `.all(decoding: T.self)` and `.first(decoding: T.self)` to decode the return from the database.
+`.execute(on database: Database)` can be used to run your query, from here you have access to `.all(decoding: T.self)` and `.first(decoding: T.self)` to decode the return from the database.
 
 ```swift
 struct MyModel: Codable {
@@ -85,7 +85,7 @@ func index(_ req: Request) throws -> EventLoopFuture<[MyModel]> {
         SELECT { Moon.$name }
         FROM { Moon.table }
     }
-    .query(on: req.db)
+    .execute(on: req.db)
     .all(decoding: MyModel.self)
 }
 ```

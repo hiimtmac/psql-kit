@@ -19,7 +19,7 @@ extension PSQLQuery {
     
     public static var testDB: SQLDatabase { TestSQLDatabase() }
     
-    public func query(on database: Database) -> PSQLQueryFetcher {
+    public func execute(on database: Database) -> PSQLQueryFetcher {
         let psqlDatabase = database as! PostgresDatabase
         let sqlDatabase = psqlDatabase.sql()
         
