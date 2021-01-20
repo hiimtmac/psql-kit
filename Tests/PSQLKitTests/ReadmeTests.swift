@@ -99,7 +99,7 @@ WHERE {
         print(fluentSerializer.sql)
     }
     
-    func testComparrisons() {
+    func testComparisons() {
 let m = Moon.as("m")
 WHERE {
     m.$craters == 3 || m.$craters != 3 // = / !=
@@ -189,6 +189,18 @@ QUERY {
         }
         .asSubquery("y")
     }
+}
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+    }
+    
+    func testArithmetic() {
+let m = Moon.as("m")
+SELECT {
+    (m.$craters / m.$comets).as("division")
+    m.$craters + m.$comets
+    m.$craters - m.$comets
+    (m.$craters * m.$comets).as("multiply")
 }
         .serialize(to: &fluentSerializer)
         print(fluentSerializer.sql)

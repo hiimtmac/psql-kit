@@ -186,7 +186,7 @@ SELECT "m".*, "p".* LEFT JOIN "planets" AS "p" ON ("m"."planet_id" = "p"."id")
 
 #### WHERE
 
-Comparrisons (like `JOIN` above) will try to help and only allow you to compare types that are equal (so you can't compare a `String` column against an `Int`)
+Comparisons (like `JOIN` above) will try to help and only allow you to compare types that are equal (so you can't compare a `String` column against an `Int`)
 
 ```swift
 let m = Moon.as("m")
@@ -334,6 +334,53 @@ QUERY {
 SELECT (SELECT "m".* FROM "moons" AS "m") AS "x" FROM (SELECT "m".* FROM "moons" AS "m") AS "y"
 ```
 
+### Arithmetic
+
+The following arithmetic operations have been included:
+
+- `+`
+- `-`
+- `/`
+- `*`
+
+They can also be aliased using `.as(_ alias: String)`
+
+```swift
+let m = Moon.as("m")
+SELECT {
+    m.$craters / m.$comets.as("division")
+    m.$craters + m.$comets
+    m.$craters - m.$comets
+    (m.$craters * m.$comets).as("multiply")
+}
+```
+
+```sql
+SELECT
+    ("m"."craters"::INTEGER / "m"."comets"::INTEGER)::NUMERIC AS "division", 
+    ("m"."craters"::INTEGER + "m"."comets"::INTEGER)::NUMERIC, 
+    ("m"."craters"::INTEGER - "m"."comets"::INTEGER)::NUMERIC, 
+    ("m"."craters"::INTEGER * "m"."comets"::INTEGER)::NUMERIC AS "multiply"
+```
+
+> Even though you might be using `INTEGER`, because division would cause non integer return I decided to make the psql type of `ArithmeticExpression` be `NUMERIC` always.
+
+Arithmetic will only allow you to compare like types (ie `Int` with an `Int`, or `Double` vs a `Double`) but as an escape hatch you can `transform` one to another type to make compiler happy:
+
+```swift
+struct PSQLModel: Table {
+    ...
+    @Column(key: "age") var age: Int
+    @Column(key: "money") var money: Double    
+    ...
+}
+
+let p = PSQLModel.as("p")
+SELECT {
+    p.$money / p.$age.transform(to: Double.self)
+}
+```
+
 ### Expressions
 
 The following expressions have been included:
@@ -378,7 +425,7 @@ SELECT
 
 ### Advanced
 
-If your types dont match up, you can transform them to another type to make the compiler happy. For example when you want to do date comparrisons (which are difficult, see below). Transforms are done using `.transform(to: T.Type)`
+If your types dont match up, you can transform them to another type to make the compiler happy. For example when you want to do date comparisons (which are difficult, see below). Transforms are done using `.transform(to: T.Type)`
 
 ```swift
 final class MyModel: Model, Table {
@@ -415,7 +462,7 @@ Dates are tricky. Included are 2 types `PSQLDate` and `PSQLTimestamp` each with 
 
 ### Raw
 
-If you want to select a column that is not part of a `Table` use `RawColumn<T>(_ column: String)`. The type is required for annotation in the `SELECT` and for comparrisons if you use it in a `WHERE`/`JOIN`/etc. This can also be aliased with `.as(_ alias: String)`
+If you want to select a column that is not part of a `Table` use `RawColumn<T>(_ column: String)`. The type is required for annotation in the `SELECT` and for comparisons if you use it in a `WHERE`/`JOIN`/etc. This can also be aliased with `.as(_ alias: String)`
 
 If you want to select a raw value, use the value, provided it conforms to `PSQLExpressible` (conformance for a variety of types has been included). If you want to alias it, you can also use `.as(_ alias: String)`
 
@@ -575,7 +622,7 @@ WITH "x" AS (SELECT DISTINCT ON ("m"."name"::TEXT, "m"."id"::UUID) "m"."name"::T
 
 ## Not using Fluent?
 
-If you are not using models that conform to `Model` from `Fluent`/`FluentKit`, you can still use this library... although it might not have as many features. Like above, still conform your models to `Table`. From here you will have access to some property wrappers similar to `@ID`/`@Field`/`@OptionalField`. This can be useful for intermediate query tables if you use the `WITH` psql feature. They are listed below along with their use in comparrison to `Fluent` wrappers.
+If you are not using models that conform to `Model` from `Fluent`/`FluentKit`, you can still use this library... although it might not have as many features. Like above, still conform your models to `Table`. From here you will have access to some property wrappers similar to `@ID`/`@Field`/`@OptionalField`. This can be useful for intermediate query tables if you use the `WITH` psql feature. They are listed below along with their use in comparison to `Fluent` wrappers.
 
 | `X: Model, Table`                                            | `X: Table`                                              | Notes                                 |
 | ------------------------------------------------------------ | ------------------------------------------------------- | ------------------------------------- |
