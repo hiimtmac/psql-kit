@@ -251,7 +251,7 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
-    func testAnyComparrison() {
+    func testAnyComparison() {
         let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
         
         WHERE {

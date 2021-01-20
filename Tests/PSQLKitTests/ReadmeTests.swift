@@ -99,7 +99,7 @@ WHERE {
         print(fluentSerializer.sql)
     }
     
-    func testComparrisons() {
+    func testComparisons() {
 let m = Moon.as("m")
 WHERE {
     m.$craters == 3 || m.$craters != 3 // = / !=
