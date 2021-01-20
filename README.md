@@ -334,6 +334,53 @@ QUERY {
 SELECT (SELECT "m".* FROM "moons" AS "m") AS "x" FROM (SELECT "m".* FROM "moons" AS "m") AS "y"
 ```
 
+### Arithmetic
+
+The following aritmetic operations have been included:
+
+- `+`
+- `-`
+- `/`
+- `*`
+
+They can also be aliased using `.as(_ alias: String)`
+
+```swift
+let m = Moon.as("m")
+SELECT {
+    m.$craters / m.$comets.as("division")
+    m.$craters + m.$comets
+    m.$craters - m.$comets
+    (m.$craters * m.$comets).as("multiply")
+}
+```
+
+```sql
+SELECT
+    ("m"."craters"::INTEGER / "m"."comets"::INTEGER)::NUMERIC AS "division", 
+    ("m"."craters"::INTEGER + "m"."comets"::INTEGER)::NUMERIC, 
+    ("m"."craters"::INTEGER - "m"."comets"::INTEGER)::NUMERIC, 
+    ("m"."craters"::INTEGER * "m"."comets"::INTEGER)::NUMERIC AS "multiply"
+```
+
+> Even though you might be using `INTEGER`, because division would cause non integer return I decided to make the psql type of `ArithmeticExpression` be `NUMERIC` always.
+
+Arithmetic will only allow you to compare like types (ie `Int` with an `Int`, or `Double` vs a `Double`) but as an escape hatch you can `transform` one to another type to make compiler happy:
+
+```swift
+struct PSQLModel: Table {
+    ...
+    @Column(key: "age") var age: Int
+    @Column(key: "money") var money: Double    
+    ...
+}
+
+let p = PSQLModel.as("p")
+SELECT {
+    p.$money / p.$age.transform(to: Double.self)
+}
+```
+
 ### Expressions
 
 The following expressions have been included:

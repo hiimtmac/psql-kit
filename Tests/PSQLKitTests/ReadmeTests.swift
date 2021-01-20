@@ -194,6 +194,18 @@ QUERY {
         print(fluentSerializer.sql)
     }
     
+    func testArithmetic() {
+let m = Moon.as("m")
+SELECT {
+    (m.$craters / m.$comets).as("division")
+    m.$craters + m.$comets
+    m.$craters - m.$comets
+    (m.$craters * m.$comets).as("multiply")
+}
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+    }
+    
     func testExpressions() {
 let m = Moon.as("m")
 SELECT {

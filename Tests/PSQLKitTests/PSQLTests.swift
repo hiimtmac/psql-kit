@@ -11,6 +11,7 @@ final class FluentModel: Model, Table {
     @OptionalField(key: "name") var name: String?
     @Field(key: "title") var title: String
     @Field(key: "age") var age: Int
+    @Field(key: "money") var money: Double
     @Field(key: "birthday") var birthday: Date
     @Group(key: "pet") var pet: Pet
     
@@ -38,6 +39,7 @@ struct PSQLModel: Table {
     @OptionalColumn(key: "name") var name: String?
     @Column(key: "title") var title: String
     @Column(key: "age") var age: Int
+    @Column(key: "money") var money: Double
     @Column(key: "birthday") var birthday: Date
     @NestedColumn(key: "pet") var pet: Pet
     
