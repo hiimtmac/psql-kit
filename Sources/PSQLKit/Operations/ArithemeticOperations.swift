@@ -3,7 +3,7 @@ import SQLKit
 import FluentKit
 
 // MARK: - +
-/// lhs = rhs
+/// lhs + rhs
 public func +<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
@@ -14,7 +14,7 @@ public func +<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
 }
 
 // MARK: - -
-/// lhs IS rhs
+/// lhs - rhs
 public func -<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
@@ -25,7 +25,7 @@ public func -<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
 }
 
 // MARK: - *
-/// lhs != rhs
+/// lhs * rhs
 public func *<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
@@ -36,7 +36,7 @@ public func *<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
 }
 
 // MARK: - /
-/// lhs IS NOT rhs
+/// lhs / rhs
 public func /<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
