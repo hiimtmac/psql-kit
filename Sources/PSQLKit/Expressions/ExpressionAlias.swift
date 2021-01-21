@@ -10,7 +10,9 @@ extension ExpressionAlias: TypeEquatable where Expression: TypeEquatable {
     public typealias CompareType = Expression.CompareType
 }
 
-extension ExpressionAlias: SelectSQLExpression where Expression: SelectSQLExpression {
+extension ExpressionAlias: SelectSQLExpression where
+    Expression: SelectSQLExpression
+{
     public var selectSqlExpression: some SQLExpression {
         _Select(expression: expression, alias: alias)
     }
@@ -33,7 +35,9 @@ extension ExpressionAlias: SelectSQLExpression where Expression: SelectSQLExpres
     }
 }
 
-extension ExpressionAlias: FromSQLExpression where Expression: FromSQLExpression {
+extension ExpressionAlias: FromSQLExpression where
+    Expression: FromSQLExpression
+{
     public var fromSqlExpression: some SQLExpression {
         _From(expression: expression, alias: alias)
     }

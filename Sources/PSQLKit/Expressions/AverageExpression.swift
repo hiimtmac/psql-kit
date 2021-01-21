@@ -9,7 +9,9 @@ public struct AverageExpression<Content>: AggregateExpression {
     }
 }
 
-extension AverageExpression: SelectSQLExpression where Content: SelectSQLExpression {
+extension AverageExpression: SelectSQLExpression where
+    Content: SelectSQLExpression
+{
     public var selectSqlExpression: some SQLExpression {
         _Select(content: content)
     }
@@ -26,7 +28,9 @@ extension AverageExpression: SelectSQLExpression where Content: SelectSQLExpress
     }
 }
 
-extension AverageExpression: CompareSQLExpression where Content: CompareSQLExpression {
+extension AverageExpression: CompareSQLExpression where
+    Content: CompareSQLExpression
+{
     public var compareSqlExpression: some SQLExpression {
         _Compare(content: content)
     }

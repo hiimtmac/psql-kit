@@ -19,7 +19,11 @@ public struct ArithmeticOperator: SQLExpression {
     }
 }
 
-public struct ArithmeticExpression<T, U> where T: TypeEquatable, U: TypeEquatable, T.CompareType == U.CompareType {
+public struct ArithmeticExpression<T, U> where
+    T: TypeEquatable,
+    U: TypeEquatable,
+    T.CompareType == U.CompareType
+{
     let lhs: T
     let `operator`: ArithmeticOperator
     let rhs: U
@@ -35,7 +39,10 @@ extension ArithmeticExpression: TypeEquatable {
     public typealias CompareType = T.CompareType
 }
 
-extension ArithmeticExpression: SelectSQLExpression where T: SelectSQLExpression, U: SelectSQLExpression, T.CompareType: PSQLExpression {
+extension ArithmeticExpression: SelectSQLExpression where
+    T: SelectSQLExpression,
+    U: SelectSQLExpression
+{
     public var selectSqlExpression: some SQLExpression {
         _Select(lhs: lhs, operator: `operator`, rhs: rhs)
     }
@@ -65,7 +72,10 @@ extension ArithmeticExpression {
     }
 }
 
-extension ArithmeticExpression: CompareSQLExpression where T: CompareSQLExpression, U: CompareSQLExpression {
+extension ArithmeticExpression: CompareSQLExpression where
+    T: CompareSQLExpression,
+    U: CompareSQLExpression
+{
     public var compareSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
@@ -87,19 +97,28 @@ extension ArithmeticExpression: CompareSQLExpression where T: CompareSQLExpressi
     }
 }
 
-extension ArithmeticExpression: WhereSQLExpression where T: CompareSQLExpression, U: CompareSQLExpression {
+extension ArithmeticExpression: WhereSQLExpression where
+    T: CompareSQLExpression,
+    U: CompareSQLExpression
+{
     public var whereSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
-extension ArithmeticExpression: HavingSQLExpression where T: CompareSQLExpression, U: CompareSQLExpression {
+extension ArithmeticExpression: HavingSQLExpression where
+    T: CompareSQLExpression,
+    U: CompareSQLExpression
+{
     public var havingSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
-extension ArithmeticExpression: JoinSQLExpression where T: CompareSQLExpression, U: CompareSQLExpression {
+extension ArithmeticExpression: JoinSQLExpression where
+    T: CompareSQLExpression,
+    U: CompareSQLExpression
+{
     public var joinSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }

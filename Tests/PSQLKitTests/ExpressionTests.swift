@@ -101,7 +101,7 @@ final class ExpressionTests: PSQLTestCase {
     
     func testConcat() {
         SELECT {
-            CONCAT5(f.$name, " ", f.$title, " ", f.$age)
+            CONCAT5(f.$name, " ", f.$title, " ", f.$name)
             CONCAT4(f.$name, " ", f.$title, " ").as("cool")
             CONCAT3(f.$name, " ", f.$title)
             CONCAT(8, 8).as("cool")
@@ -109,14 +109,14 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &fluentSerializer)
         
         SELECT {
-            CONCAT5(p.$name, " ", p.$title, " ", p.$age)
+            CONCAT5(p.$name, " ", p.$title, " ", p.$name)
             CONCAT4(p.$name, " ", p.$title, " ").as("cool")
             CONCAT3(p.$name, " ", p.$title)
             CONCAT(8, 8).as("cool")
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"SELECT CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT, "x"."age"::INTEGER), CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT) AS "cool", CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT), CONCAT(8::INTEGER, 8::INTEGER) AS "cool""#
+        let compare = #"SELECT CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT, "x"."name"::TEXT), CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT, ' '::TEXT) AS "cool", CONCAT("x"."name"::TEXT, ' '::TEXT, "x"."title"::TEXT), CONCAT(8::INTEGER, 8::INTEGER) AS "cool""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
@@ -185,6 +185,42 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testCoalesceCompare() {
+        let date = DateComponents(calendar: .current, year: 2021, month: 01, day: 21).date!
+        
+        WHERE {
+            COALESCE(f.$name, "tmac") == "taylor"
+            COALESCE(f.$birthday, date.psqlDate) >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            COALESCE(p.$name, "tmac") == "taylor"
+            COALESCE(p.$birthday, date.psqlDate) >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE (COALESCE("x"."name", 'tmac') = 'taylor') AND (COALESCE("x"."birthday", '2021-01-21') BETWEEN '2021-01-21' AND '2021-01-21')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testConcatCompare() {
+        WHERE {
+            CONCAT(f.$name, "tmac") == "taylor"
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            CONCAT(p.$name, "tmac") == "taylor"
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE (CONCAT("x"."name", 'tmac') = 'taylor')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testMax", testMax),
         ("testMin", testMin),
@@ -193,6 +229,8 @@ final class ExpressionTests: PSQLTestCase {
         ("testGenerateSeries", testGenerateSeries),
         ("testConcat", testConcat),
         ("testCoalesce", testCoalesce),
-        ("testJsonExtractPathText", testJsonExtractPathText)
+        ("testJsonExtractPathText", testJsonExtractPathText),
+        ("testCoalesceCompare", testCoalesceCompare),
+        ("testConcatCompare", testConcatCompare)
     ]
 }
