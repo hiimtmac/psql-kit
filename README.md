@@ -6,7 +6,7 @@ PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.8.0")
+    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.9.0")
 ],
 ```
 

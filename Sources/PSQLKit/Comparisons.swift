@@ -32,7 +32,10 @@ public struct CompareOperator: SQLExpression {
     }
 }
 
-public struct CompareExpression<T, U> where T: CompareSQLExpression, U: CompareSQLExpression {
+public struct CompareExpression<T, U> where
+    T: CompareSQLExpression,
+    U: CompareSQLExpression
+{
     let lhs: T
     let `operator`: CompareOperator
     let rhs: U
@@ -79,59 +82,6 @@ extension CompareExpression: HavingSQLExpression {
 }
 
 extension CompareExpression: JoinSQLExpression {
-    public var joinSqlExpression: some SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
-    }
-}
-
-public struct AnyCompareExpression {
-    let lhs: SQLExpression
-    let `operator`: CompareOperator
-    let rhs: SQLExpression
-    
-    public init<T, U>(lhs: T, operator: CompareOperator, rhs: U) where T: CompareSQLExpression, U: CompareSQLExpression
-    {
-        self.lhs = lhs.compareSqlExpression
-        self.operator = `operator`
-        self.rhs = rhs.compareSqlExpression
-    }
-}
-
-extension AnyCompareExpression: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
-    }
-    
-    private struct _Compare: SQLExpression {
-        let lhs: SQLExpression
-        let `operator`: CompareOperator
-        let rhs: SQLExpression
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("(")
-            lhs.serialize(to: &serializer)
-            serializer.writeSpace()
-            `operator`.serialize(to: &serializer)
-            serializer.writeSpace()
-            rhs.serialize(to: &serializer)
-            serializer.write(")")
-        }
-    }
-}
-
-extension AnyCompareExpression: WhereSQLExpression {
-    public var whereSqlExpression: some SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
-    }
-}
-
-extension AnyCompareExpression: HavingSQLExpression {
-    public var havingSqlExpression: some SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
-    }
-}
-
-extension AnyCompareExpression: JoinSQLExpression {
     public var joinSqlExpression: some SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }

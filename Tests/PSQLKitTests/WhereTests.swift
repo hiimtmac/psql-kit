@@ -251,32 +251,6 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
-    func testAnyComparison() {
-        let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
-        
-        WHERE {
-            AnyCompareExpression(
-                lhs: f.$birthday,
-                operator: .between,
-                rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
-            )
-        }
-        .serialize(to: &fluentSerializer)
-        
-        WHERE {
-            AnyCompareExpression(
-                lhs: p.$birthday,
-                operator: .between,
-                rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
-            )
-        }
-        .serialize(to: &psqlkitSerializer)
-        
-        let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01')"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
-    }
-    
     func testWhereControlFlow() {
         let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
         
@@ -293,32 +267,16 @@ final class WhereTests: PSQLTestCase {
             
             switch t1 {
             case .current:
-                AnyCompareExpression(
-                    lhs: f.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
-                )
+                f.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
             case .missing:
-                AnyCompareExpression(
-                    lhs: f.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
-                )
+                f.$birthday >< PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
             }
             
             switch t2 {
             case .current:
-                AnyCompareExpression(
-                    lhs: f.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
-                )
+                f.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
             case .missing:
-                AnyCompareExpression(
-                    lhs: f.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
-                )
+                f.$birthday >< PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
             }
         }
         .serialize(to: &fluentSerializer)
@@ -328,32 +286,16 @@ final class WhereTests: PSQLTestCase {
             
             switch t1 {
             case .current:
-                AnyCompareExpression(
-                    lhs: p.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
-                )
+                p.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
             case .missing:
-                AnyCompareExpression(
-                    lhs: p.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
-                )
+                p.$birthday >< PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
             }
             
             switch t2 {
             case .current:
-                AnyCompareExpression(
-                    lhs: p.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlDate, to: date.psqlDate)
-                )
+                p.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
             case .missing:
-                AnyCompareExpression(
-                    lhs: p.$birthday,
-                    operator: .between,
-                    rhs: PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
-                )
+                p.$birthday >< PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
             }
         }
         .serialize(to: &psqlkitSerializer)

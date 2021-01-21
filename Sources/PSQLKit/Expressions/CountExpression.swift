@@ -9,7 +9,9 @@ public struct CountExpression<Content>: AggregateExpression {
     }
 }
 
-extension CountExpression: SelectSQLExpression where Content: SelectSQLExpression {
+extension CountExpression: SelectSQLExpression where
+    Content: SelectSQLExpression
+{
     public var selectSqlExpression: some SQLExpression {
         _Select(content: content)
     }
@@ -26,7 +28,9 @@ extension CountExpression: SelectSQLExpression where Content: SelectSQLExpressio
     }
 }
 
-extension CountExpression: CompareSQLExpression where Content: CompareSQLExpression {
+extension CountExpression: CompareSQLExpression where
+    Content: CompareSQLExpression
+{
     public var compareSqlExpression: some SQLExpression {
         _Compare(content: content)
     }
