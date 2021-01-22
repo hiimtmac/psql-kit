@@ -6,7 +6,7 @@ PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.9.0")
+    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.10.0")
 ],
 ```
 
@@ -383,17 +383,25 @@ SELECT {
 
 ### Expressions
 
-The following expressions have been included:
+The following expressions have been implemented:
 
-- `AVG`
-- `MIN`
-- `MAX`
-- `COUNT`
-- `SUM`
-- `JSONB_EXTRACT_PATH_TEXT`
-- `COALESCE`
-- `CONCAT`/`CONCAT3`/`CONCAT4`/`CONCAT5`
-- `GENERATE_SERIES`
+- [x] `AVG`
+- [x] `MIN`
+- [x] `MAX`
+- [x] `COUNT`
+- [x] `SUM`
+- [x] `JSONB_EXTRACT_PATH_TEXT`
+- [x] `COALESCE`
+- [x] `CONCAT`/`CONCAT3`/`CONCAT4`/`CONCAT5`
+- [x] `GENERATE_SERIES`
+- [x] `ARRAY_AGG`
+- [x] `ARRAY_TO_STRING`
+- [ ] `ARRAY_DIMS`
+- [ ] `ARRAY_UPPER`
+- [ ] `ARRAY_LENGTH`
+- [ ] `ARRAY_PREPEND`
+- [ ] `ARRAY_APPEND`
+- [ ] `ARRAY_CAT`
 
 They can also be aliased using `.as(_ alias: String)`
 

@@ -221,6 +221,60 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testArrayAggregate() {
+        QUERY {
+            SELECT {
+                ARRAY_AGG(f.$name).as("agg")
+            }
+            WHERE {
+                ARRAY_AGG(f.$name) == ["taylor", "tmac"]
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_AGG(p.$name).as("agg")
+            }
+            WHERE {
+                ARRAY_AGG(p.$name) == ["taylor", "tmac"]
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_AGG("x"."name"::TEXT) AS "agg" WHERE (ARRAY_AGG("x"."name") = ('taylor', 'tmac'))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayToString() {
+        QUERY {
+            SELECT {
+                ARRAY_TO_STRING(f.$name, delimiter: ",", ifNull: "*")
+                ARRAY_TO_STRING(f.$name, delimiter: ",").as("agg")
+            }
+            WHERE {
+                ARRAY_TO_STRING(f.$name, delimiter: ",") == "taylor, tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_TO_STRING(p.$name, delimiter: ",", ifNull: "*")
+                ARRAY_TO_STRING(p.$name, delimiter: ",").as("agg")
+            }
+            WHERE {
+                ARRAY_TO_STRING(p.$name, delimiter: ",") == "taylor, tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_TO_STRING("x"."name"::TEXT, ',', '*')::TEXT, ARRAY_TO_STRING("x"."name"::TEXT, ',')::TEXT AS "agg" WHERE (ARRAY_TO_STRING("x"."name", ',') = 'taylor, tmac')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testMax", testMax),
         ("testMin", testMin),
@@ -231,6 +285,8 @@ final class ExpressionTests: PSQLTestCase {
         ("testCoalesce", testCoalesce),
         ("testJsonExtractPathText", testJsonExtractPathText),
         ("testCoalesceCompare", testCoalesceCompare),
-        ("testConcatCompare", testConcatCompare)
+        ("testConcatCompare", testConcatCompare),
+        ("testArrayAggregate", testArrayAggregate),
+        ("testArrayToString", testArrayToString)
     ]
 }
