@@ -460,7 +460,7 @@ final class ExpressionTests: PSQLTestCase {
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"SELECT ARRAY_REPLACE("x"."name"::TEXT, 'hi'::TEXT)::TEXT[] AS "rep", ARRAY_REPLACE(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER)::INTEGER[] WHERE (ARRAY_REPLACE("x"."name", 'hi') = ('hello'))"#
+        let compare = #"SELECT ARRAY_REMOVE("x"."name"::TEXT, 'hi'::TEXT)::TEXT[] AS "rep", ARRAY_REMOVE(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER)::INTEGER[] WHERE (ARRAY_REMOVE("x"."name", 'hi') = ('hello'))"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
