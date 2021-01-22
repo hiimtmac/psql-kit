@@ -14,7 +14,7 @@ dependencies: [
 
 ## Getting Started
 
-The easiest way to get started is to conform Fluent `Models` to `Table`
+The easiest way to get started is to conform Fluent `Model`s to `Table`
 
 ```swift
 // existing model from FluentBenchmark
@@ -89,8 +89,6 @@ func index(_ req: Request) throws -> EventLoopFuture<[MyModel]> {
     .all(decoding: MyModel.self)
 }
 ```
-
-> I didnt test this specific example (so might not compile or be exactly right), but its worked in other projects where I am using this
 
 ### Alias
 

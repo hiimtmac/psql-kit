@@ -1,5 +1,4 @@
 import Foundation
-import SQLKit
 
 public typealias GENERATE_SERIES = GenerateSeriesExpression
 public typealias MAX = MaxExpression
