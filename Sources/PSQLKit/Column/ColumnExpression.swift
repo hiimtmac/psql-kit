@@ -243,3 +243,5 @@ extension ColumnExpression where T == Date {
         )
     }
 }
+
+extension ColumnExpression: PSQLArrayRepresentable {}

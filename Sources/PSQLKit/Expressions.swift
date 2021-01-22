@@ -7,18 +7,29 @@ public typealias SUM = SumExpression
 public typealias COUNT = CountExpression
 public typealias AVG = AverageExpression
 public typealias JSONB_EXTRACT_PATH_TEXT = JsonbExtractPathTextExpression
+
 public typealias ARRAY_AGG = ArrayAggregateExpression
+public typealias ARRAY_APPEND = ArrayAppendExpression
+public typealias ARRAY_CAT = ArrayConcatenateExpression
+public typealias ARRAY_DIMS = ArrayDimensionsExpression
+public typealias ARRAY_LENGTH = ArrayLengthExpression
+public typealias ARRAY_LOWER = ArrayLowerExpression
+public typealias ARRAY_NDIMS = ArrayNumberDimensionsExpression
+public typealias ARRAY_PREPEND = ArrayPrependExpression
+public typealias ARRAY_REMOVE = ArrayRemoveExpression
+public typealias ARRAY_REPLACE = ArrayReplaceExpression
 public typealias ARRAY_TO_STRING = ArrayToStringExpression
+public typealias ARRAY_UPPER = ArrayUpperExpression
 
 public typealias COALESCE = CoalesceExpression
 public typealias COALESCE3 = CoalesceExpression3
 public typealias COALESCE4 = CoalesceExpression4
 public typealias COALESCE5 = CoalesceExpression5
 
-public typealias CONCAT = ConcatExpression
-public typealias CONCAT3 = ConcatExpression3
-public typealias CONCAT4 = ConcatExpression4
-public typealias CONCAT5 = ConcatExpression5
+public typealias CONCAT = ConcatenateExpression
+public typealias CONCAT3 = ConcatenateExpression3
+public typealias CONCAT4 = ConcatenateExpression4
+public typealias CONCAT5 = ConcatenateExpression5
 
 public protocol Expression {}
 public protocol AggregateExpression: Expression {}

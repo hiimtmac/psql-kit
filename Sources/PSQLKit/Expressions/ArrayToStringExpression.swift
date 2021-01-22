@@ -2,7 +2,9 @@ import Foundation
 import SQLKit
 import PostgresKit
 
-public struct ArrayToStringExpression<Content>: AggregateExpression {
+public struct ArrayToStringExpression<Content>: AggregateExpression where
+    Content: PSQLArrayRepresentable
+{
     let content: Content
     let delimiter: String
     let ifNull: String?
