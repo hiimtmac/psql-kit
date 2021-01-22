@@ -1,8 +1,8 @@
 import Foundation
 import SQLKit
 
-// MARK: ConcatExpression
-public struct ConcatExpression<T0, T1> where
+// MARK: ConcatenateExpression
+public struct ConcatenateExpression<T0, T1> where
     T0: TypeEquatable,
     T1: TypeEquatable,
     T0.CompareType == T1.CompareType
@@ -19,11 +19,11 @@ public struct ConcatExpression<T0, T1> where
     }
 }
 
-extension ConcatExpression: TypeEquatable {
+extension ConcatenateExpression: TypeEquatable {
     public typealias CompareType = T0.CompareType
 }
 
-extension ConcatExpression: SelectSQLExpression where
+extension ConcatenateExpression: SelectSQLExpression where
     T0: SelectSQLExpression,
     T1: SelectSQLExpression
 {
@@ -47,7 +47,7 @@ extension ConcatExpression: SelectSQLExpression where
     }
 }
 
-extension ConcatExpression: GroupBySQLExpression where
+extension ConcatenateExpression: GroupBySQLExpression where
     T0: GroupBySQLExpression,
     T1: GroupBySQLExpression
 {
@@ -71,7 +71,7 @@ extension ConcatExpression: GroupBySQLExpression where
     }
 }
 
-extension ConcatExpression: CompareSQLExpression where
+extension ConcatenateExpression: CompareSQLExpression where
     T0: CompareSQLExpression,
     T1: CompareSQLExpression
 {
@@ -95,14 +95,14 @@ extension ConcatExpression: CompareSQLExpression where
     }
 }
 
-extension ConcatExpression {
-    public func `as`(_ alias: String) -> ExpressionAlias<ConcatExpression<T0, T1>> {
+extension ConcatenateExpression {
+    public func `as`(_ alias: String) -> ExpressionAlias<ConcatenateExpression<T0, T1>> {
         ExpressionAlias(expression: self, alias: alias)
     }
 }
 
-// MARK: ConcatExpression3
-public struct ConcatExpression3<T0, T1, T2> where
+// MARK: ConcatenateExpression3
+public struct ConcatenateExpression3<T0, T1, T2> where
     T0: TypeEquatable,
     T1: TypeEquatable,
     T2: TypeEquatable,
@@ -124,11 +124,11 @@ public struct ConcatExpression3<T0, T1, T2> where
     }
 }
 
-extension ConcatExpression3: TypeEquatable {
+extension ConcatenateExpression3: TypeEquatable {
     public typealias CompareType = T0.CompareType
 }
 
-extension ConcatExpression3: SelectSQLExpression where
+extension ConcatenateExpression3: SelectSQLExpression where
     T0: SelectSQLExpression,
     T1: SelectSQLExpression,
     T2: SelectSQLExpression
@@ -155,7 +155,7 @@ extension ConcatExpression3: SelectSQLExpression where
     }
 }
 
-extension ConcatExpression3: GroupBySQLExpression where
+extension ConcatenateExpression3: GroupBySQLExpression where
     T0: GroupBySQLExpression,
     T1: GroupBySQLExpression,
     T2: GroupBySQLExpression
@@ -182,7 +182,7 @@ extension ConcatExpression3: GroupBySQLExpression where
     }
 }
 
-extension ConcatExpression3: CompareSQLExpression where
+extension ConcatenateExpression3: CompareSQLExpression where
     T0: CompareSQLExpression,
     T1: CompareSQLExpression,
     T2: CompareSQLExpression
@@ -209,14 +209,14 @@ extension ConcatExpression3: CompareSQLExpression where
     }
 }
 
-extension ConcatExpression3 {
-    public func `as`(_ alias: String) -> ExpressionAlias<ConcatExpression3<T0, T1, T2>> {
+extension ConcatenateExpression3 {
+    public func `as`(_ alias: String) -> ExpressionAlias<ConcatenateExpression3<T0, T1, T2>> {
         ExpressionAlias(expression: self, alias: alias)
     }
 }
 
-// MARK: ConcatExpression4
-public struct ConcatExpression4<T0, T1, T2, T3> where
+// MARK: ConcatenateExpression4
+public struct ConcatenateExpression4<T0, T1, T2, T3> where
     T0: TypeEquatable,
     T1: TypeEquatable,
     T2: TypeEquatable,
@@ -243,11 +243,11 @@ public struct ConcatExpression4<T0, T1, T2, T3> where
     }
 }
 
-extension ConcatExpression4: TypeEquatable {
+extension ConcatenateExpression4: TypeEquatable {
     public typealias CompareType = T0.CompareType
 }
 
-extension ConcatExpression4: SelectSQLExpression where
+extension ConcatenateExpression4: SelectSQLExpression where
     T0: SelectSQLExpression,
     T1: SelectSQLExpression,
     T2: SelectSQLExpression,
@@ -277,7 +277,7 @@ extension ConcatExpression4: SelectSQLExpression where
     }
 }
 
-extension ConcatExpression4: GroupBySQLExpression where
+extension ConcatenateExpression4: GroupBySQLExpression where
     T0: GroupBySQLExpression,
     T1: GroupBySQLExpression,
     T2: GroupBySQLExpression,
@@ -307,7 +307,7 @@ extension ConcatExpression4: GroupBySQLExpression where
     }
 }
 
-extension ConcatExpression4: CompareSQLExpression where
+extension ConcatenateExpression4: CompareSQLExpression where
     T0: CompareSQLExpression,
     T1: CompareSQLExpression,
     T2: CompareSQLExpression,
@@ -337,14 +337,14 @@ extension ConcatExpression4: CompareSQLExpression where
     }
 }
 
-extension ConcatExpression4 {
-    public func `as`(_ alias: String) -> ExpressionAlias<ConcatExpression4<T0, T1, T2, T3>> {
+extension ConcatenateExpression4 {
+    public func `as`(_ alias: String) -> ExpressionAlias<ConcatenateExpression4<T0, T1, T2, T3>> {
         ExpressionAlias(expression: self, alias: alias)
     }
 }
 
-// MARK: ConcatExpression5
-public struct ConcatExpression5<T0, T1, T2, T3, T4> where
+// MARK: ConcatenateExpression5
+public struct ConcatenateExpression5<T0, T1, T2, T3, T4> where
     T0: TypeEquatable,
     T1: TypeEquatable,
     T2: TypeEquatable,
@@ -376,11 +376,11 @@ public struct ConcatExpression5<T0, T1, T2, T3, T4> where
     }
 }
 
-extension ConcatExpression5: TypeEquatable {
+extension ConcatenateExpression5: TypeEquatable {
     public typealias CompareType = T0.CompareType
 }
 
-extension ConcatExpression5: SelectSQLExpression where
+extension ConcatenateExpression5: SelectSQLExpression where
     T0: SelectSQLExpression,
     T1: SelectSQLExpression,
     T2: SelectSQLExpression,
@@ -413,7 +413,7 @@ extension ConcatExpression5: SelectSQLExpression where
     }
 }
 
-extension ConcatExpression5: GroupBySQLExpression where
+extension ConcatenateExpression5: GroupBySQLExpression where
     T0: GroupBySQLExpression,
     T1: GroupBySQLExpression,
     T2: GroupBySQLExpression,
@@ -446,7 +446,7 @@ extension ConcatExpression5: GroupBySQLExpression where
     }
 }
 
-extension ConcatExpression5: CompareSQLExpression where
+extension ConcatenateExpression5: CompareSQLExpression where
     T0: CompareSQLExpression,
     T1: CompareSQLExpression,
     T2: CompareSQLExpression,
@@ -479,8 +479,8 @@ extension ConcatExpression5: CompareSQLExpression where
     }
 }
 
-extension ConcatExpression5 {
-    public func `as`(_ alias: String) -> ExpressionAlias<ConcatExpression5<T0, T1, T2, T3, T4>> {
+extension ConcatenateExpression5 {
+    public func `as`(_ alias: String) -> ExpressionAlias<ConcatenateExpression5<T0, T1, T2, T3, T4>> {
         ExpressionAlias(expression: self, alias: alias)
     }
 }
