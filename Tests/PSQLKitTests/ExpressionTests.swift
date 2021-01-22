@@ -222,27 +222,19 @@ final class ExpressionTests: PSQLTestCase {
     }
     
     func testArrayAggregate() {
-        QUERY {
-            SELECT {
-                ARRAY_AGG(f.$name).as("agg")
-            }
-            WHERE {
-                ARRAY_AGG(f.$name) == ["taylor", "tmac"]
-            }
+        SELECT {
+            ARRAY_AGG(f.$name).as("agg")
+            ARRAY_AGG(PSQLArray([1,2,3])).as("array")
         }
         .serialize(to: &fluentSerializer)
-        
-        QUERY {
-            SELECT {
-                ARRAY_AGG(p.$name).as("agg")
-            }
-            WHERE {
-                ARRAY_AGG(p.$name) == ["taylor", "tmac"]
-            }
+
+        SELECT {
+            ARRAY_AGG(p.$name).as("agg")
+            ARRAY_AGG(PSQLArray([1,2,3])).as("array")
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"SELECT ARRAY_AGG("x"."name"::TEXT) AS "agg" WHERE (ARRAY_AGG("x"."name") = ('taylor', 'tmac'))"#
+        let compare = #"SELECT ARRAY_AGG("x"."name"::TEXT) AS "agg", ARRAY_AGG(ARRAY[1, 2, 3]::INTEGER[]) AS "array""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
@@ -252,6 +244,7 @@ final class ExpressionTests: PSQLTestCase {
             SELECT {
                 ARRAY_TO_STRING(f.$name, delimiter: ",", ifNull: "*")
                 ARRAY_TO_STRING(f.$name, delimiter: ",").as("agg")
+                ARRAY_TO_STRING(PSQLArray([1,2,3]), delimiter: ",").as("array")
             }
             WHERE {
                 ARRAY_TO_STRING(f.$name, delimiter: ",") == "taylor, tmac"
@@ -263,6 +256,7 @@ final class ExpressionTests: PSQLTestCase {
             SELECT {
                 ARRAY_TO_STRING(p.$name, delimiter: ",", ifNull: "*")
                 ARRAY_TO_STRING(p.$name, delimiter: ",").as("agg")
+                ARRAY_TO_STRING(PSQLArray([1,2,3]), delimiter: ",").as("array")
             }
             WHERE {
                 ARRAY_TO_STRING(p.$name, delimiter: ",") == "taylor, tmac"
@@ -270,7 +264,287 @@ final class ExpressionTests: PSQLTestCase {
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"SELECT ARRAY_TO_STRING("x"."name"::TEXT, ',', '*')::TEXT, ARRAY_TO_STRING("x"."name"::TEXT, ',')::TEXT AS "agg" WHERE (ARRAY_TO_STRING("x"."name", ',') = 'taylor, tmac')"#
+        let compare = #"SELECT ARRAY_TO_STRING("x"."name"::TEXT, ',', '*')::TEXT, ARRAY_TO_STRING("x"."name"::TEXT, ',')::TEXT AS "agg", ARRAY_TO_STRING(ARRAY[1, 2, 3]::INTEGER[], ',')::TEXT AS "array" WHERE (ARRAY_TO_STRING("x"."name", ',') = 'taylor, tmac')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayUpper() {
+        QUERY {
+            SELECT {
+                ARRAY_UPPER(f.$name, dimension: 1).as("upp")
+                ARRAY_UPPER(PSQLArray([1,2,3]), dimension: 1).as("upp")
+            }
+            WHERE {
+                ARRAY_UPPER(f.$name, dimension: 1) == 5
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_UPPER(p.$name, dimension: 1).as("upp")
+                ARRAY_UPPER(PSQLArray([1,2,3]), dimension: 1).as("upp")
+            }
+            WHERE {
+                ARRAY_UPPER(p.$name, dimension: 1) == 5
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_UPPER("x"."name"::TEXT, 1)::INTEGER AS "upp", ARRAY_UPPER(ARRAY[1, 2, 3]::INTEGER[], 1)::INTEGER AS "upp" WHERE (ARRAY_UPPER("x"."name", 1) = 5)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayNDims() {
+        QUERY {
+            SELECT {
+                ARRAY_NDIMS(f.$name).as("upp")
+                ARRAY_NDIMS(PSQLArray([1,2,3]))
+            }
+            WHERE {
+                ARRAY_NDIMS(f.$name) == 5
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_NDIMS(p.$name).as("upp")
+                ARRAY_NDIMS(PSQLArray([1,2,3]))
+            }
+            WHERE {
+                ARRAY_NDIMS(p.$name) == 5
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_NDIMS("x"."name"::TEXT)::INTEGER AS "upp", ARRAY_NDIMS(ARRAY[1, 2, 3]::INTEGER[])::INTEGER WHERE (ARRAY_NDIMS("x"."name") = 5)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayLower() {
+        QUERY {
+            SELECT {
+                ARRAY_LOWER(f.$name, dimension: 1).as("low")
+                ARRAY_LOWER(PSQLArray([1,2,3]), dimension: 1).as("low")
+            }
+            WHERE {
+                ARRAY_LOWER(f.$name, dimension: 1) == 5
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_LOWER(p.$name, dimension: 1).as("low")
+                ARRAY_LOWER(PSQLArray([1,2,3]), dimension: 1).as("low")
+            }
+            WHERE {
+                ARRAY_LOWER(p.$name, dimension: 1) == 5
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_LOWER("x"."name"::TEXT, 1)::INTEGER AS "low", ARRAY_LOWER(ARRAY[1, 2, 3]::INTEGER[], 1)::INTEGER AS "low" WHERE (ARRAY_LOWER("x"."name", 1) = 5)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayLength() {
+        QUERY {
+            SELECT {
+                ARRAY_LENGTH(f.$name, dimension: 1).as("low")
+                ARRAY_LENGTH(PSQLArray([1,2,3]), dimension: 1).as("low")
+            }
+            WHERE {
+                ARRAY_LENGTH(f.$name, dimension: 1) == 5
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_LENGTH(p.$name, dimension: 1).as("low")
+                ARRAY_LENGTH(PSQLArray([1,2,3]), dimension: 1).as("low")
+            }
+            WHERE {
+                ARRAY_LENGTH(p.$name, dimension: 1) == 5
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_LENGTH("x"."name"::TEXT, 1)::INTEGER AS "low", ARRAY_LENGTH(ARRAY[1, 2, 3]::INTEGER[], 1)::INTEGER AS "low" WHERE (ARRAY_LENGTH("x"."name", 1) = 5)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayDims() {
+        QUERY {
+            SELECT {
+                ARRAY_DIMS(f.$name).as("dim")
+                ARRAY_DIMS(PSQLArray([1,2,3]))
+            }
+            WHERE {
+                ARRAY_DIMS(f.$name) == "[5]"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_DIMS(p.$name).as("dim")
+                ARRAY_DIMS(PSQLArray([1,2,3]))
+            }
+            WHERE {
+                ARRAY_DIMS(p.$name) == "[5]"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_DIMS("x"."name"::TEXT)::TEXT AS "dim", ARRAY_DIMS(ARRAY[1, 2, 3]::INTEGER[])::TEXT WHERE (ARRAY_DIMS("x"."name") = '[5]')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayReplace() {
+        QUERY {
+            SELECT {
+                ARRAY_REPLACE(f.$name, find: "hi", replace: "bye").as("rep")
+                ARRAY_REPLACE(PSQLArray([1,2,3]), find: 1, replace: 2)
+            }
+            WHERE {
+                ARRAY_REPLACE(f.$name, find: "hi", replace: "by") == ["hello"]
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_REPLACE(p.$name, find: "hi", replace: "bye").as("rep")
+                ARRAY_REPLACE(PSQLArray([1,2,3]), find: 1, replace: 2)
+            }
+            WHERE {
+                ARRAY_REPLACE(p.$name, find: "hi", replace: "by") == ["hello"]
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_REPLACE("x"."name"::TEXT, 'hi'::TEXT, 'bye'::TEXT)::TEXT[] AS "rep", ARRAY_REPLACE(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER, 2::INTEGER)::INTEGER[] WHERE (ARRAY_REPLACE("x"."name", 'hi', 'by') = ('hello'))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayRemove() {
+        QUERY {
+            SELECT {
+                ARRAY_REMOVE(f.$name, remove: "hi").as("rep")
+                ARRAY_REMOVE(PSQLArray([1,2,3]), remove: 1)
+            }
+            WHERE {
+                ARRAY_REMOVE(f.$name, remove: "hi") == ["hello"]
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_REMOVE(p.$name, remove: "hi").as("rep")
+                ARRAY_REMOVE(PSQLArray([1,2,3]), remove: 1)
+            }
+            WHERE {
+                ARRAY_REMOVE(p.$name, remove: "hi") == ["hello"]
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_REMOVE("x"."name"::TEXT, 'hi'::TEXT)::TEXT[] AS "rep", ARRAY_REMOVE(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER)::INTEGER[] WHERE (ARRAY_REMOVE("x"."name", 'hi') = ('hello'))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayPrepend() {
+        QUERY {
+            SELECT {
+                ARRAY_PREPEND(f.$name, prepend: "hi").as("pre")
+                ARRAY_PREPEND(PSQLArray([1,2,3]), prepend: 1)
+            }
+            WHERE {
+                ARRAY_PREPEND(f.$name, prepend: "hi") == ["hello"]
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_PREPEND(p.$name, prepend: "hi").as("pre")
+                ARRAY_PREPEND(PSQLArray([1,2,3]), prepend: 1)
+            }
+            WHERE {
+                ARRAY_PREPEND(p.$name, prepend: "hi") == ["hello"]
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_PREPEND('hi'::TEXT, "x"."name"::TEXT)::TEXT[] AS "pre", ARRAY_PREPEND(1::INTEGER, ARRAY[1, 2, 3]::INTEGER[])::INTEGER[] WHERE (ARRAY_PREPEND('hi', "x"."name") = ('hello'))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayConcatenate() {
+        QUERY {
+            SELECT {
+                ARRAY_CAT(f.$name, f.$name).as("app")
+                ARRAY_CAT(PSQLArray([1,2,3]), PSQLArray([1,2,3]))
+            }
+            WHERE {
+                ARRAY_CAT(f.$name, PSQLArray(["hi"])) == ["hello"]
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_CAT(p.$name, p.$name).as("app")
+                ARRAY_CAT(PSQLArray([1,2,3]), PSQLArray([1,2,3]))
+            }
+            WHERE {
+                ARRAY_CAT(f.$name, PSQLArray(["hi"])) == ["hello"]
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_CAT("x"."name"::TEXT, "x"."name"::TEXT)::TEXT[] AS "app", ARRAY_CAT(ARRAY[1, 2, 3]::INTEGER[], ARRAY[1, 2, 3]::INTEGER[])::INTEGER[] WHERE (ARRAY_CAT("x"."name", ARRAY['hi']) = ('hello'))"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testArrayAppend() {
+        QUERY {
+            SELECT {
+                ARRAY_APPEND(f.$name, append: "hi").as("app")
+                ARRAY_APPEND(PSQLArray([1,2,3]), append: 1)
+            }
+            WHERE {
+                ARRAY_APPEND(f.$name, append: "hi") == ["hello"]
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            SELECT {
+                ARRAY_APPEND(p.$name, append: "hi").as("app")
+                ARRAY_APPEND(PSQLArray([1,2,3]), append: 1)
+            }
+            WHERE {
+                ARRAY_APPEND(p.$name, append: "hi") == ["hello"]
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT ARRAY_APPEND("x"."name"::TEXT, 'hi'::TEXT)::TEXT[] AS "app", ARRAY_APPEND(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER)::INTEGER[] WHERE (ARRAY_APPEND("x"."name", 'hi') = ('hello'))"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
@@ -287,6 +561,16 @@ final class ExpressionTests: PSQLTestCase {
         ("testCoalesceCompare", testCoalesceCompare),
         ("testConcatCompare", testConcatCompare),
         ("testArrayAggregate", testArrayAggregate),
-        ("testArrayToString", testArrayToString)
+        ("testArrayToString", testArrayToString),
+        ("testArrayUpper", testArrayUpper),
+        ("testArrayNDims", testArrayNDims),
+        ("testArrayLower", testArrayLower),
+        ("testArrayLength", testArrayLength),
+        ("testArrayDims", testArrayDims),
+        ("testArrayReplace", testArrayReplace),
+        ("testArrayRemove", testArrayRemove),
+        ("testArrayPrepend", testArrayPrepend),
+        ("testArrayConcatenate", testArrayConcatenate),
+        ("testArrayAppend", testArrayAppend)
     ]
 }

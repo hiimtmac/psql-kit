@@ -1,14 +1,8 @@
 import Foundation
 import SQLKit
-import FluentKit
-import NIO
 import PostgresKit
 
 public protocol PSQLQuery: SQLExpression, QuerySQLExpression { }
-
-extension QueryDirective: PSQLQuery {
-    public var querySqlExpression: some SQLExpression { self }
-}
 
 extension PSQLQuery {
     public func raw(database: SQLDatabase = Self.testDB) -> (sql: String, binds: [Encodable]) {
@@ -39,32 +33,6 @@ extension PSQLQuery {
     }
 }
 
-public final class PSQLQueryFetcher: SQLQueryFetcher {
-    public var query: SQLExpression
-    public var database: SQLDatabase
-    
-    init(query: SQLExpression, database: SQLDatabase) {
-        self.query = query
-        self.database = database
-    }
-}
-
-final class TestSQLDatabase: SQLDatabase {
-    let logger: Logger
-    let eventLoop: EventLoop
-    var results: [String]
-    let dialect: SQLDialect = PostgresDialect()
-    
-    init() {
-        self.logger = .init(label: "com.hiimtmac.psqlkit")
-        self.eventLoop = EmbeddedEventLoop()
-        self.results = []
-    }
-    
-    func execute(sql query: SQLExpression, _ onRow: @escaping (SQLRow) -> ()) -> EventLoopFuture<Void> {
-        var serializer = SQLSerializer(database: self)
-        query.serialize(to: &serializer)
-        results.append(serializer.sql)
-        return self.eventLoop.makeSucceededFuture(())
-    }
+extension QueryDirective: PSQLQuery {
+    public var querySqlExpression: some SQLExpression { self }
 }
