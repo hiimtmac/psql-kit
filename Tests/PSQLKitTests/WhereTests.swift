@@ -252,7 +252,7 @@ final class WhereTests: PSQLTestCase {
     }
     
     func testWhereControlFlow() {
-        let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
+        let date = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 01, hour: 01, minute: 01, second: 01).date!
         
         enum Type {
             case current
@@ -300,7 +300,7 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &psqlkitSerializer)
         
-        let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01 06:00 AM' AND '2020-01-01 06:00 AM')"#
+        let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01 01:01 AM' AND '2020-01-01 01:01 AM')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

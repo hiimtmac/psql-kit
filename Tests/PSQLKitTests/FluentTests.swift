@@ -67,8 +67,8 @@ final class FluentTests: PSQLTestCase {
     
     func testDates() {
         let p = Pet.as("p")
-        let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
-        let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!
+        let date1 = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 01, hour: 01, minute: 01, second: 01).date!
+        let date2 = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 30, hour: 01, minute: 01, second: 01).date!
                 
         let b = QUERY {
             SELECT {
@@ -85,7 +85,7 @@ final class FluentTests: PSQLTestCase {
         }
         
         b.serialize(to: &fluentSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30 06:00 AM') AND ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30') GROUP BY "p"."created_at""#)
+        XCTAssertEqual(fluentSerializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30 01:01 AM') AND ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30') GROUP BY "p"."created_at""#)
     }
     
     static var allTests = [
