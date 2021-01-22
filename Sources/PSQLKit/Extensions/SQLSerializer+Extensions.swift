@@ -1,6 +1,10 @@
 import SQLKit
 
 extension SQLSerializer {
+    mutating func writeComma() {
+        self.write(",")
+    }
+    
     mutating func writeSpace() {
         self.write(" ")
     }
