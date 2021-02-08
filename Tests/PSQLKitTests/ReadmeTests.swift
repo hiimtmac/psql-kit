@@ -148,6 +148,35 @@ ORDERBY {
         print(fluentSerializer.sql)
     }
     
+    func testInsert() {
+let m = Moon.as("m")
+INSERT(into: m.table) {
+    m.$name => "the moon"
+    m.$craters => 10
+    m.$comets => 20
+    m.$planet => UUID()
+}
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+    }
+    
+    func testUpdate() {
+let m = Moon.as("m")
+UPDATE(m.table) {
+    m.$name => "cool moon"
+    m.$craters => 30
+}
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+    }
+    
+    func testDelete() {
+let m = Moon.as("m")
+DELETE { m.table }
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+    }
+    
     func testQuery() {
 let m = Moon.as("m")
 QUERY {
