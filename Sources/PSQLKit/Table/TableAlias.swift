@@ -3,7 +3,7 @@ import FluentKit
 import SQLKit
 
 @dynamicMemberLookup
-public struct TableAlias<T: Table> {
+public struct TableAlias<T> where T: Table {
     /// psql `schema`
     let path: String?
     /// table alias
@@ -22,12 +22,14 @@ extension TableAlias {
     
     public var table: TableAlias { self }
     
-    public static postfix func .*(_ alias: Self) -> AllTableAliasSelection<T> {
-        .init(tableAlias: alias)
+    public static postfix func .*(_ alias: Self) -> AllTableSelection<T>.Alias {
+        .init(table: alias)
     }
     
     // MARK: - ColumnProperty
-    public subscript<U: PSQLExpression>(dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, ColumnProperty<T, U>>
+    ) -> ColumnExpression<U> where U: PSQLExpression {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -38,7 +40,9 @@ extension TableAlias {
     }
     
     // MARK: - OptionalColumnProperty
-    public subscript<U: PSQLExpression>(dynamicMember keyPath: KeyPath<T, OptionalColumnProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, OptionalColumnProperty<T, U>>
+    ) -> ColumnExpression<U> where U: PSQLExpression {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -49,7 +53,9 @@ extension TableAlias {
     }
     
     // MARK: - NestedColumnProperty
-    public subscript<U: PSQLExpression>(dynamicMember keyPath: KeyPath<T, NestedObjectProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, NestedObjectProperty<T, U>>
+    ) -> ColumnExpression<U> where U: PSQLExpression {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -62,7 +68,9 @@ extension TableAlias {
 
 extension TableAlias where T: Model {
     // MARK: - FieldProperty
-    public subscript<U>(dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, FieldProperty<T, U>>
+    ) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -73,7 +81,9 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - OptionalFieldProperty
-    public subscript<U>(dynamicMember keyPath: KeyPath<T, OptionalFieldProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, OptionalFieldProperty<T, U>>
+    ) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -84,7 +94,9 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - IDProperty
-    public subscript<U>(dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>) -> ColumnExpression<U> {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, IDProperty<T, U>>
+    ) -> ColumnExpression<U> {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -95,7 +107,9 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - ParentProperty
-    public subscript<U>(dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>) -> ColumnExpression<U.IDValue> where U: Model {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, ParentProperty<T, U>>
+    ) -> ColumnExpression<U.IDValue> where U: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -106,7 +120,9 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - OptionalParentProperty
-    public subscript<U>(dynamicMember keyPath: KeyPath<T, OptionalParentProperty<T, U>>) -> ColumnExpression<U.IDValue> where T: Model {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, OptionalParentProperty<T, U>>
+    ) -> ColumnExpression<U.IDValue> where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -117,7 +133,9 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - TimestampProperty
-    public subscript<U>(dynamicMember keyPath: KeyPath<T, TimestampProperty<T, U>>) -> ColumnExpression<U.Value> where T: Model {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, TimestampProperty<T, U>>
+    ) -> ColumnExpression<U.Value> where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,
@@ -128,7 +146,9 @@ extension TableAlias where T: Model {
     }
     
     // MARK: - GroupProperty
-    public subscript<U>(dynamicMember keyPath: KeyPath<T, GroupProperty<T, U>>) -> ColumnExpression<U> where T: Model {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T, GroupProperty<T, U>>
+    ) -> ColumnExpression<U> where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: alias,

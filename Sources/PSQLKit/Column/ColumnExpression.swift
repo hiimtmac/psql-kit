@@ -15,6 +15,7 @@ public struct ColumnExpression<T> where T: PSQLExpression {
     }
 }
 
+// MARK: Select
 extension ColumnExpression: SelectSQLExpression  {
     public var selectSqlExpression: some SQLExpression {
         _Select(
@@ -65,11 +66,8 @@ extension ColumnExpression: SelectSQLExpression  {
     }
 }
 
+// MARK: Transform
 extension ColumnExpression {
-    public func `as`(_ alias: String) -> ColumnAlias<T> {
-        ColumnAlias(column: self, alias: alias)
-    }
-    
     public func transform<U>(to type: U.Type) -> ColumnExpression<U> where U: PSQLExpression {
         ColumnExpression<U>(
             aliasName: aliasName,
@@ -80,6 +78,7 @@ extension ColumnExpression {
     }
 }
 
+// MARK: Group By
 extension ColumnExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
         _GroupBy(
@@ -125,7 +124,17 @@ extension ColumnExpression: GroupBySQLExpression {
     }
 }
 
-extension ColumnExpression {
+// MARK: Order By
+extension ColumnExpression: OrderBySQLExpression {
+    public var orderBySqlExpression: some SQLExpression {
+        _OrderBy(
+            aliasName: aliasName,
+            pathName: pathName,
+            schemaName: schemaName,
+            columnName: columnName
+        )
+    }
+    
     public func asc() -> OrderByModifier<ColumnExpression<T>> {
         order(.asc)
     }
@@ -136,17 +145,6 @@ extension ColumnExpression {
 
     public func order(_ direction: OrderByDirection) -> OrderByModifier<ColumnExpression<T>> {
         OrderByModifier(content: self, direction: direction)
-    }
-}
-
-extension ColumnExpression: OrderBySQLExpression {
-    public var orderBySqlExpression: some SQLExpression {
-        _OrderBy(
-            aliasName: aliasName,
-            pathName: pathName,
-            schemaName: schemaName,
-            columnName: columnName
-        )
     }
 
     private struct _OrderBy: SQLExpression {
@@ -184,6 +182,7 @@ extension ColumnExpression: OrderBySQLExpression {
     }
 }
 
+// MARK: Compare
 extension ColumnExpression: CompareSQLExpression {    
     public var compareSqlExpression: some SQLExpression {
         _Compare(
@@ -229,10 +228,12 @@ extension ColumnExpression: CompareSQLExpression {
     }
 }
 
+// MARK: Equatable
 extension ColumnExpression: TypeEquatable where T: TypeEquatable {
     public typealias CompareType = T.CompareType
 }
 
+// MARK:
 extension ColumnExpression where T == Date {
     public func `as`<U>(_ psqlDateTimeType: U.Type) -> ColumnExpression<U> where U: PSQLDateTime {
         ColumnExpression<U>(
@@ -244,4 +245,81 @@ extension ColumnExpression where T == Date {
     }
 }
 
+// MARK: 
 extension ColumnExpression: PSQLArrayRepresentable {}
+
+// MARK: - Alias
+extension ColumnExpression {
+    public struct Alias {
+        let column: ColumnExpression<T>
+        let alias: String
+    }
+    
+    public func `as`(_ alias: String) -> ColumnExpression<T>.Alias {
+        Alias(column: self, alias: alias)
+    }
+}
+
+extension ColumnExpression.Alias: TypeEquatable where T: TypeEquatable {
+    public typealias CompareType = T.CompareType
+}
+
+extension ColumnExpression.Alias: SelectSQLExpression {
+    public var selectSqlExpression: some SQLExpression {
+        _Select(
+            aliasName: column.aliasName,
+            pathName: column.pathName,
+            schemaName: column.schemaName,
+            columnName: column.columnName,
+            columnType: T.postgresColumnType,
+            columnAlias: alias
+        )
+    }
+    
+    private struct _Select: SQLExpression {
+        let aliasName: String?
+        let pathName: String?
+        let schemaName: String?
+        let columnName: String
+        let columnType: SQLExpression
+        let columnAlias: String
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            if let alias = aliasName {
+                serializer.writeQuote()
+                serializer.write(alias)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            } else {
+                if let path = pathName {
+                    serializer.writeQuote()
+                    serializer.write(path)
+                    serializer.writeQuote()
+                    serializer.writePeriod()
+                }
+                
+                if let schema = schemaName {
+                    serializer.writeQuote()
+                    serializer.write(schema)
+                    serializer.writeQuote()
+                    serializer.writePeriod()
+                }
+            }
+            
+            serializer.writeQuote()
+            serializer.write(columnName)
+            serializer.writeQuote()
+            
+            serializer.write("::")
+            columnType.serialize(to: &serializer)
+            
+            serializer.writeSpace()
+            serializer.write("AS")
+            serializer.writeSpace()
+            
+            serializer.writeQuote()
+            serializer.write(columnAlias)
+            serializer.writeQuote()
+        }
+    }
+}

@@ -6,8 +6,8 @@ public protocol PSQLExpression {
 }
 
 extension PSQLExpression where Self: SQLExpression {
-    public func `as`(_ alias: String) -> RawValueAlias<Self> {
-        RawValueAlias(value: self, alias: alias)
+    public func `as`(_ alias: String) -> RawValue<Self>.Alias {
+        RawValue.Alias(value: self, alias: alias)
     }
 }
 

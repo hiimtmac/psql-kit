@@ -5,6 +5,7 @@ public struct AllTableSelection<T> where T: Table {
     let table: T
 }
 
+// MARK: Select
 extension AllTableSelection: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let pathName: String?
@@ -31,11 +32,14 @@ extension AllTableSelection: SelectSQLExpression {
     }
 }
 
-public struct AllTableAliasSelection<T> where T: Table {
-    let tableAlias: TableAlias<T>
+// MARK: - Alias
+extension AllTableSelection {
+    public struct Alias {
+        let table: TableAlias<T>
+    }
 }
 
-extension AllTableAliasSelection: SelectSQLExpression {
+extension AllTableSelection.Alias: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let aliasName: String
         
@@ -49,6 +53,6 @@ extension AllTableAliasSelection: SelectSQLExpression {
     }
     
     public var selectSqlExpression: some SQLExpression {
-        _Select(aliasName: tableAlias.alias)
+        _Select(aliasName: table.alias)
     }
 }

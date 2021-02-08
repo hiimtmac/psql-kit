@@ -1,6 +1,7 @@
 import SQLKit
 import PostgresKit
 
+#if DEBUG
 final class TestSQLDatabase: SQLDatabase {
     let logger: Logger
     let eventLoop: EventLoop
@@ -20,3 +21,4 @@ final class TestSQLDatabase: SQLDatabase {
         return self.eventLoop.makeSucceededFuture(())
     }
 }
+#endif
