@@ -213,6 +213,30 @@ final class QueryTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testReturning() {
+        QUERY {
+            UPDATE(f.table) {
+                f.$name => "taylor"
+            }
+            WHERE { f.$name == "tmac" }
+            RETURNING { f.$id }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        QUERY {
+            UPDATE(p.table) {
+                p.$name => "taylor"
+            }
+            WHERE { p.$name == "tmac" }
+            RETURNING { p.$id }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"UPDATE "my_model" AS "x" SET "name" = 'taylor' WHERE ("x"."name" = 'tmac') RETURNING "x"."id"::UUID"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testEmpty", testEmpty),
         ("testQuery", testQuery),
@@ -222,6 +246,7 @@ final class QueryTests: PSQLTestCase {
         ("testUnion", testUnion),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testReturning", testReturning)
     ]
 }
