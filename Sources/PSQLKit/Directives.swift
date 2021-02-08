@@ -14,6 +14,7 @@ public typealias UNION = UnionDirective
 public typealias RETURNING = ReturningDirective
 public typealias INSERT = InsertDirective
 public typealias UPDATE = UpdateDirective
+public typealias DELETE = DeleteDirective
 
 public protocol SelectSQLExpression {
     associatedtype Select: SQLExpression

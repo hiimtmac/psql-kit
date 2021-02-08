@@ -231,42 +231,13 @@ extension ColumnExpression: CompareSQLExpression {
 // MARK: Mutation
 extension ColumnExpression: MutationSQLExpression {
     public var mutationSqlExpression: some SQLExpression {
-        _Mutation(
-            aliasName: aliasName,
-            pathName: pathName,
-            schemaName: schemaName,
-            columnName: columnName
-        )
+        _Mutation(columnName: columnName)
     }
     
     private struct _Mutation: SQLExpression {
-        let aliasName: String?
-        let pathName: String?
-        let schemaName: String?
         let columnName: String
         
         func serialize(to serializer: inout SQLSerializer) {
-            if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
-                serializer.writePeriod()
-            } else {
-                if let path = pathName {
-                    serializer.writeQuote()
-                    serializer.write(path)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-                
-                if let schema = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-            }
-            
             serializer.writeQuote()
             serializer.write(columnName)
             serializer.writeQuote()

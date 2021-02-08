@@ -18,7 +18,10 @@ public struct _ConditionalExpression<TrueContent, FalseContent> {
     }
 }
 
-extension _ConditionalExpression: SelectSQLExpression where TrueContent: SelectSQLExpression, FalseContent: SelectSQLExpression {
+extension _ConditionalExpression: SelectSQLExpression where
+    TrueContent: SelectSQLExpression,
+    FalseContent: SelectSQLExpression
+{
     private struct _Select: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -37,7 +40,10 @@ extension _ConditionalExpression: SelectSQLExpression where TrueContent: SelectS
     }
 }
 
-extension _ConditionalExpression: FromSQLExpression where TrueContent: FromSQLExpression, FalseContent: FromSQLExpression {
+extension _ConditionalExpression: FromSQLExpression where
+    TrueContent: FromSQLExpression,
+    FalseContent: FromSQLExpression
+{
     private struct _From: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -56,7 +62,10 @@ extension _ConditionalExpression: FromSQLExpression where TrueContent: FromSQLEx
     }
 }
 
-extension _ConditionalExpression: GroupBySQLExpression where TrueContent: GroupBySQLExpression, FalseContent: GroupBySQLExpression {
+extension _ConditionalExpression: GroupBySQLExpression where
+    TrueContent: GroupBySQLExpression,
+    FalseContent: GroupBySQLExpression
+{
     private struct _GroupBy: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -75,7 +84,10 @@ extension _ConditionalExpression: GroupBySQLExpression where TrueContent: GroupB
     }
 }
 
-extension _ConditionalExpression: HavingSQLExpression where TrueContent: HavingSQLExpression, FalseContent: HavingSQLExpression {
+extension _ConditionalExpression: HavingSQLExpression where
+    TrueContent: HavingSQLExpression,
+    FalseContent: HavingSQLExpression
+{
     private struct _Having: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -94,7 +106,10 @@ extension _ConditionalExpression: HavingSQLExpression where TrueContent: HavingS
     }
 }
 
-extension _ConditionalExpression: JoinSQLExpression where TrueContent: JoinSQLExpression, FalseContent: JoinSQLExpression {
+extension _ConditionalExpression: JoinSQLExpression where
+    TrueContent: JoinSQLExpression,
+    FalseContent: JoinSQLExpression
+{
     private struct _Join: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -113,7 +128,10 @@ extension _ConditionalExpression: JoinSQLExpression where TrueContent: JoinSQLEx
     }
 }
 
-extension _ConditionalExpression: OrderBySQLExpression where TrueContent: OrderBySQLExpression, FalseContent: OrderBySQLExpression {
+extension _ConditionalExpression: OrderBySQLExpression where
+    TrueContent: OrderBySQLExpression,
+    FalseContent: OrderBySQLExpression
+{
     private struct _OrderBy: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -132,7 +150,10 @@ extension _ConditionalExpression: OrderBySQLExpression where TrueContent: OrderB
     }
 }
 
-extension _ConditionalExpression: QuerySQLExpression where TrueContent: QuerySQLExpression, FalseContent: QuerySQLExpression {
+extension _ConditionalExpression: QuerySQLExpression where
+    TrueContent: QuerySQLExpression,
+    FalseContent: QuerySQLExpression
+{
     private struct _Query: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -151,7 +172,10 @@ extension _ConditionalExpression: QuerySQLExpression where TrueContent: QuerySQL
     }
 }
 
-extension _ConditionalExpression: WhereSQLExpression where TrueContent: WhereSQLExpression, FalseContent: WhereSQLExpression {
+extension _ConditionalExpression: WhereSQLExpression where
+    TrueContent: WhereSQLExpression,
+    FalseContent: WhereSQLExpression
+{
     private struct _Where: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -170,7 +194,10 @@ extension _ConditionalExpression: WhereSQLExpression where TrueContent: WhereSQL
     }
 }
 
-extension _ConditionalExpression: WithSQLExpression where TrueContent: WithSQLExpression, FalseContent: WithSQLExpression {
+extension _ConditionalExpression: WithSQLExpression where
+    TrueContent: WithSQLExpression,
+    FalseContent: WithSQLExpression
+{
     private struct _With: SQLExpression {
         let content: _ConditionalExpression.Content
         
@@ -186,5 +213,66 @@ extension _ConditionalExpression: WithSQLExpression where TrueContent: WithSQLEx
     
     public var withSqlExpression: some SQLExpression {
         _With(content: content)
+    }
+}
+
+extension _ConditionalExpression: InsertSQLExpression where
+    TrueContent: InsertSQLExpression,
+    FalseContent: InsertSQLExpression
+{
+    private struct _InsertColumn: SQLExpression {
+        let content: _ConditionalExpression.Content
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            switch content {
+            case .first(let select):
+                select.insertColumnSqlExpression.serialize(to: &serializer)
+            case .second(let select):
+                select.insertColumnSqlExpression.serialize(to: &serializer)
+            }
+        }
+    }
+    
+    public var insertColumnSqlExpression: some SQLExpression {
+        _InsertColumn(content: content)
+    }
+    
+    private struct _InsertValue: SQLExpression {
+        let content: _ConditionalExpression.Content
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            switch content {
+            case .first(let select):
+                select.insertValueSqlExpression.serialize(to: &serializer)
+            case .second(let select):
+                select.insertValueSqlExpression.serialize(to: &serializer)
+            }
+        }
+    }
+    
+    public var insertValueSqlExpression: some SQLExpression {
+        _InsertValue(content: content)
+    }
+}
+
+extension _ConditionalExpression: UpdateSQLExpression where
+    TrueContent: UpdateSQLExpression,
+    FalseContent: UpdateSQLExpression
+{
+    private struct _Update: SQLExpression {
+        let content: _ConditionalExpression.Content
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            switch content {
+            case .first(let select):
+                select.updateSqlExpression.serialize(to: &serializer)
+            case .second(let select):
+                select.updateSqlExpression.serialize(to: &serializer)
+            }
+        }
+    }
+    
+    public var updateSqlExpression: some SQLExpression {
+        _Update(content: content)
     }
 }

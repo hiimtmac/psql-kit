@@ -6,7 +6,7 @@ final class UpdateTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testUpdateEmpty() {
+    func testEmpty() {
         UPDATE(FluentModel.table) {}
         .serialize(to: &fluentSerializer)
         
@@ -17,311 +17,149 @@ final class UpdateTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, #"UPDATE "my_model" SET "#)
     }
     
-    func testUpdateModel() {
+    func testModel() {
         UPDATE(FluentModel.table) {
             FluentModel.$name => "hi"
         }
         .serialize(to: &fluentSerializer)
-
+        
         UPDATE(PSQLModel.table) {
             PSQLModel.$name => "hi"
         }
         .serialize(to: &psqlkitSerializer)
-
-        let compare = #"UPDATE "my_model" SET "my_model"."name" = 'hi'"#
+        
+        let compare = #"UPDATE "my_model" SET "name" = 'hi'"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
-//    func testSelectModelAlias() {
-//        SELECT {
-//            f.$name
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            p.$name
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "x"."name"::TEXT"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSelectBoth() {
-//        SELECT {
-//            FluentModel.$name
-//            f.$name
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            PSQLModel.$name
-//            p.$name
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "my_model"."name"::TEXT, "x"."name"::TEXT"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSelectDistinctOn() {
-//        SELECT {
-//            FluentModel.$name
-//        }
-//        .distinctOn {
-//            FluentModel.$name
-//            f.$id
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            PSQLModel.$name
-//        }
-//        .distinctOn {
-//            PSQLModel.$name
-//            p.$id
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT DISTINCT ON ("my_model"."name"::TEXT, "x"."id"::UUID) "my_model"."name"::TEXT"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSelectDistinct() {
-//        SELECT {
-//            FluentModel.$name
-//            f.$name
-//        }
-//        .distinct()
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            PSQLModel.$name
-//            p.$name
-//        }
-//        .distinct()
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT DISTINCT "my_model"."name"::TEXT, "x"."name"::TEXT"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSelectAliasSingle() {
-//        SELECT {
-//            FluentModel.$name.as("nam")
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            PSQLModel.$name.as("nam")
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "my_model"."name"::TEXT AS "nam""#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSelectAliasMultiple() {
-//        SELECT {
-//            FluentModel.$name.as("nam")
-//            f.$name.as("nam")
-//            f.$id
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            PSQLModel.$name.as("nam")
-//            p.$name.as("nam")
-//            p.$id
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "my_model"."name"::TEXT AS "nam", "x"."name"::TEXT AS "nam", "x"."id"::UUID"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSelectRaw() {
-//        let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
-//
-//        SELECT {
-//            RawColumn<String>("cool")
-//            RawColumn<String>("cool").as("yes")
-//            8
-//            8.as("cool")
-//            PSQLDate(date)
-//            RawValue(PSQLDate(date))
-//            date.psqlDate
-//            date.psqlDate.as("date_alias")
-//            RawValue(date.psqlDate).as("raw_date_alias")
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            RawColumn<String>("cool")
-//            RawColumn<String>("cool").as("yes")
-//            8
-//            8.as("cool")
-//            PSQLDate(date)
-//            RawValue(PSQLDate(date))
-//            date.psqlDate
-//            date.psqlDate.as("date_alias")
-//            RawValue(date.psqlDate).as("raw_date_alias")
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER, 8::INTEGER AS "cool", '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE AS "date_alias", '2020-01-01'::DATE AS "raw_date_alias""#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSelectSubquery() {
-//        SELECT {
-//            QUERY {
-//                SELECT { f.$age }
-//                FROM { f.table }
-//            }
-//            .asSubquery(f.table)
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            QUERY {
-//                SELECT { p.$age }
-//                FROM { p.table }
-//            }
-//            .asSubquery(p.table)
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testPostfix() {
-//        SELECT {
-//            FluentModel.table.*
-//            f.table.*
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            PSQLModel.table.*
-//            p.table.*
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "my_model".*, "x".*"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testIfElseTrue() {
-//        let bool = true
-//        SELECT {
-//            if bool {
-//                f.$name
-//            } else {
-//                f.$age
-//            }
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            if bool {
-//                p.$name
-//            } else {
-//                p.$age
-//            }
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "x"."name"::TEXT"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testIfElseFalse() {
-//        let bool = false
-//        SELECT {
-//            if bool {
-//                f.$name
-//            } else {
-//                f.$age
-//            }
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            if bool {
-//                p.$name
-//            } else {
-//                p.$age
-//            }
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "x"."age"::INTEGER"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
-//
-//    func testSwitch() {
-//        enum Test {
-//            case one
-//            case two
-//            case three
-//        }
-//
-//        let option = Test.two
-//
-//        SELECT {
-//            switch option {
-//            case .one: f.$name
-//            case .two: f.$age
-//            case .three:
-//                f.$age
-//                f.$name
-//            }
-//        }
-//        .serialize(to: &fluentSerializer)
-//
-//        SELECT {
-//            switch option {
-//            case .one: p.$name
-//            case .two: p.$age
-//            case .three:
-//                p.$age
-//                p.$name
-//            }
-//        }
-//        .serialize(to: &psqlkitSerializer)
-//
-//        let compare = #"SELECT "x"."age"::INTEGER"#
-//        XCTAssertEqual(fluentSerializer.sql, compare)
-//        XCTAssertEqual(psqlkitSerializer.sql, compare)
-//    }
+    func testModelAlias() {
+        UPDATE(f.table) {
+            f.$name => "hi"
+        }
+        .serialize(to: &fluentSerializer)
+
+        UPDATE(p.table) {
+            p.$name => "hi"
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi'"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testBoth() {
+        UPDATE(f.table) {
+            FluentModel.$name => "hi"
+            f.$name => "hi"
+        }
+        .serialize(to: &fluentSerializer)
+
+        UPDATE(p.table) {
+            PSQLModel.$name => "hi"
+            p.$name => "hi"
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi', "name" = 'hi'"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testIfElseTrue() {
+        let bool = true
+        UPDATE(f.table) {
+            if bool {
+                f.$name => "hi"
+            } else {
+                f.$age => 29
+            }
+        }
+        .serialize(to: &fluentSerializer)
+
+        UPDATE(p.table) {
+            if bool {
+                p.$name => "hi"
+            } else {
+                p.$age => 29
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi'"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testIfElseFalse() {
+        let bool = false
+        UPDATE(f.table) {
+            if bool {
+                f.$name => "hi"
+            } else {
+                f.$age => 29
+            }
+        }
+        .serialize(to: &fluentSerializer)
+
+        UPDATE(p.table) {
+            if bool {
+                p.$name => "hi"
+            } else {
+                p.$age => 29
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"UPDATE "my_model" AS "x" SET "age" = 29"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testSwitch() {
+        enum Test {
+            case one
+            case two
+            case three
+        }
+
+        let option = Test.two
+
+        UPDATE(f.table) {
+            switch option {
+            case .one: f.$name => "hi"
+            case .two: f.$age => 29
+            case .three:
+                f.$age => 29
+                f.$name => "hi"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+
+        UPDATE(p.table) {
+            switch option {
+            case .one: p.$name => "hi"
+            case .two: p.$age => 29
+            case .three:
+                p.$age => 29
+                p.$name => "hi"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"UPDATE "my_model" AS "x" SET "age" = 29"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
     
     static var allTests = [
-        ("testUpdateEmpty", testUpdateEmpty),
-        ("testUpdateModel", testUpdateModel),
-//        ("testSelectModelAlias", testSelectModelAlias),
-//        ("testSelectBoth", testSelectBoth),
-//        ("testSelectDistinctOn", testSelectDistinctOn),
-//        ("testSelectAliasSingle", testSelectAliasSingle),
-//        ("testSelectAliasMultiple", testSelectAliasMultiple),
-//        ("testSelectRaw", testSelectRaw),
-//        ("testSelectSubquery", testSelectSubquery),
-//        ("testPostfix", testPostfix),
-//        ("testIfElseTrue", testIfElseTrue),
-//        ("testIfElseFalse", testIfElseFalse),
-//        ("testSwitch", testSwitch)
+        ("testEmpty", testEmpty),
+        ("testModel", testModel),
+        ("testModelAlias", testModelAlias),
+        ("testBoth", testBoth),
+        ("testIfElseTrue", testIfElseTrue),
+        ("testIfElseFalse", testIfElseFalse),
+        ("testSwitch", testSwitch)
     ]
 }
