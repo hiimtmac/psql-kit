@@ -17,7 +17,8 @@ public struct QueryBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         first: TrueContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: QuerySQLExpression, FalseContent: QuerySQLExpression
+        TrueContent: QuerySQLExpression,
+        FalseContent: QuerySQLExpression
     {
         .init(first: first)
     }
@@ -25,7 +26,8 @@ public struct QueryBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         second: FalseContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: QuerySQLExpression, FalseContent: QuerySQLExpression
+        TrueContent: QuerySQLExpression,
+        FalseContent: QuerySQLExpression
     {
         .init(second: second)
     }

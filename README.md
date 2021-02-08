@@ -6,7 +6,7 @@ PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.11.0")
+    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.12.0")
 ],
 ```
 
@@ -267,6 +267,47 @@ ORDERBY {
 
 ```sql
 ORDER BY "m"."name", "m"."name" DESC, "m"."craters" ASC, "m"."planet_id" DESC
+```
+
+#### INSERT INTO
+
+```swift
+let m = Moon.as("m")
+INSERT(into: m.table) {
+    m.$name => "the moon"
+    m.$craters => 10
+    m.$comets => 20
+    m.$planet => UUID()
+}
+```
+
+```sql
+INSERT INTO "moons" AS "m" ("name", "craters", "comets", "planet_id") VALUES ('the moon', 10, 20, 'C5C9569B-C1D4-4173-A239-0BBE06602E17')
+```
+
+#### UPDATE
+
+```swift
+let m = Moon.as("m")
+UPDATE(m.table) {
+    m.$name => "cool moon"
+    m.$craters => 30
+}
+```
+
+```sql
+UPDATE "moons" AS "m" SET "name" = 'cool moon', "craters" = 30
+```
+
+#### DELETE FROM
+
+```swift
+let m = Moon.as("m")
+DELETE { m.table }
+```
+
+```sql
+DELETE FROM "moons" AS "m"
 ```
 
 #### QUERY

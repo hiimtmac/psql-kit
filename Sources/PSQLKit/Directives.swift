@@ -11,6 +11,10 @@ public typealias SELECT = SelectDirective
 public typealias WHERE = WhereDirective
 public typealias WITH = WithDirective
 public typealias UNION = UnionDirective
+public typealias RETURNING = ReturningDirective
+public typealias INSERT = InsertDirective
+public typealias UPDATE = UpdateDirective
+public typealias DELETE = DeleteDirective
 
 public protocol SelectSQLExpression {
     associatedtype Select: SQLExpression
@@ -65,4 +69,21 @@ public protocol WithSQLExpression {
 public protocol UnionSQLExpression {
     associatedtype Union: SQLExpression
     var unionSqlExpression: Union { get }
+}
+
+public protocol MutationSQLExpression {
+    associatedtype Mutation: SQLExpression
+    var mutationSqlExpression: Mutation { get }
+}
+
+public protocol InsertSQLExpression {
+    associatedtype InsertColumn: SQLExpression
+    var insertColumnSqlExpression: InsertColumn { get }
+    associatedtype InsertValue: SQLExpression
+    var insertValueSqlExpression: InsertValue { get }
+}
+
+public protocol UpdateSQLExpression {
+    associatedtype Update: SQLExpression
+    var updateSqlExpression: Update { get }
 }

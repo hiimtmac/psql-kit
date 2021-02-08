@@ -29,3 +29,7 @@ extension Bool: CompareSQLExpression {
 extension Bool: JoinSQLExpression {
     public var joinSqlExpression: some SQLExpression { self }
 }
+
+extension Bool: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
+}

@@ -17,7 +17,8 @@ public struct OrderByBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         first: TrueContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: OrderBySQLExpression, FalseContent: OrderBySQLExpression
+        TrueContent: OrderBySQLExpression,
+        FalseContent: OrderBySQLExpression
     {
         .init(first: first)
     }
@@ -25,7 +26,8 @@ public struct OrderByBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         second: FalseContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: OrderBySQLExpression, FalseContent: OrderBySQLExpression
+        TrueContent: OrderBySQLExpression,
+        FalseContent: OrderBySQLExpression
     {
         .init(second: second)
     }

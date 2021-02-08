@@ -25,3 +25,7 @@ extension Float: SelectSQLExpression {
 extension Float: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
+
+extension Float: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
+}

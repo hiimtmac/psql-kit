@@ -314,6 +314,7 @@ final class SelectTests: PSQLTestCase {
         ("testSelectModel", testSelectModel),
         ("testSelectModelAlias", testSelectModelAlias),
         ("testSelectBoth", testSelectBoth),
+        ("testSelectDistinct", testSelectDistinct),
         ("testSelectDistinctOn", testSelectDistinctOn),
         ("testSelectAliasSingle", testSelectAliasSingle),
         ("testSelectAliasMultiple", testSelectAliasMultiple),

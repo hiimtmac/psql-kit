@@ -25,3 +25,7 @@ extension Double: SelectSQLExpression {
 extension Double: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
+
+extension Double: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
+}

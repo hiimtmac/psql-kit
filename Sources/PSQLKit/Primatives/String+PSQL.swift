@@ -27,3 +27,7 @@ extension String: SelectSQLExpression {
 extension String: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
+
+extension String: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
+}
