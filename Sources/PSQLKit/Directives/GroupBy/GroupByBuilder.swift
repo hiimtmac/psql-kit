@@ -17,7 +17,8 @@ public struct GroupByBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         first: TrueContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: GroupBySQLExpression, FalseContent: GroupBySQLExpression
+        TrueContent: GroupBySQLExpression,
+        FalseContent: GroupBySQLExpression
     {
         .init(first: first)
     }
@@ -25,7 +26,8 @@ public struct GroupByBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         second: FalseContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: GroupBySQLExpression, FalseContent: GroupBySQLExpression
+        TrueContent: GroupBySQLExpression,
+        FalseContent: GroupBySQLExpression
     {
         .init(second: second)
     }

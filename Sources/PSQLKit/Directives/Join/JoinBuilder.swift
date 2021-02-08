@@ -17,7 +17,8 @@ public struct JoinBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         first: TrueContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: JoinSQLExpression, FalseContent: JoinSQLExpression
+        TrueContent: JoinSQLExpression,
+        FalseContent: JoinSQLExpression
     {
         .init(first: first)
     }
@@ -25,7 +26,8 @@ public struct JoinBuilder {
     public static func buildEither<TrueContent, FalseContent>(
         second: FalseContent
     ) -> _ConditionalExpression<TrueContent, FalseContent> where
-        TrueContent: JoinSQLExpression, FalseContent: JoinSQLExpression
+        TrueContent: JoinSQLExpression,
+        FalseContent: JoinSQLExpression
     {
         .init(second: second)
     }
