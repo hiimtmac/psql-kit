@@ -13,6 +13,7 @@ public typealias WITH = WithDirective
 public typealias UNION = UnionDirective
 public typealias RETURNING = ReturningDirective
 public typealias INSERT = InsertDirective
+public typealias UPDATE = UpdateDirective
 
 public protocol SelectSQLExpression {
     associatedtype Select: SQLExpression
@@ -79,4 +80,9 @@ public protocol InsertSQLExpression {
     var insertColumnSqlExpression: InsertColumn { get }
     associatedtype InsertValue: SQLExpression
     var insertValueSqlExpression: InsertValue { get }
+}
+
+public protocol UpdateSQLExpression {
+    associatedtype Update: SQLExpression
+    var updateSqlExpression: Update { get }
 }

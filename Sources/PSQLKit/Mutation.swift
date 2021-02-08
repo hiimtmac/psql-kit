@@ -21,3 +21,25 @@ extension Mutation: InsertSQLExpression where
         value.mutationSqlExpression
     }
 }
+
+extension Mutation: UpdateSQLExpression where
+    T: MutationSQLExpression,
+    U: MutationSQLExpression
+{
+    private struct _Update: SQLExpression {
+        let column: T
+        let value: U
+
+        func serialize(to serializer: inout SQLSerializer) {
+            column.mutationSqlExpression.serialize(to: &serializer)
+            serializer.writeSpace()
+            serializer.write("=")
+            serializer.writeSpace()
+            value.mutationSqlExpression.serialize(to: &serializer)
+        }
+    }
+
+    public var updateSqlExpression: some SQLExpression {
+        _Update(column: column, value: value)
+    }
+}
