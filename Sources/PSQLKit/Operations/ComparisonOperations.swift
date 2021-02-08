@@ -107,15 +107,6 @@ public func &&<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U>
     CompareExpression(lhs: lhs, operator: .and, rhs: rhs)
 }
 
-postfix operator .*
-infix operator ...: LogicalConjunctionPrecedence
-infix operator ><: ComparisonPrecedence
-infix operator <>: ComparisonPrecedence
-infix operator ~~: ComparisonPrecedence
-infix operator !~~: ComparisonPrecedence
-infix operator ~~*: ComparisonPrecedence
-infix operator !~~*: ComparisonPrecedence
-
 // MARK: - Range
 /// lhs IN rhs
 public func ...<T, U>(_ lhs: T, _ rhs: U) -> PSQLRange<T, U> where

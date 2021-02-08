@@ -41,3 +41,8 @@ extension EmptyExpression: HavingSQLExpression {
 extension EmptyExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression { self }
 }
+
+extension EmptyExpression: InsertSQLExpression {
+    public var insertColumnSqlExpression: some SQLExpression { self }
+    public var insertValueSqlExpression: some SQLExpression { self }
+}

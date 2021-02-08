@@ -27,3 +27,7 @@ extension UUID: SelectSQLExpression {
 extension UUID: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
+
+extension UUID: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
+}
