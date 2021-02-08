@@ -11,6 +11,7 @@ public typealias SELECT = SelectDirective
 public typealias WHERE = WhereDirective
 public typealias WITH = WithDirective
 public typealias UNION = UnionDirective
+public typealias RETURNING = ReturningDirective
 
 public protocol SelectSQLExpression {
     associatedtype Select: SQLExpression
