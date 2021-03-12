@@ -6,7 +6,7 @@ PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.12.0")
+    .package(url: "https://github.com/hiimtmac/PSQLKit.git", from: "0.13.0")
 ],
 ```
 
@@ -430,8 +430,8 @@ The following expressions have been implemented:
 - [x] `COUNT`
 - [x] `SUM`
 - [x] `JSONB_EXTRACT_PATH_TEXT`
-- [x] `COALESCE`/`COALESCE3`/`COALESCE4`/`COALESCE5`
-- [x] `CONCAT`/`CONCAT3`/`CONCAT4`/`CONCAT5`
+- [x] `COALESCE`
+- [x] `CONCAT`
 - [x] `GENERATE_SERIES`
 - [x] `ARRAY_AGG`
 - [x] `ARRAY_APPEND`
@@ -456,7 +456,7 @@ SELECT {
     MAX(m.$craters)
     COUNT(m.$craters).as("crater_count")
     SUM(m.$craters)
-    COALESCE(m.$craters, 5).as("unwrapped_craters")
+    COALESCE<Int.(m.$craters, 5).as("unwrapped_craters")
     CONCAT(m.$name, " is a cool planet").as("annotated")
     GENERATE_SERIES(from: 1, to: 5, interval: 1)
 }
