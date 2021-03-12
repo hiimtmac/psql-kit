@@ -15,6 +15,52 @@ public struct ColumnExpression<T> where T: PSQLExpression {
     }
 }
 
+// MARK: Base
+extension ColumnExpression: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression {
+        _Base(
+            aliasName: aliasName,
+            pathName: pathName,
+            schemaName: schemaName,
+            columnName: columnName
+        )
+    }
+    
+    private struct _Base: SQLExpression {
+        let aliasName: String?
+        let pathName: String?
+        let schemaName: String?
+        let columnName: String
+        
+        func serialize(to serializer: inout SQLSerializer) {
+            if let alias = aliasName {
+                serializer.writeQuote()
+                serializer.write(alias)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            } else {
+                if let path = pathName {
+                    serializer.writeQuote()
+                    serializer.write(path)
+                    serializer.writeQuote()
+                    serializer.writePeriod()
+                }
+                
+                if let schema = schemaName {
+                    serializer.writeQuote()
+                    serializer.write(schema)
+                    serializer.writeQuote()
+                    serializer.writePeriod()
+                }
+            }
+            
+            serializer.writeQuote()
+            serializer.write(columnName)
+            serializer.writeQuote()
+        }
+    }
+}
+
 // MARK: Select
 extension ColumnExpression: SelectSQLExpression  {
     public var selectSqlExpression: some SQLExpression {
@@ -81,53 +127,19 @@ extension ColumnExpression {
 // MARK: Group By
 extension ColumnExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
-        _GroupBy(
+        _Base(
             aliasName: aliasName,
             pathName: pathName,
             schemaName: schemaName,
             columnName: columnName
         )
     }
-    
-    private struct _GroupBy: SQLExpression {
-        let aliasName: String?
-        let pathName: String?
-        let schemaName: String?
-        let columnName: String
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
-                serializer.writePeriod()
-            } else {
-                if let path = pathName {
-                    serializer.writeQuote()
-                    serializer.write(path)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-                
-                if let schema = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-            }
-            
-            serializer.writeQuote()
-            serializer.write(columnName)
-            serializer.writeQuote()
-        }
-    }
 }
 
 // MARK: Order By
 extension ColumnExpression: OrderBySQLExpression {
     public var orderBySqlExpression: some SQLExpression {
-        _OrderBy(
+        _Base(
             aliasName: aliasName,
             pathName: pathName,
             schemaName: schemaName,
@@ -146,85 +158,17 @@ extension ColumnExpression: OrderBySQLExpression {
     public func order(_ direction: OrderByDirection) -> OrderByModifier<ColumnExpression<T>> {
         OrderByModifier(content: self, direction: direction)
     }
-
-    private struct _OrderBy: SQLExpression {
-        let aliasName: String?
-        let pathName: String?
-        let schemaName: String?
-        let columnName: String
-
-        func serialize(to serializer: inout SQLSerializer) {
-            if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
-                serializer.writePeriod()
-            } else {
-                if let path = pathName {
-                    serializer.writeQuote()
-                    serializer.write(path)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-
-                if let schema = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-            }
-
-            serializer.writeQuote()
-            serializer.write(columnName)
-            serializer.writeQuote()
-        }
-    }
 }
 
 // MARK: Compare
 extension ColumnExpression: CompareSQLExpression {    
     public var compareSqlExpression: some SQLExpression {
-        _Compare(
+        _Base(
             aliasName: aliasName,
             pathName: pathName,
             schemaName: schemaName,
             columnName: columnName
         )
-    }
-    
-    private struct _Compare: SQLExpression {
-        let aliasName: String?
-        let pathName: String?
-        let schemaName: String?
-        let columnName: String
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
-                serializer.writePeriod()
-            } else {
-                if let path = pathName {
-                    serializer.writeQuote()
-                    serializer.write(path)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-                
-                if let schema = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-            }
-            
-            serializer.writeQuote()
-            serializer.write(columnName)
-            serializer.writeQuote()
-        }
     }
 }
 
@@ -262,141 +206,10 @@ extension ColumnExpression where T == Date {
     }
 }
 
-// MARK: 
 extension ColumnExpression: PSQLArrayRepresentable {}
 
-// MARK: - Alias
-extension ColumnExpression {
-    public struct Alias {
-        let column: ColumnExpression<T>
-        let alias: String
-    }
-    
-    public func `as`(_ alias: String) -> ColumnExpression<T>.Alias {
-        Alias(column: self, alias: alias)
-    }
-}
+extension ColumnExpression: Coalescable {}
 
-extension ColumnExpression.Alias: TypeEquatable where T: TypeEquatable {
-    public typealias CompareType = T.CompareType
-}
+extension ColumnExpression: Concatenatable where T: CustomStringConvertible {}
 
-extension ColumnExpression.Alias: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
-        _Select(
-            aliasName: column.aliasName,
-            pathName: column.pathName,
-            schemaName: column.schemaName,
-            columnName: column.columnName,
-            columnType: T.postgresColumnType,
-            columnAlias: alias
-        )
-    }
-    
-    private struct _Select: SQLExpression {
-        let aliasName: String?
-        let pathName: String?
-        let schemaName: String?
-        let columnName: String
-        let columnType: SQLExpression
-        let columnAlias: String
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
-                serializer.writePeriod()
-            } else {
-                if let path = pathName {
-                    serializer.writeQuote()
-                    serializer.write(path)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-                
-                if let schema = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-            }
-            
-            serializer.writeQuote()
-            serializer.write(columnName)
-            serializer.writeQuote()
-            
-            serializer.write("::")
-            columnType.serialize(to: &serializer)
-            
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
-            
-            serializer.writeQuote()
-            serializer.write(columnAlias)
-            serializer.writeQuote()
-        }
-    }
-}
-
-extension ColumnExpression.Alias: MutationSQLExpression {
-    public var mutationSqlExpression: some SQLExpression {
-        _Mutation(
-            aliasName: column.aliasName,
-            pathName: column.pathName,
-            schemaName: column.schemaName,
-            columnName: column.columnName,
-            columnType: T.postgresColumnType,
-            columnAlias: alias
-        )
-    }
-    
-    private struct _Mutation: SQLExpression {
-        let aliasName: String?
-        let pathName: String?
-        let schemaName: String?
-        let columnName: String
-        let columnType: SQLExpression
-        let columnAlias: String
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
-                serializer.writePeriod()
-            } else {
-                if let path = pathName {
-                    serializer.writeQuote()
-                    serializer.write(path)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-                
-                if let schema = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
-                    serializer.writePeriod()
-                }
-            }
-            
-            serializer.writeQuote()
-            serializer.write(columnName)
-            serializer.writeQuote()
-            
-            serializer.write("::")
-            columnType.serialize(to: &serializer)
-            
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
-            
-            serializer.writeQuote()
-            serializer.write(columnAlias)
-            serializer.writeQuote()
-        }
-    }
-}
+extension ColumnExpression: JsonbExtractable where T: Codable {}

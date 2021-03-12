@@ -12,9 +12,9 @@ public protocol Table: FromSQLExpression {
 }
 
 extension Table {
-    public typealias Column<Value> = ColumnProperty<Self, Value>
-    public typealias OptionalColumn<Value> = OptionalColumnProperty<Self, Value>
-    public typealias NestedColumn<Value> = NestedObjectProperty<Self, Value>
+    public typealias Column<Value> = ColumnProperty<Self, Value> where Value: Codable
+    public typealias OptionalColumn<Value> = OptionalColumnProperty<Self, Value> where Value: Codable
+    public typealias NestedColumn<Value> = NestedObjectProperty<Self, Value> where Value: Codable
     
     /// Table Name
     public static var schema: String { "\(Self.self)" }

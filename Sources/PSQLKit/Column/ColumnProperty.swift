@@ -1,7 +1,9 @@
 import Foundation
 
 @propertyWrapper
-public struct ColumnProperty<Table, Value> {
+public struct ColumnProperty<Table, Value>: Codable where
+    Value: Codable
+{
     let key: String
     
     public init(key: String) {
@@ -16,7 +18,9 @@ public struct ColumnProperty<Table, Value> {
 }
 
 @propertyWrapper
-public struct OptionalColumnProperty<Table, WrappedValue> {
+public struct OptionalColumnProperty<Table, WrappedValue>: Codable where
+    WrappedValue: Codable
+{
     let key: String
     
     public init(key: String) {
@@ -31,7 +35,9 @@ public struct OptionalColumnProperty<Table, WrappedValue> {
 }
 
 @propertyWrapper
-public struct NestedObjectProperty<Table, Nested> {
+public struct NestedObjectProperty<Table, Nested>: Codable where
+    Nested: Codable
+{
     let key: String
 
     public init(key: String) {

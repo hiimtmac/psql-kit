@@ -16,6 +16,13 @@ extension Int: TypeEquatable {
     public typealias CompareType = Self
 }
 
+extension Int: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension Int: Concatenatable {}
+extension Int: Coalescable {}
+
 extension Int: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression

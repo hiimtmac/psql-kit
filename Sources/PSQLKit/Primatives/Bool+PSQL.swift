@@ -16,6 +16,13 @@ extension Bool: TypeEquatable {
     public typealias CompareType = Self
 }
 
+extension Bool: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension Bool: Concatenatable {}
+extension Bool: Coalescable {}
+
 extension Bool: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression

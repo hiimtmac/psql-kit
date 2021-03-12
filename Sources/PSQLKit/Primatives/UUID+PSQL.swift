@@ -18,6 +18,13 @@ extension UUID: TypeEquatable {
     public typealias CompareType = Self
 }
 
+extension UUID: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension UUID: Concatenatable {}
+extension UUID: Coalescable {}
+
 extension UUID: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression

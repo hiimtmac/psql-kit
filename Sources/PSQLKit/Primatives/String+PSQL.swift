@@ -18,6 +18,13 @@ extension String: TypeEquatable {
     public typealias CompareType = Self
 }
 
+extension String: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension String: Concatenatable {}
+extension String: Coalescable {}
+
 extension String: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression

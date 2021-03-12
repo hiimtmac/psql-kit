@@ -45,14 +45,14 @@ struct PSQLModel: Table {
     
     init() {}
     
-    struct Pet: TableObject {
+    struct Pet: TableObject, Codable {
         @Column(key: "name") var name: String
         @Column(key: "type") var type: String
         @NestedColumn(key: "info") var info: Info
 
         init() { }
         
-        struct Info: TableObject {
+        struct Info: TableObject, Codable {
             @Column(key: "name") var name: String
 
             init() { }
