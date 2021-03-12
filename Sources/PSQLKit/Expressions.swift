@@ -20,16 +20,8 @@ public typealias ARRAY_REMOVE = ArrayRemoveExpression
 public typealias ARRAY_REPLACE = ArrayReplaceExpression
 public typealias ARRAY_TO_STRING = ArrayToStringExpression
 public typealias ARRAY_UPPER = ArrayUpperExpression
-
 public typealias COALESCE = CoalesceExpression
-public typealias COALESCE3 = CoalesceExpression3
-public typealias COALESCE4 = CoalesceExpression4
-public typealias COALESCE5 = CoalesceExpression5
-
 public typealias CONCAT = ConcatenateExpression
-public typealias CONCAT3 = ConcatenateExpression3
-public typealias CONCAT4 = ConcatenateExpression4
-public typealias CONCAT5 = ConcatenateExpression5
 
 public protocol Expression {}
 public protocol AggregateExpression: Expression {}

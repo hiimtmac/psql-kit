@@ -16,6 +16,11 @@ public typealias INSERT = InsertDirective
 public typealias UPDATE = UpdateDirective
 public typealias DELETE = DeleteDirective
 
+public protocol BaseSQLExpression {
+    associatedtype Base: SQLExpression
+    var baseSqlExpression: Base { get }
+}
+
 public protocol SelectSQLExpression {
     associatedtype Select: SQLExpression
     var selectSqlExpression: Select { get }

@@ -16,6 +16,13 @@ extension Date: TypeEquatable {
     public typealias CompareType = Self
 }
 
+extension Date: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension Date: Concatenatable {}
+extension Date: Coalescable {}
+
 extension Date: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
@@ -79,6 +86,13 @@ extension PSQLDate: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .date }
 }
 
+extension PSQLDate: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension PSQLDate: Concatenatable {}
+extension PSQLDate: Coalescable {}
+
 extension PSQLDate: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
@@ -103,6 +117,13 @@ public struct PSQLTimestamp: PSQLDateTime {
         return f
     }()
 }
+
+extension PSQLTimestamp: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension PSQLTimestamp: Concatenatable {}
+extension PSQLTimestamp: Coalescable {}
 
 extension PSQLTimestamp: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {

@@ -16,6 +16,13 @@ extension Float: TypeEquatable {
     public typealias CompareType = Self
 }
 
+extension Float: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression { self }
+}
+
+extension Float: Concatenatable {}
+extension Float: Coalescable {}
+
 extension Float: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
