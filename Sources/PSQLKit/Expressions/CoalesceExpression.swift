@@ -152,3 +152,5 @@ extension CoalesceExpression {
         ExpressionAlias(expression: self, alias: alias)
     }
 }
+
+extension CoalesceExpression: Concatenatable where T: Concatenatable {}
