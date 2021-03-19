@@ -548,6 +548,22 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testConcateWithCoalesce() {
+        SELECT {
+            CONCAT(COALESCE<String>(f.$name, "hi"), " there")
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            CONCAT(COALESCE<String>(p.$name, "hi"), " there")
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT CONCAT(COALESCE("x"."name", 'hi'), ' there')::TEXT"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testMax", testMax),
         ("testMin", testMin),
@@ -570,6 +586,7 @@ final class ExpressionTests: PSQLTestCase {
         ("testArrayRemove", testArrayRemove),
         ("testArrayPrepend", testArrayPrepend),
         ("testArrayConcatenate", testArrayConcatenate),
-        ("testArrayAppend", testArrayAppend)
+        ("testArrayAppend", testArrayAppend),
+        ("testConcateWithCoalesce", testConcateWithCoalesce)
     ]
 }
