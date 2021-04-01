@@ -11,7 +11,9 @@ extension PSQLQuery {
         return (serializer.sql, serializer.binds)
     }
     
+    #if DEBUG
     public static var testDB: SQLDatabase { TestSQLDatabase() }
+    #endif
     
     public func execute(on database: Database) -> PSQLQueryFetcher {
         let psqlDatabase = database as! PostgresDatabase
