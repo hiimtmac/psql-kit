@@ -5,7 +5,6 @@ import PostgresKit
 public protocol PSQLQuery: SQLExpression, QuerySQLExpression { }
 
 extension PSQLQuery {
-    #if DEBUG
     public func raw(database: SQLDatabase = Self.testDB) -> (sql: String, binds: [Encodable]) {
         var serializer = SQLSerializer(database: database)
         self.serialize(to: &serializer)
@@ -13,7 +12,6 @@ extension PSQLQuery {
     }
     
     public static var testDB: SQLDatabase { TestSQLDatabase() }
-    #endif
     
     public func execute(on database: Database) -> PSQLQueryFetcher {
         let psqlDatabase = database as! PostgresDatabase
