@@ -5,13 +5,13 @@ import PostgresKit
 public protocol PSQLQuery: SQLExpression, QuerySQLExpression { }
 
 extension PSQLQuery {
+    #if DEBUG
     public func raw(database: SQLDatabase = Self.testDB) -> (sql: String, binds: [Encodable]) {
         var serializer = SQLSerializer(database: database)
         self.serialize(to: &serializer)
         return (serializer.sql, serializer.binds)
     }
     
-    #if DEBUG
     public static var testDB: SQLDatabase { TestSQLDatabase() }
     #endif
     
