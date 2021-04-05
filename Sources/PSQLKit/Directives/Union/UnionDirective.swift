@@ -14,5 +14,5 @@ public struct UnionDirective<Content>: SQLExpression where Content: UnionSQLExpr
 }
 
 extension UnionDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

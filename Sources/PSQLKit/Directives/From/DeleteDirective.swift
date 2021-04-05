@@ -16,5 +16,5 @@ public struct DeleteDirective<Content>: SQLExpression where Content: FromSQLExpr
 }
 
 extension DeleteDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

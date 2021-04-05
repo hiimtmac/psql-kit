@@ -16,5 +16,5 @@ public struct GroupByDirective<Content>: SQLExpression where Content: GroupBySQL
 }
 
 extension GroupByDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

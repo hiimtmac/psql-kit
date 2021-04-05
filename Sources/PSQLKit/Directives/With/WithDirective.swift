@@ -16,5 +16,5 @@ public struct WithDirective<Content>: SQLExpression where Content: WithSQLExpres
 }
 
 extension WithDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression{ self }
+    public var querySqlExpression: SQLExpression{ self }
 }

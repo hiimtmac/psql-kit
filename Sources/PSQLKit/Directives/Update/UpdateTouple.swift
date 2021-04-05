@@ -3,7 +3,7 @@ import SQLKit
 
 public struct UpdateTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [UpdateSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: UpdateSQLExpression,
@@ -11,8 +11,8 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression,
-            value.3.updateSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression,
-            value.3.updateSqlExpression,
-            value.4.updateSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression,
-            value.3.updateSqlExpression,
-            value.4.updateSqlExpression,
-            value.5.updateSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression,
-            value.3.updateSqlExpression,
-            value.4.updateSqlExpression,
-            value.5.updateSqlExpression,
-            value.6.updateSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression,
-            value.3.updateSqlExpression,
-            value.4.updateSqlExpression,
-            value.5.updateSqlExpression,
-            value.6.updateSqlExpression,
-            value.7.updateSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression,
-            value.3.updateSqlExpression,
-            value.4.updateSqlExpression,
-            value.5.updateSqlExpression,
-            value.6.updateSqlExpression,
-            value.7.updateSqlExpression,
-            value.8.updateSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct UpdateTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.updateSqlExpression,
-            value.1.updateSqlExpression,
-            value.2.updateSqlExpression,
-            value.3.updateSqlExpression,
-            value.4.updateSqlExpression,
-            value.5.updateSqlExpression,
-            value.6.updateSqlExpression,
-            value.7.updateSqlExpression,
-            value.8.updateSqlExpression,
-            value.9.updateSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension UpdateTouple: UpdateSQLExpression {
-    public var updateSqlExpression: some SQLExpression {
-        SQLList(expressions)
+    public var updateSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.updateSqlExpression))
     }
 }

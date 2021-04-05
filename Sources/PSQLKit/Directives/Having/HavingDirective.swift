@@ -16,5 +16,5 @@ public struct HavingDirective<Content>: SQLExpression where Content: HavingSQLEx
 }
 
 extension HavingDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

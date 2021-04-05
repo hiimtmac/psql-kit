@@ -48,7 +48,7 @@ public struct CompareExpression<T, U> where
 }
 
 extension CompareExpression: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
     
@@ -70,19 +70,19 @@ extension CompareExpression: CompareSQLExpression {
 }
 
 extension CompareExpression: WhereSQLExpression {
-    public var whereSqlExpression: some SQLExpression {
+    public var whereSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
 extension CompareExpression: HavingSQLExpression {
-    public var havingSqlExpression: some SQLExpression {
+    public var havingSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
 
 extension CompareExpression: JoinSQLExpression {
-    public var joinSqlExpression: some SQLExpression {
+    public var joinSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }

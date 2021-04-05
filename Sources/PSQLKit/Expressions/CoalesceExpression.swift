@@ -102,7 +102,7 @@ extension CoalesceExpression: TypeEquatable {
 extension CoalesceExpression: Coalescable {}
 
 extension CoalesceExpression: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression {
+    public var baseSqlExpression: SQLExpression {
         _Base(values: values)
     }
     
@@ -121,7 +121,7 @@ extension CoalesceExpression: BaseSQLExpression {
 extension CoalesceExpression: SelectSQLExpression where
     T: SelectSQLExpression & PSQLExpression
 {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(values: values)
     }
     
@@ -142,7 +142,7 @@ extension CoalesceExpression: SelectSQLExpression where
 extension CoalesceExpression: CompareSQLExpression where
     T: CompareSQLExpression
 {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Base(values: values)
     }
 }

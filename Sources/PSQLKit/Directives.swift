@@ -17,78 +17,62 @@ public typealias UPDATE = UpdateDirective
 public typealias DELETE = DeleteDirective
 
 public protocol BaseSQLExpression {
-    associatedtype Base: SQLExpression
-    var baseSqlExpression: Base { get }
+    var baseSqlExpression: SQLExpression { get }
 }
 
 public protocol SelectSQLExpression {
-    associatedtype Select: SQLExpression
-    var selectSqlExpression: Select { get }
+    var selectSqlExpression: SQLExpression { get }
 }
 
 public protocol FromSQLExpression {
-    associatedtype From: SQLExpression
-    var fromSqlExpression: From { get }
+    var fromSqlExpression: SQLExpression { get }
 }
 
 public protocol GroupBySQLExpression {
-    associatedtype GroupBy: SQLExpression
-    var groupBySqlExpression: GroupBy { get }
+    var groupBySqlExpression: SQLExpression { get }
 }
 
 public protocol OrderBySQLExpression {
-    associatedtype OrderBy: SQLExpression
-    var orderBySqlExpression: OrderBy { get }
+    var orderBySqlExpression: SQLExpression { get }
 }
 
 public protocol CompareSQLExpression {
-    associatedtype Compare: SQLExpression
-    var compareSqlExpression: Compare { get }
+    var compareSqlExpression: SQLExpression { get }
 }
 
 public protocol JoinSQLExpression {
-    associatedtype Join: SQLExpression
-    var joinSqlExpression: Join { get }
+    var joinSqlExpression: SQLExpression { get }
 }
 
 public protocol WhereSQLExpression {
-    associatedtype Where: SQLExpression
-    var whereSqlExpression: Where { get }
+    var whereSqlExpression: SQLExpression { get }
 }
 
 public protocol HavingSQLExpression {
-    associatedtype Having: SQLExpression
-    var havingSqlExpression: Having { get }
+    var havingSqlExpression: SQLExpression { get }
 }
 
 public protocol QuerySQLExpression {
-    associatedtype Query: SQLExpression
-    var querySqlExpression: Query { get }
+    var querySqlExpression: SQLExpression { get }
 }
 
 public protocol WithSQLExpression {
-    associatedtype With: SQLExpression
-    var withSqlExpression: With { get }
+    var withSqlExpression: SQLExpression { get }
 }
 
 public protocol UnionSQLExpression {
-    associatedtype Union: SQLExpression
-    var unionSqlExpression: Union { get }
+    var unionSqlExpression: SQLExpression { get }
 }
 
 public protocol MutationSQLExpression {
-    associatedtype Mutation: SQLExpression
-    var mutationSqlExpression: Mutation { get }
+    var mutationSqlExpression: SQLExpression { get }
 }
 
 public protocol InsertSQLExpression {
-    associatedtype InsertColumn: SQLExpression
-    var insertColumnSqlExpression: InsertColumn { get }
-    associatedtype InsertValue: SQLExpression
-    var insertValueSqlExpression: InsertValue { get }
+    var insertColumnSqlExpression: SQLExpression { get }
+    var insertValueSqlExpression: SQLExpression { get }
 }
 
 public protocol UpdateSQLExpression {
-    associatedtype Update: SQLExpression
-    var updateSqlExpression: Update { get }
+    var updateSqlExpression: SQLExpression { get }
 }

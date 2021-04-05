@@ -35,7 +35,7 @@ extension _ConditionalExpression: SelectSQLExpression where
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(content: content)
     }
 }
@@ -57,7 +57,7 @@ extension _ConditionalExpression: FromSQLExpression where
         }
     }
     
-    public var fromSqlExpression: some SQLExpression {
+    public var fromSqlExpression: SQLExpression {
         _From(content: content)
     }
 }
@@ -79,7 +79,7 @@ extension _ConditionalExpression: GroupBySQLExpression where
         }
     }
     
-    public var groupBySqlExpression: some SQLExpression {
+    public var groupBySqlExpression: SQLExpression {
         _GroupBy(content: content)
     }
 }
@@ -101,7 +101,7 @@ extension _ConditionalExpression: HavingSQLExpression where
         }
     }
     
-    public var havingSqlExpression: some SQLExpression {
+    public var havingSqlExpression: SQLExpression {
         _Having(content: content)
     }
 }
@@ -123,7 +123,7 @@ extension _ConditionalExpression: JoinSQLExpression where
         }
     }
     
-    public var joinSqlExpression: some SQLExpression {
+    public var joinSqlExpression: SQLExpression {
         _Join(content: content)
     }
 }
@@ -145,7 +145,7 @@ extension _ConditionalExpression: OrderBySQLExpression where
         }
     }
     
-    public var orderBySqlExpression: some SQLExpression {
+    public var orderBySqlExpression: SQLExpression {
         _OrderBy(content: content)
     }
 }
@@ -167,7 +167,7 @@ extension _ConditionalExpression: QuerySQLExpression where
         }
     }
     
-    public var querySqlExpression: some SQLExpression {
+    public var querySqlExpression: SQLExpression {
         _Query(content: content)
     }
 }
@@ -189,7 +189,7 @@ extension _ConditionalExpression: WhereSQLExpression where
         }
     }
     
-    public var whereSqlExpression: some SQLExpression {
+    public var whereSqlExpression: SQLExpression {
         _Where(content: content)
     }
 }
@@ -211,7 +211,7 @@ extension _ConditionalExpression: WithSQLExpression where
         }
     }
     
-    public var withSqlExpression: some SQLExpression {
+    public var withSqlExpression: SQLExpression {
         _With(content: content)
     }
 }
@@ -233,7 +233,7 @@ extension _ConditionalExpression: InsertSQLExpression where
         }
     }
     
-    public var insertColumnSqlExpression: some SQLExpression {
+    public var insertColumnSqlExpression: SQLExpression {
         _InsertColumn(content: content)
     }
     
@@ -250,7 +250,7 @@ extension _ConditionalExpression: InsertSQLExpression where
         }
     }
     
-    public var insertValueSqlExpression: some SQLExpression {
+    public var insertValueSqlExpression: SQLExpression {
         _InsertValue(content: content)
     }
 }
@@ -272,7 +272,7 @@ extension _ConditionalExpression: UpdateSQLExpression where
         }
     }
     
-    public var updateSqlExpression: some SQLExpression {
+    public var updateSqlExpression: SQLExpression {
         _Update(content: content)
     }
 }

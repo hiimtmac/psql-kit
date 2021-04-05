@@ -22,5 +22,5 @@ public struct UpdateDirective<Table, Content>: SQLExpression where Table: FromSQ
 }
 
 extension UpdateDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

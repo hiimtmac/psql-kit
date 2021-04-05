@@ -23,7 +23,7 @@ extension PSQLRange: CompareSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(lower: lower, upper: upper)
     }
     

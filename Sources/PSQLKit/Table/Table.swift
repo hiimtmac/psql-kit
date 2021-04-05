@@ -36,7 +36,7 @@ extension Table {
         .init(table: table)
     }
     
-    public var fromSqlExpression: some SQLExpression {
+    public var fromSqlExpression: SQLExpression {
         _From(pathName: Self.path, schemaName: Self.schema)
     }
     

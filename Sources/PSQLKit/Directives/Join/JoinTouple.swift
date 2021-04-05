@@ -3,7 +3,7 @@ import SQLKit
 
 public struct JoinTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [JoinSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: JoinSQLExpression,
@@ -11,8 +11,8 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression,
-            value.3.joinSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression,
-            value.3.joinSqlExpression,
-            value.4.joinSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression,
-            value.3.joinSqlExpression,
-            value.4.joinSqlExpression,
-            value.5.joinSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression,
-            value.3.joinSqlExpression,
-            value.4.joinSqlExpression,
-            value.5.joinSqlExpression,
-            value.6.joinSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression,
-            value.3.joinSqlExpression,
-            value.4.joinSqlExpression,
-            value.5.joinSqlExpression,
-            value.6.joinSqlExpression,
-            value.7.joinSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression,
-            value.3.joinSqlExpression,
-            value.4.joinSqlExpression,
-            value.5.joinSqlExpression,
-            value.6.joinSqlExpression,
-            value.7.joinSqlExpression,
-            value.8.joinSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct JoinTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.joinSqlExpression,
-            value.1.joinSqlExpression,
-            value.2.joinSqlExpression,
-            value.3.joinSqlExpression,
-            value.4.joinSqlExpression,
-            value.5.joinSqlExpression,
-            value.6.joinSqlExpression,
-            value.7.joinSqlExpression,
-            value.8.joinSqlExpression,
-            value.9.joinSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension JoinTouple: JoinSQLExpression {
-    public var joinSqlExpression: some SQLExpression {
-        SQLList(expressions, separator: SQLRaw(" AND "))
+    public var joinSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.joinSqlExpression), separator: SQLRaw(" AND "))
     }
 }

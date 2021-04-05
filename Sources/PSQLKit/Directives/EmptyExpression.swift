@@ -2,51 +2,50 @@ import Foundation
 import SQLKit
 
 public struct EmptyExpression: SQLExpression {
-    
     public func serialize(to serializer: inout SQLSerializer) {}
 }
 
 extension EmptyExpression: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { self }
+    public var selectSqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: FromSQLExpression {
-    public var fromSqlExpression: some SQLExpression { self }
+    public var fromSqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: WhereSQLExpression {
-    public var whereSqlExpression: some SQLExpression { self }
+    public var whereSqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: WithSQLExpression {
-    public var withSqlExpression: some SQLExpression { self }
+    public var withSqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: OrderBySQLExpression {
-    public var orderBySqlExpression: some SQLExpression { self }
+    public var orderBySqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: JoinSQLExpression {
-    public var joinSqlExpression: some SQLExpression { self }
+    public var joinSqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: HavingSQLExpression {
-    public var havingSqlExpression: some SQLExpression { self }
+    public var havingSqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: GroupBySQLExpression {
-    public var groupBySqlExpression: some SQLExpression { self }
+    public var groupBySqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: InsertSQLExpression {
-    public var insertColumnSqlExpression: some SQLExpression { self }
-    public var insertValueSqlExpression: some SQLExpression { self }
+    public var insertColumnSqlExpression: SQLExpression { self }
+    public var insertValueSqlExpression: SQLExpression { self }
 }
 
 extension EmptyExpression: UpdateSQLExpression {
-    public var updateSqlExpression: some SQLExpression { self }
+    public var updateSqlExpression: SQLExpression { self }
 }

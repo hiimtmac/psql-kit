@@ -223,6 +223,52 @@ final class SelectTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        SELECT {
+            f.$age
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            p.$age
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT "x"."age"::INTEGER, "x"."name"::TEXT"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        SELECT {
+            f.$age
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            p.$age
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT "x"."age"::INTEGER"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     func testIfElseTrue() {
         let bool = true
         SELECT {
@@ -321,6 +367,8 @@ final class SelectTests: PSQLTestCase {
         ("testSelectRaw", testSelectRaw),
         ("testSelectSubquery", testSelectSubquery),
         ("testPostfix", testPostfix),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
         ("testSwitch", testSwitch)

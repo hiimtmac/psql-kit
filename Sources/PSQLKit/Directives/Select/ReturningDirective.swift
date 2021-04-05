@@ -20,5 +20,5 @@ public struct ReturningDirective<Content>: SQLExpression where Content: SelectSQ
 }
 
 extension ReturningDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

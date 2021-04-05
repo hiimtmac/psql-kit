@@ -31,6 +31,18 @@ public struct SelectBuilder {
     {
         .init(second: second)
     }
+    
+    public static func buildOptional<Content>(
+        _ content: Content?
+    ) -> _ConditionalExpression<Content, EmptyExpression> where
+        Content: SelectSQLExpression
+    {
+        if let content = content {
+            return .init(first: content)
+        } else {
+            return .init(second: EmptyExpression())
+        }
+    }
 }
 
 extension SelectBuilder {

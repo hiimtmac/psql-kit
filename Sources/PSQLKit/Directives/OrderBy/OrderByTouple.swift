@@ -3,7 +3,7 @@ import SQLKit
 
 public struct OrderByTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [OrderBySQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: OrderBySQLExpression,
@@ -11,8 +11,8 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression,
-            value.3.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression,
-            value.3.orderBySqlExpression,
-            value.4.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression,
-            value.3.orderBySqlExpression,
-            value.4.orderBySqlExpression,
-            value.5.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression,
-            value.3.orderBySqlExpression,
-            value.4.orderBySqlExpression,
-            value.5.orderBySqlExpression,
-            value.6.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression,
-            value.3.orderBySqlExpression,
-            value.4.orderBySqlExpression,
-            value.5.orderBySqlExpression,
-            value.6.orderBySqlExpression,
-            value.7.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression,
-            value.3.orderBySqlExpression,
-            value.4.orderBySqlExpression,
-            value.5.orderBySqlExpression,
-            value.6.orderBySqlExpression,
-            value.7.orderBySqlExpression,
-            value.8.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct OrderByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.orderBySqlExpression,
-            value.1.orderBySqlExpression,
-            value.2.orderBySqlExpression,
-            value.3.orderBySqlExpression,
-            value.4.orderBySqlExpression,
-            value.5.orderBySqlExpression,
-            value.6.orderBySqlExpression,
-            value.7.orderBySqlExpression,
-            value.8.orderBySqlExpression,
-            value.9.orderBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension OrderByTouple: OrderBySQLExpression {
-    public var orderBySqlExpression: some SQLExpression {
-        SQLList(expressions)
+    public var orderBySqlExpression: SQLExpression {
+        SQLList(expressions.map(\.orderBySqlExpression))
     }
 }

@@ -17,7 +17,7 @@ public struct ColumnExpression<T> where T: PSQLExpression {
 
 // MARK: Base
 extension ColumnExpression: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression {
+    public var baseSqlExpression: SQLExpression {
         _Base(
             aliasName: aliasName,
             pathName: pathName,
@@ -63,7 +63,7 @@ extension ColumnExpression: BaseSQLExpression {
 
 // MARK: Select
 extension ColumnExpression: SelectSQLExpression  {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(
             aliasName: aliasName,
             pathName: pathName,
@@ -126,7 +126,7 @@ extension ColumnExpression {
 
 // MARK: Group By
 extension ColumnExpression: GroupBySQLExpression {
-    public var groupBySqlExpression: some SQLExpression {
+    public var groupBySqlExpression: SQLExpression {
         _Base(
             aliasName: aliasName,
             pathName: pathName,
@@ -138,7 +138,7 @@ extension ColumnExpression: GroupBySQLExpression {
 
 // MARK: Order By
 extension ColumnExpression: OrderBySQLExpression {
-    public var orderBySqlExpression: some SQLExpression {
+    public var orderBySqlExpression: SQLExpression {
         _Base(
             aliasName: aliasName,
             pathName: pathName,
@@ -162,7 +162,7 @@ extension ColumnExpression: OrderBySQLExpression {
 
 // MARK: Compare
 extension ColumnExpression: CompareSQLExpression {    
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Base(
             aliasName: aliasName,
             pathName: pathName,
@@ -174,7 +174,7 @@ extension ColumnExpression: CompareSQLExpression {
 
 // MARK: Mutation
 extension ColumnExpression: MutationSQLExpression {
-    public var mutationSqlExpression: some SQLExpression {
+    public var mutationSqlExpression: SQLExpression {
         _Mutation(columnName: columnName)
     }
     

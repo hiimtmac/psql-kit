@@ -3,7 +3,7 @@ import SQLKit
 
 public struct GroupByTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [GroupBySQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: GroupBySQLExpression,
@@ -11,8 +11,8 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression,
-            value.3.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression,
-            value.3.groupBySqlExpression,
-            value.4.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression,
-            value.3.groupBySqlExpression,
-            value.4.groupBySqlExpression,
-            value.5.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression,
-            value.3.groupBySqlExpression,
-            value.4.groupBySqlExpression,
-            value.5.groupBySqlExpression,
-            value.6.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression,
-            value.3.groupBySqlExpression,
-            value.4.groupBySqlExpression,
-            value.5.groupBySqlExpression,
-            value.6.groupBySqlExpression,
-            value.7.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression,
-            value.3.groupBySqlExpression,
-            value.4.groupBySqlExpression,
-            value.5.groupBySqlExpression,
-            value.6.groupBySqlExpression,
-            value.7.groupBySqlExpression,
-            value.8.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct GroupByTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.groupBySqlExpression,
-            value.1.groupBySqlExpression,
-            value.2.groupBySqlExpression,
-            value.3.groupBySqlExpression,
-            value.4.groupBySqlExpression,
-            value.5.groupBySqlExpression,
-            value.6.groupBySqlExpression,
-            value.7.groupBySqlExpression,
-            value.8.groupBySqlExpression,
-            value.9.groupBySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension GroupByTouple: GroupBySQLExpression {
-    public var groupBySqlExpression: some SQLExpression {
-        SQLList(expressions)
+    public var groupBySqlExpression: SQLExpression {
+        SQLList(expressions.map(\.groupBySqlExpression))
     }
 }

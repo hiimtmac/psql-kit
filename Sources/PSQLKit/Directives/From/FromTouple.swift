@@ -3,7 +3,7 @@ import SQLKit
 
 public struct FromTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [FromSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: FromSQLExpression,
@@ -11,8 +11,8 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression,
-            value.3.fromSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression,
-            value.3.fromSqlExpression,
-            value.4.fromSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression,
-            value.3.fromSqlExpression,
-            value.4.fromSqlExpression,
-            value.5.fromSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression,
-            value.3.fromSqlExpression,
-            value.4.fromSqlExpression,
-            value.5.fromSqlExpression,
-            value.6.fromSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression,
-            value.3.fromSqlExpression,
-            value.4.fromSqlExpression,
-            value.5.fromSqlExpression,
-            value.6.fromSqlExpression,
-            value.7.fromSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression,
-            value.3.fromSqlExpression,
-            value.4.fromSqlExpression,
-            value.5.fromSqlExpression,
-            value.6.fromSqlExpression,
-            value.7.fromSqlExpression,
-            value.8.fromSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct FromTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.fromSqlExpression,
-            value.1.fromSqlExpression,
-            value.2.fromSqlExpression,
-            value.3.fromSqlExpression,
-            value.4.fromSqlExpression,
-            value.5.fromSqlExpression,
-            value.6.fromSqlExpression,
-            value.7.fromSqlExpression,
-            value.8.fromSqlExpression,
-            value.9.fromSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension FromTouple: FromSQLExpression {
-    public var fromSqlExpression: some SQLExpression {
-        SQLList(expressions)
+    public var fromSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.fromSqlExpression))
     }
 }

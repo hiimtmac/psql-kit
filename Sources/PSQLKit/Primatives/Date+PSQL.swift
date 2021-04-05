@@ -17,20 +17,20 @@ extension Date: TypeEquatable {
 }
 
 extension Date: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression { self }
+    public var baseSqlExpression: SQLExpression { self }
 }
 
 extension Date: Concatenatable {}
 extension Date: Coalescable {}
 
 extension Date: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension Date: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression { self }
+    public var compareSqlExpression: SQLExpression { self }
 }
 
 extension Date {
@@ -87,20 +87,20 @@ extension PSQLDate: PSQLExpression {
 }
 
 extension PSQLDate: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression { self }
+    public var baseSqlExpression: SQLExpression { self }
 }
 
 extension PSQLDate: Concatenatable {}
 extension PSQLDate: Coalescable {}
 
 extension PSQLDate: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension PSQLDate: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression { self }
+    public var compareSqlExpression: SQLExpression { self }
 }
 
 public struct PSQLTimestamp: PSQLDateTime {
@@ -119,20 +119,20 @@ public struct PSQLTimestamp: PSQLDateTime {
 }
 
 extension PSQLTimestamp: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression { self }
+    public var baseSqlExpression: SQLExpression { self }
 }
 
 extension PSQLTimestamp: Concatenatable {}
 extension PSQLTimestamp: Coalescable {}
 
 extension PSQLTimestamp: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension PSQLTimestamp: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression { self }
+    public var compareSqlExpression: SQLExpression { self }
 }
 
 extension PSQLTimestamp: PSQLExpression {

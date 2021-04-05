@@ -20,7 +20,7 @@ extension PSQLArray: TypeEquatable where T: TypeEquatable {
 extension PSQLArray: SelectSQLExpression where
     T: SQLExpression
 {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(items: items, arrayType: [T].postgresColumnType)
     }
     
@@ -42,7 +42,7 @@ extension PSQLArray: SelectSQLExpression where
 extension PSQLArray: CompareSQLExpression where
     T: SQLExpression
 {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(items: items)
     }
     

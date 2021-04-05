@@ -3,7 +3,7 @@ import SQLKit
 
 public struct QueryTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [QuerySQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: QuerySQLExpression,
@@ -11,8 +11,8 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression,
-            value.3.querySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression,
-            value.3.querySqlExpression,
-            value.4.querySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression,
-            value.3.querySqlExpression,
-            value.4.querySqlExpression,
-            value.5.querySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression,
-            value.3.querySqlExpression,
-            value.4.querySqlExpression,
-            value.5.querySqlExpression,
-            value.6.querySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression,
-            value.3.querySqlExpression,
-            value.4.querySqlExpression,
-            value.5.querySqlExpression,
-            value.6.querySqlExpression,
-            value.7.querySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression,
-            value.3.querySqlExpression,
-            value.4.querySqlExpression,
-            value.5.querySqlExpression,
-            value.6.querySqlExpression,
-            value.7.querySqlExpression,
-            value.8.querySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct QueryTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.querySqlExpression,
-            value.1.querySqlExpression,
-            value.2.querySqlExpression,
-            value.3.querySqlExpression,
-            value.4.querySqlExpression,
-            value.5.querySqlExpression,
-            value.6.querySqlExpression,
-            value.7.querySqlExpression,
-            value.8.querySqlExpression,
-            value.9.querySqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension QueryTouple: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression {
-        SQLList(expressions, separator: SQLRaw(" "))
+    public var querySqlExpression: SQLExpression {
+        SQLList(expressions.map(\.querySqlExpression), separator: SQLRaw(" "))
     }
 }

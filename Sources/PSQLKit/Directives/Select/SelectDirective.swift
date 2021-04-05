@@ -32,7 +32,7 @@ public struct DistinctModifier<Content>: SelectSQLExpression where Content: Sele
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(content: content)
     }
 }
@@ -68,7 +68,7 @@ public struct DistinctOnModifier<DistinctOn, Content>: SelectSQLExpression where
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(distinctOn: distinctOn, content: content)
     }
 }
@@ -87,5 +87,5 @@ extension SelectDirective {
 }
 
 extension SelectDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

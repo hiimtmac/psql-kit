@@ -19,22 +19,22 @@ extension UUID: TypeEquatable {
 }
 
 extension UUID: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression { self }
+    public var baseSqlExpression: SQLExpression { self }
 }
 
 extension UUID: Concatenatable {}
 extension UUID: Coalescable {}
 
 extension UUID: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension UUID: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression { self }
+    public var compareSqlExpression: SQLExpression { self }
 }
 
 extension UUID: MutationSQLExpression {
-    public var mutationSqlExpression: some SQLExpression { self }
+    public var mutationSqlExpression: SQLExpression { self }
 }

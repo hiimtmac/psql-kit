@@ -26,5 +26,5 @@ public struct JoinDirective<Table, Content>: SQLExpression where Table: FromSQLE
 }
 
 extension JoinDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

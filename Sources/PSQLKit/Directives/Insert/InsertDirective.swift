@@ -28,5 +28,5 @@ public struct InsertDirective<Table, Content>: SQLExpression where Table: FromSQ
 }
 
 extension InsertDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

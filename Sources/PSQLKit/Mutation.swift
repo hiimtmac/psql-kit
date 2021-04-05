@@ -13,11 +13,11 @@ extension Mutation: InsertSQLExpression where
     T: MutationSQLExpression,
     U: MutationSQLExpression
 {
-    public var insertColumnSqlExpression: some SQLExpression {
+    public var insertColumnSqlExpression: SQLExpression {
         column.mutationSqlExpression
     }
 
-    public var insertValueSqlExpression: some SQLExpression {
+    public var insertValueSqlExpression: SQLExpression {
         value.mutationSqlExpression
     }
 }
@@ -39,7 +39,7 @@ extension Mutation: UpdateSQLExpression where
         }
     }
 
-    public var updateSqlExpression: some SQLExpression {
+    public var updateSqlExpression: SQLExpression {
         _Update(column: column, value: value)
     }
 }

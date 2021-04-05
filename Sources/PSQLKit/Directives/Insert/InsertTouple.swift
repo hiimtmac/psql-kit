@@ -3,21 +3,16 @@ import SQLKit
 
 public struct InsertTouple<T> {
     let value: T
-    let columns: [SQLExpression]
-    let values: [SQLExpression]
+    let expressions: [InsertSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: InsertSQLExpression,
         T1: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1
         ]
     }
     
@@ -27,15 +22,10 @@ public struct InsertTouple<T> {
         T2: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -46,17 +36,11 @@ public struct InsertTouple<T> {
         T3: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression,
-            value.3.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression,
-            value.3.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -68,19 +52,12 @@ public struct InsertTouple<T> {
         T4: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression,
-            value.3.insertColumnSqlExpression,
-            value.4.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression,
-            value.3.insertValueSqlExpression,
-            value.4.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -93,21 +70,13 @@ public struct InsertTouple<T> {
         T5: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression,
-            value.3.insertColumnSqlExpression,
-            value.4.insertColumnSqlExpression,
-            value.5.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression,
-            value.3.insertValueSqlExpression,
-            value.4.insertValueSqlExpression,
-            value.5.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -121,23 +90,14 @@ public struct InsertTouple<T> {
         T6: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression,
-            value.3.insertColumnSqlExpression,
-            value.4.insertColumnSqlExpression,
-            value.5.insertColumnSqlExpression,
-            value.6.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression,
-            value.3.insertValueSqlExpression,
-            value.4.insertValueSqlExpression,
-            value.5.insertValueSqlExpression,
-            value.6.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -152,25 +112,15 @@ public struct InsertTouple<T> {
         T7: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression,
-            value.3.insertColumnSqlExpression,
-            value.4.insertColumnSqlExpression,
-            value.5.insertColumnSqlExpression,
-            value.6.insertColumnSqlExpression,
-            value.7.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression,
-            value.3.insertValueSqlExpression,
-            value.4.insertValueSqlExpression,
-            value.5.insertValueSqlExpression,
-            value.6.insertValueSqlExpression,
-            value.7.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -186,27 +136,16 @@ public struct InsertTouple<T> {
         T8: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression,
-            value.3.insertColumnSqlExpression,
-            value.4.insertColumnSqlExpression,
-            value.5.insertColumnSqlExpression,
-            value.6.insertColumnSqlExpression,
-            value.7.insertColumnSqlExpression,
-            value.8.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression,
-            value.3.insertValueSqlExpression,
-            value.4.insertValueSqlExpression,
-            value.5.insertValueSqlExpression,
-            value.6.insertValueSqlExpression,
-            value.7.insertValueSqlExpression,
-            value.8.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -223,39 +162,27 @@ public struct InsertTouple<T> {
         T9: InsertSQLExpression
     {
         self.value = value as! T
-        self.columns = [
-            value.0.insertColumnSqlExpression,
-            value.1.insertColumnSqlExpression,
-            value.2.insertColumnSqlExpression,
-            value.3.insertColumnSqlExpression,
-            value.4.insertColumnSqlExpression,
-            value.5.insertColumnSqlExpression,
-            value.6.insertColumnSqlExpression,
-            value.7.insertColumnSqlExpression,
-            value.8.insertColumnSqlExpression,
-            value.9.insertColumnSqlExpression
-        ]
-        self.values = [
-            value.0.insertValueSqlExpression,
-            value.1.insertValueSqlExpression,
-            value.2.insertValueSqlExpression,
-            value.3.insertValueSqlExpression,
-            value.4.insertValueSqlExpression,
-            value.5.insertValueSqlExpression,
-            value.6.insertValueSqlExpression,
-            value.7.insertValueSqlExpression,
-            value.8.insertValueSqlExpression,
-            value.9.insertValueSqlExpression
+        self.expressions = [
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension InsertTouple: InsertSQLExpression {
-    public var insertColumnSqlExpression: some SQLExpression {
-        SQLList(columns)
+    public var insertColumnSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.insertColumnSqlExpression))
     }
     
-    public var insertValueSqlExpression: some SQLExpression {
-        SQLList(values)
+    public var insertValueSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.insertValueSqlExpression))
     }
 }

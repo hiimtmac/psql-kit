@@ -3,7 +3,7 @@ import SQLKit
 
 public struct WhereTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [WhereSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: WhereSQLExpression,
@@ -11,8 +11,8 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression,
-            value.3.whereSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression,
-            value.3.whereSqlExpression,
-            value.4.whereSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression,
-            value.3.whereSqlExpression,
-            value.4.whereSqlExpression,
-            value.5.whereSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression,
-            value.3.whereSqlExpression,
-            value.4.whereSqlExpression,
-            value.5.whereSqlExpression,
-            value.6.whereSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression,
-            value.3.whereSqlExpression,
-            value.4.whereSqlExpression,
-            value.5.whereSqlExpression,
-            value.6.whereSqlExpression,
-            value.7.whereSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression,
-            value.3.whereSqlExpression,
-            value.4.whereSqlExpression,
-            value.5.whereSqlExpression,
-            value.6.whereSqlExpression,
-            value.7.whereSqlExpression,
-            value.8.whereSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct WhereTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.whereSqlExpression,
-            value.1.whereSqlExpression,
-            value.2.whereSqlExpression,
-            value.3.whereSqlExpression,
-            value.4.whereSqlExpression,
-            value.5.whereSqlExpression,
-            value.6.whereSqlExpression,
-            value.7.whereSqlExpression,
-            value.8.whereSqlExpression,
-            value.9.whereSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension WhereTouple: WhereSQLExpression {
-    public var whereSqlExpression: some SQLExpression {
-        SQLList(expressions, separator: SQLRaw(" AND "))
+    public var whereSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.whereSqlExpression), separator: SQLRaw(" AND "))
     }
 }

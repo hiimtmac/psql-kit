@@ -39,11 +39,11 @@ public struct OrderByModifier<Content>: OrderBySQLExpression where Content: Orde
         }
     }
     
-    public var orderBySqlExpression: some SQLExpression {
+    public var orderBySqlExpression: SQLExpression {
         _OrderBy(content: content, direction: direction)
     }
 }
 
 extension OrderByDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

@@ -17,7 +17,7 @@ public struct ArrayLowerExpression<Content>: AggregateExpression where
 extension ArrayLowerExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(content: content, dimension: dimension)
     }
     
@@ -42,7 +42,7 @@ extension ArrayLowerExpression: SelectSQLExpression where
 extension ArrayLowerExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(content: content, dimension: dimension)
     }
     

@@ -3,7 +3,7 @@ import SQLKit
 
 public struct SelectTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [SelectSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: SelectSQLExpression,
@@ -11,8 +11,8 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression,
-            value.3.selectSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression,
-            value.3.selectSqlExpression,
-            value.4.selectSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression,
-            value.3.selectSqlExpression,
-            value.4.selectSqlExpression,
-            value.5.selectSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression,
-            value.3.selectSqlExpression,
-            value.4.selectSqlExpression,
-            value.5.selectSqlExpression,
-            value.6.selectSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression,
-            value.3.selectSqlExpression,
-            value.4.selectSqlExpression,
-            value.5.selectSqlExpression,
-            value.6.selectSqlExpression,
-            value.7.selectSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression,
-            value.3.selectSqlExpression,
-            value.4.selectSqlExpression,
-            value.5.selectSqlExpression,
-            value.6.selectSqlExpression,
-            value.7.selectSqlExpression,
-            value.8.selectSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,26 @@ public struct SelectTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.selectSqlExpression,
-            value.1.selectSqlExpression,
-            value.2.selectSqlExpression,
-            value.3.selectSqlExpression,
-            value.4.selectSqlExpression,
-            value.5.selectSqlExpression,
-            value.6.selectSqlExpression,
-            value.7.selectSqlExpression,
-            value.8.selectSqlExpression,
-            value.9.selectSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension SelectTouple: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
-        SQLList(expressions)
+    public var selectSqlExpression: SQLExpression {
+//        print(expressions.count)
+//        print(expressions.filter { $0 is _ConditionalExpression<T, EmptyExpression> }.count)
+//        expressions.forEach { print($0) }
+//        print(expressions.filter { $0 as? _ConditionalExpression == nil }.count)
+        return SQLList(expressions.map(\.selectSqlExpression))
     }
 }

@@ -9,7 +9,7 @@ public struct SelectGrouping<Content>: SelectSQLExpression where Content: Select
         self.content = builder()
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         content.selectSqlExpression
     }
 }
@@ -22,7 +22,7 @@ public struct FromGrouping<Content>: FromSQLExpression where Content: FromSQLExp
         self.content = builder()
     }
     
-    public var fromSqlExpression: some SQLExpression {
+    public var fromSqlExpression: SQLExpression {
         content.fromSqlExpression
     }
 }
@@ -35,7 +35,7 @@ public struct GroupByGrouping<Content>: GroupBySQLExpression where Content: Grou
         self.content = builder()
     }
     
-    public var groupBySqlExpression: some SQLExpression {
+    public var groupBySqlExpression: SQLExpression {
         content.groupBySqlExpression
     }
 }
@@ -48,7 +48,7 @@ public struct HavingGrouping<Content>: HavingSQLExpression where Content: Having
         self.content = builder()
     }
     
-    public var havingSqlExpression: some SQLExpression {
+    public var havingSqlExpression: SQLExpression {
         content.havingSqlExpression
     }
 }
@@ -61,7 +61,7 @@ public struct JoinGrouping<Content>: JoinSQLExpression where Content: JoinSQLExp
         self.content = builder()
     }
     
-    public var joinSqlExpression: some SQLExpression {
+    public var joinSqlExpression: SQLExpression {
         content.joinSqlExpression
     }
 }
@@ -74,7 +74,7 @@ public struct OrderByGrouping<Content>: OrderBySQLExpression where Content: Orde
         self.content = builder()
     }
     
-    public var orderBySqlExpression: some SQLExpression {
+    public var orderBySqlExpression: SQLExpression {
         content.orderBySqlExpression
     }
 }
@@ -87,7 +87,7 @@ public struct QueryGrouping<Content>: QuerySQLExpression where Content: QuerySQL
         self.content = builder()
     }
     
-    public var querySqlExpression: some SQLExpression {
+    public var querySqlExpression: SQLExpression {
         content.querySqlExpression
     }
 }
@@ -100,7 +100,7 @@ public struct WhereGrouping<Content>: WhereSQLExpression where Content: WhereSQL
         self.content = builder()
     }
     
-    public var whereSqlExpression: some SQLExpression {
+    public var whereSqlExpression: SQLExpression {
         content.whereSqlExpression
     }
 }
@@ -113,7 +113,7 @@ public struct WithGrouping<Content>: WithSQLExpression where Content: WithSQLExp
         self.content = builder()
     }
     
-    public var withSqlExpression: some SQLExpression {
+    public var withSqlExpression: SQLExpression {
         content.withSqlExpression
     }
 }

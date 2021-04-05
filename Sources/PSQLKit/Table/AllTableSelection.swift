@@ -27,7 +27,7 @@ extension AllTableSelection: SelectSQLExpression {
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(pathName: T.path, schemaName: T.schema)
     }
 }
@@ -52,7 +52,7 @@ extension AllTableSelection.Alias: SelectSQLExpression {
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(aliasName: table.alias)
     }
 }

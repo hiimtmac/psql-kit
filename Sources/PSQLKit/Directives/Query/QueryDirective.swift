@@ -18,7 +18,7 @@ public struct QueryDirective<Content>: SQLExpression where Content: QuerySQLExpr
 }
 
 extension QueryDirective: UnionSQLExpression {
-    public var unionSqlExpression: some SQLExpression { self }
+    public var unionSqlExpression: SQLExpression { self }
 }
 
 // MARK: - SubqueryModifier
@@ -45,7 +45,7 @@ extension SubqueryModifier: QuerySQLExpression {
         }
     }
     
-    public var querySqlExpression: some SQLExpression {
+    public var querySqlExpression: SQLExpression {
         _Query(name: name, content: content)
     }
 }
@@ -65,7 +65,7 @@ extension QueryDirective {
 }
 
 extension SubqueryModifier: FromSQLExpression {
-    public var fromSqlExpression: some SQLExpression { querySqlExpression }
+    public var fromSqlExpression: SQLExpression { querySqlExpression }
 }
 
 extension QueryDirective: FromSQLExpression where Content: FromSQLExpression {
@@ -77,13 +77,13 @@ extension QueryDirective: FromSQLExpression where Content: FromSQLExpression {
         }
     }
     
-    public var fromSqlExpression: some SQLExpression {
+    public var fromSqlExpression: SQLExpression {
         _From(content: content)
     }
 }
 
 extension SubqueryModifier: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { querySqlExpression }
+    public var selectSqlExpression: SQLExpression { querySqlExpression }
 }
 
 extension QueryDirective: SelectSQLExpression where Content: SelectSQLExpression {
@@ -95,7 +95,7 @@ extension QueryDirective: SelectSQLExpression where Content: SelectSQLExpression
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(content: content)
     }
 }
@@ -124,7 +124,7 @@ extension WithModifier: QuerySQLExpression {
         }
     }
     
-    public var querySqlExpression: some SQLExpression {
+    public var querySqlExpression: SQLExpression {
         _Query(name: name, content: content)
     }
 }
@@ -144,7 +144,7 @@ extension QueryDirective {
 }
 
 extension WithModifier: WithSQLExpression {
-    public var withSqlExpression: some SQLExpression { querySqlExpression }
+    public var withSqlExpression: SQLExpression { querySqlExpression }
 }
 
 extension QueryDirective: WithSQLExpression where Content: WithSQLExpression {
@@ -156,7 +156,7 @@ extension QueryDirective: WithSQLExpression where Content: WithSQLExpression {
         }
     }
     
-    public var withSqlExpression: some SQLExpression {
+    public var withSqlExpression: SQLExpression {
         _With(content: content)
     }
 }

@@ -3,7 +3,7 @@ import SQLKit
 
 public struct HavingTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [HavingSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: HavingSQLExpression,
@@ -11,8 +11,8 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression,
-            value.3.havingSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,11 +53,11 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression,
-            value.3.havingSqlExpression,
-            value.4.havingSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
     
@@ -71,12 +71,12 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression,
-            value.3.havingSqlExpression,
-            value.4.havingSqlExpression,
-            value.5.havingSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5
         ]
     }
     
@@ -91,13 +91,13 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression,
-            value.3.havingSqlExpression,
-            value.4.havingSqlExpression,
-            value.5.havingSqlExpression,
-            value.6.havingSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6
         ]
     }
     
@@ -113,14 +113,14 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression,
-            value.3.havingSqlExpression,
-            value.4.havingSqlExpression,
-            value.5.havingSqlExpression,
-            value.6.havingSqlExpression,
-            value.7.havingSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7
         ]
     }
     
@@ -137,15 +137,15 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression,
-            value.3.havingSqlExpression,
-            value.4.havingSqlExpression,
-            value.5.havingSqlExpression,
-            value.6.havingSqlExpression,
-            value.7.havingSqlExpression,
-            value.8.havingSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8
         ]
     }
     
@@ -163,22 +163,22 @@ public struct HavingTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.havingSqlExpression,
-            value.1.havingSqlExpression,
-            value.2.havingSqlExpression,
-            value.3.havingSqlExpression,
-            value.4.havingSqlExpression,
-            value.5.havingSqlExpression,
-            value.6.havingSqlExpression,
-            value.7.havingSqlExpression,
-            value.8.havingSqlExpression,
-            value.9.havingSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4,
+            value.5,
+            value.6,
+            value.7,
+            value.8,
+            value.9
         ]
     }
 }
 
 extension HavingTouple: HavingSQLExpression {
-    public var havingSqlExpression: some SQLExpression {
-        SQLList(expressions, separator: SQLRaw(" AND "))
+    public var havingSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.havingSqlExpression), separator: SQLRaw(" AND "))
     }
 }

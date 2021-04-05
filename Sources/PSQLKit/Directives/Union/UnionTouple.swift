@@ -3,7 +3,7 @@ import SQLKit
 
 public struct UnionTouple<T> {
     let value: T
-    let expressions: [SQLExpression]
+    let expressions: [UnionSQLExpression]
     
     init<T0, T1>( _ value: (T0, T1)) where
         T0: UnionSQLExpression,
@@ -11,8 +11,8 @@ public struct UnionTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.unionSqlExpression,
-            value.1.unionSqlExpression
+            value.0,
+            value.1
         ]
     }
     
@@ -23,9 +23,9 @@ public struct UnionTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.unionSqlExpression,
-            value.1.unionSqlExpression,
-            value.2.unionSqlExpression
+            value.0,
+            value.1,
+            value.2
         ]
     }
     
@@ -37,10 +37,10 @@ public struct UnionTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.unionSqlExpression,
-            value.1.unionSqlExpression,
-            value.2.unionSqlExpression,
-            value.3.unionSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3
         ]
     }
     
@@ -53,17 +53,17 @@ public struct UnionTouple<T> {
     {
         self.value = value as! T
         self.expressions = [
-            value.0.unionSqlExpression,
-            value.1.unionSqlExpression,
-            value.2.unionSqlExpression,
-            value.3.unionSqlExpression,
-            value.4.unionSqlExpression
+            value.0,
+            value.1,
+            value.2,
+            value.3,
+            value.4
         ]
     }
 }
 
 extension UnionTouple: UnionSQLExpression {
-    public var unionSqlExpression: some SQLExpression {
-        SQLList(expressions, separator: SQLRaw(" UNION "))
+    public var unionSqlExpression: SQLExpression {
+        SQLList(expressions.map(\.unionSqlExpression), separator: SQLRaw(" UNION "))
     }
 }

@@ -34,5 +34,5 @@ extension PSQLQuery {
 }
 
 extension QueryDirective: PSQLQuery {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }
