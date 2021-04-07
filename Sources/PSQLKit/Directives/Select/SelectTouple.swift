@@ -179,10 +179,6 @@ public struct SelectTouple<T> {
 
 extension SelectTouple: SelectSQLExpression {
     public var selectSqlExpression: SQLExpression {
-//        print(expressions.count)
-//        print(expressions.filter { $0 is _ConditionalExpression<T, EmptyExpression> }.count)
-//        expressions.forEach { print($0) }
-//        print(expressions.filter { $0 as? _ConditionalExpression == nil }.count)
         return SQLList(expressions.map(\.selectSqlExpression))
     }
 }
