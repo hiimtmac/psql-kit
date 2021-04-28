@@ -1,6 +1,6 @@
 import Foundation
 
-@_functionBuilder
+@resultBuilder
 public struct HavingBuilder {
     public static func buildBlock() -> EmptyExpression {
         .init()
