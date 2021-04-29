@@ -1,6 +1,6 @@
 import Foundation
 
-@_functionBuilder
+@resultBuilder
 public struct UnionBuilder {
     public static func buildBlock<T0, T1>(
         _ t0: T0,

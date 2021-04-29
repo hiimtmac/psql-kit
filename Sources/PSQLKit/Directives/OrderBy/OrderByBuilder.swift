@@ -1,6 +1,6 @@
 import Foundation
 
-@_functionBuilder
+@resultBuilder
 public struct OrderByBuilder {
     public static func buildBlock() -> EmptyExpression {
         .init()
