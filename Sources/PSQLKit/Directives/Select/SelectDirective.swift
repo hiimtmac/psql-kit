@@ -1,39 +1,37 @@
 import Foundation
 import SQLKit
 
-public struct SelectDirective<Content>: SQLExpression where Content: SelectSQLExpression {
-    let content: Content
+public struct SelectDirective: SQLExpression {
+    let content: [SelectSQLExpression]
     
-    public init(@SelectBuilder builder: () -> Content) {
+    public init(@SelectBuilder builder: () -> [SelectSQLExpression]) {
         self.content = builder()
     }
     
-    init(content: Content) {
+    init(content: [SelectSQLExpression]) {
         self.content = content
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write("SELECT")
-        serializer.writeSpace()
-        content.selectSqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            serializer.write("SELECT")
+            serializer.writeSpace()
+            SQLList(content.map(\.selectSqlExpression))
+                .serialize(to: &serializer)
+        }
     }
 }
 
-public struct DistinctModifier<Content>: SelectSQLExpression where Content: SelectSQLExpression {
-    let content: Content
+public struct DistinctSelection: SQLExpression {
+    let content: [SelectSQLExpression]
     
-    private struct _Select: SQLExpression {
-        let content: Content
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("DISTINCT")
+    public func serialize(to serializer: inout SQLSerializer) {
+        if !content.isEmpty {
+            serializer.write("SELECT DISTINCT")
             serializer.writeSpace()
-            content.selectSqlExpression.serialize(to: &serializer)
+            SQLList(content.map(\.selectSqlExpression))
+                .serialize(to: &serializer)
         }
-    }
-    
-    public var selectSqlExpression: some SQLExpression {
-        _Select(content: content)
     }
 }
 
@@ -43,33 +41,27 @@ extension SelectDirective {
     /// FROM people
     /// ```
     ///
-    public func distinct() -> SelectDirective<DistinctModifier<Content>> {
-        .init(content: DistinctModifier(content: content))
+    public func distinct() -> DistinctSelection {
+        DistinctSelection(content: content)
     }
 }
 
-
-public struct DistinctOnModifier<DistinctOn, Content>: SelectSQLExpression where DistinctOn: SelectSQLExpression, Content: SelectSQLExpression {
-    let distinctOn: DistinctOn
-    let content: Content
+public struct DistinctOnSelection: SQLExpression {
+    let distinctOn: [SelectSQLExpression]
+    let content: [SelectSQLExpression]
     
-    private struct _Select: SQLExpression {
-        let distinctOn: DistinctOn
-        let content: Content
-        
-        func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("DISTINCT ON")
+    public func serialize(to serializer: inout SQLSerializer) {
+        if !content.isEmpty {
+            serializer.write("SELECT DISTINCT ON")
             serializer.writeSpace()
             serializer.write("(")
-            distinctOn.selectSqlExpression.serialize(to: &serializer)
+            SQLList(distinctOn.map(\.selectSqlExpression))
+                .serialize(to: &serializer)
             serializer.write(")")
             serializer.writeSpace()
-            content.selectSqlExpression.serialize(to: &serializer)
+            SQLList(content.map(\.selectSqlExpression))
+                .serialize(to: &serializer)
         }
-    }
-    
-    public var selectSqlExpression: some SQLExpression {
-        _Select(distinctOn: distinctOn, content: content)
     }
 }
 
@@ -81,11 +73,19 @@ extension SelectDirective {
     /// ORDER BY address_id, purchased_at DESC
     /// ```
     ///
-    public func distinctOn<DistinctOn>(@SelectBuilder builder: () -> DistinctOn) -> SelectDirective<DistinctOnModifier<DistinctOn, Content>> where DistinctOn: SelectSQLExpression {
-        .init(content: DistinctOnModifier(distinctOn: builder(), content: content))
+    public func distinctOn(@SelectBuilder builder: () -> [SelectSQLExpression]) -> DistinctOnSelection {
+        DistinctOnSelection(distinctOn: builder(), content: content)
     }
 }
 
 extension SelectDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
+}
+
+extension DistinctSelection: QuerySQLExpression {
+    public var querySqlExpression: SQLExpression { self }
+}
+
+extension DistinctOnSelection: QuerySQLExpression {
+    public var querySqlExpression: SQLExpression { self }
 }

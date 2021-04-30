@@ -160,7 +160,7 @@ extension TableAlias where T: Model {
 }
 
 extension TableAlias: FromSQLExpression {
-    public var fromSqlExpression: some SQLExpression {
+    public var fromSqlExpression: SQLExpression {
         _From(
             aliasName: alias,
             pathName: T.path,

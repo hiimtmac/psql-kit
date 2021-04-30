@@ -6,17 +6,6 @@ final class SelectTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testSelectEmpty() {
-        SELECT {}
-        .serialize(to: &fluentSerializer)
-        
-        SELECT {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"SELECT "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"SELECT "#)
-    }
-    
     func testSelectModel() {
         SELECT {
             FluentModel.$name
@@ -223,6 +212,52 @@ final class SelectTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        SELECT {
+            f.$age
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            p.$age
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT "x"."age"::INTEGER, "x"."name"::TEXT"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        SELECT {
+            f.$age
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            p.$age
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT "x"."age"::INTEGER"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     func testIfElseTrue() {
         let bool = true
         SELECT {
@@ -310,7 +345,6 @@ final class SelectTests: PSQLTestCase {
     }
     
     static var allTests = [
-        ("testSelectEmpty", testSelectEmpty),
         ("testSelectModel", testSelectModel),
         ("testSelectModelAlias", testSelectModelAlias),
         ("testSelectBoth", testSelectBoth),
@@ -321,6 +355,8 @@ final class SelectTests: PSQLTestCase {
         ("testSelectRaw", testSelectRaw),
         ("testSelectSubquery", testSelectSubquery),
         ("testPostfix", testPostfix),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
         ("testSwitch", testSwitch)

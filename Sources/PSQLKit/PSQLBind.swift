@@ -16,11 +16,11 @@ extension PSQLBind: SQLExpression {
 }
 
 extension PSQLBind: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression { self }
+    public var compareSqlExpression: SQLExpression { self }
 }
 
 extension PSQLBind: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { self }
+    public var selectSqlExpression: SQLExpression { self }
 }
 
 extension PSQLBind: Equatable where T: Equatable {

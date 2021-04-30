@@ -1,20 +1,23 @@
 import Foundation
 import SQLKit
 
-public struct WithDirective<Content>: SQLExpression where Content: WithSQLExpression {
-    let content: Content
+public struct WithDirective: SQLExpression {
+    let content: [WithSQLExpression]
     
-    public init(@WithBuilder builder: () -> Content) {
+    public init(@WithBuilder builder: () -> [WithSQLExpression]) {
         self.content = builder()
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write("WITH")
-        serializer.writeSpace()
-        content.withSqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            serializer.write("WITH")
+            serializer.writeSpace()
+            SQLList(content.map(\.withSqlExpression))
+                .serialize(to: &serializer)
+        }
     }
 }
 
 extension WithDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression{ self }
+    public var querySqlExpression: SQLExpression{ self }
 }

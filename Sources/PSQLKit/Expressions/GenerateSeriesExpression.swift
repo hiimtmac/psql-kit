@@ -29,7 +29,7 @@ public struct GenerateSeriesExpression<Content>: SQLExpression where Content: Se
 }
 
 extension GenerateSeriesExpression: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { self }
+    public var selectSqlExpression: SQLExpression { self }
 }
 
 extension GenerateSeriesExpression {
@@ -39,5 +39,5 @@ extension GenerateSeriesExpression {
 }
 
 extension GenerateSeriesExpression: FromSQLExpression {
-    public var fromSqlExpression: some SQLExpression { self }
+    public var fromSqlExpression: SQLExpression { self }
 }

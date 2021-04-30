@@ -20,7 +20,7 @@ extension ArrayRemoveExpression: SelectSQLExpression where
     Content: SelectSQLExpression,
     T: PSQLExpression & SelectSQLExpression
 {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(content: content, remove: remove)
     }
     
@@ -46,7 +46,7 @@ extension ArrayRemoveExpression: CompareSQLExpression where
     Content: CompareSQLExpression,
     T: CompareSQLExpression
 {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(content: content, remove: remove)
     }
     

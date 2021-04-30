@@ -21,9 +21,9 @@ extension Array: PSQLExpression where Element: PSQLExpression {
 }
 
 extension Array: SelectSQLExpression where Element: SQLExpression & SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { self }
+    public var selectSqlExpression: SQLExpression { self }
 }
 
 extension Array: CompareSQLExpression where Element: SQLExpression & CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression { self }
+    public var compareSqlExpression: SQLExpression { self }
 }

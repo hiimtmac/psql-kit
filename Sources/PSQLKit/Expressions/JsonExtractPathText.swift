@@ -21,7 +21,7 @@ extension JsonbExtractPathTextExpression: Coalescable where Content: TypeEquatab
 }
 
 extension JsonbExtractPathTextExpression: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression {
+    public var baseSqlExpression: SQLExpression {
         _Base(content: content, pathElements: pathElements)
     }
     
@@ -44,7 +44,7 @@ extension JsonbExtractPathTextExpression: BaseSQLExpression {
 extension JsonbExtractPathTextExpression: SelectSQLExpression where
     Content: PSQLExpression
 {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(
             content: content,
             pathElements: pathElements,

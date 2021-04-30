@@ -1,26 +1,29 @@
 import Foundation
 import SQLKit
 
-public struct UpdateDirective<Table, Content>: SQLExpression where Table: FromSQLExpression, Content: UpdateSQLExpression {
+public struct UpdateDirective<Table>: SQLExpression where Table: FromSQLExpression {
     let table: Table
-    let content: Content
+    let content: [UpdateSQLExpression]
     
-    public init(_ table: Table, @UpdateBuilder builder: () -> Content) {
+    public init(_ table: Table, @UpdateBuilder builder: () -> [UpdateSQLExpression]) {
         self.table = table
         self.content = builder()
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write("UPDATE")
-        serializer.writeSpace()
-        table.fromSqlExpression.serialize(to: &serializer)
-        serializer.writeSpace()
-        serializer.write("SET")
-        serializer.writeSpace()
-        content.updateSqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            serializer.write("UPDATE")
+            serializer.writeSpace()
+            table.fromSqlExpression.serialize(to: &serializer)
+            serializer.writeSpace()
+            serializer.write("SET")
+            serializer.writeSpace()
+            SQLList(content.map(\.updateSqlExpression))
+                .serialize(to: &serializer)
+        }
     }
 }
 
 extension UpdateDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

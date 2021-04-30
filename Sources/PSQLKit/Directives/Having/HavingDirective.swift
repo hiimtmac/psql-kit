@@ -1,20 +1,23 @@
 import Foundation
 import SQLKit
 
-public struct HavingDirective<Content>: SQLExpression where Content: HavingSQLExpression {
-    let content: Content
+public struct HavingDirective: SQLExpression {
+    let content: [HavingSQLExpression]
     
-    public init(@HavingBuilder builder: () -> Content) {
+    public init(@HavingBuilder builder: () -> [HavingSQLExpression]) {
         self.content = builder()
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write("HAVING")
-        serializer.writeSpace()
-        content.havingSqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            serializer.write("HAVING")
+            serializer.writeSpace()
+            SQLList(content.map(\.havingSqlExpression), separator: SQLRaw(" AND "))
+                .serialize(to: &serializer)
+        }
     }
 }
 
 extension HavingDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

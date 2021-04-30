@@ -90,7 +90,7 @@ extension ConcatenateExpression: TypeEquatable {
 }
 
 extension ConcatenateExpression: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(values: values)
     }
     
@@ -109,7 +109,7 @@ extension ConcatenateExpression: SelectSQLExpression {
 }
 
 extension ConcatenateExpression: GroupBySQLExpression {
-    public var groupBySqlExpression: some SQLExpression {
+    public var groupBySqlExpression: SQLExpression {
         _GroupBy(values: values)
     }
     
@@ -126,7 +126,7 @@ extension ConcatenateExpression: GroupBySQLExpression {
 }
 
 extension ConcatenateExpression: CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(values: values)
     }
     

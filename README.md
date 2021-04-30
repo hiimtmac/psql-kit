@@ -6,7 +6,7 @@ PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hiimtmac/psql-kit.git", from: "0.13.5")
+    .package(url: "https://github.com/hiimtmac/psql-kit.git", from: "0.14.0")
 ],
 ```
 
@@ -53,8 +53,6 @@ SELECT "moons"."name"::TEXT, "moons"."craters"::INTEGER FROM "moons"
 ```
 
 ### `PSQLQuery`
-
-The query builders store all your types as you build them up. For example, the above type is `QueryDirective<QueryTouple<(SelectDirective<SelectTouple<(ColumnExpression<String>, ColumnExpression<Int>)>>, FromDirective<Moon>)>>`. This is obviously nasty if you want to pass it around as functions. To combat this, you can return a `QUERY` as `some PSQLQuery`. This will also give you some added functionality for executing and debugging (`QUERY` can also be executed or inspected).
 
 `.raw()` can be used to inspect your query
 
@@ -548,49 +546,6 @@ BINDS: ["the moon", 8]
 ```
 
 > Binds dont work nice with `PSQLDate` or `PSQLTimestamp`, however they have to be a swift `Date` object at some point so that should escape all injection possibliity from strings there.
-
-### Groupings
-
-Function builders are tricky. There is a lot of boilerplate to retain types but be versatile. All builders support 10 expressions within. If you need more, you can use the group-ers provided. See example and mapping:
-
-```swift
-let m = Moon.as("m")
-let p = Planet.as("p")
-QUERY {
-    SELECT {
-        m.$name
-        SELECTGROUP { m.$name }
-        SELECTGROUP { m.$name }
-    }
-    JOIN(p.table) { p.$id == m.$planet }
-    QUERYGROUP {
-        JOIN(p.table) {
-            p.$id == m.$planet
-            JOINGROUP {
-                p.$id == m.$planet
-            }
-        }
-    }
-}
-```
-
-```sql
-SELECT "m"."name"::TEXT, "m"."name"::TEXT, "m"."name"::TEXT
-INNER JOIN "planets" AS "p" ON ("p"."id" = "m"."planet_id")
-INNER JOIN "planets" AS "p" ON ("p"."id" = "m"."planet_id") AND ("p"."id" = "m"."planet_id")
-```
-
-|          | Directive | Group          | Notes                                                                 |
-| -------- | --------- | -------------- | --------------------------------------------------------------------- |
-| Select   | `SELECT`  | `SELECTGROUP`  |                                                                       |
-| Join     | `JOIN`    | `JOINGROUP`    | `JOINGROUP` for the stuff after `ON`, `QUERYGROUP` for multiple joins |
-| From     | `FROM`    | `FROMGROUP`    |                                                                       |
-| Group By | `GROUPBY` | `GROUPBYGROUP` |                                                                       |
-| Having   | `HAVING`  | `HAVINGGROUP`  |                                                                       |
-| Order By | `ORDERBY` | `ORDERBYGROUP` |                                                                       |
-| Query    | `QUERY`   | `QUERYGROUP`   | All other directives can be in here                                   |
-| Where    | `WHERE`   | `WHEREGROUP`   |                                                                       |
-| With     | `WITH`    | `WITHGROUP`    |                                                                       |
 
 ### Other
 

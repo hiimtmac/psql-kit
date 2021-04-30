@@ -43,7 +43,7 @@ extension ArithmeticExpression: SelectSQLExpression where
     T: SelectSQLExpression,
     U: SelectSQLExpression
 {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(lhs: lhs, operator: `operator`, rhs: rhs)
     }
     
@@ -76,7 +76,7 @@ extension ArithmeticExpression: CompareSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
     
@@ -101,7 +101,7 @@ extension ArithmeticExpression: WhereSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var whereSqlExpression: some SQLExpression {
+    public var whereSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
@@ -110,7 +110,7 @@ extension ArithmeticExpression: HavingSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var havingSqlExpression: some SQLExpression {
+    public var havingSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }
@@ -119,7 +119,7 @@ extension ArithmeticExpression: JoinSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var joinSqlExpression: some SQLExpression {
+    public var joinSqlExpression: SQLExpression {
         _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
     }
 }

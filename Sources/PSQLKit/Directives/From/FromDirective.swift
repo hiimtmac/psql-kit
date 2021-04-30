@@ -1,20 +1,23 @@
 import Foundation
 import SQLKit
 
-public struct FromDirective<Content>: SQLExpression where Content: FromSQLExpression {
-    let content: Content
+public struct FromDirective: SQLExpression {
+    let content: [FromSQLExpression]
     
-    public init(@FromBuilder builder: () -> Content) {
+    public init(@FromBuilder builder: () -> [FromSQLExpression]) {
         self.content = builder()
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write("FROM")
-        serializer.writeSpace()
-        content.fromSqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            serializer.write("FROM")
+            serializer.writeSpace()
+            SQLList(content.map(\.fromSqlExpression))
+                .serialize(to: &serializer)
+        }
     }
 }
 
 extension FromDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

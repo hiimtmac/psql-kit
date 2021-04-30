@@ -296,29 +296,6 @@ WHERE {
         print(fluentSerializer.binds)
     }
     
-    func testGroupings() {
-let m = Moon.as("m")
-let p = Planet.as("p")
-QUERY {
-    SELECT {
-        m.$name
-        SELECTGROUP { m.$name }
-        SELECTGROUP { m.$name }
-    }
-    JOIN(p.table) { p.$id == m.$planet }
-    QUERYGROUP {
-        JOIN(p.table) {
-            p.$id == m.$planet
-            JOINGROUP {
-                p.$id == m.$planet
-            }
-        }
-    }
-}
-        .serialize(to: &fluentSerializer)
-        print(fluentSerializer.sql)
-    }
-    
     func testUnion() {
 let m = Moon.as("m")
 let p = Planet.as("p")

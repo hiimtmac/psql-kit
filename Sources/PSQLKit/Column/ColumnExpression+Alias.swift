@@ -18,7 +18,7 @@ extension ColumnExpression.Alias: TypeEquatable where T: TypeEquatable {
 
 // MARK: Base
 extension ColumnExpression.Alias: BaseSQLExpression {
-    public var baseSqlExpression: some SQLExpression {
+    public var baseSqlExpression: SQLExpression {
         _Base(
             aliasName: column.aliasName,
             pathName: column.pathName,
@@ -74,7 +74,7 @@ extension ColumnExpression.Alias: BaseSQLExpression {
 
 // MARK: Select
 extension ColumnExpression.Alias: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(
             aliasName: column.aliasName,
             pathName: column.pathName,
@@ -134,7 +134,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
 }
 
 extension ColumnExpression.Alias: MutationSQLExpression {
-    public var mutationSqlExpression: some SQLExpression {
+    public var mutationSqlExpression: SQLExpression {
         _Mutation(
             aliasName: column.aliasName,
             pathName: column.pathName,

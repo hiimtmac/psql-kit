@@ -6,17 +6,6 @@ final class GroupByTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testGroupEmpty() {
-        GROUPBY {}
-        .serialize(to: &fluentSerializer)
-        
-        GROUPBY {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"GROUP BY "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"GROUP BY "#)
-    }
-    
     func testGroupModel() {
         GROUPBY {
             FluentModel.$name
@@ -169,14 +158,57 @@ final class GroupByTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        GROUPBY {
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        GROUPBY {
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"GROUP BY "x"."name""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        GROUPBY {
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        GROUPBY {
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
-        ("testGroupEmpty", testGroupEmpty),
         ("testGroupModel", testGroupModel),
         ("testGroupModelAlias", testGroupModelAlias),
         ("testGroupBoth", testGroupBoth),
         ("testGroupRaw", testGroupRaw),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
     ]
 }

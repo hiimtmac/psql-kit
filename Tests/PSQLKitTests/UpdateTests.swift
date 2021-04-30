@@ -6,17 +6,6 @@ final class UpdateTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testEmpty() {
-        UPDATE(FluentModel.table) {}
-        .serialize(to: &fluentSerializer)
-        
-        UPDATE(PSQLModel.table) {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"UPDATE "my_model" SET "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"UPDATE "my_model" SET "#)
-    }
-    
     func testModel() {
         UPDATE(FluentModel.table) {
             FluentModel.$name => "hi"
@@ -154,7 +143,6 @@ final class UpdateTests: PSQLTestCase {
     }
     
     static var allTests = [
-        ("testEmpty", testEmpty),
         ("testModel", testModel),
         ("testModelAlias", testModelAlias),
         ("testBoth", testBoth),

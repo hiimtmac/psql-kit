@@ -21,7 +21,7 @@ extension ArrayConcatenateExpression: SelectSQLExpression where
     U: SelectSQLExpression,
     T.CompareType: PSQLExpression
 {
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(one: one, two: two)
     }
     
@@ -47,7 +47,7 @@ extension ArrayConcatenateExpression: CompareSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var compareSqlExpression: some SQLExpression {
+    public var compareSqlExpression: SQLExpression {
         _Compare(one: one, two: two)
     }
     

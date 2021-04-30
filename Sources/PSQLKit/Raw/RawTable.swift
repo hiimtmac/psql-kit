@@ -16,5 +16,5 @@ public struct RawTable: SQLExpression {
 }
 
 extension RawTable: FromSQLExpression {
-    public var fromSqlExpression: some SQLExpression { self }
+    public var fromSqlExpression: SQLExpression { self }
 }

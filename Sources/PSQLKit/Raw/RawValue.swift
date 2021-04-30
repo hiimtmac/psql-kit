@@ -30,7 +30,7 @@ extension RawValue: SelectSQLExpression {
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(value: value)
     }
 }
@@ -69,7 +69,7 @@ extension RawValue.Alias: SelectSQLExpression {
         }
     }
     
-    public var selectSqlExpression: some SQLExpression {
+    public var selectSqlExpression: SQLExpression {
         _Select(value: value, alias: alias)
     }
 }

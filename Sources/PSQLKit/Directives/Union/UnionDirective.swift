@@ -1,18 +1,21 @@
 import Foundation
 import SQLKit
 
-public struct UnionDirective<Content>: SQLExpression where Content: UnionSQLExpression {
-    let content: Content
+public struct UnionDirective: SQLExpression {
+    let content: [UnionSQLExpression]
     
-    public init(@UnionBuilder builder: () -> Content) {
+    public init(@UnionBuilder builder: () -> [UnionSQLExpression]) {
         self.content = builder()
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
-        content.unionSqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            SQLList(content.map(\.unionSqlExpression), separator: SQLRaw(" UNION "))
+                .serialize(to: &serializer)
+        }
     }
 }
 
 extension UnionDirective: QuerySQLExpression {
-    public var querySqlExpression: some SQLExpression { self }
+    public var querySqlExpression: SQLExpression { self }
 }

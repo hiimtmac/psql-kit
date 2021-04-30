@@ -6,17 +6,6 @@ final class JoinTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testJoinEmpty() {
-        JOIN(f.table) {}
-        .serialize(to: &fluentSerializer)
-        
-        JOIN(p.table) {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"INNER JOIN "my_model" AS "x" ON "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"INNER JOIN "my_model" AS "x" ON "#)
-    }
-    
     func testJoinModel() {
         JOIN(FluentModel.table) {
             FluentModel.$name == FluentModel.$name
@@ -189,8 +178,53 @@ final class JoinTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        JOIN(f.table) {
+            f.$age == 29
+            if bool {
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        JOIN(p.table) {
+            p.$age == 29
+            if bool {
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."age" = 29) AND ("x"."name" = 'tmac')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        JOIN(f.table) {
+            f.$age == 29
+            if bool {
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        JOIN(p.table) {
+            p.$age == 29
+            if bool {
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
-        ("testJoinEmpty", testJoinEmpty),
         ("testJoinModel", testJoinModel),
         ("testJoinModelAlias", testJoinModelAlias),
         ("testJoinBoth", testJoinBoth),
@@ -198,6 +232,8 @@ final class JoinTests: PSQLTestCase {
         ("testJoinRaw", testJoinRaw),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
     ]
 }
