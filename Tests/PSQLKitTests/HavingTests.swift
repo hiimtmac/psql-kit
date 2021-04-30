@@ -6,17 +6,6 @@ final class HavingTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testHavingEmpty() {
-        HAVING {}
-        .serialize(to: &fluentSerializer)
-        
-        HAVING {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"HAVING "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"HAVING "#)
-    }
-    
     func testHaving1() {
         HAVING {
             FluentModel.$name == FluentModel.$title
@@ -155,13 +144,58 @@ final class HavingTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        HAVING {
+            if bool {
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        HAVING {
+            if bool {
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("x"."name" = 'tmac')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        HAVING {
+            f.$age == 29
+            if bool {
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        HAVING {
+            p.$age == 29
+            if bool {
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"HAVING ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
-        ("testHavingEmpty", testHavingEmpty),
         ("testHaving1", testHaving1),
         ("testHaving2", testHaving2),
         ("testHavingN", testHavingN),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
     ]
 }

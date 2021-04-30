@@ -10,17 +10,20 @@ public enum OrderByDirection: String, SQLExpression {
     }
 }
 
-public struct OrderByDirective<Content>: SQLExpression where Content: OrderBySQLExpression {
-    let content: Content
+public struct OrderByDirective: SQLExpression {
+    let content: [OrderBySQLExpression]
     
-    public init(@OrderByBuilder builder: () -> Content) {
+    public init(@OrderByBuilder builder: () -> [OrderBySQLExpression]) {
         self.content = builder()
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write("ORDER BY")
-        serializer.writeSpace()
-        content.orderBySqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            serializer.write("ORDER BY")
+            serializer.writeSpace()
+            SQLList(content.map(\.orderBySqlExpression))
+                .serialize(to: &serializer)
+        }
     }
 }
 

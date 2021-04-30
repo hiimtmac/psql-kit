@@ -6,17 +6,6 @@ final class SelectTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testSelectEmpty() {
-        SELECT {}
-        .serialize(to: &fluentSerializer)
-        
-        SELECT {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"SELECT "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"SELECT "#)
-    }
-    
     func testSelectModel() {
         SELECT {
             FluentModel.$name
@@ -356,7 +345,6 @@ final class SelectTests: PSQLTestCase {
     }
     
     static var allTests = [
-        ("testSelectEmpty", testSelectEmpty),
         ("testSelectModel", testSelectModel),
         ("testSelectModelAlias", testSelectModelAlias),
         ("testSelectBoth", testSelectBoth),

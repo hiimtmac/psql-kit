@@ -6,17 +6,6 @@ final class OrderByTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testOrderEmpty() {
-        ORDERBY {}
-        .serialize(to: &fluentSerializer)
-        
-        ORDERBY {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"ORDER BY "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"ORDER BY "#)
-    }
-    
     func testOrderModel() {
         ORDERBY {
             FluentModel.$name
@@ -193,8 +182,49 @@ final class OrderByTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        ORDERBY {
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        ORDERBY {
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"ORDER BY "x"."name""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        ORDERBY {
+            if bool {
+                f.$name
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        ORDERBY {
+            if bool {
+                p.$name
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
-        ("testOrderEmpty", testOrderEmpty),
         ("testOrderModel", testOrderModel),
         ("testOrderModelAlias", testOrderModelAlias),
         ("testOrderMultiple", testOrderMultiple),
@@ -202,6 +232,8 @@ final class OrderByTests: PSQLTestCase {
         ("testOrderRaw", testOrderRaw),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
     ]
 }

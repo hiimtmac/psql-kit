@@ -1,17 +1,20 @@
 import Foundation
 import SQLKit
 
-public struct WhereDirective<Content>: SQLExpression where Content: WhereSQLExpression {
-    let content: Content
+public struct WhereDirective: SQLExpression {
+    let content: [WhereSQLExpression]
     
-    public init(@WhereBuilder builder: () -> Content) {
+    public init(@WhereBuilder builder: () -> [WhereSQLExpression]) {
         self.content = builder()
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write("WHERE")
-        serializer.writeSpace()
-        content.whereSqlExpression.serialize(to: &serializer)
+        if !content.isEmpty {
+            serializer.write("WHERE")
+            serializer.writeSpace()
+            SQLList(content.map(\.whereSqlExpression), separator: SQLRaw(" AND "))
+                .serialize(to: &serializer)
+        }
     }
 }
 

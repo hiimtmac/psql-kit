@@ -10,17 +10,6 @@ final class WhereTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testEmpty() {
-        WHERE {}
-        .serialize(to: &fluentSerializer)
-        
-        WHERE {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"WHERE "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"WHERE "#)
-    }
-    
     func testEqual() {
         WHERE {
             FluentModel.$name == FluentModel.$title
@@ -391,8 +380,53 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        WHERE {
+            f.$age == 29
+            if bool {
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            p.$age == 29
+            if bool {
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE ("x"."age" = 29) AND ("x"."name" = 'tmac')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        WHERE {
+            f.$age == 29
+            if bool {
+                f.$name == "tmac"
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WHERE {
+            p.$age == 29
+            if bool {
+                p.$name == "tmac"
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WHERE ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
-        ("testEmpty", testEmpty),
         ("testEqual", testEqual),
         ("testMultiple", testMultiple),
         ("testNotEqual", testNotEqual),
@@ -407,6 +441,8 @@ final class WhereTests: PSQLTestCase {
         ("testWhereControlFlow", testWhereControlFlow),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
     ]
 }

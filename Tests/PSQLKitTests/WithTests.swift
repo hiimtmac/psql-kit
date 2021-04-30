@@ -6,17 +6,6 @@ final class WithTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testWithEmpty() {
-        WITH {}
-        .serialize(to: &fluentSerializer)
-        
-        WITH {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"WITH "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"WITH "#)
-    }
-    
     func testWith1() {
         WITH {
             QUERY {
@@ -98,7 +87,7 @@ final class WithTests: PSQLTestCase {
     }
     
     func testWithErased() {
-        let f: some PSQLQuery = QUERY {
+        let f = QUERY {
             SELECT { FluentModel.$name }
             FROM { FluentModel.table }
         }
@@ -110,7 +99,7 @@ final class WithTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
         
-        let p: some PSQLQuery = QUERY {
+        let p = QUERY {
             SELECT { FluentModel.$name }
             FROM { FluentModel.table }
         }
@@ -213,13 +202,56 @@ final class WithTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        WITH {
+            if bool {
+                QUERY { SELECT { f.$title } }.asWith(f.table)
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WITH {
+            if bool {
+                QUERY { SELECT { p.$title } }.asWith(p.table)
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"WITH "x" AS (SELECT "x"."title"::TEXT)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testIfFalse() {
+        let bool = false
+        WITH {
+            if bool {
+                QUERY { SELECT { f.$title } }.asWith(f.table)
+            }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        WITH {
+            if bool {
+                QUERY { SELECT { p.$title } }.asWith(p.table)
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
-        ("testWithEmpty", testWithEmpty),
         ("testWith1", testWith1),
         ("testWith2", testWith2),
         ("testWithErased", testWithErased),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
     ]
 }

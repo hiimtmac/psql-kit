@@ -6,17 +6,6 @@ final class DeleteTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
     
-    func testEmpty() {
-        DELETE {}
-        .serialize(to: &fluentSerializer)
-        
-        DELETE {}
-        .serialize(to: &psqlkitSerializer)
-        
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"DELETE FROM "#)
-    }
-    
     func testModel() {
         DELETE {
             FluentModel.table
@@ -208,8 +197,53 @@ final class DeleteTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testIfTrue() {
+        let bool = true
+        DELETE {
+            if bool {
+                f.table
+                FluentModel.table
+            }
+        }
+        .serialize(to: &fluentSerializer)
+
+        DELETE {
+            if bool {
+                p.table
+                PSQLModel.table
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"DELETE FROM "my_model" AS "x", "my_model""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testIfFalse() {
+        let bool = false
+        DELETE {
+            FluentModel.table
+            if bool {
+                f.table
+            }
+        }
+        .serialize(to: &fluentSerializer)
+
+        DELETE {
+            PSQLModel.table
+            if bool {
+                p.table
+            }
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"DELETE FROM "my_model""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
-        ("testEmpty", testEmpty),
         ("testModel", testModel),
         ("testModelAlias", testModelAlias),
         ("testBoth", testBoth),
@@ -218,6 +252,8 @@ final class DeleteTests: PSQLTestCase {
         ("testSubquery", testSubquery),
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch)
+        ("testSwitch", testSwitch),
+        ("testIfTrue", testIfTrue),
+        ("testIfFalse", testIfFalse),
     ]
 }
