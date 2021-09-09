@@ -23,5 +23,8 @@ public typealias ARRAY_UPPER = ArrayUpperExpression
 public typealias COALESCE = CoalesceExpression
 public typealias CONCAT = ConcatenateExpression
 
+public typealias DATE_TRUNC = DateTruncExpression
+public typealias DATE_PART = DatePartExpression
+
 public protocol Expression {}
 public protocol AggregateExpression: Expression {}

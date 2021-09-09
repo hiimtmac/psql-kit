@@ -564,6 +564,38 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
+    func testDateTrunc() {
+        SELECT {
+            DATE_TRUNC("hour", p.$birthday).as("datehour")
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            DATE_TRUNC("hour", p.$birthday).as("datehour")
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT DATE_TRUNC('hour', "x"."birthday"::TIMESTAMP) AS "datehour""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testDatePart() {
+        SELECT {
+            DATE_PART("hour", p.$birthday).as("hour")
+        }
+        .serialize(to: &fluentSerializer)
+        
+        SELECT {
+            DATE_PART("hour", p.$birthday).as("hour")
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        let compare = #"SELECT DATE_PART('hour', "x"."birthday"::TIMESTAMP) AS "hour""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
     static var allTests = [
         ("testMax", testMax),
         ("testMin", testMin),
@@ -587,6 +619,8 @@ final class ExpressionTests: PSQLTestCase {
         ("testArrayPrepend", testArrayPrepend),
         ("testArrayConcatenate", testArrayConcatenate),
         ("testArrayAppend", testArrayAppend),
+        ("testDateTrunc", testArrayAppend),
+        ("testDatePart", testArrayAppend),
         ("testConcateWithCoalesce", testConcateWithCoalesce)
     ]
 }
