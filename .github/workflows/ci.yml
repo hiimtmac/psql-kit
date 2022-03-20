@@ -54,9 +54,17 @@ jobs:
   #       uses: maxim-lobanov/setup-xcode@v1
   #       with:
   #         xcode-version: ${{ matrix.xcode }}
-  #     - name: Check out Vapor
+  #     - name: Checkout
   #       uses: actions/checkout@v3
-  #     - name: Run main tests with Thread Sanitizer
+  #     - name: Cache Swift PM
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: .build
+  #         key: ${{ runner.os }}-${{ matrix.images }}-spm-${{ hashFiles('Package.resolved') }}-v2
+  #         restore-keys: ${{ runner.os }}-${{ matrix.images }}-spm-
+  #     - name: Resolve Swift dependencies
+  #       run: swift package resolve
+  #     - name: Build & Test
   #       run: |
   #         swift test --parallel --sanitize=thread \
   #           -Xlinker -rpath \
