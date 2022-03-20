@@ -1,3 +1,6 @@
+// ExpressionAlias.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
@@ -14,22 +17,22 @@ extension ExpressionAlias: SelectSQLExpression where
     Expression: SelectSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(expression: expression, alias: alias)
+        _Select(expression: self.expression, alias: self.alias)
     }
-    
+
     private struct _Select: SQLExpression {
         let expression: Expression
         let alias: String
-        
+
         func serialize(to serializer: inout SQLSerializer) {
-            expression.selectSqlExpression.serialize(to: &serializer)
-            
+            self.expression.selectSqlExpression.serialize(to: &serializer)
+
             serializer.writeSpace()
             serializer.write("AS")
             serializer.writeSpace()
-            
+
             serializer.writeQuote()
-            serializer.write(alias)
+            serializer.write(self.alias)
             serializer.writeQuote()
         }
     }
@@ -39,22 +42,22 @@ extension ExpressionAlias: FromSQLExpression where
     Expression: FromSQLExpression
 {
     public var fromSqlExpression: SQLExpression {
-        _From(expression: expression, alias: alias)
+        _From(expression: self.expression, alias: self.alias)
     }
-    
+
     private struct _From: SQLExpression {
         let expression: Expression
         let alias: String
-        
+
         func serialize(to serializer: inout SQLSerializer) {
-            expression.fromSqlExpression.serialize(to: &serializer)
-            
+            self.expression.fromSqlExpression.serialize(to: &serializer)
+
             serializer.writeSpace()
             serializer.write("AS")
             serializer.writeSpace()
-            
+
             serializer.writeQuote()
-            serializer.write(alias)
+            serializer.write(self.alias)
             serializer.writeQuote()
         }
     }

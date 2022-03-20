@@ -1,21 +1,24 @@
+// Arithmetic.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 public struct ArithmeticOperator: SQLExpression {
     let value: String
-    
+
     public init(_ value: String) {
         self.value = value
     }
-    
+
     public static let addition = ArithmeticOperator("+")
     public static let subtraction = ArithmeticOperator("-")
     public static let multiplication = ArithmeticOperator("*")
     public static let division = ArithmeticOperator("/")
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write(value)
+        serializer.write(self.value)
     }
 }
 
@@ -27,7 +30,7 @@ public struct ArithmeticExpression<T, U> where
     let lhs: T
     let `operator`: ArithmeticOperator
     let rhs: U
-    
+
     public init(lhs: T, operator: ArithmeticOperator, rhs: U) {
         self.lhs = lhs
         self.operator = `operator`
@@ -44,21 +47,21 @@ extension ArithmeticExpression: SelectSQLExpression where
     U: SelectSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Select(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
-    
+
     private struct _Select: SQLExpression {
         let lhs: T
         let `operator`: ArithmeticOperator
         let rhs: U
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("(")
-            lhs.selectSqlExpression.serialize(to: &serializer)
+            self.lhs.selectSqlExpression.serialize(to: &serializer)
             serializer.writeSpace()
-            `operator`.serialize(to: &serializer)
+            self.operator.serialize(to: &serializer)
             serializer.writeSpace()
-            rhs.selectSqlExpression.serialize(to: &serializer)
+            self.rhs.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
             serializer.write("::")
             PostgresColumnType.decimal.serialize(to: &serializer)
@@ -77,21 +80,21 @@ extension ArithmeticExpression: CompareSQLExpression where
     U: CompareSQLExpression
 {
     public var compareSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
-    
+
     private struct _Compare: SQLExpression {
         let lhs: T
         let `operator`: ArithmeticOperator
         let rhs: U
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("(")
-            lhs.compareSqlExpression.serialize(to: &serializer)
+            self.lhs.compareSqlExpression.serialize(to: &serializer)
             serializer.writeSpace()
-            `operator`.serialize(to: &serializer)
+            self.operator.serialize(to: &serializer)
             serializer.writeSpace()
-            rhs.compareSqlExpression.serialize(to: &serializer)
+            self.rhs.compareSqlExpression.serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -102,7 +105,7 @@ extension ArithmeticExpression: WhereSQLExpression where
     U: CompareSQLExpression
 {
     public var whereSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
 
@@ -111,7 +114,7 @@ extension ArithmeticExpression: HavingSQLExpression where
     U: CompareSQLExpression
 {
     public var havingSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
 
@@ -120,6 +123,6 @@ extension ArithmeticExpression: JoinSQLExpression where
     U: CompareSQLExpression
 {
     public var joinSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }

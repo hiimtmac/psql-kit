@@ -1,6 +1,9 @@
+// Optional+PSQL.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 extension Optional: SQLExpression where Wrapped: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {

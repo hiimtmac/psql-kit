@@ -1,6 +1,9 @@
+// UUID+PSQL.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 extension UUID: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .uuid }

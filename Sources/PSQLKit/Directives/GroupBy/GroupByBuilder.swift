@@ -1,3 +1,6 @@
+// GroupByBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias GroupByBuilder = Builder<GroupBySQLExpression>

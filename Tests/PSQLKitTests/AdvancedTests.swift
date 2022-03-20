@@ -1,45 +1,59 @@
-import XCTest
-import PSQLKit
+// AdvancedTests.swift
+// Copyright © 2022 hiimtmac
+
 import FluentKit
+import PSQLKit
+import XCTest
 
 final class AdvancedTests: PSQLTestCase {
     final class Pet: Model, Table {
         static let schema = "pet"
-        
-        @ID var id: UUID?
-        @Field(key: "name") var name: String
-        @Parent(key: "owner_id") var owner: Owner
-        
+
+        @ID
+        var id: UUID?
+        @Field(key: "name")
+        var name: String
+        @Parent(key: "owner_id")
+        var owner: Owner
+
         init() {}
     }
-    
+
     final class Owner: Model, Table {
         static let schema = "owner"
-        
-        @ID var id: UUID?
-        @Field(key: "name") var name: String
-        @Field(key: "age") var age: Int
-        @Field(key: "bday") var bday: PSQLDate
-        
+
+        @ID
+        var id: UUID?
+        @Field(key: "name")
+        var name: String
+        @Field(key: "age")
+        var age: Int
+        @Field(key: "bday")
+        var bday: PSQLDate
+
         init() {}
     }
-    
+
     struct DateRange: Table {
         static let schema: String = "date_range"
-        @Column(key: "date") var date: PSQLDate
+        @Column(key: "date")
+        var date: PSQLDate
     }
-    
+
     struct OwnerFilter: Table {
-        @Column(key: "id") var id: UUID
+        @Column(key: "id")
+        var id: UUID
     }
-    
+
     struct OwnerDateSeries: Table {
-        @OptionalColumn(key: "id") var id: UUID?
-        @Column(key: "date") var date: PSQLDate
+        @OptionalColumn(key: "id")
+        var id: UUID?
+        @Column(key: "date")
+        var date: PSQLDate
     }
-    
+
     func testTypesCompile() {
-        let _ = WHERE {
+        _ = WHERE {
             // Custom UUID vs Custom UUID?
             OwnerFilter.$id == OwnerDateSeries.$id
             // Fluent UUID? vs Custom UUID?
@@ -48,7 +62,7 @@ final class AdvancedTests: PSQLTestCase {
             Owner.$id == OwnerFilter.$id
         }
     }
-    
+
     func testExample() {
         let d1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 31).date!
         let d2 = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!
@@ -57,7 +71,7 @@ final class AdvancedTests: PSQLTestCase {
         let p = Pet.as("p")
         let o = Owner.as("o")
         let f = OwnerFilter.as("f")
-        
+
         let query = QUERY {
             WITH {
                 QUERY {
@@ -86,7 +100,7 @@ final class AdvancedTests: PSQLTestCase {
                 }
                 .asWith(OwnerDateSeries.table) // not using alias to access results with full type...
             }
-            
+
             SELECT {
                 OwnerDateSeries.$date
                 o.$name
@@ -96,25 +110,25 @@ final class AdvancedTests: PSQLTestCase {
             JOIN(OwnerDateSeries.table) { o.$bday == OwnerDateSeries.$date }
         }
         query.serialize(to: &fluentSerializer)
-        
+
         let sub1 = [
             #"SELECT "date"::DATE"#,
             #"FROM GENERATE_SERIES($1, $2, '1 day'::INTERVAL)"#,
-            #"ORDER BY "date""#
+            #"ORDER BY "date""#,
         ].joined(separator: " ")
-        
+
         let sub2 = [
             #"SELECT DISTINCT "o"."id"::UUID FROM "pet" AS "p""#,
             #"INNER JOIN "owner" AS "o" ON ("o"."id" = "p"."owner_id")"#,
-            #"WHERE ("o"."age" > 20) AND ("p"."name" = 'dog')"#
+            #"WHERE ("o"."age" > 20) AND ("p"."name" = 'dog')"#,
         ].joined(separator: " ")
-        
+
         let sub3 = [
             #"SELECT "r"."date"::DATE, "f"."id"::UUID"#,
             #"FROM "OwnerFilter" AS "f""#,
-            #"INNER JOIN "date_range" AS "r" ON true"#
+            #"INNER JOIN "date_range" AS "r" ON true"#,
         ].joined(separator: " ")
-        
+
         let compare = [
             "WITH",
             #""r" AS (\#(sub1)),"#,
@@ -123,14 +137,14 @@ final class AdvancedTests: PSQLTestCase {
             #"SELECT "OwnerDateSeries"."date"::DATE, "o"."name"::TEXT"#,
             #"FROM "OwnerFilter" AS "f""#,
             #"LEFT JOIN "owner" AS "o" ON ("f"."id" = "o"."id")"#,
-            #"INNER JOIN "OwnerDateSeries" ON ("o"."bday" = "OwnerDateSeries"."date")"#
+            #"INNER JOIN "OwnerDateSeries" ON ("o"."bday" = "OwnerDateSeries"."date")"#,
         ].joined(separator: " ")
-        
+
         XCTAssertEqual(fluentSerializer.sql, compare)
         print(fluentSerializer.sql)
     }
-    
+
     static var allTests = [
-        ("testExample", testExample)
+        ("testExample", testExample),
     ]
 }

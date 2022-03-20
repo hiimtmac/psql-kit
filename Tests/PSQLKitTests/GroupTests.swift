@@ -1,6 +1,9 @@
+// GroupTests.swift
+// Copyright © 2022 hiimtmac
+
+import FluentKit
 import XCTest
 @testable import PSQLKit
-import FluentKit
 
 final class GroupTests: PSQLTestCase {
     func testLength() {
@@ -23,7 +26,7 @@ final class GroupTests: PSQLTestCase {
             FluentModel.$age
         }
         .serialize(to: &fluentSerializer)
-        
+
         SELECT {
             PSQLModel.$id
             PSQLModel.$age
@@ -43,12 +46,12 @@ final class GroupTests: PSQLTestCase {
             PSQLModel.$age
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     static var allTests = [
         ("testLength", testLength),
     ]

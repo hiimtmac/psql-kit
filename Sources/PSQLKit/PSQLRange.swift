@@ -1,3 +1,6 @@
+// PSQLRange.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
@@ -8,7 +11,7 @@ public struct PSQLRange<T, U> where
 {
     let lower: T
     let upper: U
-    
+
     public init(from: T, to: U) {
         self.lower = from
         self.upper = to
@@ -24,19 +27,19 @@ extension PSQLRange: CompareSQLExpression where
     U: CompareSQLExpression
 {
     public var compareSqlExpression: SQLExpression {
-        _Compare(lower: lower, upper: upper)
+        _Compare(lower: self.lower, upper: self.upper)
     }
-    
+
     private struct _Compare: SQLExpression {
         let lower: T
         let upper: U
-        
+
         func serialize(to serializer: inout SQLSerializer) {
-            lower.compareSqlExpression.serialize(to: &serializer)
+            self.lower.compareSqlExpression.serialize(to: &serializer)
             serializer.writeSpace()
             serializer.write("AND")
             serializer.writeSpace()
-            upper.compareSqlExpression.serialize(to: &serializer)
+            self.upper.compareSqlExpression.serialize(to: &serializer)
         }
     }
 }

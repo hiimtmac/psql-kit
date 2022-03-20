@@ -1,3 +1,6 @@
+// InsertBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias InsertBuilder = Builder<InsertSQLExpression>

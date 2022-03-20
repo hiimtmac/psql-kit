@@ -1,10 +1,13 @@
+// OrderByDirective.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
 public enum OrderByDirection: String, SQLExpression {
     case asc = "ASC"
     case desc = "DESC"
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write(rawValue)
     }
@@ -12,16 +15,16 @@ public enum OrderByDirection: String, SQLExpression {
 
 public struct OrderByDirective: SQLExpression {
     let content: [OrderBySQLExpression]
-    
+
     public init(@OrderByBuilder builder: () -> [OrderBySQLExpression]) {
         self.content = builder()
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
-        if !content.isEmpty {
+        if !self.content.isEmpty {
             serializer.write("ORDER BY")
             serializer.writeSpace()
-            SQLList(content.map(\.orderBySqlExpression))
+            SQLList(self.content.map(\.orderBySqlExpression))
                 .serialize(to: &serializer)
         }
     }
@@ -30,20 +33,20 @@ public struct OrderByDirective: SQLExpression {
 public struct OrderByModifier<Content>: OrderBySQLExpression where Content: OrderBySQLExpression {
     let content: Content
     let direction: OrderByDirection
-    
+
     private struct _OrderBy: SQLExpression {
         let content: Content
         let direction: OrderByDirection
-        
+
         func serialize(to serializer: inout SQLSerializer) {
-            content.orderBySqlExpression.serialize(to: &serializer)
+            self.content.orderBySqlExpression.serialize(to: &serializer)
             serializer.writeSpace()
-            direction.serialize(to: &serializer)
+            self.direction.serialize(to: &serializer)
         }
     }
-    
+
     public var orderBySqlExpression: SQLExpression {
-        _OrderBy(content: content, direction: direction)
+        _OrderBy(content: self.content, direction: self.direction)
     }
 }
 

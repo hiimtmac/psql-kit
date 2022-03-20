@@ -1,6 +1,9 @@
+// ArrayReplaceExpression.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 public struct ArrayReplaceExpression<Content, T, U>: AggregateExpression where
     Content: PSQLArrayRepresentable & TypeEquatable,
@@ -12,7 +15,7 @@ public struct ArrayReplaceExpression<Content, T, U>: AggregateExpression where
     let content: Content
     let find: T
     let replace: U
-    
+
     public init(_ content: Content, find: T, replace: U) {
         self.content = content
         self.find = find
@@ -27,24 +30,24 @@ extension ArrayReplaceExpression: SelectSQLExpression where
     U: SelectSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(content: content, find: find, replace: replace)
+        _Select(content: self.content, find: self.find, replace: self.replace)
     }
-    
+
     private struct _Select: SQLExpression {
         let content: Content
         let find: T
         let replace: U
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_REPLACE")
             serializer.write("(")
-            content.selectSqlExpression.serialize(to: &serializer)
+            self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            find.selectSqlExpression.serialize(to: &serializer)
+            self.find.selectSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            replace.selectSqlExpression.serialize(to: &serializer)
+            self.replace.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
             serializer.write("::")
             PostgresColumnType.array(T.postgresColumnType).serialize(to: &serializer)
@@ -58,24 +61,24 @@ extension ArrayReplaceExpression: CompareSQLExpression where
     U: CompareSQLExpression
 {
     public var compareSqlExpression: SQLExpression {
-        _Compare(content: content, find: find, replace: replace)
+        _Compare(content: self.content, find: self.find, replace: self.replace)
     }
-    
+
     private struct _Compare: SQLExpression {
         let content: Content
         let find: T
         let replace: U
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_REPLACE")
             serializer.write("(")
-            content.compareSqlExpression.serialize(to: &serializer)
+            self.content.compareSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            find.compareSqlExpression.serialize(to: &serializer)
+            self.find.compareSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            replace.compareSqlExpression.serialize(to: &serializer)
+            self.replace.compareSqlExpression.serialize(to: &serializer)
             serializer.write(")")
         }
     }

@@ -1,13 +1,16 @@
+// Comparisons.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
 public struct CompareOperator: SQLExpression {
     let value: String
-    
+
     public init(_ value: String) {
         self.value = value
     }
-    
+
     public static let equal = CompareOperator("=")
     public static let notEqual = CompareOperator("!=")
     public static let `in` = CompareOperator("IN")
@@ -26,9 +29,9 @@ public struct CompareOperator: SQLExpression {
     public static let notILike = CompareOperator("NOT ILIKE")
     public static let `is` = CompareOperator("IS")
     public static let isNot = CompareOperator("IS NOT")
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.write(value)
+        serializer.write(self.value)
     }
 }
 
@@ -39,7 +42,7 @@ public struct CompareExpression<T, U> where
     let lhs: T
     let `operator`: CompareOperator
     let rhs: U
-    
+
     public init(lhs: T, operator: CompareOperator, rhs: U) {
         self.lhs = lhs
         self.operator = `operator`
@@ -49,21 +52,21 @@ public struct CompareExpression<T, U> where
 
 extension CompareExpression: CompareSQLExpression {
     public var compareSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
-    
+
     private struct _Compare: SQLExpression {
         let lhs: T
         let `operator`: CompareOperator
         let rhs: U
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("(")
-            lhs.compareSqlExpression.serialize(to: &serializer)
+            self.lhs.compareSqlExpression.serialize(to: &serializer)
             serializer.writeSpace()
-            `operator`.serialize(to: &serializer)
+            self.operator.serialize(to: &serializer)
             serializer.writeSpace()
-            rhs.compareSqlExpression.serialize(to: &serializer)
+            self.rhs.compareSqlExpression.serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -71,18 +74,18 @@ extension CompareExpression: CompareSQLExpression {
 
 extension CompareExpression: WhereSQLExpression {
     public var whereSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
 
 extension CompareExpression: HavingSQLExpression {
     public var havingSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
 
 extension CompareExpression: JoinSQLExpression {
     public var joinSqlExpression: SQLExpression {
-        _Compare(lhs: lhs, operator: `operator`, rhs: rhs)
+        _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }

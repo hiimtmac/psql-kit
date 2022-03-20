@@ -1,28 +1,31 @@
+// GenerateSeriesExpression.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpression {
     let lower: Content
     let upper: Content
     let interval: SQLExpression
-    
+
     public init(from lower: Content, to upper: Content, interval: SQLExpression) {
         self.lower = lower
         self.upper = upper
         self.interval = interval
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("GENERATE_SERIES")
         serializer.write("(")
-        lower.selectSqlExpression.serialize(to: &serializer)
+        self.lower.selectSqlExpression.serialize(to: &serializer)
         serializer.write(",")
         serializer.writeSpace()
-        upper.selectSqlExpression.serialize(to: &serializer)
+        self.upper.selectSqlExpression.serialize(to: &serializer)
         serializer.write(",")
         serializer.writeSpace()
-        interval.serialize(to: &serializer)
+        self.interval.serialize(to: &serializer)
         serializer.write("::INTERVAL")
         serializer.write(")")
     }

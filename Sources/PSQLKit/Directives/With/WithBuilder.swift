@@ -1,3 +1,6 @@
+// WithBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias WithBuilder = Builder<WithSQLExpression>

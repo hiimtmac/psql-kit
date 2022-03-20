@@ -1,13 +1,17 @@
+// ComparisonOperations.swift
+// Copyright © 2022 hiimtmac
+
+import FluentKit
 import Foundation
 import SQLKit
-import FluentKit
 
 public typealias PSQLEquatable = PSQLExpression & Equatable
 public typealias PSQLComparable = PSQLExpression & Comparable
 
 // MARK: - ==
+
 /// lhs = rhs
-public func ==<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func == <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLEquatable,
@@ -17,8 +21,9 @@ public func ==<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - ===
+
 /// lhs IS rhs
-public func ===<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func === <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLEquatable,
@@ -28,8 +33,9 @@ public func ===<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - !=
+
 /// lhs != rhs
-public func !=<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func != <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLEquatable,
@@ -39,8 +45,9 @@ public func !=<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - !==
+
 /// lhs IS NOT rhs
-public func !==<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func !== <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLEquatable,
@@ -50,8 +57,9 @@ public func !==<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - <
+
 /// lhs < rhs
-public func <<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func < <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLComparable,
@@ -61,8 +69,9 @@ public func <<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - <=
+
 /// lhs <= rhs
-public func <=<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func <= <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLComparable,
@@ -72,8 +81,9 @@ public func <=<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - >
+
 /// lhs > rhs
-public func ><T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func > <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLComparable,
@@ -83,8 +93,9 @@ public func ><T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - >=
+
 /// lhs >= rhs
-public func >=<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func >= <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLComparable,
@@ -94,22 +105,23 @@ public func >=<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - OR
+
 /// lhs OR rhs
-public func ||<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U>
-{
+public func || <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> {
     CompareExpression(lhs: lhs, operator: .or, rhs: rhs)
 }
 
 // MARK: - AND
+
 /// lhs OR rhs
-public func &&<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U>
-{
+public func && <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> {
     CompareExpression(lhs: lhs, operator: .and, rhs: rhs)
 }
 
 // MARK: - Range
+
 /// lhs IN rhs
-public func ...<T, U>(_ lhs: T, _ rhs: U) -> PSQLRange<T, U> where
+public func ... <T, U>(_ lhs: T, _ rhs: U) -> PSQLRange<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType
@@ -118,8 +130,9 @@ public func ...<T, U>(_ lhs: T, _ rhs: U) -> PSQLRange<T, U> where
 }
 
 // MARK: - IN
+
 /// lhs IN rhs
-public func ><<T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
+public func >< <T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType
@@ -128,8 +141,9 @@ public func ><<T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
 }
 
 // MARK: - BETWEEN
+
 /// lhs BETWEEN rhs
-public func ><<T, U, V>(_ lhs: T, _ rhs: PSQLRange<U, V>) -> CompareExpression<T, PSQLRange<U, V>> where
+public func >< <T, U, V>(_ lhs: T, _ rhs: PSQLRange<U, V>) -> CompareExpression<T, PSQLRange<U, V>> where
     T: TypeEquatable,
     U: TypeEquatable,
     V: TypeEquatable,
@@ -140,8 +154,9 @@ public func ><<T, U, V>(_ lhs: T, _ rhs: PSQLRange<U, V>) -> CompareExpression<T
 }
 
 // MARK: - NOT IN
+
 /// lhs NOT IN rhs
-public func <><T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
+public func <> <T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType
@@ -150,8 +165,9 @@ public func <><T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
 }
 
 // MARK: - NOT BETWEEN
+
 /// lhs NOT BETWEEN rhs
-public func <><T, U, V>(_ lhs: T, _ rhs: PSQLRange<U, V>) -> CompareExpression<T, PSQLRange<U, V>> where
+public func <> <T, U, V>(_ lhs: T, _ rhs: PSQLRange<U, V>) -> CompareExpression<T, PSQLRange<U, V>> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType,
@@ -161,8 +177,9 @@ public func <><T, U, V>(_ lhs: T, _ rhs: PSQLRange<U, V>) -> CompareExpression<T
 }
 
 // MARK: - LIKE
+
 /// lhs LIKE rhs
-public func ~~<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func ~~ <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType
@@ -171,8 +188,9 @@ public func ~~<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - NOT LIKE
+
 /// lhs NOT LIKE rhs
-public func !~~<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func !~~ <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType
@@ -181,8 +199,9 @@ public func !~~<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - ILIKE
+
 /// lhs ILIKE rhs
-public func ~~*<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func ~~* <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType
@@ -191,8 +210,9 @@ public func ~~*<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
 }
 
 // MARK: - NOT ILIKE
+
 /// lhs NOT ILIKE rhs
-public func !~~*<T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
+public func !~~* <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType

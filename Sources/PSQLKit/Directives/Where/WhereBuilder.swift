@@ -1,3 +1,6 @@
+// WhereBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias WhereBuilder = Builder<WhereSQLExpression>

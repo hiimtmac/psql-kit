@@ -1,3 +1,6 @@
+// AllTableSelection.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
@@ -6,11 +9,12 @@ public struct AllTableSelection<T> where T: Table {
 }
 
 // MARK: Select
+
 extension AllTableSelection: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let pathName: String?
         let schemaName: String
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             if let path = pathName {
                 serializer.writeQuote()
@@ -18,21 +22,22 @@ extension AllTableSelection: SelectSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             }
-            
+
             serializer.writeQuote()
-            serializer.write(schemaName)
+            serializer.write(self.schemaName)
             serializer.writeQuote()
             serializer.writePeriod()
             serializer.write("*")
         }
     }
-    
+
     public var selectSqlExpression: SQLExpression {
         _Select(pathName: T.path, schemaName: T.schema)
     }
 }
 
 // MARK: - Alias
+
 extension AllTableSelection {
     public struct Alias {
         let table: TableAlias<T>
@@ -42,17 +47,17 @@ extension AllTableSelection {
 extension AllTableSelection.Alias: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let aliasName: String
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.writeQuote()
-            serializer.write(aliasName)
+            serializer.write(self.aliasName)
             serializer.writeQuote()
             serializer.writePeriod()
             serializer.write("*")
         }
     }
-    
+
     public var selectSqlExpression: SQLExpression {
-        _Select(aliasName: table.alias)
+        _Select(aliasName: self.table.alias)
     }
 }

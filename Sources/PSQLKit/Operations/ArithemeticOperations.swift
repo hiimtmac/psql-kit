@@ -1,10 +1,14 @@
+// ArithemeticOperations.swift
+// Copyright © 2022 hiimtmac
+
+import FluentKit
 import Foundation
 import SQLKit
-import FluentKit
 
 // MARK: - +
+
 /// lhs + rhs
-public func +<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
+public func + <T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLExpression,
@@ -14,8 +18,9 @@ public func +<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
 }
 
 // MARK: - -
+
 /// lhs - rhs
-public func -<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
+public func - <T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLExpression,
@@ -25,8 +30,9 @@ public func -<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
 }
 
 // MARK: - *
+
 /// lhs * rhs
-public func *<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
+public func * <T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLExpression,
@@ -36,8 +42,9 @@ public func *<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
 }
 
 // MARK: - /
+
 /// lhs / rhs
-public func /<T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
+public func / <T, U>(_ lhs: T, _ rhs: U) -> ArithmeticExpression<T, U> where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType: PSQLExpression,

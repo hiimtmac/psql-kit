@@ -1,3 +1,6 @@
+// Expressions.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 public typealias GENERATE_SERIES = GenerateSeriesExpression

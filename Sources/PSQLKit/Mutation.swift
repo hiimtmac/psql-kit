@@ -1,3 +1,6 @@
+// Mutation.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 public struct Mutation<T, U> where
@@ -14,11 +17,11 @@ extension Mutation: InsertSQLExpression where
     U: MutationSQLExpression
 {
     public var insertColumnSqlExpression: SQLExpression {
-        column.mutationSqlExpression
+        self.column.mutationSqlExpression
     }
 
     public var insertValueSqlExpression: SQLExpression {
-        value.mutationSqlExpression
+        self.value.mutationSqlExpression
     }
 }
 
@@ -31,15 +34,15 @@ extension Mutation: UpdateSQLExpression where
         let value: U
 
         func serialize(to serializer: inout SQLSerializer) {
-            column.mutationSqlExpression.serialize(to: &serializer)
+            self.column.mutationSqlExpression.serialize(to: &serializer)
             serializer.writeSpace()
             serializer.write("=")
             serializer.writeSpace()
-            value.mutationSqlExpression.serialize(to: &serializer)
+            self.value.mutationSqlExpression.serialize(to: &serializer)
         }
     }
 
     public var updateSqlExpression: SQLExpression {
-        _Update(column: column, value: value)
+        _Update(column: self.column, value: self.value)
     }
 }

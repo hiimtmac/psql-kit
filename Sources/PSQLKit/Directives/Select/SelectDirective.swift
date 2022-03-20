@@ -1,22 +1,25 @@
+// SelectDirective.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
 public struct SelectDirective: SQLExpression {
     let content: [SelectSQLExpression]
-    
+
     public init(@SelectBuilder builder: () -> [SelectSQLExpression]) {
         self.content = builder()
     }
-    
+
     init(content: [SelectSQLExpression]) {
         self.content = content
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
-        if !content.isEmpty {
+        if !self.content.isEmpty {
             serializer.write("SELECT")
             serializer.writeSpace()
-            SQLList(content.map(\.selectSqlExpression))
+            SQLList(self.content.map(\.selectSqlExpression))
                 .serialize(to: &serializer)
         }
     }
@@ -24,12 +27,12 @@ public struct SelectDirective: SQLExpression {
 
 public struct DistinctSelection: SQLExpression {
     let content: [SelectSQLExpression]
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
-        if !content.isEmpty {
+        if !self.content.isEmpty {
             serializer.write("SELECT DISTINCT")
             serializer.writeSpace()
-            SQLList(content.map(\.selectSqlExpression))
+            SQLList(self.content.map(\.selectSqlExpression))
                 .serialize(to: &serializer)
         }
     }
@@ -42,24 +45,24 @@ extension SelectDirective {
     /// ```
     ///
     public func distinct() -> DistinctSelection {
-        DistinctSelection(content: content)
+        DistinctSelection(content: self.content)
     }
 }
 
 public struct DistinctOnSelection: SQLExpression {
     let distinctOn: [SelectSQLExpression]
     let content: [SelectSQLExpression]
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
-        if !content.isEmpty {
+        if !self.content.isEmpty {
             serializer.write("SELECT DISTINCT ON")
             serializer.writeSpace()
             serializer.write("(")
-            SQLList(distinctOn.map(\.selectSqlExpression))
+            SQLList(self.distinctOn.map(\.selectSqlExpression))
                 .serialize(to: &serializer)
             serializer.write(")")
             serializer.writeSpace()
-            SQLList(content.map(\.selectSqlExpression))
+            SQLList(self.content.map(\.selectSqlExpression))
                 .serialize(to: &serializer)
         }
     }
@@ -74,7 +77,7 @@ extension SelectDirective {
     /// ```
     ///
     public func distinctOn(@SelectBuilder builder: () -> [SelectSQLExpression]) -> DistinctOnSelection {
-        DistinctOnSelection(distinctOn: builder(), content: content)
+        DistinctOnSelection(distinctOn: builder(), content: self.content)
     }
 }
 

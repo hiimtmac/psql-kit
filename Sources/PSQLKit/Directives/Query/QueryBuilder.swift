@@ -1,3 +1,6 @@
+// QueryBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias QueryBuilder = Builder<QuerySQLExpression>

@@ -1,0 +1,230 @@
+# swift version
+--swiftversion 5.6
+
+# Exclusions
+--exclude .build,.swiftpm
+
+# Use comma rather than && where possible
+--rules andOperator
+
+# Use AnyObject instead of (deprecated) class
+--rules anyObjectProtocol
+
+# Use assertion/preconditionFailure() instead of assert/precondition(false)
+--rules assertionFailures
+
+# Add blank line after MARK comments
+--rules blankLinesAroundMark
+--lineaftermarks true
+
+# Remove leading and trailing blank lines inside scopes and between imports
+--rules blankLinesAtEndOfScope, blankLinesAtStartOfScope, blankLinesBetweenImports
+
+# Add blank line between consecutive scopes
+--rules blankLinesBetweenScopes
+
+# Replace /* */ comments with // comments
+--rules blockComments
+
+# Use K&R-style braces (same line)
+--rules braces
+--allman false
+
+# Collapse multiple blank lines into one
+--rules consecutiveBlankLines
+
+# Remove duplicate imports
+--rules duplicateImports
+
+# Format if-else on same line with braces, guard-else appropriately to context
+--rules elseOnSameLine
+--elseposition same-line
+
+# No spaces inside empty braces
+--rules emptyBraces
+--emptybraces no-space
+
+# Put access control modifiers for extensions on the declarations
+--rules extensionAccessControl
+--extensionacl on-declarations
+
+# File headers
+--rules fileHeader
+--header "{file}\nCopyright © {year} hiimtmac"
+
+# Place let on the outside of patterns
+--rules hoistPatternLet
+--patternlet hoist
+
+# Normalize indentation to 4 spaces per scope
+--rules indent
+--indent 4
+--smarttabs enabled
+--indentcase false
+--ifdef indent
+--xcodeindentation disabled
+--indentstrings true
+
+# Mark unimplmented init(coder:) methods unavailable
+--rules initCoderUnavailable
+
+# Use .isEmpty instead of .count == 0
+--rules isEmpty
+
+# Keep list commas at the end of lines
+--rules leadingDelimiters
+
+# Make sure files end in a newline
+--rules linebreakAtEndOfFile
+
+# Normalize to UNIX newlines
+--rules linebreaks
+--linebreaks lf
+
+# Normalize ordering of modifiers
+# Modifier list from:
+#  https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#grammar_declaration-modifiers
+--rules modifierOrder
+--modifierorder open,public,internal,fileprivate,private,\
+                override,final,optional,\
+                class,static,\
+                mutating,nonmutating,\
+                isolated,nonisolated,\
+                dynamic,lazy,\
+                weak,unowned,\
+                required,convenience,\
+                prefix,infix,postfix
+
+# Use consistent formatting for numeric literals
+--rules numberFormatting
+--decimalgrouping 3,5
+--binarygrouping 4,8
+--hexgrouping 8,9
+--fractiongrouping disabled
+--exponentgrouping disabled
+--hexliteralcase lowercase
+--exponentcase lowercase
+
+# Replace CGFloat with Double in Swift 5.6
+--rules preferDouble
+
+# Replace .map { $0.foo } with .map(\.foo)
+--rules preferKeyPath
+
+# Remove unnecessary backtick escaping
+--rules redundantBackticks
+
+# Remove unnecessary break statements
+--rules redundantBreak
+
+# Remove get {} in getter-only computed properties
+--rules redundantGet
+
+# Remove let/var from _ = expressions
+--rules redundantLet
+
+# Replace catch let error with catch
+--rules redundantLetError
+
+# Remove unneeded explicit = nil initializer expressions
+--rules redundantNilInit
+
+# Remove unnecessary grouping parenthesis
+--rules redundantParens
+
+# Remove unnecesary pattern initializer syntax
+--rules redundantPattern
+
+# Always explicitly refer to self
+--rules redundantSelf
+--self insert
+
+# Remove unnecessary type declarations, but only on local variables
+--rules redundantType
+--redundanttype infer-locals-only
+
+# Remove unnecessary Void return type on function declarations
+--rules redundantVoidReturnType
+--closurevoid preserve
+
+# Ditch semicolons on single-statement lines
+--rules semicolons
+--semicolons inline
+
+# Sort import statements, putting testable imports last
+--rules sortedImports
+--importgrouping testable-last
+
+# Normalize whitespace around and inside various things
+--rules spaceAroundBraces,spaceAroundBrackets,\
+        spaceAroundComments,spaceAroundGenerics,\
+        spaceAroundOperators,spaceAroundParens,\
+        spaceInsideBraces,spaceInsideBrackets,\
+        spaceInsideComments,spaceInsideGenerics,\
+        spaceInsideParens
+
+--operatorfunc spaced
+--ranges spaced
+
+# Cleanup guard self = self expressions
+--rules strongifiedSelf
+
+# Correct misformatted MARK, TODO, etc. comments
+--rules todos
+
+# Always use trailing commas in collection literals
+--rules trailingCommas
+--commas always
+
+# Trim lines with trailing whitespace
+--rules trailingSpace
+--trimwhitespace always
+
+# Name unused arguments _ always
+--rules unusedArguments
+--stripunusedargs always
+
+# Use Void instead of () in type context
+--rules void
+--voidtype void
+
+# Align wrapped arguments and elements
+--rules wrapArguments
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--closingparen balanced
+--wrapreturntype preserve
+--wrapconditions before-first
+--wraptypealiases before-first
+
+# Put @attributes on separate lines
+--rules wrapAttributes
+--funcattributes prev-line
+--typeattributes prev-line
+--varattributes prev-line
+
+# Put open braces of multiline conditions on their own line
+--rules wrapMultilineStatementBraces
+
+# Disabled rules
+# --rules acroynms
+# --rules consecutiveSpaces
+# --rules enumNamespaces
+# --rules marktypes
+# --rules organizeDeclarations
+# --rules redundantClosure
+# --rules redundantExtensionACL
+# --rules redundantFileprivate
+# --rules redundantObjc
+# --rules redundantRawValues
+# --rules redundantReturn
+# --rules sortedSwitchCases
+# --rules strongOutlets
+# --rules trailingClosures
+# --rules typeSugar
+# --rules wrap
+# --rules wrapConditionalBodies
+# --rules wrapEnumCases
+# --rules wrapSwitchCases
+# --rules yodaConditions

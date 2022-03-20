@@ -1,9 +1,12 @@
+// ArrayAggregateExpression.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
 public struct ArrayAggregateExpression<Content>: AggregateExpression {
     let content: Content
-    
+
     public init(_ content: Content) {
         self.content = content
     }
@@ -13,16 +16,16 @@ extension ArrayAggregateExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(content: content)
+        _Select(content: self.content)
     }
-    
+
     private struct _Select: SQLExpression {
         let content: Content
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_AGG")
             serializer.write("(")
-            content.selectSqlExpression.serialize(to: &serializer)
+            self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -32,16 +35,16 @@ extension ArrayAggregateExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
     public var compareSqlExpression: SQLExpression {
-        _Compare(content: content)
+        _Compare(content: self.content)
     }
-    
+
     private struct _Compare: SQLExpression {
         let content: Content
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_AGG")
             serializer.write("(")
-            content.compareSqlExpression.serialize(to: &serializer)
+            self.content.compareSqlExpression.serialize(to: &serializer)
             serializer.write(")")
         }
     }

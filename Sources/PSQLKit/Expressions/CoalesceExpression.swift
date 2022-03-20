@@ -1,15 +1,19 @@
+// CoalesceExpression.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 public protocol Coalescable: BaseSQLExpression {}
 
 // MARK: CoalesceExpression
+
 public struct CoalesceExpression<T> where
     T: TypeEquatable
 {
     let values: [SQLExpression]
-    
+
     public init<T0, T1>(
         _ t0: T0,
         _ t1: T1
@@ -21,10 +25,10 @@ public struct CoalesceExpression<T> where
     {
         self.values = [
             t0.baseSqlExpression,
-            t1.baseSqlExpression
+            t1.baseSqlExpression,
         ]
     }
-    
+
     public init<T0, T1, T2>(
         _ t0: T0,
         _ t1: T1,
@@ -40,10 +44,10 @@ public struct CoalesceExpression<T> where
         self.values = [
             t0.baseSqlExpression,
             t1.baseSqlExpression,
-            t2.baseSqlExpression
+            t2.baseSqlExpression,
         ]
     }
-    
+
     public init<T0, T1, T2, T3>(
         _ t0: T0,
         _ t1: T1,
@@ -63,10 +67,10 @@ public struct CoalesceExpression<T> where
             t0.baseSqlExpression,
             t1.baseSqlExpression,
             t2.baseSqlExpression,
-            t3.baseSqlExpression
+            t3.baseSqlExpression,
         ]
     }
-    
+
     public init<T0, T1, T2, T3, T4>(
         _ t0: T0,
         _ t1: T1,
@@ -90,7 +94,7 @@ public struct CoalesceExpression<T> where
             t1.baseSqlExpression,
             t2.baseSqlExpression,
             t3.baseSqlExpression,
-            t4.baseSqlExpression
+            t4.baseSqlExpression,
         ]
     }
 }
@@ -103,16 +107,16 @@ extension CoalesceExpression: Coalescable {}
 
 extension CoalesceExpression: BaseSQLExpression {
     public var baseSqlExpression: SQLExpression {
-        _Base(values: values)
+        _Base(values: self.values)
     }
-    
+
     private struct _Base: SQLExpression {
         let values: [SQLExpression]
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("COALESCE")
             serializer.write("(")
-            SQLList(values).serialize(to: &serializer)
+            SQLList(self.values).serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -122,16 +126,16 @@ extension CoalesceExpression: SelectSQLExpression where
     T: SelectSQLExpression & PSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(values: values)
+        _Select(values: self.values)
     }
-    
+
     private struct _Select: SQLExpression {
         let values: [SQLExpression]
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("COALESCE")
             serializer.write("(")
-            SQLList(values).serialize(to: &serializer)
+            SQLList(self.values).serialize(to: &serializer)
             serializer.write(")")
             serializer.write("::")
             T.postgresColumnType.serialize(to: &serializer)
@@ -143,7 +147,7 @@ extension CoalesceExpression: CompareSQLExpression where
     T: CompareSQLExpression
 {
     public var compareSqlExpression: SQLExpression {
-        _Base(values: values)
+        _Base(values: self.values)
     }
 }
 
