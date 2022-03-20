@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -12,8 +12,8 @@ let package = Package(
         .library(name: "PSQLKit", targets: ["PSQLKit"])
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.0.0"),
-        .package(url: "https://github.com/vapor/postgres-kit.git", from: "2.0.0")
+        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.23.0"),
+        .package(url: "https://github.com/vapor/postgres-kit.git", from: "2.6.0")
     ],
     targets: [
         .target(name: "PSQLKit", dependencies: [
