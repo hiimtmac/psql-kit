@@ -38,7 +38,7 @@ jobs:
       - name: Resolve Swift dependencies
         run: swift package resolve
       - name: Build & Test
-        run: swift test --enable-test-discovery --parallel --sanitize=thread
+        run: swift test --parallel --sanitize=thread
 
   # test-macos:
   #   name: Test macOS
