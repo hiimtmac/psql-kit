@@ -1,61 +1,86 @@
+// PSQLTests.swift
+// Copyright © 2022 hiimtmac
+
+import FluentKit
+import PostgresKit
+import SQLKit
 import XCTest
 @testable import PSQLKit
-import FluentKit
-import SQLKit
-import PostgresKit
 
 final class FluentModel: Model, Table {
     static let schema = "my_model"
-    
-    @ID var id: UUID?
-    @OptionalField(key: "name") var name: String?
-    @Field(key: "title") var title: String
-    @Field(key: "age") var age: Int
-    @Field(key: "money") var money: Double
-    @Field(key: "birthday") var birthday: Date
-    @Group(key: "pet") var pet: Pet
-    
+
+    @ID
+    var id: UUID?
+    @OptionalField(key: "name")
+    var name: String?
+    @Field(key: "title")
+    var title: String
+    @Field(key: "age")
+    var age: Int
+    @Field(key: "money")
+    var money: Double
+    @Field(key: "birthday")
+    var birthday: Date
+    @Group(key: "pet")
+    var pet: Pet
+
     init() {}
-    
+
     final class Pet: Fields, TableObject {
-        @Field(key: "name") var name: String
-        @Field(key: "type") var type: String
-        @Group(key: "info") var info: Info
+        @Field(key: "name")
+        var name: String
+        @Field(key: "type")
+        var type: String
+        @Group(key: "info")
+        var info: Info
 
-        init() { }
-        
+        init() {}
+
         final class Info: Fields, TableObject {
-            @Field(key: "name") var name: String
+            @Field(key: "name")
+            var name: String
 
-            init() { }
+            init() {}
         }
     }
 }
 
 struct PSQLModel: Table {
     static let schema = "my_model"
-    
-    @Column(key: "id") var id: UUID?
-    @OptionalColumn(key: "name") var name: String?
-    @Column(key: "title") var title: String
-    @Column(key: "age") var age: Int
-    @Column(key: "money") var money: Double
-    @Column(key: "birthday") var birthday: Date
-    @NestedColumn(key: "pet") var pet: Pet
-    
+
+    @Column(key: "id")
+    var id: UUID?
+    @OptionalColumn(key: "name")
+    var name: String?
+    @Column(key: "title")
+    var title: String
+    @Column(key: "age")
+    var age: Int
+    @Column(key: "money")
+    var money: Double
+    @Column(key: "birthday")
+    var birthday: Date
+    @NestedColumn(key: "pet")
+    var pet: Pet
+
     init() {}
-    
+
     struct Pet: TableObject, Codable {
-        @Column(key: "name") var name: String
-        @Column(key: "type") var type: String
-        @NestedColumn(key: "info") var info: Info
+        @Column(key: "name")
+        var name: String
+        @Column(key: "type")
+        var type: String
+        @NestedColumn(key: "info")
+        var info: Info
 
-        init() { }
-        
+        init() {}
+
         struct Info: TableObject, Codable {
-            @Column(key: "name") var name: String
+            @Column(key: "name")
+            var name: String
 
-            init() { }
+            init() {}
         }
     }
 }

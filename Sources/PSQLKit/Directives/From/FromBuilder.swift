@@ -1,3 +1,6 @@
+// FromBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias FromBuilder = Builder<FromSQLExpression>

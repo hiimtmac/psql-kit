@@ -1,15 +1,17 @@
-import Foundation
-import SQLKit
-import PostgresKit
+// ConcatenateExpression.swift
+// Copyright © 2022 hiimtmac
 
-public protocol Concatenatable: BaseSQLExpression {
-    
-}
+import Foundation
+import PostgresKit
+import SQLKit
+
+public protocol Concatenatable: BaseSQLExpression {}
 
 // MARK: ConcatenateExpression
+
 public struct ConcatenateExpression {
     let values: [SQLExpression]
-    
+
     public init<T0, T1>
     (
         _ t0: T0,
@@ -20,10 +22,10 @@ public struct ConcatenateExpression {
     {
         self.values = [
             t0.baseSqlExpression,
-            t1.baseSqlExpression
+            t1.baseSqlExpression,
         ]
     }
-    
+
     public init<T0, T1, T2>
     (
         _ t0: T0,
@@ -37,10 +39,10 @@ public struct ConcatenateExpression {
         self.values = [
             t0.baseSqlExpression,
             t1.baseSqlExpression,
-            t2.baseSqlExpression
+            t2.baseSqlExpression,
         ]
     }
-    
+
     public init<T0, T1, T2, T3>
     (
         _ t0: T0,
@@ -57,10 +59,10 @@ public struct ConcatenateExpression {
             t0.baseSqlExpression,
             t1.baseSqlExpression,
             t2.baseSqlExpression,
-            t3.baseSqlExpression
+            t3.baseSqlExpression,
         ]
     }
-    
+
     public init<T0, T1, T2, T3, T4>
     (
         _ t0: T0,
@@ -80,7 +82,7 @@ public struct ConcatenateExpression {
             t1.baseSqlExpression,
             t2.baseSqlExpression,
             t3.baseSqlExpression,
-            t4.baseSqlExpression
+            t4.baseSqlExpression,
         ]
     }
 }
@@ -91,16 +93,16 @@ extension ConcatenateExpression: TypeEquatable {
 
 extension ConcatenateExpression: SelectSQLExpression {
     public var selectSqlExpression: SQLExpression {
-        _Select(values: values)
+        _Select(values: self.values)
     }
-    
+
     private struct _Select: SQLExpression {
         let values: [SQLExpression]
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            SQLList(values).serialize(to: &serializer)
+            SQLList(self.values).serialize(to: &serializer)
             serializer.write(")")
             serializer.write("::")
             PostgresColumnType.text.serialize(to: &serializer)
@@ -110,16 +112,16 @@ extension ConcatenateExpression: SelectSQLExpression {
 
 extension ConcatenateExpression: GroupBySQLExpression {
     public var groupBySqlExpression: SQLExpression {
-        _GroupBy(values: values)
+        _GroupBy(values: self.values)
     }
-    
+
     private struct _GroupBy: SQLExpression {
         let values: [SQLExpression]
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            SQLList(values).serialize(to: &serializer)
+            SQLList(self.values).serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -127,16 +129,16 @@ extension ConcatenateExpression: GroupBySQLExpression {
 
 extension ConcatenateExpression: CompareSQLExpression {
     public var compareSqlExpression: SQLExpression {
-        _Compare(values: values)
+        _Compare(values: self.values)
     }
-    
+
     private struct _Compare: SQLExpression {
         let values: [SQLExpression]
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            SQLList(values).serialize(to: &serializer)
+            SQLList(self.values).serialize(to: &serializer)
             serializer.write(")")
         }
     }

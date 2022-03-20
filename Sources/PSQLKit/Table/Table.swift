@@ -1,5 +1,8 @@
-import Foundation
+// Table.swift
+// Copyright © 2022 hiimtmac
+
 import FluentKit
+import Foundation
 import SQLKit
 
 @dynamicMemberLookup
@@ -15,32 +18,33 @@ extension Table {
     public typealias Column<Value> = ColumnProperty<Self, Value> where Value: Codable
     public typealias OptionalColumn<Value> = OptionalColumnProperty<Self, Value> where Value: Codable
     public typealias NestedColumn<Value> = NestedObjectProperty<Self, Value> where Value: Codable
-    
+
     /// Table Name
     public static var schema: String { "\(Self.self)" }
-    
+
     /// Path/Schema Name
     public static var path: String? { nil }
 
     public static func `as`(_ alias: String) -> TableAlias<Self> {
-        .init(path: path, alias: alias)
+        .init(path: self.path, alias: alias)
     }
-    
+
     public func `as`(_ alias: String) -> TableAlias<Self> {
         .init(path: Self.path, alias: alias)
     }
 
     public static var table: Self { Self() }
-    
-    public static postfix func .*(table: Self) -> AllTableSelection<Self> {
+
+    public static postfix func .* (table: Self) -> AllTableSelection<Self> {
         .init(table: table)
     }
-    
+
     public var fromSqlExpression: SQLExpression {
         _From(pathName: Self.path, schemaName: Self.schema)
     }
-    
+
     // MARK: - ColumnProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, Column<T>>
     ) -> ColumnExpression<T> {
@@ -52,8 +56,9 @@ extension Table {
             columnName: field.key
         )
     }
-    
+
     // MARK: - OptionalColumnProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, OptionalColumn<T>>
     ) -> ColumnExpression<T> {
@@ -65,8 +70,9 @@ extension Table {
             columnName: field.key
         )
     }
-    
+
     // MARK: - NestedColumnProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, NestedObjectProperty<Self, T>>
     ) -> ColumnExpression<T> {
@@ -82,6 +88,7 @@ extension Table {
 
 extension Table where Self: Model {
     // MARK: - FieldProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>
     ) -> ColumnExpression<T> {
@@ -93,8 +100,9 @@ extension Table where Self: Model {
             columnName: field.key.description
         )
     }
-    
+
     // MARK: - OptionalFieldProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, OptionalFieldProperty<Self, T>>
     ) -> ColumnExpression<T> {
@@ -106,8 +114,9 @@ extension Table where Self: Model {
             columnName: field.key.description
         )
     }
-    
+
     // MARK: - IDProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>
     ) -> ColumnExpression<T> {
@@ -119,8 +128,9 @@ extension Table where Self: Model {
             columnName: field.key.description
         )
     }
-    
+
     // MARK: - ParentProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>
     ) -> ColumnExpression<T.IDValue> where T: Model {
@@ -132,8 +142,9 @@ extension Table where Self: Model {
             columnName: field.$id.key.description
         )
     }
-    
+
     // MARK: - OptionalParentProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, OptionalParentProperty<Self, T>>
     ) -> ColumnExpression<T.IDValue> where T: Model {
@@ -145,8 +156,9 @@ extension Table where Self: Model {
             columnName: field.$id.key.description
         )
     }
-    
+
     // MARK: - TimestampProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, TimestampProperty<Self, T>>
     ) -> ColumnExpression<T.Value> {
@@ -158,8 +170,9 @@ extension Table where Self: Model {
             columnName: field.$timestamp.key.description
         )
     }
-    
+
     // MARK: - GroupProperty
+
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<Self, GroupProperty<Self, T>>
     ) -> ColumnExpression<T> {
@@ -176,7 +189,7 @@ extension Table where Self: Model {
 private struct _From: SQLExpression {
     let pathName: String?
     let schemaName: String
-    
+
     func serialize(to serializer: inout SQLSerializer) {
         if let path = pathName {
             serializer.writeQuote()
@@ -184,9 +197,9 @@ private struct _From: SQLExpression {
             serializer.writeQuote()
             serializer.writePeriod()
         }
-        
+
         serializer.writeQuote()
-        serializer.write(schemaName)
+        serializer.write(self.schemaName)
         serializer.writeQuote()
     }
 }

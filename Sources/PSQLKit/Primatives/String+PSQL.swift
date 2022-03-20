@@ -1,6 +1,9 @@
+// String+PSQL.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 extension String: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .text }

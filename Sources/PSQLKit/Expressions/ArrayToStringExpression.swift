@@ -1,6 +1,9 @@
+// ArrayToStringExpression.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 public struct ArrayToStringExpression<Content>: AggregateExpression where
     Content: PSQLArrayRepresentable
@@ -8,7 +11,7 @@ public struct ArrayToStringExpression<Content>: AggregateExpression where
     let content: Content
     let delimiter: String
     let ifNull: String?
-    
+
     public init(_ content: Content, delimiter: String, ifNull: String? = nil) {
         self.content = content
         self.delimiter = delimiter
@@ -20,21 +23,21 @@ extension ArrayToStringExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(content: content, delimiter: delimiter, ifNull: ifNull)
+        _Select(content: self.content, delimiter: self.delimiter, ifNull: self.ifNull)
     }
-    
+
     private struct _Select: SQLExpression {
         let content: Content
         let delimiter: String
         let ifNull: String?
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_TO_STRING")
             serializer.write("(")
-            content.selectSqlExpression.serialize(to: &serializer)
+            self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            delimiter.serialize(to: &serializer)
+            self.delimiter.serialize(to: &serializer)
             if let ifNull = ifNull {
                 serializer.writeComma()
                 serializer.writeSpace()
@@ -51,21 +54,21 @@ extension ArrayToStringExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
     public var compareSqlExpression: SQLExpression {
-        _Compare(content: content, delimiter: delimiter, ifNull: ifNull)
+        _Compare(content: self.content, delimiter: self.delimiter, ifNull: self.ifNull)
     }
-    
+
     private struct _Compare: SQLExpression {
         let content: Content
         let delimiter: String
         let ifNull: String?
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_TO_STRING")
             serializer.write("(")
-            content.compareSqlExpression.serialize(to: &serializer)
+            self.content.compareSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            delimiter.serialize(to: &serializer)
+            self.delimiter.serialize(to: &serializer)
             if let ifNull = ifNull {
                 serializer.writeComma()
                 serializer.writeSpace()

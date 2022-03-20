@@ -1,29 +1,32 @@
+// QueryTests.swift
+// Copyright © 2022 hiimtmac
+
+import FluentKit
 import XCTest
 @testable import PSQLKit
-import FluentKit
 
 final class QueryTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
-    
+
     func testQuery() {
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
         }
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             SELECT { p.$name }
             FROM { p.table }
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"SELECT "x"."name"::TEXT FROM "my_model" AS "x""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testQueryAsSub() {
         QUERY {
             SELECT { f.$name }
@@ -31,39 +34,39 @@ final class QueryTests: PSQLTestCase {
         }
         .asSubquery(FluentModel.table)
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             SELECT { p.$name }
             FROM { p.table }
         }
         .asSubquery(PSQLModel.table)
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"(SELECT "x"."name"::TEXT FROM "my_model" AS "x") AS "my_model""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testQueryAsWith() {
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
         }
-        .asWith(f.table)
+        .asWith(self.f.table)
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             SELECT { p.$name }
             FROM { p.table }
         }
-        .asWith(p.table)
+        .asWith(self.p.table)
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #""x" AS (SELECT "x"."name"::TEXT FROM "my_model" AS "x")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testQueryN() {
         QUERY {
             SELECT {
@@ -75,7 +78,7 @@ final class QueryTests: PSQLTestCase {
             ORDERBY { f.$name.desc() }
         }
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             SELECT {
                 p.$name
@@ -86,12 +89,12 @@ final class QueryTests: PSQLTestCase {
             ORDERBY { p.$name.desc() }
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"SELECT "x"."name"::TEXT, "x"."title"::TEXT FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" DESC"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testUnion() {
         QUERY {
             UNION {
@@ -101,7 +104,7 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             UNION {
                 QUERY { SELECT { p.$name } }
@@ -110,12 +113,12 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testIfElseTrue() {
         let bool = true
         QUERY {
@@ -126,7 +129,7 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             if bool {
                 SELECT { p.$name }
@@ -135,12 +138,12 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"SELECT "x"."name"::TEXT"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testIfElseFalse() {
         let bool = false
         QUERY {
@@ -151,7 +154,7 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             if bool {
                 SELECT { p.$name }
@@ -160,21 +163,21 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"SELECT "x"."age"::INTEGER"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testSwitch() {
         enum Test {
             case one
             case two
             case three
         }
-        
+
         let option = Test.two
-        
+
         QUERY {
             switch option {
             case .one: SELECT { f.$name }
@@ -185,7 +188,7 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             switch option {
             case .one: SELECT { p.$name }
@@ -196,12 +199,12 @@ final class QueryTests: PSQLTestCase {
             }
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"SELECT "x"."age"::INTEGER"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testReturning() {
         QUERY {
             UPDATE(f.table) {
@@ -211,7 +214,7 @@ final class QueryTests: PSQLTestCase {
             RETURNING { f.$id }
         }
         .serialize(to: &fluentSerializer)
-        
+
         QUERY {
             UPDATE(p.table) {
                 p.$name => "taylor"
@@ -220,12 +223,12 @@ final class QueryTests: PSQLTestCase {
             RETURNING { p.$id }
         }
         .serialize(to: &psqlkitSerializer)
-        
+
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'taylor' WHERE ("x"."name" = 'tmac') RETURNING "x"."id"::UUID"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     static var allTests = [
         ("testQuery", testQuery),
         ("testQueryAsSub", testQueryAsSub),
@@ -235,6 +238,6 @@ final class QueryTests: PSQLTestCase {
         ("testIfElseTrue", testIfElseTrue),
         ("testIfElseFalse", testIfElseFalse),
         ("testSwitch", testSwitch),
-        ("testReturning", testReturning)
+        ("testReturning", testReturning),
     ]
 }

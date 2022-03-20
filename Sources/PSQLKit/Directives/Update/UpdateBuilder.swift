@@ -1,3 +1,6 @@
+// UpdateBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias UpdateBuilder = Builder<UpdateSQLExpression>

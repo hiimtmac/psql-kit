@@ -1,18 +1,21 @@
+// HavingDirective.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
 public struct HavingDirective: SQLExpression {
     let content: [HavingSQLExpression]
-    
+
     public init(@HavingBuilder builder: () -> [HavingSQLExpression]) {
         self.content = builder()
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
-        if !content.isEmpty {
+        if !self.content.isEmpty {
             serializer.write("HAVING")
             serializer.writeSpace()
-            SQLList(content.map(\.havingSqlExpression), separator: SQLRaw(" AND "))
+            SQLList(self.content.map(\.havingSqlExpression), separator: SQLRaw(" AND "))
                 .serialize(to: &serializer)
         }
     }

@@ -1,6 +1,9 @@
+// Date+PSQL.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 extension Date: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .timestamp }
@@ -45,19 +48,19 @@ public protocol PSQLDateTime: Comparable, SQLExpression, PSQLExpression, Decodab
 }
 
 extension PSQLDateTime {
-    public static func <(lhs: Self, rhs: Self) -> Bool {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.storage < rhs.storage
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
         Self.defaultFormatter.string(from: storage).serialize(to: &serializer)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(storage)
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let decoded = try container.decode(Date.self)
@@ -69,11 +72,11 @@ extension PSQLDateTime {
 
 public struct PSQLDate: PSQLDateTime {
     public let storage: Date
-    
+
     public init(_ date: Date = .init()) {
         self.storage = date
     }
-    
+
     public static let defaultFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
@@ -105,11 +108,11 @@ extension PSQLDate: CompareSQLExpression {
 
 public struct PSQLTimestamp: PSQLDateTime {
     public let storage: Date
-    
+
     public init(_ date: Date = .init()) {
         self.storage = date
     }
-    
+
     public static let defaultFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd hh:mm a"

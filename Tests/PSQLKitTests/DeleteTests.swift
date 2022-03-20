@@ -1,17 +1,20 @@
+// DeleteTests.swift
+// Copyright © 2022 hiimtmac
+
+import FluentKit
 import XCTest
 @testable import PSQLKit
-import FluentKit
 
 final class DeleteTests: PSQLTestCase {
     let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
-    
+
     func testModel() {
         DELETE {
             FluentModel.table
         }
         .serialize(to: &fluentSerializer)
-        
+
         DELETE {
             PSQLModel.table
         }
@@ -19,7 +22,7 @@ final class DeleteTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "my_model""#)
         XCTAssertEqual(psqlkitSerializer.sql, #"DELETE FROM "my_model""#)
     }
-    
+
     func testModelAlias() {
         DELETE {
             f.table
@@ -196,7 +199,7 @@ final class DeleteTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testIfTrue() {
         let bool = true
         DELETE {
@@ -242,7 +245,7 @@ final class DeleteTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     static var allTests = [
         ("testModel", testModel),
         ("testModelAlias", testModelAlias),

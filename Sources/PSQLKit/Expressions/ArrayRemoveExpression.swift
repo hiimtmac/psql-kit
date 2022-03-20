@@ -1,6 +1,9 @@
+// ArrayRemoveExpression.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 public struct ArrayRemoveExpression<Content, T>: AggregateExpression where
     Content: PSQLArrayRepresentable & TypeEquatable,
@@ -9,7 +12,7 @@ public struct ArrayRemoveExpression<Content, T>: AggregateExpression where
 {
     let content: Content
     let remove: T
-    
+
     public init(_ content: Content, remove: T) {
         self.content = content
         self.remove = remove
@@ -21,20 +24,20 @@ extension ArrayRemoveExpression: SelectSQLExpression where
     T: PSQLExpression & SelectSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(content: content, remove: remove)
+        _Select(content: self.content, remove: self.remove)
     }
-    
+
     private struct _Select: SQLExpression {
         let content: Content
         let remove: T
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_REMOVE")
             serializer.write("(")
-            content.selectSqlExpression.serialize(to: &serializer)
+            self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            remove.selectSqlExpression.serialize(to: &serializer)
+            self.remove.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
             serializer.write("::")
             PostgresColumnType.array(T.postgresColumnType).serialize(to: &serializer)
@@ -47,20 +50,20 @@ extension ArrayRemoveExpression: CompareSQLExpression where
     T: CompareSQLExpression
 {
     public var compareSqlExpression: SQLExpression {
-        _Compare(content: content, remove: remove)
+        _Compare(content: self.content, remove: self.remove)
     }
-    
+
     private struct _Compare: SQLExpression {
         let content: Content
         let remove: T
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY_REMOVE")
             serializer.write("(")
-            content.compareSqlExpression.serialize(to: &serializer)
+            self.content.compareSqlExpression.serialize(to: &serializer)
             serializer.writeComma()
             serializer.writeSpace()
-            remove.compareSqlExpression.serialize(to: &serializer)
+            self.remove.compareSqlExpression.serialize(to: &serializer)
             serializer.write(")")
         }
     }

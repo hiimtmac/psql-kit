@@ -1,3 +1,6 @@
+// OrderByBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias OrderByBuilder = Builder<OrderBySQLExpression>

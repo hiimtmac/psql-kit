@@ -1,3 +1,6 @@
+// SelectBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias SelectBuilder = Builder<SelectSQLExpression>

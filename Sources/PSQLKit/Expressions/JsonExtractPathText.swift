@@ -1,14 +1,17 @@
+// JsonExtractPathText.swift
+// Copyright © 2022 hiimtmac
+
+import FluentKit
 import Foundation
 import SQLKit
-import FluentKit
 
 public protocol JsonbExtractable: BaseSQLExpression {}
 
 public struct JsonbExtractPathTextExpression<Content> {
     let content: SQLExpression
     let pathElements: [String]
-    
-    public init<T>(_ content: T, _ paths: String..., as: Content.Type) where
+
+    public init<T>(_ content: T, _ paths: String..., as _: Content.Type) where
         T: JsonbExtractable
     {
         self.content = content.baseSqlExpression
@@ -16,26 +19,24 @@ public struct JsonbExtractPathTextExpression<Content> {
     }
 }
 
-extension JsonbExtractPathTextExpression: Coalescable where Content: TypeEquatable {
-
-}
+extension JsonbExtractPathTextExpression: Coalescable where Content: TypeEquatable {}
 
 extension JsonbExtractPathTextExpression: BaseSQLExpression {
     public var baseSqlExpression: SQLExpression {
-        _Base(content: content, pathElements: pathElements)
+        _Base(content: self.content, pathElements: self.pathElements)
     }
-    
+
     private struct _Base: SQLExpression {
         let content: SQLExpression
         let pathElements: [String]
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("JSONB_EXTRACT_PATH_TEXT")
             serializer.write("(")
-            content.serialize(to: &serializer)
+            self.content.serialize(to: &serializer)
             serializer.write(",")
             serializer.writeSpace()
-            SQLList(pathElements).serialize(to: &serializer)
+            SQLList(self.pathElements).serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -46,27 +47,27 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
 {
     public var selectSqlExpression: SQLExpression {
         _Select(
-            content: content,
-            pathElements: pathElements,
+            content: self.content,
+            pathElements: self.pathElements,
             columnType: Content.postgresColumnType
         )
     }
-    
+
     private struct _Select: SQLExpression {
         let content: SQLExpression
         let pathElements: [String]
         let columnType: SQLExpression
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("JSONB_EXTRACT_PATH_TEXT")
             serializer.write("(")
-            content.serialize(to: &serializer)
+            self.content.serialize(to: &serializer)
             serializer.write(",")
             serializer.writeSpace()
-            SQLList(pathElements).serialize(to: &serializer)
+            SQLList(self.pathElements).serialize(to: &serializer)
             serializer.write(")")
             serializer.write("::")
-            columnType.serialize(to: &serializer)
+            self.columnType.serialize(to: &serializer)
         }
     }
 }
@@ -82,6 +83,7 @@ extension JsonbExtractPathTextExpression: TypeEquatable where Content: TypeEquat
 }
 
 // MARK: Fluent
+
 extension JsonbExtractPathTextExpression {
     public init<T>(
         _ group: ColumnExpression<T>,
@@ -90,7 +92,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: keyPath].key.description]
     }
-    
+
     public init<T>(
         _ group: ColumnExpression<T>,
         _ keyPath: KeyPath<T, OptionalFieldProperty<T, Content>>
@@ -98,7 +100,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: keyPath].key.description]
     }
-    
+
     public init<T>(
         _ group: ColumnExpression<T>,
         _ keyPath: KeyPath<T, TimestampProperty<T, Content>>
@@ -106,7 +108,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: keyPath].$timestamp.key.description]
     }
-    
+
     public init<T>(
         _ group: ColumnExpression<T>,
         _ keyPath: KeyPath<T, IDProperty<T, Content>>
@@ -114,7 +116,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: keyPath].key.description]
     }
-    
+
     public init<T, U>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T, GroupProperty<T, U>>,
@@ -123,7 +125,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
     }
-    
+
     public init<T, U>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T, GroupProperty<T, U>>,
@@ -132,7 +134,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
     }
-    
+
     public init<T, U>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T, GroupProperty<T, U>>,
@@ -141,7 +143,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].$timestamp.key.description]
     }
-    
+
     public init<T, U>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T, GroupProperty<T, U>>,
@@ -153,6 +155,7 @@ extension JsonbExtractPathTextExpression {
 }
 
 // MARK: PSQLKit
+
 extension JsonbExtractPathTextExpression {
     public init<T>(
         _ group: ColumnExpression<T>,
@@ -161,7 +164,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: keyPath].key.description]
     }
-    
+
     public init<T>(
         _ group: ColumnExpression<T>,
         _ keyPath: KeyPath<T, OptionalColumnProperty<T, Content>>
@@ -169,7 +172,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: keyPath].key.description]
     }
-    
+
     public init<T, U>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T, NestedObjectProperty<T, U>>,
@@ -178,7 +181,7 @@ extension JsonbExtractPathTextExpression {
         self.content = group.baseSqlExpression
         self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
     }
-    
+
     public init<T, U>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T, NestedObjectProperty<T, U>>,

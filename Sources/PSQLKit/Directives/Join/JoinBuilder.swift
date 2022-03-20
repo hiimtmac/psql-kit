@@ -1,3 +1,6 @@
+// JoinBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias JoinBuilder = Builder<JoinSQLExpression>

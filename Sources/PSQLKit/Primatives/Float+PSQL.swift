@@ -1,6 +1,9 @@
+// Float+PSQL.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
-import SQLKit
 import PostgresKit
+import SQLKit
 
 extension Float: PSQLExpression {
     public static var postgresColumnType: PostgresColumnType { .decimal }

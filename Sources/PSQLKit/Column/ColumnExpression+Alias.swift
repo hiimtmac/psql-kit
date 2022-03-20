@@ -1,3 +1,6 @@
+// ColumnExpression+Alias.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import SQLKit
 
@@ -6,7 +9,7 @@ extension ColumnExpression {
         let column: ColumnExpression<T>
         let alias: String
     }
-    
+
     public func `as`(_ alias: String) -> ColumnExpression<T>.Alias {
         Alias(column: self, alias: alias)
     }
@@ -17,6 +20,7 @@ extension ColumnExpression.Alias: TypeEquatable where T: TypeEquatable {
 }
 
 // MARK: Base
+
 extension ColumnExpression.Alias: BaseSQLExpression {
     public var baseSqlExpression: SQLExpression {
         _Base(
@@ -27,14 +31,14 @@ extension ColumnExpression.Alias: BaseSQLExpression {
             columnAlias: alias
         )
     }
-    
+
     private struct _Base: SQLExpression {
         let aliasName: String?
         let pathName: String?
         let schemaName: String?
         let columnName: String
         let columnAlias: String
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
                 serializer.writeQuote()
@@ -48,7 +52,7 @@ extension ColumnExpression.Alias: BaseSQLExpression {
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
-                
+
                 if let schema = schemaName {
                     serializer.writeQuote()
                     serializer.write(schema)
@@ -56,23 +60,24 @@ extension ColumnExpression.Alias: BaseSQLExpression {
                     serializer.writePeriod()
                 }
             }
-            
+
             serializer.writeQuote()
-            serializer.write(columnName)
+            serializer.write(self.columnName)
             serializer.writeQuote()
-            
+
             serializer.writeSpace()
             serializer.write("AS")
             serializer.writeSpace()
-            
+
             serializer.writeQuote()
-            serializer.write(columnAlias)
+            serializer.write(self.columnAlias)
             serializer.writeQuote()
         }
     }
 }
 
 // MARK: Select
+
 extension ColumnExpression.Alias: SelectSQLExpression {
     public var selectSqlExpression: SQLExpression {
         _Select(
@@ -84,7 +89,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
             columnAlias: alias
         )
     }
-    
+
     private struct _Select: SQLExpression {
         let aliasName: String?
         let pathName: String?
@@ -92,7 +97,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
         let columnName: String
         let columnType: SQLExpression
         let columnAlias: String
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
                 serializer.writeQuote()
@@ -106,7 +111,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
-                
+
                 if let schema = schemaName {
                     serializer.writeQuote()
                     serializer.write(schema)
@@ -114,20 +119,20 @@ extension ColumnExpression.Alias: SelectSQLExpression {
                     serializer.writePeriod()
                 }
             }
-            
+
             serializer.writeQuote()
-            serializer.write(columnName)
+            serializer.write(self.columnName)
             serializer.writeQuote()
-            
+
             serializer.write("::")
-            columnType.serialize(to: &serializer)
-            
+            self.columnType.serialize(to: &serializer)
+
             serializer.writeSpace()
             serializer.write("AS")
             serializer.writeSpace()
-            
+
             serializer.writeQuote()
-            serializer.write(columnAlias)
+            serializer.write(self.columnAlias)
             serializer.writeQuote()
         }
     }
@@ -144,7 +149,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
             columnAlias: alias
         )
     }
-    
+
     private struct _Mutation: SQLExpression {
         let aliasName: String?
         let pathName: String?
@@ -152,7 +157,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
         let columnName: String
         let columnType: SQLExpression
         let columnAlias: String
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
                 serializer.writeQuote()
@@ -166,7 +171,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
-                
+
                 if let schema = schemaName {
                     serializer.writeQuote()
                     serializer.write(schema)
@@ -174,20 +179,20 @@ extension ColumnExpression.Alias: MutationSQLExpression {
                     serializer.writePeriod()
                 }
             }
-            
+
             serializer.writeQuote()
-            serializer.write(columnName)
+            serializer.write(self.columnName)
             serializer.writeQuote()
-            
+
             serializer.write("::")
-            columnType.serialize(to: &serializer)
-            
+            self.columnType.serialize(to: &serializer)
+
             serializer.writeSpace()
             serializer.write("AS")
             serializer.writeSpace()
-            
+
             serializer.writeQuote()
-            serializer.write(columnAlias)
+            serializer.write(self.columnAlias)
             serializer.writeQuote()
         }
     }

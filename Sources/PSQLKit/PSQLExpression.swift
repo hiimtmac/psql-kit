@@ -1,3 +1,6 @@
+// PSQLExpression.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 import PostgresKit
 

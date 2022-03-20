@@ -1,3 +1,6 @@
+// HavingBuilder.swift
+// Copyright © 2022 hiimtmac
+
 import Foundation
 
 typealias HavingBuilder = Builder<HavingSQLExpression>
