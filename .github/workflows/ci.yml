@@ -21,13 +21,19 @@ jobs:
           - swiftlang/swift:nightly-main
     container: ${{ matrix.images }}
     steps:
+      - name: Workaround SPM incompatibility with old Git on CentOS 7
+        if: ${{ contains(matrix.swiftos, 'centos7') }}
+        run: |
+          yum install -y make libcurl-devel
+          git clone https://github.com/git/git -bv2.28.0 --depth 1 && cd git
+          make prefix=/usr -j all install NO_OPENSSL=1 NO_EXPAT=1 NO_TCLTK=1 NO_GETTEXT=1 NO_PERL=1
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cache Swift PM
         uses: actions/cache@v2
         with:
           path: .build
-          key: ${{ runner.os }}-${{ matrix.images }}-spm-${{ hashFiles('**/Package.resolved') }}-v2
+          key: ${{ runner.os }}-${{ matrix.images }}-spm-${{ hashFiles('Package.resolved') }}-v2
           restore-keys: ${{ runner.os }}-${{ matrix.images }}-spm-
       - name: Resolve Swift dependencies
         run: swift package resolve
