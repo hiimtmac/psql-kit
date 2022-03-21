@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cache Swift PM
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .build
           key: ${{ runner.os }}-${{ matrix.images }}-spm-${{ hashFiles('Package.resolved') }}-v2
@@ -57,7 +57,7 @@ jobs:
   #     - name: Checkout
   #       uses: actions/checkout@v3
   #     - name: Cache Swift PM
-  #       uses: actions/cache@v2
+  #       uses: actions/cache@v3
   #       with:
   #         path: .build
   #         key: ${{ runner.os }}-${{ matrix.images }}-spm-${{ hashFiles('Package.resolved') }}-v2
