@@ -28,7 +28,7 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(fluentSerializer.sql, compare)
     }
-    
+
     func testEnum() {
         WHERE {
             FluentModel.$category != FluentModel.$category

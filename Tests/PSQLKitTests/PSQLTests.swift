@@ -46,7 +46,7 @@ final class FluentModel: Model, Table {
             init() {}
         }
     }
-    
+
     enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
         case yes
         case no
@@ -92,7 +92,7 @@ struct PSQLModel: Table {
             init() {}
         }
     }
-    
+
     enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
         case yes
         case no

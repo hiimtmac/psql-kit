@@ -7,7 +7,7 @@ import SQLKit
 public struct CountExpression<Content>: AggregateExpression {
     let content: Content
     let isDistinct: Bool
-    
+
     init(_ content: Content, distinct: Bool) {
         self.content = content
         self.isDistinct = distinct
@@ -33,7 +33,7 @@ extension CountExpression: SelectSQLExpression where
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("COUNT")
             serializer.write("(")
-            if distinct {
+            if self.distinct {
                 serializer.write("DISTINCT")
                 serializer.writeSpace()
             }
@@ -70,8 +70,8 @@ extension CountExpression {
     public func `as`(_ alias: String) -> ExpressionAlias<CountExpression<Content>> {
         ExpressionAlias(expression: self, alias: alias)
     }
-    
+
     public func distinct(_ isDistinct: Bool = true) -> Self {
-        .init(content, distinct: isDistinct)
+        .init(self.content, distinct: isDistinct)
     }
 }

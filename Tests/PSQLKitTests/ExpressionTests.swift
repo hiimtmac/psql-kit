@@ -62,7 +62,7 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testCountDistinct() {
         SELECT {
             COUNT(f.$name)
