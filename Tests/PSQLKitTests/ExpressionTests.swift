@@ -62,6 +62,30 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
+    
+    func testCountDistinct() {
+        SELECT {
+            COUNT(f.$name)
+                .distinct()
+            COUNT(f.$age)
+                .distinct()
+                .as("age")
+        }
+        .serialize(to: &fluentSerializer)
+
+        SELECT {
+            COUNT(p.$name)
+                .distinct()
+            COUNT(p.$age)
+                .distinct()
+                .as("age")
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"SELECT COUNT(DISTINCT "x"."name"::TEXT), COUNT(DISTINCT "x"."age"::INTEGER) AS "age""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
 
     func testSum() {
         SELECT {
