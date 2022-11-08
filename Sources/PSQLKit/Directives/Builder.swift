@@ -19,19 +19,19 @@ public struct Builder<T> {
         content
     }
 
-    static func buildOptional(
+    public static func buildOptional(
         _ component: Component?
     ) -> Component {
         component ?? []
     }
 
-    static func buildEither(
+    public static func buildEither(
         first component: Component
     ) -> Component {
         component
     }
 
-    static func buildEither(
+    public static func buildEither(
         second component: Component
     ) -> Component {
         component

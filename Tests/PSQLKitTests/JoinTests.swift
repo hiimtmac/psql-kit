@@ -226,17 +226,4 @@ final class JoinTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testJoinModel", testJoinModel),
-        ("testJoinModelAlias", testJoinModelAlias),
-        ("testJoinBoth", testJoinBoth),
-        ("testJoinN", testJoinN),
-        ("testJoinRaw", testJoinRaw),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-        ("testIfTrue", testIfTrue),
-        ("testIfFalse", testIfFalse),
-    ]
 }

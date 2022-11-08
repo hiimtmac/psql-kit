@@ -226,17 +226,4 @@ final class OrderByTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testOrderModel", testOrderModel),
-        ("testOrderModelAlias", testOrderModelAlias),
-        ("testOrderMultiple", testOrderMultiple),
-        ("testOrderDirections", testOrderDirections),
-        ("testOrderRaw", testOrderRaw),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-        ("testIfTrue", testIfTrue),
-        ("testIfFalse", testIfFalse),
-    ]
 }

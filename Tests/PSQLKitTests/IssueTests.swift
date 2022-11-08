@@ -26,8 +26,4 @@ final class IssueTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testIssue6", testIssue6),
-    ]
 }

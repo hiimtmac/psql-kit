@@ -188,15 +188,4 @@ final class InsertTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testModel", testModel),
-        ("testModelAlias", testModelAlias),
-        ("testBoth", testBoth),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-        ("testIfTrue", testIfTrue),
-        ("testIfFalse", testIfFalse),
-    ]
 }

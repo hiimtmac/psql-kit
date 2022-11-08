@@ -51,8 +51,4 @@ final class GroupTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testLength", testLength),
-    ]
 }

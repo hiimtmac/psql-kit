@@ -622,32 +622,4 @@ final class ExpressionTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testMax", testMax),
-        ("testMin", testMin),
-        ("testCount", testCount),
-        ("testSum", testSum),
-        ("testGenerateSeries", testGenerateSeries),
-        ("testConcat", testConcat),
-        ("testCoalesce", testCoalesce),
-        ("testJsonExtractPathText", testJsonExtractPathText),
-        ("testCoalesceCompare", testCoalesceCompare),
-        ("testConcatCompare", testConcatCompare),
-        ("testArrayAggregate", testArrayAggregate),
-        ("testArrayToString", testArrayToString),
-        ("testArrayUpper", testArrayUpper),
-        ("testArrayNDims", testArrayNDims),
-        ("testArrayLower", testArrayLower),
-        ("testArrayLength", testArrayLength),
-        ("testArrayDims", testArrayDims),
-        ("testArrayReplace", testArrayReplace),
-        ("testArrayRemove", testArrayRemove),
-        ("testArrayPrepend", testArrayPrepend),
-        ("testArrayConcatenate", testArrayConcatenate),
-        ("testArrayAppend", testArrayAppend),
-        ("testDateTrunc", testArrayAppend),
-        ("testDatePart", testArrayAppend),
-        ("testConcateWithCoalesce", testConcateWithCoalesce),
-    ]
 }

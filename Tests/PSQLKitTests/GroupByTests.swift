@@ -202,16 +202,4 @@ final class GroupByTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testGroupModel", testGroupModel),
-        ("testGroupModelAlias", testGroupModelAlias),
-        ("testGroupBoth", testGroupBoth),
-        ("testGroupRaw", testGroupRaw),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-        ("testIfTrue", testIfTrue),
-        ("testIfFalse", testIfFalse),
-    ]
 }

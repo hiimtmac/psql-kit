@@ -346,22 +346,4 @@ final class SelectTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testSelectModel", testSelectModel),
-        ("testSelectModelAlias", testSelectModelAlias),
-        ("testSelectBoth", testSelectBoth),
-        ("testSelectDistinct", testSelectDistinct),
-        ("testSelectDistinctOn", testSelectDistinctOn),
-        ("testSelectAliasSingle", testSelectAliasSingle),
-        ("testSelectAliasMultiple", testSelectAliasMultiple),
-        ("testSelectRaw", testSelectRaw),
-        ("testSelectSubquery", testSelectSubquery),
-        ("testPostfix", testPostfix),
-        ("testIfTrue", testIfTrue),
-        ("testIfFalse", testIfFalse),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-    ]
 }

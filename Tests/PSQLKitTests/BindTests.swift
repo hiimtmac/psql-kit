@@ -107,11 +107,4 @@ final class BindTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testBindSimple", testBindSimple),
-        ("testBindComplex", testBindComplex),
-        ("testDateBindCodable", testDateBindCodable),
-        ("testBindArray", testBindArray),
-    ]
 }

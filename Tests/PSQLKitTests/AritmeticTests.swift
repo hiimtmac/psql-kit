@@ -78,11 +78,4 @@ final class ArithemticTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testSelect", testSelect),
-        ("testWhere", testWhere),
-        ("testTypeSwap", testTypeSwap),
-        ("testOptional", testOptional),
-    ]
 }
