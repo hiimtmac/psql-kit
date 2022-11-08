@@ -19,3 +19,9 @@ extension PSQLExpression where Self: Encodable {
         .init(self)
     }
 }
+
+extension PSQLExpression where Self: RawRepresentable, RawValue: PSQLExpression {
+    public static var postgresColumnType: PostgresColumnType {
+        RawValue.postgresColumnType
+    }
+}

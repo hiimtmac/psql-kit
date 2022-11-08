@@ -28,6 +28,24 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(fluentSerializer.sql, compare)
     }
+    
+    func testEnum() {
+        WHERE {
+            FluentModel.$category != FluentModel.$category
+            FluentModel.$category == FluentModel.Category.yes.rawValue
+        }
+        .serialize(to: &fluentSerializer)
+
+        WHERE {
+            PSQLModel.$category != PSQLModel.$category
+            PSQLModel.$category == PSQLModel.Category.yes.rawValue
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"WHERE ("my_model"."category" != "my_model"."category") AND ("my_model"."category" = 'yes')"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(fluentSerializer.sql, compare)
+    }
 
     func testMultiple() {
         WHERE {

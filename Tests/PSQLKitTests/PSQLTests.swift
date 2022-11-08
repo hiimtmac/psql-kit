@@ -22,6 +22,8 @@ final class FluentModel: Model, Table {
     var money: Double
     @Field(key: "birthday")
     var birthday: Date
+    @Field(key: "category")
+    var category: Category
     @Group(key: "pet")
     var pet: Pet
 
@@ -44,6 +46,11 @@ final class FluentModel: Model, Table {
             init() {}
         }
     }
+    
+    enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
+        case yes
+        case no
+    }
 }
 
 struct PSQLModel: Table {
@@ -61,6 +68,8 @@ struct PSQLModel: Table {
     var money: Double
     @Column(key: "birthday")
     var birthday: Date
+    @Column(key: "category")
+    var category: Category
     @NestedColumn(key: "pet")
     var pet: Pet
 
@@ -82,6 +91,11 @@ struct PSQLModel: Table {
 
             init() {}
         }
+    }
+    
+    enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
+        case yes
+        case no
     }
 }
 
