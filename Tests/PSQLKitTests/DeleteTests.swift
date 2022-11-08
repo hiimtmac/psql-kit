@@ -245,18 +245,4 @@ final class DeleteTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testModel", testModel),
-        ("testModelAlias", testModelAlias),
-        ("testBoth", testBoth),
-        ("testRaw", testRaw),
-        ("testGenerateSeries", testGenerateSeries),
-        ("testSubquery", testSubquery),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-        ("testIfTrue", testIfTrue),
-        ("testIfFalse", testIfFalse),
-    ]
 }

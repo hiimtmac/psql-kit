@@ -228,16 +228,4 @@ final class QueryTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testQuery", testQuery),
-        ("testQueryAsSub", testQueryAsSub),
-        ("testQueryAsWith", testQueryAsWith),
-        ("testQueryN", testQueryN),
-        ("testUnion", testUnion),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-        ("testReturning", testReturning),
-    ]
 }

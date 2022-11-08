@@ -143,8 +143,4 @@ final class AdvancedTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         print(fluentSerializer.sql)
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }

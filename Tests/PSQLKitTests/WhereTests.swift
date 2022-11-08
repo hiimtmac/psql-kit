@@ -446,24 +446,4 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testEqual", testEqual),
-        ("testMultiple", testMultiple),
-        ("testNotEqual", testNotEqual),
-        ("testIn", testIn),
-        ("testNotIn", testNotIn),
-        ("testLiteral", testLiteral),
-        ("testWhereOr", testWhereOr),
-        ("testWhereRaw", testWhereRaw),
-        ("testWhereBind", testWhereBind),
-        ("testWhereLikes", testWhereLikes),
-        ("testWhereTransforms", testWhereTransforms),
-        ("testWhereControlFlow", testWhereControlFlow),
-        ("testIfElseTrue", testIfElseTrue),
-        ("testIfElseFalse", testIfElseFalse),
-        ("testSwitch", testSwitch),
-        ("testIfTrue", testIfTrue),
-        ("testIfFalse", testIfFalse),
-    ]
 }

@@ -26,8 +26,4 @@ final class SQLExpressionTests: XCTestCase {
         let (sql, _) = q.raw()
         XCTAssertEqual(sql, #"SELECT "Thing"."id"::UUID, "Thing"."name"::TEXT FROM "Thing""#)
     }
-
-    static var allTests = [
-        ("testExpressionRaw", testExpressionRaw),
-    ]
 }

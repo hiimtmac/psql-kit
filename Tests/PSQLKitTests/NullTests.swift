@@ -108,11 +108,4 @@ final class NullTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testNullEqual", testNullEqual),
-        ("testNullIs", testNullIs),
-        ("testNullNotEqual", testNullNotEqual),
-        ("testNullIsNot", testNullIsNot),
-    ]
 }

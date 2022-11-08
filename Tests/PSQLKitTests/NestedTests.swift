@@ -26,8 +26,4 @@ final class NestedTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    static var allTests = [
-        ("testGroup", testGroup),
-    ]
 }
