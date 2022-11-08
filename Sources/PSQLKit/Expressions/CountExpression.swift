@@ -6,9 +6,16 @@ import SQLKit
 
 public struct CountExpression<Content>: AggregateExpression {
     let content: Content
+    let isDistinct: Bool
+
+    init(_ content: Content, distinct: Bool) {
+        self.content = content
+        self.isDistinct = distinct
+    }
 
     public init(_ content: Content) {
         self.content = content
+        self.isDistinct = false
     }
 }
 
@@ -16,15 +23,20 @@ extension CountExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(content: self.content)
+        _Select(content: self.content, distinct: self.isDistinct)
     }
 
     private struct _Select: SQLExpression {
         let content: Content
+        let distinct: Bool
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("COUNT")
             serializer.write("(")
+            if self.distinct {
+                serializer.write("DISTINCT")
+                serializer.writeSpace()
+            }
             self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
         }
@@ -57,5 +69,9 @@ extension CountExpression: TypeEquatable where Content: TypeEquatable {
 extension CountExpression {
     public func `as`(_ alias: String) -> ExpressionAlias<CountExpression<Content>> {
         ExpressionAlias(expression: self, alias: alias)
+    }
+
+    public func distinct(_ isDistinct: Bool = true) -> Self {
+        .init(self.content, distinct: isDistinct)
     }
 }

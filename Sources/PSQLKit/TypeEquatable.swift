@@ -6,3 +6,7 @@ import Foundation
 public protocol TypeEquatable {
     associatedtype CompareType
 }
+
+extension TypeEquatable where Self: RawRepresentable, RawValue: TypeEquatable {
+    public typealias CompareType = RawValue
+}
