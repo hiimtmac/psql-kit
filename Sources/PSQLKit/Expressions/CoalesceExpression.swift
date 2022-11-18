@@ -2,7 +2,6 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresKit
 import SQLKit
 
 public protocol Coalescable: BaseSQLExpression {}
@@ -20,7 +19,7 @@ public struct CoalesceExpression<T> where
     ) where
         T0: Coalescable & TypeEquatable,
         T1: Coalescable & TypeEquatable,
-        T.CompareType == T0.CompareType,
+        T == T0.CompareType,
         T0.CompareType == T1.CompareType
     {
         self.values = [
@@ -37,7 +36,7 @@ public struct CoalesceExpression<T> where
         T0: Coalescable & TypeEquatable,
         T1: Coalescable & TypeEquatable,
         T2: Coalescable & TypeEquatable,
-        T.CompareType == T0.CompareType,
+        T == T0.CompareType,
         T0.CompareType == T1.CompareType,
         T1.CompareType == T2.CompareType
     {
@@ -58,7 +57,7 @@ public struct CoalesceExpression<T> where
         T1: Coalescable & TypeEquatable,
         T2: Coalescable & TypeEquatable,
         T3: Coalescable & TypeEquatable,
-        T.CompareType == T0.CompareType,
+        T == T0.CompareType,
         T0.CompareType == T1.CompareType,
         T1.CompareType == T2.CompareType,
         T2.CompareType == T3.CompareType
@@ -83,7 +82,7 @@ public struct CoalesceExpression<T> where
         T2: Coalescable & TypeEquatable,
         T3: Coalescable & TypeEquatable,
         T4: Coalescable & TypeEquatable,
-        T.CompareType == T0.CompareType,
+        T == T0.CompareType,
         T0.CompareType == T1.CompareType,
         T1.CompareType == T2.CompareType,
         T2.CompareType == T3.CompareType,
