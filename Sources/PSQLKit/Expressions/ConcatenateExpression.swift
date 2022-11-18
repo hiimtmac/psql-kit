@@ -91,6 +91,23 @@ extension ConcatenateExpression: TypeEquatable {
     public typealias CompareType = String
 }
 
+extension ConcatenateExpression: BaseSQLExpression {
+    public var baseSqlExpression: SQLExpression {
+        _Base(values: self.values)
+    }
+
+    private struct _Base: SQLExpression {
+        let values: [SQLExpression]
+
+        func serialize(to serializer: inout SQLSerializer) {
+            serializer.write("CONCAT")
+            serializer.write("(")
+            SQLList(self.values).serialize(to: &serializer)
+            serializer.write(")")
+        }
+    }
+}
+
 extension ConcatenateExpression: SelectSQLExpression {
     public var selectSqlExpression: SQLExpression {
         _Select(values: self.values)
@@ -112,35 +129,13 @@ extension ConcatenateExpression: SelectSQLExpression {
 
 extension ConcatenateExpression: GroupBySQLExpression {
     public var groupBySqlExpression: SQLExpression {
-        _GroupBy(values: self.values)
-    }
-
-    private struct _GroupBy: SQLExpression {
-        let values: [SQLExpression]
-
-        func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("CONCAT")
-            serializer.write("(")
-            SQLList(self.values).serialize(to: &serializer)
-            serializer.write(")")
-        }
+        _Base(values: self.values)
     }
 }
 
 extension ConcatenateExpression: CompareSQLExpression {
     public var compareSqlExpression: SQLExpression {
-        _Compare(values: self.values)
-    }
-
-    private struct _Compare: SQLExpression {
-        let values: [SQLExpression]
-
-        func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("CONCAT")
-            serializer.write("(")
-            SQLList(self.values).serialize(to: &serializer)
-            serializer.write(")")
-        }
+        _Base(values: self.values)
     }
 }
 

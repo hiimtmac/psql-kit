@@ -150,20 +150,20 @@ final class ExpressionTests: PSQLTestCase {
 
     func testCoalesce() {
         SELECT {
-            COALESCE<String>(f.$name, f.$name, f.$name, f.$name, "hello").as("cool")
-            COALESCE<String>(f.$name, f.$name, f.$name, "hello").as("cool")
-            COALESCE<String>(f.$name, f.$name, "hello").as("cool")
-            COALESCE<String>(f.$name, "hello").as("cool")
-            COALESCE<String>(f.$name, COALESCE<String>(f.$name, "hello"))
+            COALESCE(f.$name, f.$name, f.$name, f.$name, "hello").as("cool")
+            COALESCE(f.$name, f.$name, f.$name, "hello").as("cool")
+            COALESCE(f.$name, f.$name, "hello").as("cool")
+            COALESCE(f.$name, "hello").as("cool")
+            COALESCE(f.$name, COALESCE(f.$name, "hello"))
         }
         .serialize(to: &fluentSerializer)
 
         SELECT {
-            COALESCE<String>(p.$name, p.$name, p.$name, p.$name, "hello").as("cool")
-            COALESCE<String>(p.$name, p.$name, p.$name, "hello").as("cool")
-            COALESCE<String>(p.$name, p.$name, "hello").as("cool")
-            COALESCE<String>(p.$name, "hello").as("cool")
-            COALESCE<String>(p.$name, COALESCE<String>(f.$name, "hello"))
+            COALESCE(p.$name, p.$name, p.$name, p.$name, "hello").as("cool")
+            COALESCE(p.$name, p.$name, p.$name, "hello").as("cool")
+            COALESCE(p.$name, p.$name, "hello").as("cool")
+            COALESCE(p.$name, "hello").as("cool")
+            COALESCE(p.$name, COALESCE(f.$name, "hello"))
         }
         .serialize(to: &psqlkitSerializer)
 
@@ -191,7 +191,7 @@ final class ExpressionTests: PSQLTestCase {
 
     func testNestedJsonExtract() {
         SELECT {
-            COALESCE<String>(
+            COALESCE(
                 JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$name),
                 JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$type)
             )
@@ -199,7 +199,7 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &fluentSerializer)
 
         SELECT {
-            COALESCE<String>(
+            COALESCE(
                 JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$name),
                 JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$type)
             )
@@ -215,14 +215,14 @@ final class ExpressionTests: PSQLTestCase {
         let date = DateComponents(calendar: .current, year: 2021, month: 01, day: 21).date!
 
         WHERE {
-            COALESCE<String>(f.$name, "tmac") == "taylor"
-            COALESCE<PSQLDate>(f.$birthday, date.psqlDate) >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
+            COALESCE(f.$name, "tmac") == "taylor"
+            COALESCE(f.$birthday, date.psqlDate) >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
         }
         .serialize(to: &fluentSerializer)
 
         WHERE {
-            COALESCE<String>(p.$name, "tmac") == "taylor"
-            COALESCE<PSQLDate>(p.$birthday, date.psqlDate) >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
+            COALESCE(p.$name, "tmac") == "taylor"
+            COALESCE(p.$birthday, date.psqlDate) >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
         }
         .serialize(to: &psqlkitSerializer)
 
@@ -577,12 +577,12 @@ final class ExpressionTests: PSQLTestCase {
 
     func testConcateWithCoalesce() {
         SELECT {
-            CONCAT(COALESCE<String>(f.$name, "hi"), " there")
+            CONCAT(COALESCE(f.$name, "hi"), " there")
         }
         .serialize(to: &fluentSerializer)
 
         SELECT {
-            CONCAT(COALESCE<String>(p.$name, "hi"), " there")
+            CONCAT(COALESCE(p.$name, "hi"), " there")
         }
         .serialize(to: &psqlkitSerializer)
 
