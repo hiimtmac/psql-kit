@@ -20,26 +20,26 @@ extension Bool: TypeEquatable {
 }
 
 extension Bool: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension Bool: Concatenatable {}
 extension Bool: Coalescable {}
 
 extension Bool: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension Bool: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension Bool: JoinSQLExpression {
-    public var joinSqlExpression: SQLExpression { self }
+    public var joinSqlExpression: some SQLExpression { self }
 }
 
 extension Bool: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

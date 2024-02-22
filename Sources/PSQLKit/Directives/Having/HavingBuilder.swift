@@ -3,12 +3,12 @@
 
 import Foundation
 
-typealias HavingBuilder = Builder<HavingSQLExpression>
+typealias HavingBuilder = Builder<(any HavingSQLExpression)>
 
-extension Builder where T == HavingSQLExpression {
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> Component where T: HavingSQLExpression {
+extension Builder where T == (any HavingSQLExpression) {
+    public static func buildExpression<U>(
+        _ expression: U
+    ) -> Component where U: HavingSQLExpression {
         [expression]
     }
 }

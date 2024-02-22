@@ -3,12 +3,12 @@
 
 import Foundation
 
-typealias UnionBuilder = Builder<UnionSQLExpression>
+typealias UnionBuilder = Builder<(any UnionSQLExpression)>
 
-extension Builder where T == UnionSQLExpression {
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> Component where T: UnionSQLExpression {
+extension Builder where T == (any UnionSQLExpression) {
+    public static func buildExpression<U>(
+        _ expression: U
+    ) -> Component where U: UnionSQLExpression {
         [expression]
     }
 }

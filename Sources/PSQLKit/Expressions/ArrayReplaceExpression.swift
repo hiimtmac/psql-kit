@@ -29,7 +29,7 @@ extension ArrayReplaceExpression: SelectSQLExpression where
     T: SelectSQLExpression,
     U: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content, find: self.find, replace: self.replace)
     }
 
@@ -60,7 +60,7 @@ extension ArrayReplaceExpression: CompareSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content, find: self.find, replace: self.replace)
     }
 

@@ -8,7 +8,7 @@ import SQLKit
 public protocol JsonbExtractable: BaseSQLExpression {}
 
 public struct JsonbExtractPathTextExpression<Content> {
-    let content: SQLExpression
+    let content: any SQLExpression
     let pathElements: [String]
 
     public init<T>(_ content: T, _ paths: String..., as _: Content.Type) where
@@ -22,12 +22,12 @@ public struct JsonbExtractPathTextExpression<Content> {
 extension JsonbExtractPathTextExpression: Coalescable where Content: TypeEquatable {}
 
 extension JsonbExtractPathTextExpression: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression {
+    public var baseSqlExpression: some SQLExpression {
         _Base(content: self.content, pathElements: self.pathElements)
     }
 
     private struct _Base: SQLExpression {
-        let content: SQLExpression
+        let content: any SQLExpression
         let pathElements: [String]
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -45,7 +45,7 @@ extension JsonbExtractPathTextExpression: BaseSQLExpression {
 extension JsonbExtractPathTextExpression: SelectSQLExpression where
     Content: PSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(
             content: self.content,
             pathElements: self.pathElements,
@@ -54,9 +54,9 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
     }
 
     private struct _Select: SQLExpression {
-        let content: SQLExpression
+        let content: any SQLExpression
         let pathElements: [String]
-        let dataType: SQLExpression
+        let dataType: any SQLExpression
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("JSONB_EXTRACT_PATH_TEXT")

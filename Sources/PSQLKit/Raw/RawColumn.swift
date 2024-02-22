@@ -36,7 +36,7 @@ extension RawColumn: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(column: self.column, dataType: T.postgresDataType)
     }
 }
@@ -52,7 +52,7 @@ extension RawColumn: GroupBySQLExpression {
         }
     }
 
-    public var groupBySqlExpression: SQLExpression {
+    public var groupBySqlExpression: some SQLExpression {
         _GroupBy(column: self.column)
     }
 }
@@ -68,7 +68,7 @@ extension RawColumn: OrderBySQLExpression {
         }
     }
 
-    public var orderBySqlExpression: SQLExpression {
+    public var orderBySqlExpression: some SQLExpression {
         _OrderBy(column: self.column)
     }
 
@@ -96,7 +96,7 @@ extension RawColumn: CompareSQLExpression {
         }
     }
 
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(column: self.column)
     }
 }
@@ -137,7 +137,7 @@ extension RawColumn.Alias: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(column: self.column, alias: alias)
     }
 }

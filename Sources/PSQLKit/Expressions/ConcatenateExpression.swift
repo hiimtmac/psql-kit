@@ -10,7 +10,7 @@ public protocol Concatenatable: BaseSQLExpression {}
 // MARK: ConcatenateExpression
 
 public struct ConcatenateExpression {
-    let values: [SQLExpression]
+    let values: [any SQLExpression]
 
     public init<T0, T1>
     (
@@ -92,12 +92,12 @@ extension ConcatenateExpression: TypeEquatable {
 }
 
 extension ConcatenateExpression: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression {
+    public var baseSqlExpression: some SQLExpression {
         _Base(values: self.values)
     }
 
     private struct _Base: SQLExpression {
-        let values: [SQLExpression]
+        let values: [any SQLExpression]
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
@@ -109,12 +109,12 @@ extension ConcatenateExpression: BaseSQLExpression {
 }
 
 extension ConcatenateExpression: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(values: self.values)
     }
 
     private struct _Select: SQLExpression {
-        let values: [SQLExpression]
+        let values: [any SQLExpression]
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
@@ -127,13 +127,13 @@ extension ConcatenateExpression: SelectSQLExpression {
 }
 
 extension ConcatenateExpression: GroupBySQLExpression {
-    public var groupBySqlExpression: SQLExpression {
+    public var groupBySqlExpression: some SQLExpression {
         _Base(values: self.values)
     }
 }
 
 extension ConcatenateExpression: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Base(values: self.values)
     }
 }

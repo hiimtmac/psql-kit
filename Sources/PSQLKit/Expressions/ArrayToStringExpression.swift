@@ -22,7 +22,7 @@ public struct ArrayToStringExpression<Content>: AggregateExpression where
 extension ArrayToStringExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content, delimiter: self.delimiter, ifNull: self.ifNull)
     }
 
@@ -52,7 +52,7 @@ extension ArrayToStringExpression: SelectSQLExpression where
 extension ArrayToStringExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content, delimiter: self.delimiter, ifNull: self.ifNull)
     }
 

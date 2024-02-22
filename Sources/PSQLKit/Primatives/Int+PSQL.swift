@@ -20,22 +20,22 @@ extension Int: TypeEquatable {
 }
 
 extension Int: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension Int: Concatenatable {}
 extension Int: Coalescable {}
 
 extension Int: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension Int: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension Int: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

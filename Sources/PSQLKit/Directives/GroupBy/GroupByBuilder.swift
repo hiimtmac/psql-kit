@@ -3,12 +3,12 @@
 
 import Foundation
 
-typealias GroupByBuilder = Builder<GroupBySQLExpression>
+typealias GroupByBuilder = Builder<(any GroupBySQLExpression)>
 
-extension Builder where T == GroupBySQLExpression {
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> Component where T: GroupBySQLExpression {
+extension Builder where T == (any GroupBySQLExpression) {
+    public static func buildExpression<U>(
+        _ expression: U
+    ) -> Component where U: GroupBySQLExpression {
         [expression]
     }
 }

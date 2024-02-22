@@ -5,22 +5,22 @@ import Foundation
 import SQLKit
 
 public struct FromDirective: SQLExpression {
-    let content: [FromSQLExpression]
+    let content: [any FromSQLExpression]
 
-    public init(@FromBuilder builder: () -> [FromSQLExpression]) {
+    public init(@FromBuilder builder: () -> [any FromSQLExpression]) {
         self.content = builder()
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
-        if !self.content.isEmpty {
-            serializer.write("FROM")
-            serializer.writeSpace()
-            SQLList(self.content.map(\.fromSqlExpression))
-                .serialize(to: &serializer)
-        }
+//        if !self.content.isEmpty {
+//            serializer.write("FROM")
+//            serializer.writeSpace()
+//            SQLList(self.content.map(\.fromSqlExpression))
+//                .serialize(to: &serializer)
+//        }
     }
 }
 
 extension FromDirective: QuerySQLExpression {
-    public var querySqlExpression: SQLExpression { self }
+    public var querySqlExpression: some SQLExpression { self }
 }

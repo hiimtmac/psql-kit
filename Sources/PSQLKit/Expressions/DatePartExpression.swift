@@ -20,7 +20,7 @@ public struct DatePartExpression<Content>: AggregateExpression where
 extension DatePartExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(precision: self.precision, content: self.content)
     }
 

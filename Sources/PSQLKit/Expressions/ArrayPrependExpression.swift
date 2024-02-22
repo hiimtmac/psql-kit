@@ -23,7 +23,7 @@ extension ArrayPrependExpression: SelectSQLExpression where
     Content: SelectSQLExpression,
     T: PSQLExpression & SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content, prepend: self.prepend)
     }
 
@@ -49,7 +49,7 @@ extension ArrayPrependExpression: CompareSQLExpression where
     Content: CompareSQLExpression,
     T: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content, prepend: self.prepend)
     }
 

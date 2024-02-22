@@ -173,7 +173,7 @@ extension TableAlias where T: Model {
 }
 
 extension TableAlias: FromSQLExpression {
-    public var fromSqlExpression: SQLExpression {
+    public var fromSqlExpression: some SQLExpression {
         _From(
             aliasName: self.alias,
             pathName: T.path,

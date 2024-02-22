@@ -22,22 +22,22 @@ extension String: TypeEquatable {
 }
 
 extension String: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension String: Concatenatable {}
 extension String: Coalescable {}
 
 extension String: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
-        RawValue(self).selectSqlExpression
+    public var selectSqlExpression: some SQLExpression {
+        RawValue._Select(value: self)
     }
 }
 
 extension String: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension String: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

@@ -18,7 +18,7 @@ public struct ArrayNumberDimensionsExpression<Content>: AggregateExpression wher
 extension ArrayNumberDimensionsExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content)
     }
 
@@ -38,7 +38,7 @@ extension ArrayNumberDimensionsExpression: SelectSQLExpression where
 extension ArrayNumberDimensionsExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content)
     }
 

@@ -22,22 +22,22 @@ extension UUID: TypeEquatable {
 }
 
 extension UUID: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension UUID: Concatenatable {}
 extension UUID: Coalescable {}
 
 extension UUID: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
-        RawValue(self).selectSqlExpression
+    public var selectSqlExpression: some SQLExpression {
+        RawValue._Select(value: self)
     }
 }
 
 extension UUID: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension UUID: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

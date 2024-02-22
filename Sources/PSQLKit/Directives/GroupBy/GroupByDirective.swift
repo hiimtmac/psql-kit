@@ -5,22 +5,22 @@ import Foundation
 import SQLKit
 
 public struct GroupByDirective: SQLExpression {
-    let content: [GroupBySQLExpression]
+    let content: [any GroupBySQLExpression]
 
-    public init(@GroupByBuilder builder: () -> [GroupBySQLExpression]) {
+    public init(@GroupByBuilder builder: () -> [any GroupBySQLExpression]) {
         self.content = builder()
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
-        if !self.content.isEmpty {
-            serializer.write("GROUP BY")
-            serializer.writeSpace()
-            SQLList(self.content.map(\.groupBySqlExpression))
-                .serialize(to: &serializer)
-        }
+//        if !self.content.isEmpty {
+//            serializer.write("GROUP BY")
+//            serializer.writeSpace()
+//            SQLList(self.content.map(\.groupBySqlExpression))
+//                .serialize(to: &serializer)
+//        }
     }
 }
 
 extension GroupByDirective: QuerySQLExpression {
-    public var querySqlExpression: SQLExpression { self }
+    public var querySqlExpression: some SQLExpression { self }
 }

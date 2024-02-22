@@ -3,12 +3,12 @@
 
 import Foundation
 
-typealias InsertBuilder = Builder<InsertSQLExpression>
+typealias InsertBuilder = Builder<(any InsertSQLExpression)>
 
-extension Builder where T == InsertSQLExpression {
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> Component where T: InsertSQLExpression {
+extension Builder where T == (any InsertSQLExpression) {
+    public static func buildExpression<U>(
+        _ expression: U
+    ) -> Component where U: InsertSQLExpression {
         [expression]
     }
 }

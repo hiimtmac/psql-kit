@@ -2,6 +2,7 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
+import PostgresNIO
 import SQLKit
 
 public struct ColumnExpression<T> where T: PSQLExpression {
@@ -26,7 +27,7 @@ public struct ColumnExpression<T> where T: PSQLExpression {
 // MARK: Base
 
 extension ColumnExpression: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression {
+    public var baseSqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
             pathName: self.pathName,
@@ -73,7 +74,7 @@ extension ColumnExpression: BaseSQLExpression {
 // MARK: Select
 
 extension ColumnExpression: SelectSQLExpression  {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: self.aliasName,
             pathName: self.pathName,
@@ -88,7 +89,7 @@ extension ColumnExpression: SelectSQLExpression  {
         let pathName: String?
         let schemaName: String?
         let columnName: String
-        let dataType: SQLExpression
+        let dataType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
@@ -137,7 +138,7 @@ extension ColumnExpression {
 // MARK: Group By
 
 extension ColumnExpression: GroupBySQLExpression {
-    public var groupBySqlExpression: SQLExpression {
+    public var groupBySqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
             pathName: self.pathName,
@@ -150,7 +151,7 @@ extension ColumnExpression: GroupBySQLExpression {
 // MARK: Order By
 
 extension ColumnExpression: OrderBySQLExpression {
-    public var orderBySqlExpression: SQLExpression {
+    public var orderBySqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
             pathName: self.pathName,
@@ -175,7 +176,7 @@ extension ColumnExpression: OrderBySQLExpression {
 // MARK: Compare
 
 extension ColumnExpression: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
             pathName: self.pathName,
@@ -188,7 +189,7 @@ extension ColumnExpression: CompareSQLExpression {
 // MARK: Mutation
 
 extension ColumnExpression: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression {
+    public var mutationSqlExpression: some SQLExpression {
         _Mutation(columnName: self.columnName)
     }
 

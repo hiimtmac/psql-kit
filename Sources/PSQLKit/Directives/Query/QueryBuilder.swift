@@ -3,12 +3,12 @@
 
 import Foundation
 
-typealias QueryBuilder = Builder<QuerySQLExpression>
+typealias QueryBuilder = Builder<(any QuerySQLExpression)>
 
-extension Builder where T == QuerySQLExpression {
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> Component where T: QuerySQLExpression {
+extension Builder where T == (any QuerySQLExpression) {
+    public static func buildExpression<U>(
+        _ expression: U
+    ) -> Component where U: QuerySQLExpression {
         [expression]
     }
 }

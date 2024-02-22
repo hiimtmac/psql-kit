@@ -23,7 +23,7 @@ extension RawValue: TypeEquatable where T: TypeEquatable {
 }
 
 extension RawValue: SelectSQLExpression {
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let value: T
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -32,7 +32,7 @@ extension RawValue: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(value: self.value)
     }
 }
@@ -70,7 +70,7 @@ extension RawValue.Alias: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(value: self.value, alias: alias)
     }
 }

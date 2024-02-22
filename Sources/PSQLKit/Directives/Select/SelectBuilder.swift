@@ -3,12 +3,12 @@
 
 import Foundation
 
-typealias SelectBuilder = Builder<SelectSQLExpression>
+typealias SelectBuilder = Builder<(any SelectSQLExpression)>
 
-extension Builder where T == SelectSQLExpression {
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> Component where T: SelectSQLExpression {
+extension Builder where T == (any SelectSQLExpression) {
+    public static func buildExpression<U>(
+        _ expression: U
+    ) -> Component where U: SelectSQLExpression {
         [expression]
     }
 }

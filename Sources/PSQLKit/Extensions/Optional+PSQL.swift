@@ -26,13 +26,13 @@ extension Optional: PSQLExpression where Wrapped: PSQLExpression {
 }
 
 extension Optional: SelectSQLExpression where Wrapped: SQLExpression & SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression { self }
+    public var selectSqlExpression: some SQLExpression { self }
 }
 
 extension Optional: CompareSQLExpression where Wrapped: SQLExpression & CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension Optional: WhereSQLExpression where Wrapped: SQLExpression & WhereSQLExpression {
-    public var whereSqlExpression: SQLExpression { self }
+    public var whereSqlExpression: some SQLExpression { self }
 }

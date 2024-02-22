@@ -3,12 +3,12 @@
 
 import Foundation
 
-typealias JoinBuilder = Builder<JoinSQLExpression>
+typealias JoinBuilder = Builder<(any JoinSQLExpression)>
 
-extension Builder where T == JoinSQLExpression {
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> Component where T: JoinSQLExpression {
+extension Builder where T == (any JoinSQLExpression) {
+    public static func buildExpression<U>(
+        _ expression: U
+    ) -> Component where U: JoinSQLExpression {
         [expression]
     }
 }

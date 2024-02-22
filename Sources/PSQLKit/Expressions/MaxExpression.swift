@@ -15,7 +15,7 @@ public struct MaxExpression<Content>: AggregateExpression {
 extension MaxExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content)
     }
 
@@ -34,7 +34,7 @@ extension MaxExpression: SelectSQLExpression where
 extension MaxExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content)
     }
 

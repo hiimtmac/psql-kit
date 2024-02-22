@@ -20,22 +20,22 @@ extension Double: TypeEquatable {
 }
 
 extension Double: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension Double: Concatenatable {}
 extension Double: Coalescable {}
 
 extension Double: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
-        RawValue(self).selectSqlExpression
+    public var selectSqlExpression: some SQLExpression {
+        RawValue._Select(value: self)
     }
 }
 
 extension Double: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension Double: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

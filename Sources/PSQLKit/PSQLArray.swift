@@ -23,13 +23,13 @@ extension PSQLArray: TypeEquatable where T: TypeEquatable {
 extension PSQLArray: SelectSQLExpression where
     T: SQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(items: self.items, arrayType: [T].postgresDataType)
     }
 
     private struct _Select: SQLExpression {
         let items: [T]
-        let arrayType: SQLExpression
+        let arrayType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY")
@@ -44,7 +44,7 @@ extension PSQLArray: SelectSQLExpression where
 extension PSQLArray: CompareSQLExpression where
     T: SQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(items: self.items)
     }
 

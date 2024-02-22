@@ -2,6 +2,7 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
+import PostgresNIO
 import SQLKit
 
 extension ColumnExpression {
@@ -22,7 +23,7 @@ extension ColumnExpression.Alias: TypeEquatable where T: TypeEquatable {
 // MARK: Base
 
 extension ColumnExpression.Alias: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression {
+    public var baseSqlExpression: some SQLExpression {
         _Base(
             aliasName: column.aliasName,
             pathName: column.pathName,
@@ -79,7 +80,7 @@ extension ColumnExpression.Alias: BaseSQLExpression {
 // MARK: Select
 
 extension ColumnExpression.Alias: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: column.aliasName,
             pathName: column.pathName,
@@ -95,7 +96,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
         let pathName: String?
         let schemaName: String?
         let columnName: String
-        let dataType: SQLExpression
+        let dataType: PostgresDataType
         let columnAlias: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -138,7 +139,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
 }
 
 extension ColumnExpression.Alias: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression {
+    public var mutationSqlExpression: some SQLExpression {
         _Mutation(
             aliasName: column.aliasName,
             pathName: column.pathName,
@@ -154,7 +155,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
         let pathName: String?
         let schemaName: String?
         let columnName: String
-        let dataType: SQLExpression
+        let dataType: PostgresDataType
         let columnAlias: String
 
         func serialize(to serializer: inout SQLSerializer) {
