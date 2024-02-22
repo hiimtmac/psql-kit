@@ -20,8 +20,8 @@ extension Optional: TypeEquatable where Wrapped: TypeEquatable {
 }
 
 extension Optional: PSQLExpression where Wrapped: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType {
-        Wrapped.postgresColumnType
+    public static var postgresDataType: PostgresDataType {
+        Wrapped.postgresDataType
     }
 }
 

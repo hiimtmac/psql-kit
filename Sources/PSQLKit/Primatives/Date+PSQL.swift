@@ -6,7 +6,7 @@ import PostgresKit
 import SQLKit
 
 extension Date: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .timestamp }
+    public static var postgresDataType: PostgresDataType { .timestamp }
 }
 
 extension Date: SQLExpression {
@@ -86,7 +86,7 @@ public struct PSQLDate: PSQLDateTime {
 }
 
 extension PSQLDate: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .date }
+    public static var postgresDataType: PostgresDataType { .date }
 }
 
 extension PSQLDate: BaseSQLExpression {
@@ -139,5 +139,5 @@ extension PSQLTimestamp: CompareSQLExpression {
 }
 
 extension PSQLTimestamp: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .timestamp }
+    public static var postgresDataType: PostgresDataType { .timestamp }
 }

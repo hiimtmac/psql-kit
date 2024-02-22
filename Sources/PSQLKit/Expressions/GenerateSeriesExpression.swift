@@ -26,7 +26,7 @@ public struct GenerateSeriesExpression<Content>: SQLExpression where Content: Se
         serializer.write(",")
         serializer.writeSpace()
         self.interval.serialize(to: &serializer)
-        serializer.write("::INTERVAL")
+        PostgresDataType.internal.serialize(to: &serializer)
         serializer.write(")")
     }
 }

@@ -85,7 +85,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
             pathName: column.pathName,
             schemaName: column.schemaName,
             columnName: column.columnName,
-            columnType: T.postgresColumnType,
+            dataType: T.postgresDataType,
             columnAlias: alias
         )
     }
@@ -95,7 +95,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
         let pathName: String?
         let schemaName: String?
         let columnName: String
-        let columnType: SQLExpression
+        let dataType: SQLExpression
         let columnAlias: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -124,8 +124,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
             serializer.write(self.columnName)
             serializer.writeQuote()
 
-            serializer.write("::")
-            self.columnType.serialize(to: &serializer)
+            dataType.serialize(to: &serializer)
 
             serializer.writeSpace()
             serializer.write("AS")
@@ -145,7 +144,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
             pathName: column.pathName,
             schemaName: column.schemaName,
             columnName: column.columnName,
-            columnType: T.postgresColumnType,
+            dataType: T.postgresDataType,
             columnAlias: alias
         )
     }
@@ -155,7 +154,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
         let pathName: String?
         let schemaName: String?
         let columnName: String
-        let columnType: SQLExpression
+        let dataType: SQLExpression
         let columnAlias: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -184,8 +183,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
             serializer.write(self.columnName)
             serializer.writeQuote()
 
-            serializer.write("::")
-            self.columnType.serialize(to: &serializer)
+            self.dataType.serialize(to: &serializer)
 
             serializer.writeSpace()
             serializer.write("AS")

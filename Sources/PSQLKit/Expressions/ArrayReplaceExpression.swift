@@ -49,8 +49,8 @@ extension ArrayReplaceExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.replace.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.array(T.postgresColumnType).serialize(to: &serializer)
+            fatalError()
+//            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
         }
     }
 }

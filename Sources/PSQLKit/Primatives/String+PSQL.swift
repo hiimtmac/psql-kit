@@ -6,7 +6,7 @@ import PostgresKit
 import SQLKit
 
 extension String: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .text }
+    public static var postgresDataType: PostgresDataType { .text }
 }
 
 extension String: SQLExpression {

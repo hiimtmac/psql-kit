@@ -44,8 +44,7 @@ extension ArrayToStringExpression: SelectSQLExpression where
                 ifNull.serialize(to: &serializer)
             }
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.text.serialize(to: &serializer)
+            PostgresDataType.text.serialize(to: &serializer)
         }
     }
 }

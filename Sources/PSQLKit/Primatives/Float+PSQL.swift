@@ -6,7 +6,7 @@ import PostgresKit
 import SQLKit
 
 extension Float: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .decimal }
+    public static var postgresDataType: PostgresDataType { .float8 }
 }
 
 extension Float: SQLExpression {

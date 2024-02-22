@@ -49,14 +49,14 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
         _Select(
             content: self.content,
             pathElements: self.pathElements,
-            columnType: Content.postgresColumnType
+            dataType: Content.postgresDataType
         )
     }
 
     private struct _Select: SQLExpression {
         let content: SQLExpression
         let pathElements: [String]
-        let columnType: SQLExpression
+        let dataType: SQLExpression
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("JSONB_EXTRACT_PATH_TEXT")
@@ -66,8 +66,7 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
             serializer.writeSpace()
             SQLList(self.pathElements).serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            self.columnType.serialize(to: &serializer)
+            self.dataType.serialize(to: &serializer)
         }
     }
 }

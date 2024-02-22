@@ -63,8 +63,7 @@ extension ArithmeticExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.rhs.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.decimal.serialize(to: &serializer)
+            PostgresDataType.float8.serialize(to: &serializer)
         }
     }
 }

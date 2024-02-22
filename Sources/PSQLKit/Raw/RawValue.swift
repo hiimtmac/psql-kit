@@ -28,8 +28,7 @@ extension RawValue: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             self.value.serialize(to: &serializer)
-            serializer.write("::")
-            T.postgresColumnType.serialize(to: &serializer)
+            T.postgresDataType.serialize(to: &serializer)
         }
     }
 
@@ -59,8 +58,7 @@ extension RawValue.Alias: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             self.value.serialize(to: &serializer)
-            serializer.write("::")
-            T.postgresColumnType.serialize(to: &serializer)
+            T.postgresDataType.serialize(to: &serializer)
 
             serializer.writeSpace()
             serializer.write("AS")

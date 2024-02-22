@@ -6,7 +6,7 @@ import PostgresKit
 import SQLKit
 
 extension UUID: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .uuid }
+    public static var postgresDataType: PostgresDataType { .uuid }
 }
 
 extension UUID: SQLExpression {

@@ -5,7 +5,7 @@ import Foundation
 import PostgresKit
 
 public protocol PSQLExpression {
-    static var postgresColumnType: PostgresColumnType { get }
+    static var postgresDataType: PostgresDataType { get }
 }
 
 extension PSQLExpression where Self: SQLExpression {
@@ -21,7 +21,7 @@ extension PSQLExpression where Self: Encodable {
 }
 
 extension PSQLExpression where Self: RawRepresentable, RawValue: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType {
-        RawValue.postgresColumnType
+    public static var postgresDataType: PostgresDataType {
+        RawValue.postgresDataType
     }
 }

@@ -40,8 +40,8 @@ extension ArrayConcatenateExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.two.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.array(T.CompareType.postgresColumnType).serialize(to: &serializer)
+            fatalError()
+//            PostgresDataType.array(T.CompareType.postgresDataType).serialize(to: &serializer)
         }
     }
 }

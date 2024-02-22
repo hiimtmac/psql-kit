@@ -30,8 +30,7 @@ extension ArrayDimensionsExpression: SelectSQLExpression where
             serializer.write("(")
             self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.text.serialize(to: &serializer)
+            PostgresDataType.text.serialize(to: &serializer)
         }
     }
 }

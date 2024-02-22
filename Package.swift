@@ -12,8 +12,8 @@ let package = Package(
         .library(name: "PSQLKit", targets: ["PSQLKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.23.0"),
-        .package(url: "https://github.com/vapor/postgres-kit.git", from: "2.6.0"),
+        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.47.0"),
+        .package(url: "https://github.com/vapor/postgres-kit.git", from: "2.12.0"),
     ],
     targets: [
         .target(name: "PSQLKit", dependencies: [

@@ -6,7 +6,7 @@ import PostgresKit
 import SQLKit
 
 extension Bool: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .boolean }
+    public static var postgresDataType: PostgresDataType { .bool }
 }
 
 extension Bool: SQLExpression {

@@ -50,6 +50,8 @@ final class FluentModel: Model, Table {
     enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
         case yes
         case no
+        
+        static var postgresDataType: PostgresDataType { .text }
     }
 }
 
@@ -96,6 +98,8 @@ struct PSQLModel: Table {
     enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
         case yes
         case no
+        
+        static var postgresDataType: PostgresDataType { .text }
     }
 }
 

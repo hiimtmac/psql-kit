@@ -10,7 +10,12 @@ public struct ColumnExpression<T> where T: PSQLExpression {
     let schemaName: String?
     let columnName: String
 
-    public init(aliasName: String?, pathName: String?, schemaName: String?, columnName: String) {
+    public init(
+        aliasName: String?,
+        pathName: String?,
+        schemaName: String?,
+        columnName: String
+    ) {
         self.aliasName = aliasName
         self.pathName = pathName
         self.schemaName = schemaName
@@ -74,7 +79,7 @@ extension ColumnExpression: SelectSQLExpression  {
             pathName: self.pathName,
             schemaName: self.schemaName,
             columnName: self.columnName,
-            columnType: T.postgresColumnType
+            dataType: T.postgresDataType
         )
     }
 
@@ -83,7 +88,7 @@ extension ColumnExpression: SelectSQLExpression  {
         let pathName: String?
         let schemaName: String?
         let columnName: String
-        let columnType: SQLExpression
+        let dataType: SQLExpression
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
@@ -111,8 +116,7 @@ extension ColumnExpression: SelectSQLExpression  {
             serializer.write(self.columnName)
             serializer.writeQuote()
 
-            serializer.write("::")
-            self.columnType.serialize(to: &serializer)
+            dataType.serialize(to: &serializer)
         }
     }
 }

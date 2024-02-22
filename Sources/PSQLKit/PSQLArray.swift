@@ -24,7 +24,7 @@ extension PSQLArray: SelectSQLExpression where
     T: SQLExpression
 {
     public var selectSqlExpression: SQLExpression {
-        _Select(items: self.items, arrayType: [T].postgresColumnType)
+        _Select(items: self.items, arrayType: [T].postgresDataType)
     }
 
     private struct _Select: SQLExpression {
@@ -36,7 +36,6 @@ extension PSQLArray: SelectSQLExpression where
             serializer.write("[")
             SQLList(self.items).serialize(to: &serializer)
             serializer.write("]")
-            serializer.write("::")
             self.arrayType.serialize(to: &serializer)
         }
     }

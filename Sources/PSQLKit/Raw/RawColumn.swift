@@ -26,19 +26,18 @@ extension RawColumn: TypeEquatable where T: TypeEquatable {
 extension RawColumn: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let column: String
-        let type: PostgresColumnType
+        let dataType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.writeQuote()
             serializer.write(self.column)
             serializer.writeQuote()
-            serializer.write("::")
-            self.type.serialize(to: &serializer)
+            self.dataType.serialize(to: &serializer)
         }
     }
 
     public var selectSqlExpression: SQLExpression {
-        _Select(column: self.column, type: T.postgresColumnType)
+        _Select(column: self.column, dataType: T.postgresDataType)
     }
 }
 
