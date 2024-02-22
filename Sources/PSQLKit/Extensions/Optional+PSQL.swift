@@ -25,14 +25,15 @@ extension Optional: PSQLExpression where Wrapped: PSQLExpression {
     }
 }
 
-extension Optional: SelectSQLExpression where Wrapped: SQLExpression & SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression { self }
+extension Optional: SelectSQLExpression where Wrapped: SelectSQLExpression {
+    public var selectSqlExpression: some SQLExpression { self?.selectSqlExpression }
+    public var isNull: Bool { self == nil }
 }
 
-extension Optional: CompareSQLExpression where Wrapped: SQLExpression & CompareSQLExpression {
-    public var compareSqlExpression: some SQLExpression { self }
+extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
+    public var compareSqlExpression: some SQLExpression { self?.compareSqlExpression }
 }
 
-extension Optional: WhereSQLExpression where Wrapped: SQLExpression & WhereSQLExpression {
-    public var whereSqlExpression: some SQLExpression { self }
+extension Optional: WhereSQLExpression where Wrapped: WhereSQLExpression {
+    public var whereSqlExpression: some SQLExpression { self?.whereSqlExpression }
 }

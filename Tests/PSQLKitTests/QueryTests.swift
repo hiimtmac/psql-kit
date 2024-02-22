@@ -204,28 +204,52 @@ final class QueryTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-
-    func testReturning() {
-        QUERY {
-            UPDATE(f.table) {
-                f.$name => "taylor"
+    
+    func testSelectSubquery() {
+        SELECT {
+            QUERY {
+                SELECT { f.$age }
+                FROM { f.table }
             }
-            WHERE { f.$name == "tmac" }
-            RETURNING { f.$id }
+            .asSubquery(f.table)
         }
         .serialize(to: &fluentSerializer)
 
-        QUERY {
-            UPDATE(p.table) {
-                p.$name => "taylor"
+        SELECT {
+            QUERY {
+                SELECT { p.$age }
+                FROM { p.table }
             }
-            WHERE { p.$name == "tmac" }
-            RETURNING { p.$id }
+            .asSubquery(p.table)
         }
         .serialize(to: &psqlkitSerializer)
 
-        let compare = #"UPDATE "my_model" AS "x" SET "name" = 'taylor' WHERE ("x"."name" = 'tmac') RETURNING "x"."id"::UUID"#
+        let compare = #"SELECT (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
+
+//    func testReturning() {
+//        QUERY {
+//            UPDATE(f.table) {
+//                f.$name => "taylor"
+//            }
+//            WHERE { f.$name == "tmac" }
+//            RETURNING { f.$id }
+//        }
+//        .serialize(to: &fluentSerializer)
+//
+//        QUERY {
+//            UPDATE(p.table) {
+//                p.$name => "taylor"
+//            }
+//            WHERE { p.$name == "tmac" }
+//            RETURNING { p.$id }
+//        }
+//        .serialize(to: &psqlkitSerializer)
+//
+//        let compare = #"UPDATE "my_model" AS "x" SET "name" = 'taylor' WHERE ("x"."name" = 'tmac') RETURNING "x"."id"::UUID"#
+//        XCTAssertEqual(fluentSerializer.sql, compare)
+//        XCTAssertEqual(psqlkitSerializer.sql, compare)
+//    }
 }

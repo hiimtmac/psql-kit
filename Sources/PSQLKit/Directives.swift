@@ -27,6 +27,11 @@ public protocol BaseSQLExpression {
 public protocol SelectSQLExpression {
     associatedtype SelectExpression: SQLExpression
     var selectSqlExpression: SelectExpression { get }
+    var isNull: Bool { get }
+}
+
+extension SelectSQLExpression {
+    public var isNull: Bool { false }
 }
 
 public protocol FromSQLExpression {

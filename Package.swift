@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "psql-kit",
     platforms: [
-        .macOS(.v10_15), .iOS(.v13),
+        .macOS(.v14), .iOS(.v17),
     ],
     products: [
         .library(name: "PSQLKit", targets: ["PSQLKit"]),
