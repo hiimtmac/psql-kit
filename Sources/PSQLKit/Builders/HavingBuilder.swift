@@ -1,19 +1,19 @@
 // HavingBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: HavingSQLExpression {
     public var havingSqlExpression: some SQLExpression {
         _Having()
     }
-    
+
     public var havingIsNull: Bool { true }
-    
+
     private struct _Having: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,11 +23,11 @@ extension EmptyExpression: HavingSQLExpression {
 
 public struct HavingTouple<each T: HavingSQLExpression>: HavingSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var havingSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -37,18 +37,17 @@ public struct HavingTouple<each T: HavingSQLExpression>: HavingSQLExpression {
 }
 
 extension _ConditionalContent: HavingSQLExpression where T: HavingSQLExpression, U: HavingSQLExpression {
-    
     public var havingSqlExpression: some SQLExpression {
         _Having(content: self)
     }
-    
+
     struct _Having: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.havingSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.havingSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.havingSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.havingSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -75,7 +74,7 @@ public enum HavingBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> HavingTouple<repeat each Content> where repeat each Content: HavingSQLExpression {
+    ) -> HavingTouple< repeat each Content> where repeat each Content: HavingSQLExpression {
         .init(repeat each content)
     }
 }

@@ -1,5 +1,5 @@
 // PSQLTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import FluentKit
 import PostgresKit
@@ -50,7 +50,7 @@ final class FluentModel: Model, Table {
     enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
         case yes
         case no
-        
+
         static var postgresDataType: PostgresDataType { .text }
     }
 }
@@ -98,9 +98,8 @@ struct PSQLModel: Table {
     enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
         case yes
         case no
-        
+
         static var postgresDataType: PostgresDataType { .text }
-        
     }
 }
 

@@ -1,10 +1,10 @@
 // RawColumn.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
+import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
-import struct PostgresNIO.PostgresDataType
 
 public struct RawColumn<T> where T: PSQLExpression {
     let column: String

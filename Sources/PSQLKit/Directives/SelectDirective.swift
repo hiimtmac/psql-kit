@@ -1,5 +1,5 @@
 // SelectDirective.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
@@ -9,19 +9,19 @@ import struct SQLKit.SQLSerializer
 
 public struct SelectDirective<T: SelectSQLExpression>: SelectSQLExpression, SQLExpression {
     let content: T
-    
+
     init(_ content: T) {
         self.content = content
     }
-    
+
     public init(@SelectBuilder content: () -> T) {
         self.content = content()
     }
-    
+
     public var selectSqlExpression: some SQLExpression {
         content.selectSqlExpression
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
         guard !content.selectIsNull else { return }
         serializer.write("SELECT")
@@ -33,37 +33,37 @@ public struct SelectDirective<T: SelectSQLExpression>: SelectSQLExpression, SQLE
 public struct SelectModifier<T: SelectSQLExpression, U: SelectSQLExpression>: SQLExpression {
     let select: SelectDirective<T>
     let modifier: U
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
         guard !select.selectIsNull else { return }
         serializer.write("SELECT")
         serializer.writeSpace()
-        
+
         modifier.selectSqlExpression.serialize(to: &serializer)
         serializer.writeSpace()
-        
+
         select.selectSqlExpression.serialize(to: &serializer)
     }
 }
 
 public struct DistinctModifier<T: SelectSQLExpression>: SelectSQLExpression {
     let content: T
-    
+
     init(_ content: T) {
         self.content = content
     }
-    
+
     init(@SelectBuilder content: () -> T) {
         self.content = content()
     }
-    
+
     public var selectSqlExpression: some SQLExpression {
         _Select(content: content)
     }
-    
+
     private struct _Select: SQLExpression {
         let content: T
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             if T.self == EmptyExpression.self {
                 serializer.write("DISTINCT")

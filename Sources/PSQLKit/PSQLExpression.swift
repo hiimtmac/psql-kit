@@ -1,9 +1,9 @@
 // PSQLExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
-import protocol SQLKit.SQLExpression
 import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
 
 public protocol PSQLExpression {
     static var postgresDataType: PostgresDataType { get }

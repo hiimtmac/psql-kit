@@ -1,5 +1,5 @@
 // DeleteTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
 @testable import PSQLKit
@@ -244,13 +244,13 @@ final class DeleteTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testEmpty() {
         DELETE {}
-        .serialize(to: &fluentSerializer)
+            .serialize(to: &fluentSerializer)
 
         DELETE {}
-        .serialize(to: &psqlkitSerializer)
+            .serialize(to: &psqlkitSerializer)
 
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)

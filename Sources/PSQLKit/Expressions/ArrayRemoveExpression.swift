@@ -1,5 +1,5 @@
 // ArrayRemoveExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import struct PostgresNIO.PostgresDataType

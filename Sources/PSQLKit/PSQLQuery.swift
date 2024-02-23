@@ -1,12 +1,12 @@
 // PSQLQuery.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
+import protocol FluentKit.Database
 import Foundation
 import protocol PostgresNIO.PostgresDatabase
 import protocol SQLKit.SQLDatabase
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
-import protocol FluentKit.Database
 
 public protocol PSQLQuery: SQLExpression, QuerySQLExpression {}
 

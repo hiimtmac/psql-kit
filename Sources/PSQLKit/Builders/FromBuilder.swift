@@ -1,19 +1,19 @@
 // FromBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression {
         _From()
     }
-    
+
     public var fromIsNull: Bool { true }
-    
+
     private struct _From: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,11 +23,11 @@ extension EmptyExpression: FromSQLExpression {
 
 public struct FromTouple<each T: FromSQLExpression>: FromSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var fromSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -37,18 +37,17 @@ public struct FromTouple<each T: FromSQLExpression>: FromSQLExpression {
 }
 
 extension _ConditionalContent: FromSQLExpression where T: FromSQLExpression, U: FromSQLExpression {
-    
     public var fromSqlExpression: some SQLExpression {
         _From(content: self)
     }
-    
+
     struct _From: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.fromSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.fromSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.fromSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.fromSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -75,7 +74,7 @@ public enum FromBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> FromTouple<repeat each Content> where repeat each Content: FromSQLExpression {
+    ) -> FromTouple< repeat each Content> where repeat each Content: FromSQLExpression {
         .init(repeat each content)
     }
 }

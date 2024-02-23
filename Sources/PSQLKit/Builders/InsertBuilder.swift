@@ -1,23 +1,23 @@
 // InsertBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: InsertSQLExpression {
     public var insertColumnSqlExpression: some SQLExpression {
         _Insert()
     }
-    
+
     public var insertValueSqlExpression: some SQLExpression {
         _Insert()
     }
-    
+
     public var insertIsNull: Bool { true }
-    
+
     private struct _Insert: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -27,7 +27,7 @@ extension EmptyExpression: InsertSQLExpression {
 
 public struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
@@ -38,7 +38,7 @@ public struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
         _ = (repeat collector.append(column: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))
     }
-    
+
     public var insertValueSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -48,33 +48,32 @@ public struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
 }
 
 extension _ConditionalContent: InsertSQLExpression where T: InsertSQLExpression, U: InsertSQLExpression {
-    
     public var insertColumnSqlExpression: some SQLExpression {
         _InsertColumn(content: self)
     }
-    
+
     struct _InsertColumn: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.insertColumnSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.insertColumnSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.insertColumnSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.insertColumnSqlExpression.serialize(to: &serializer)
             }
         }
     }
-    
+
     public var insertValueSqlExpression: some SQLExpression {
         _InsertValue(content: self)
     }
-    
+
     struct _InsertValue: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.insertValueSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.insertValueSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.insertValueSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.insertValueSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -101,7 +100,7 @@ public enum InsertBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> InsertTouple<repeat each Content> where repeat each Content: InsertSQLExpression {
+    ) -> InsertTouple< repeat each Content> where repeat each Content: InsertSQLExpression {
         .init(repeat each content)
     }
 }

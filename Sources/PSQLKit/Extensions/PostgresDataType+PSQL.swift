@@ -1,13 +1,9 @@
-//
-//  File.swift
-//  
-//
-//  Created by Taylor McIntyre on 2024-02-22.
-//
+// PostgresDataType+PSQL.swift
+// Copyright (c) 2024 hiimtmac inc.
 
+import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
-import struct PostgresNIO.PostgresDataType
 
 extension PostgresDataType: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
@@ -15,7 +11,7 @@ extension PostgresDataType: SQLExpression {
         serializer.write("::")
         serializer.write(knownSQLName)
     }
-    
+
     static func array(_ type: Self) -> Self {
         switch type {
         case .text: .textArray

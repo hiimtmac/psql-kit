@@ -1,5 +1,5 @@
 // JoinTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
 @testable import PSQLKit
@@ -225,13 +225,13 @@ final class JoinTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testEmpty() {
         JOIN(self.f.table) {}
-        .serialize(to: &fluentSerializer)
+            .serialize(to: &fluentSerializer)
 
         JOIN(self.p.table) {}
-        .serialize(to: &psqlkitSerializer)
+            .serialize(to: &psqlkitSerializer)
 
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)

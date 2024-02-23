@@ -1,10 +1,10 @@
 // JoinDirective.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import enum SQLKit.SQLJoinMethod
+import struct SQLKit.SQLSerializer
 
 public struct JoinDirective<Table: FromSQLExpression, T: JoinSQLExpression>: SQLExpression {
     let table: Table
@@ -16,7 +16,7 @@ public struct JoinDirective<Table: FromSQLExpression, T: JoinSQLExpression>: SQL
         self.method = method
         self.content = content
     }
-    
+
     public init(_ table: Table, method: SQLJoinMethod = .inner, @JoinBuilder content: () -> T) {
         self.table = table
         self.method = method

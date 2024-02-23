@@ -1,5 +1,5 @@
 // OrderByDirective.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
@@ -16,15 +16,15 @@ public enum OrderByDirection: String, SQLExpression {
 
 public struct OrderByDirective<T: OrderBySQLExpression>: SQLExpression {
     let content: T
-    
+
     init(_ content: T) {
         self.content = content
     }
-    
+
     public init(@OrderByBuilder content: () -> T) {
         self.content = content()
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
         guard !content.orderByIsNull else { return }
         serializer.write("ORDER BY")

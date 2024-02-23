@@ -1,19 +1,19 @@
 // WithBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: WithSQLExpression {
     public var withSqlExpression: some SQLExpression {
         _With()
     }
-    
+
     public var withIsNull: Bool { true }
-    
+
     private struct _With: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,7 +23,7 @@ extension EmptyExpression: WithSQLExpression {
 
 public struct WithTouple<each T: WithSQLExpression>: WithSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
@@ -40,14 +40,14 @@ extension _ConditionalContent: WithSQLExpression where T: WithSQLExpression, U: 
     public var withSqlExpression: some SQLExpression {
         _With(content: self)
     }
-    
+
     struct _With: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.withSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.withSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.withSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.withSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -74,7 +74,7 @@ public enum WithBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> WithTouple<repeat each Content> where repeat each Content: WithSQLExpression {
+    ) -> WithTouple< repeat each Content> where repeat each Content: WithSQLExpression {
         .init(repeat each content)
     }
 }

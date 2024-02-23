@@ -1,5 +1,5 @@
 // ColumnExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import struct PostgresNIO.PostgresDataType
@@ -74,7 +74,7 @@ extension ColumnExpression: BaseSQLExpression {
 
 // MARK: Select
 
-extension ColumnExpression: SelectSQLExpression  {
+extension ColumnExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: self.aliasName,

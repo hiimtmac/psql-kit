@@ -1,5 +1,5 @@
 // InsertTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
 @testable import PSQLKit
@@ -187,13 +187,13 @@ final class InsertTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testEmpty() {
         INSERT(into: self.f.table) {}
-        .serialize(to: &fluentSerializer)
+            .serialize(to: &fluentSerializer)
 
         INSERT(into: self.p.table) {}
-        .serialize(to: &psqlkitSerializer)
+            .serialize(to: &psqlkitSerializer)
 
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)

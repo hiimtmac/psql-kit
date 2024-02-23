@@ -1,11 +1,11 @@
 // Array+PSQL.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
-import struct SQLKit.SQLList
 import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLList
+import struct SQLKit.SQLSerializer
 
 extension Array: SQLExpression where Element: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {

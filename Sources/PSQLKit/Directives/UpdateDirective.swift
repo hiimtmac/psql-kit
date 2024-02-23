@@ -1,5 +1,5 @@
 // UpdateDirective.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
@@ -8,7 +8,7 @@ import struct SQLKit.SQLSerializer
 public struct UpdateDirective<Table: FromSQLExpression, T: UpdateSQLExpression>: SQLExpression {
     let table: Table
     let content: T
-    
+
     init(_ table: Table, content: T) {
         self.table = table
         self.content = content

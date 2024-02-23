@@ -1,5 +1,5 @@
 // HavingTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
 @testable import PSQLKit
@@ -189,13 +189,13 @@ final class HavingTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testEmpty() {
         HAVING {}
-        .serialize(to: &fluentSerializer)
+            .serialize(to: &fluentSerializer)
 
         HAVING {}
-        .serialize(to: &psqlkitSerializer)
+            .serialize(to: &psqlkitSerializer)
 
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)

@@ -1,5 +1,5 @@
 // WhereDirective.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
@@ -7,15 +7,15 @@ import struct SQLKit.SQLSerializer
 
 public struct WhereDirective<T: WhereSQLExpression>: SQLExpression {
     let content: T
-    
+
     init(_ content: T) {
         self.content = content
     }
-    
+
     public init(@WhereBuilder content: () -> T) {
         self.content = content()
     }
-    
+
     public func serialize(to serializer: inout SQLSerializer) {
         guard !content.whereIsNull else { return }
         serializer.write("WHERE")

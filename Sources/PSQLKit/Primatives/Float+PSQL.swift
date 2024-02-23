@@ -1,10 +1,10 @@
 // Float+PSQL.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
+import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
-import struct PostgresNIO.PostgresDataType
 
 extension Float: PSQLExpression {
     public static var postgresDataType: PostgresDataType { .numeric }

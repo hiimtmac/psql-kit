@@ -1,5 +1,5 @@
 // SQLExpressionTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
 @testable import PSQLKit

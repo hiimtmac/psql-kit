@@ -1,23 +1,19 @@
-//
-//  File.swift
-//  
-//
-//  Created by Taylor McIntyre on 2024-02-22.
-//
+// SelectBuilder.swift
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select()
     }
-    
+
     public var selectIsNull: Bool { true }
-    
+
     private struct _Select: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -27,11 +23,11 @@ extension EmptyExpression: SelectSQLExpression {
 
 public struct SelectTouple<each T: SelectSQLExpression>: SelectSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var selectSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -44,14 +40,14 @@ extension _ConditionalContent: SelectSQLExpression where T: SelectSQLExpression,
     public var selectSqlExpression: some SQLExpression {
         _Select(content: self)
     }
-    
+
     struct _Select: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.selectSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.selectSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.selectSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.selectSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -78,7 +74,7 @@ public enum SelectBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> SelectTouple<repeat each Content> where repeat each Content: SelectSQLExpression {
+    ) -> SelectTouple< repeat each Content> where repeat each Content: SelectSQLExpression {
         .init(repeat each content)
     }
 }

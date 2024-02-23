@@ -1,19 +1,19 @@
 // UnionBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: UnionSQLExpression {
     public var unionSqlExpression: some SQLExpression {
         _Union()
     }
-    
+
     public var unionIsNull: Bool { true }
-    
+
     private struct _Union: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,11 +23,11 @@ extension EmptyExpression: UnionSQLExpression {
 
 public struct UnionTouple<each T: UnionSQLExpression>: UnionSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var unionSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -40,14 +40,14 @@ extension _ConditionalContent: UnionSQLExpression where T: UnionSQLExpression, U
     public var unionSqlExpression: some SQLExpression {
         _Union(content: self)
     }
-    
+
     struct _Union: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.unionSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.unionSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.unionSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.unionSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -74,7 +74,7 @@ public enum UnionBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> UnionTouple<repeat each Content> where repeat each Content: UnionSQLExpression {
+    ) -> UnionTouple< repeat each Content> where repeat each Content: UnionSQLExpression {
         .init(repeat each content)
     }
 }
@@ -98,4 +98,3 @@ extension UnionBuilder {
         .right(content)
     }
 }
-

@@ -1,5 +1,5 @@
 // WhereTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
 @testable import PSQLKit
@@ -445,13 +445,13 @@ final class WhereTests: PSQLTestCase {
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
-    
+
     func testEmpty() {
         WHERE {}
-        .serialize(to: &fluentSerializer)
+            .serialize(to: &fluentSerializer)
 
         WHERE {}
-        .serialize(to: &psqlkitSerializer)
+            .serialize(to: &psqlkitSerializer)
 
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)

@@ -1,15 +1,15 @@
 // JsonExtractPathText.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
+import class FluentKit.FieldProperty
+import class FluentKit.GroupProperty
+import class FluentKit.IDProperty
+import class FluentKit.OptionalFieldProperty
+import class FluentKit.TimestampProperty
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
-import class FluentKit.FieldProperty
-import class FluentKit.OptionalFieldProperty
-import class FluentKit.IDProperty
-import class FluentKit.TimestampProperty
-import class FluentKit.GroupProperty
+import struct SQLKit.SQLSerializer
 
 public protocol JsonbExtractable: BaseSQLExpression {}
 

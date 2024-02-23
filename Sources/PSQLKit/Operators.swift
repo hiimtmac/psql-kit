@@ -1,5 +1,5 @@
 // Operators.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 postfix operator .*
 infix operator ...: LogicalConjunctionPrecedence

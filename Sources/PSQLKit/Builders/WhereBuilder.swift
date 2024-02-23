@@ -1,19 +1,19 @@
 // WhereBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: WhereSQLExpression {
     public var whereSqlExpression: some SQLExpression {
         _Where()
     }
-    
+
     public var whereIsNull: Bool { true }
-    
+
     private struct _Where: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,11 +23,11 @@ extension EmptyExpression: WhereSQLExpression {
 
 public struct WhereTouple<each T: WhereSQLExpression>: WhereSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var whereSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -40,14 +40,14 @@ extension _ConditionalContent: WhereSQLExpression where T: WhereSQLExpression, U
     public var whereSqlExpression: some SQLExpression {
         _Where(content: self)
     }
-    
+
     struct _Where: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.whereSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.whereSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.whereSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.whereSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -74,7 +74,7 @@ public enum WhereBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> WhereTouple<repeat each Content> where repeat each Content: WhereSQLExpression {
+    ) -> WhereTouple< repeat each Content> where repeat each Content: WhereSQLExpression {
         .init(repeat each content)
     }
 }

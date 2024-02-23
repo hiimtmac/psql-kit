@@ -1,19 +1,19 @@
 // JoinBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: JoinSQLExpression {
     public var joinSqlExpression: some SQLExpression {
         _Join()
     }
-    
+
     public var joinIsNull: Bool { true }
-    
+
     private struct _Join: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,11 +23,11 @@ extension EmptyExpression: JoinSQLExpression {
 
 public struct JoinTouple<each T: JoinSQLExpression>: JoinSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var joinSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -37,18 +37,17 @@ public struct JoinTouple<each T: JoinSQLExpression>: JoinSQLExpression {
 }
 
 extension _ConditionalContent: JoinSQLExpression where T: JoinSQLExpression, U: JoinSQLExpression {
-    
     public var joinSqlExpression: some SQLExpression {
         _Join(content: self)
     }
-    
+
     struct _Join: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.joinSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.joinSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.joinSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.joinSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -75,7 +74,7 @@ public enum JoinBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> JoinTouple<repeat each Content> where repeat each Content: JoinSQLExpression {
+    ) -> JoinTouple< repeat each Content> where repeat each Content: JoinSQLExpression {
         .init(repeat each content)
     }
 }

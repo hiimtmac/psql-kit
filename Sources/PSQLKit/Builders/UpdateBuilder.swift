@@ -1,19 +1,19 @@
 // UpdateBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: UpdateSQLExpression {
     public var updateSqlExpression: some SQLExpression {
         _Update()
     }
-    
+
     public var updateIsNull: Bool { true }
-    
+
     private struct _Update: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,11 +23,11 @@ extension EmptyExpression: UpdateSQLExpression {
 
 public struct UpdateTouple<each T: UpdateSQLExpression>: UpdateSQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var updateSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -40,14 +40,14 @@ extension _ConditionalContent: UpdateSQLExpression where T: UpdateSQLExpression,
     public var updateSqlExpression: some SQLExpression {
         _Update(content: self)
     }
-    
+
     struct _Update: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.updateSqlExpression.serialize(to: &serializer)
-            case .right(let u): u.updateSqlExpression.serialize(to: &serializer)
+            case let .left(t): t.updateSqlExpression.serialize(to: &serializer)
+            case let .right(u): u.updateSqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -74,7 +74,7 @@ public enum UpdateBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> UpdateTouple<repeat each Content> where repeat each Content: UpdateSQLExpression {
+    ) -> UpdateTouple< repeat each Content> where repeat each Content: UpdateSQLExpression {
         .init(repeat each content)
     }
 }

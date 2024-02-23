@@ -1,19 +1,19 @@
 // QueryBuilder.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
+import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression {
         _Query()
     }
-    
+
     public var queryIsNull: Bool { true }
-    
+
     private struct _Query: SQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             fatalError("Should not be serialized")
@@ -23,11 +23,11 @@ extension EmptyExpression: QuerySQLExpression {
 
 public struct QueryTouple<each T: QuerySQLExpression>: QuerySQLExpression {
     let content: (repeat each T)
-    
+
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
+
     public var querySqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
@@ -40,14 +40,14 @@ extension _ConditionalContent: QuerySQLExpression where T: QuerySQLExpression, U
     public var querySqlExpression: some SQLExpression {
         _Query(content: self)
     }
-    
+
     struct _Query: SQLExpression {
         let content: _ConditionalContent<T, U>
-        
+
         func serialize(to serializer: inout SQLSerializer) {
             switch content {
-            case .left(let t): t.querySqlExpression.serialize(to: &serializer)
-            case .right(let u): u.querySqlExpression.serialize(to: &serializer)
+            case let .left(t): t.querySqlExpression.serialize(to: &serializer)
+            case let .right(u): u.querySqlExpression.serialize(to: &serializer)
             }
         }
     }
@@ -74,7 +74,7 @@ public enum QueryBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTouple<repeat each Content> where repeat each Content: QuerySQLExpression {
+    ) -> QueryTouple< repeat each Content> where repeat each Content: QuerySQLExpression {
         .init(repeat each content)
     }
 }

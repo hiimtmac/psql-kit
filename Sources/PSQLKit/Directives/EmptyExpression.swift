@@ -1,9 +1,5 @@
-//
-//  File.swift
-//  
-//
-//  Created by Taylor McIntyre on 2024-02-22.
-//
+// EmptyExpression.swift
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
 
