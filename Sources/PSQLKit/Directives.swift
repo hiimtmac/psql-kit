@@ -52,6 +52,11 @@ extension GroupBySQLExpression {
 public protocol OrderBySQLExpression {
     associatedtype OrderByExpression: SQLExpression
     var orderBySqlExpression: OrderByExpression { get }
+    var orderByIsNull: Bool { get }
+}
+
+extension OrderBySQLExpression {
+    public var orderByIsNull: Bool { false }
 }
 
 public protocol CompareSQLExpression {

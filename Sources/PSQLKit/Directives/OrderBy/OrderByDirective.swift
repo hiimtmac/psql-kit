@@ -13,24 +13,29 @@ public enum OrderByDirection: String, SQLExpression {
     }
 }
 
-public struct OrderByDirective: SQLExpression {
-    let content: [any OrderBySQLExpression]
-
-    public init(@OrderByBuilder builder: () -> [any OrderBySQLExpression]) {
-        self.content = builder()
+public struct OrderByDirective<T: OrderBySQLExpression>: SQLExpression {
+    let content: T
+    
+    init(_ content: T) {
+        self.content = content
     }
-
+    
+    init(@OrderByBuilder content: () -> T) {
+        self.content = content()
+    }
+    
+    public var orderBySqlExpression: some SQLExpression {
+        content.orderBySqlExpression
+    }
+    
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            serializer.write("ORDER BY")
-//            serializer.writeSpace()
-//            SQLList(self.content.map(\.orderBySqlExpression))
-//                .serialize(to: &serializer)
-//        }
+        serializer.write("ORDER BY")
+        serializer.writeSpace()
+        content.orderBySqlExpression.serialize(to: &serializer)
     }
 }
 
-public struct OrderByModifier<Content>: OrderBySQLExpression where Content: OrderBySQLExpression {
+public struct OrderByModifier<Content: OrderBySQLExpression>: OrderBySQLExpression {
     let content: Content
     let direction: OrderByDirection
 

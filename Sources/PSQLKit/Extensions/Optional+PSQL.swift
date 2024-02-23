@@ -45,6 +45,11 @@ extension Optional: WithSQLExpression where Wrapped: WithSQLExpression {
     public var withIsNull: Bool { self == nil }
 }
 
+extension Optional: OrderBySQLExpression where Wrapped: OrderBySQLExpression {
+    public var orderBySqlExpression: some SQLExpression { self?.orderBySqlExpression }
+    public var orderByIsNull: Bool { self == nil }
+}
+
 extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self?.compareSqlExpression }
 }
