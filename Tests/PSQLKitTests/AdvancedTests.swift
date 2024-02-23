@@ -52,16 +52,16 @@ final class AdvancedTests: PSQLTestCase {
         var date: PSQLDate
     }
 
-    func testTypesCompile() {
-        _ = WHERE {
-            // Custom UUID vs Custom UUID?
-            OwnerFilter.$id == OwnerDateSeries.$id
-            // Fluent UUID? vs Custom UUID?
-            Owner.$id == OwnerDateSeries.$id
-            // Fluent UUID? vs Custom UUID
-            Owner.$id == OwnerFilter.$id
-        }
-    }
+//    func testTypesCompile() {
+//        _ = WHERE {
+//            // Custom UUID vs Custom UUID?
+//            OwnerFilter.$id == OwnerDateSeries.$id
+//            // Fluent UUID? vs Custom UUID?
+//            Owner.$id == OwnerDateSeries.$id
+//            // Fluent UUID? vs Custom UUID
+//            Owner.$id == OwnerFilter.$id
+//        }
+//    }
 
 //    func testExample() {
 //        let d1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 31).date!

@@ -76,4 +76,5 @@ extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
 
 extension Optional: WhereSQLExpression where Wrapped: WhereSQLExpression {
     public var whereSqlExpression: some SQLExpression { self?.whereSqlExpression }
+    public var whereIsNull: Bool { self == nil }
 }

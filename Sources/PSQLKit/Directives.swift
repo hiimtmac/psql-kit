@@ -82,6 +82,11 @@ extension JoinSQLExpression {
 public protocol WhereSQLExpression {
     associatedtype WhereExpression: SQLExpression
     var whereSqlExpression: WhereExpression { get }
+    var whereIsNull: Bool { get }
+}
+
+extension WhereSQLExpression {
+    public var whereIsNull: Bool { false }
 }
 
 public protocol HavingSQLExpression {

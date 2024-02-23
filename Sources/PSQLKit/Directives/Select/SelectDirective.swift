@@ -25,7 +25,7 @@ public struct SelectDirective<T: SelectSQLExpression>: SelectSQLExpression, SQLE
         self.content = content
     }
     
-    init(@SelectBuilder content: () -> T) {
+    public init(@SelectBuilder content: () -> T) {
         self.content = content()
     }
     

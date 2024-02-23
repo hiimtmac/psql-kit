@@ -11,7 +11,7 @@ public struct QueryDirective<T: QuerySQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@QueryBuilder content: () -> T) {
+    public init(@QueryBuilder content: () -> T) {
         self.content = content()
     }
     

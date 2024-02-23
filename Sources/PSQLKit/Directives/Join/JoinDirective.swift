@@ -9,7 +9,7 @@ public struct JoinDirective<Table: FromSQLExpression, T: JoinSQLExpression>: SQL
     let method: SQLJoinMethod
     let content: T
 
-    public init(_ table: Table, method: SQLJoinMethod = .inner, content: T) {
+    init(_ table: Table, method: SQLJoinMethod = .inner, content: T) {
         self.table = table
         self.method = method
         self.content = content

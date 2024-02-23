@@ -11,7 +11,7 @@ public struct HavingDirective<T: HavingSQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@HavingBuilder content: () -> T) {
+    public init(@HavingBuilder content: () -> T) {
         self.content = content()
     }
     

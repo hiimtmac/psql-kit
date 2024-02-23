@@ -20,12 +20,8 @@ public struct OrderByDirective<T: OrderBySQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@OrderByBuilder content: () -> T) {
+    public init(@OrderByBuilder content: () -> T) {
         self.content = content()
-    }
-    
-    public var orderBySqlExpression: some SQLExpression {
-        content.orderBySqlExpression
     }
     
     public func serialize(to serializer: inout SQLSerializer) {

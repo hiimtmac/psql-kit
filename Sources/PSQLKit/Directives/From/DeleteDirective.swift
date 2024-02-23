@@ -11,7 +11,7 @@ public struct DeleteDirective<T: FromSQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@FromBuilder content: () -> T) {
+    public init(@FromBuilder content: () -> T) {
         self.content = content()
     }
     

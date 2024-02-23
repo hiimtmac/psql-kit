@@ -11,7 +11,7 @@ public struct ReturningDirective<T: SelectSQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@SelectBuilder content: () -> T) {
+    public init(@SelectBuilder content: () -> T) {
         self.content = content()
     }
     

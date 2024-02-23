@@ -11,7 +11,7 @@ public struct UnionDirective<T: UnionSQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@UnionBuilder content: () -> T) {
+    public init(@UnionBuilder content: () -> T) {
         self.content = content()
     }
     

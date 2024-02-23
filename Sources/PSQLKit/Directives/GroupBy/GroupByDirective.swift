@@ -11,7 +11,7 @@ public struct GroupByDirective<T: GroupBySQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@GroupByBuilder content: () -> T) {
+    public init(@GroupByBuilder content: () -> T) {
         self.content = content()
     }
     
