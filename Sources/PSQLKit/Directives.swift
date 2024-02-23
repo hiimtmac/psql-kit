@@ -67,6 +67,11 @@ public protocol WhereSQLExpression {
 public protocol HavingSQLExpression {
     associatedtype HavingExpression: SQLExpression
     var havingSqlExpression: HavingExpression { get }
+    var havingIsNull: Bool { get }
+}
+
+extension HavingSQLExpression {
+    public var havingIsNull: Bool { false }
 }
 
 public protocol QuerySQLExpression {

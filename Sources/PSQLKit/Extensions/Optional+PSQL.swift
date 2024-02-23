@@ -30,6 +30,11 @@ extension Optional: SelectSQLExpression where Wrapped: SelectSQLExpression {
     public var selectIsNull: Bool { self == nil }
 }
 
+extension Optional: HavingSQLExpression where Wrapped: HavingSQLExpression {
+    public var havingSqlExpression: some SQLExpression { self?.havingSqlExpression }
+    public var havingIsNull: Bool { self == nil }
+}
+
 extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self?.compareSqlExpression }
 }
