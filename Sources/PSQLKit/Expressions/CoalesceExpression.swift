@@ -8,6 +8,14 @@ public protocol Coalescable: BaseSQLExpression {}
 
 // MARK: CoalesceExpression
 
+// Same-element requirements are not yet supported
+//struct _CoalesceExpression<
+//    T: TypeEquatable,
+//    each U: TypeEquatable
+//> where repeat (each U).CompareType == T.CompareType {
+//    
+//}
+
 public struct CoalesceExpression<T> where
     T: TypeEquatable
 {

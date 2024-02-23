@@ -10,6 +10,7 @@ import protocol SQLKit.SQLExpression
 import protocol SQLKit.SQLDatabase
 import protocol SQLKit.SQLRow
 import struct SQLKit.SQLSerializer
+import PSQLKit
 
 final class TestSQLDatabase: SQLDatabase {
     let logger: Logger
@@ -29,4 +30,14 @@ final class TestSQLDatabase: SQLDatabase {
         self.results.append(serializer.sql)
         return self.eventLoop.makeSucceededFuture(())
     }
+}
+
+extension PSQLQuery {
+    func raw(database: any SQLDatabase = Self.testDB) -> (sql: String, binds: [any Encodable]) {
+        var serializer = SQLSerializer(database: database)
+        self.serialize(to: &serializer)
+        return (serializer.sql, serializer.binds)
+    }
+
+    static var testDB: any SQLDatabase { TestSQLDatabase() }
 }

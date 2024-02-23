@@ -7,18 +7,28 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct UpdateTouple<each T: UpdateSQLExpression>: UpdateSQLExpression {
+extension EmptyExpression: UpdateSQLExpression {
+    public var updateSqlExpression: some SQLExpression {
+        _Update()
+    }
+    
+    public var updateIsNull: Bool { true }
+    
+    private struct _Update: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct UpdateTouple<each T: UpdateSQLExpression>: UpdateSQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
     
-    var updateIsNull: Bool {
-        updateSqlExpression.expressions.isEmpty
-    }
-    
-    var updateSqlExpression: SQLList {
+    public var updateSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
@@ -27,8 +37,7 @@ struct UpdateTouple<each T: UpdateSQLExpression>: UpdateSQLExpression {
 }
 
 extension _ConditionalContent: UpdateSQLExpression where T: UpdateSQLExpression, U: UpdateSQLExpression {
-    
-    var updateSqlExpression: some SQLExpression {
+    public var updateSqlExpression: some SQLExpression {
         _Update(content: self)
     }
     
@@ -45,16 +54,16 @@ extension _ConditionalContent: UpdateSQLExpression where T: UpdateSQLExpression,
 }
 
 @resultBuilder
-enum UpdateBuilder {
+public enum UpdateBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: UpdateSQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

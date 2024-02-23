@@ -7,18 +7,6 @@ import struct SQLKit.SQLSerializer
 
 // https://github.com/apple/swift-evolution/blob/main/proposals/0289-result-builders.md
 
-extension EmptyExpression: SelectSQLExpression {
-    public var selectSqlExpression: some SQLExpression {
-        _Select()
-    }
-    
-    private struct _Select: SQLExpression {
-        func serialize(to serializer: inout SQLSerializer) {
-            fatalError("Should not be serialized")
-        }
-    }
-}
-
 public struct SelectDirective<T: SelectSQLExpression>: SelectSQLExpression, SQLExpression {
     let content: T
     

@@ -1,8 +1,6 @@
 // SQLExpressionTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
-import SQLKit
 import XCTest
 @testable import PSQLKit
 

@@ -7,18 +7,28 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct WithTouple<each T: WithSQLExpression>: WithSQLExpression {
+extension EmptyExpression: WithSQLExpression {
+    public var withSqlExpression: some SQLExpression {
+        _With()
+    }
+    
+    public var withIsNull: Bool { true }
+    
+    private struct _With: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct WithTouple<each T: WithSQLExpression>: WithSQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
-    var withIsNull: Bool {
-        withSqlExpression.expressions.isEmpty
-    }
-    
-    var withSqlExpression: SQLList {
+
+    public var withSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
@@ -27,8 +37,7 @@ struct WithTouple<each T: WithSQLExpression>: WithSQLExpression {
 }
 
 extension _ConditionalContent: WithSQLExpression where T: WithSQLExpression, U: WithSQLExpression {
-    
-    var withSqlExpression: some SQLExpression {
+    public var withSqlExpression: some SQLExpression {
         _With(content: self)
     }
     
@@ -45,16 +54,16 @@ extension _ConditionalContent: WithSQLExpression where T: WithSQLExpression, U: 
 }
 
 @resultBuilder
-enum WithBuilder {
+public enum WithBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: WithSQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

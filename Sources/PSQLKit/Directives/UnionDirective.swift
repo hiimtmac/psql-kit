@@ -17,6 +17,7 @@ public struct UnionDirective<T: UnionSQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.unionIsNull else { return }
         content.unionSqlExpression.serialize(to: &serializer)
     }
 }

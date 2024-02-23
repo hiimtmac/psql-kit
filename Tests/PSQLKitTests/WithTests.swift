@@ -1,7 +1,6 @@
 // WithTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -240,6 +239,18 @@ final class WithTests: PSQLTestCase {
                 QUERY { SELECT { p.$title } }.asWith(p.table)
             }
         }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testEmpty() {
+        WITH {}
+        .serialize(to: &fluentSerializer)
+
+        WITH {}
         .serialize(to: &psqlkitSerializer)
 
         let compare = #""#

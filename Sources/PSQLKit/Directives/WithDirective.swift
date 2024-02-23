@@ -12,7 +12,7 @@ public struct WithDirective<T: WithSQLExpression>: SQLExpression {
         self.content = content
     }
     
-    init(@WithBuilder content: () -> T) {
+    public init(@WithBuilder content: () -> T) {
         self.content = content()
     }
     

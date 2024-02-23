@@ -7,18 +7,28 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct HavingTouple<each T: HavingSQLExpression>: HavingSQLExpression {
+extension EmptyExpression: HavingSQLExpression {
+    public var havingSqlExpression: some SQLExpression {
+        _Having()
+    }
+    
+    public var havingIsNull: Bool { true }
+    
+    private struct _Having: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct HavingTouple<each T: HavingSQLExpression>: HavingSQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
     
-    var havingIsNull: Bool {
-        havingSqlExpression.expressions.isEmpty
-    }
-    
-    var havingSqlExpression: SQLList {
+    public var havingSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
@@ -28,7 +38,7 @@ struct HavingTouple<each T: HavingSQLExpression>: HavingSQLExpression {
 
 extension _ConditionalContent: HavingSQLExpression where T: HavingSQLExpression, U: HavingSQLExpression {
     
-    var havingSqlExpression: some SQLExpression {
+    public var havingSqlExpression: some SQLExpression {
         _Having(content: self)
     }
     
@@ -45,16 +55,16 @@ extension _ConditionalContent: HavingSQLExpression where T: HavingSQLExpression,
 }
 
 @resultBuilder
-enum HavingBuilder {
+public enum HavingBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: HavingSQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

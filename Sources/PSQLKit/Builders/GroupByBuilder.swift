@@ -7,18 +7,28 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct GroupByTouple<each T: GroupBySQLExpression>: GroupBySQLExpression {
+extension EmptyExpression: GroupBySQLExpression {
+    public var groupBySqlExpression: some SQLExpression {
+        _GroupBy()
+    }
+    
+    public var groupByIsNull: Bool { true }
+    
+    private struct _GroupBy: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct GroupByTouple<each T: GroupBySQLExpression>: GroupBySQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
     
-    var groupByIsNull: Bool {
-        groupBySqlExpression.expressions.isEmpty
-    }
-    
-    var groupBySqlExpression: SQLList {
+    public var groupBySqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
@@ -28,7 +38,7 @@ struct GroupByTouple<each T: GroupBySQLExpression>: GroupBySQLExpression {
 
 extension _ConditionalContent: GroupBySQLExpression where T: GroupBySQLExpression, U: GroupBySQLExpression {
     
-    var groupBySqlExpression: some SQLExpression {
+    public var groupBySqlExpression: some SQLExpression {
         _GroupBY(content: self)
     }
     
@@ -45,16 +55,16 @@ extension _ConditionalContent: GroupBySQLExpression where T: GroupBySQLExpressio
 }
 
 @resultBuilder
-enum GroupByBuilder {
+public enum GroupByBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: GroupBySQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

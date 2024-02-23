@@ -1,7 +1,6 @@
 // SelectTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -319,6 +318,18 @@ final class SelectTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"SELECT "x"."age"::INTEGER"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testEmpty() {
+        SELECT {}
+        .serialize(to: &fluentSerializer)
+
+        SELECT {}
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

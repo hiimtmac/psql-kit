@@ -7,18 +7,28 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct FromTouple<each T: FromSQLExpression>: FromSQLExpression {
+extension EmptyExpression: FromSQLExpression {
+    public var fromSqlExpression: some SQLExpression {
+        _From()
+    }
+    
+    public var fromIsNull: Bool { true }
+    
+    private struct _From: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct FromTouple<each T: FromSQLExpression>: FromSQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
     
-    var fromIsNull: Bool {
-        fromSqlExpression.expressions.isEmpty
-    }
-    
-    var fromSqlExpression: SQLList {
+    public var fromSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
@@ -28,7 +38,7 @@ struct FromTouple<each T: FromSQLExpression>: FromSQLExpression {
 
 extension _ConditionalContent: FromSQLExpression where T: FromSQLExpression, U: FromSQLExpression {
     
-    var fromSqlExpression: some SQLExpression {
+    public var fromSqlExpression: some SQLExpression {
         _From(content: self)
     }
     
@@ -45,16 +55,16 @@ extension _ConditionalContent: FromSQLExpression where T: FromSQLExpression, U: 
 }
 
 @resultBuilder
-enum FromBuilder {
+public enum FromBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: FromSQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

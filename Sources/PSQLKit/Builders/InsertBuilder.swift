@@ -7,25 +7,39 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
+extension EmptyExpression: InsertSQLExpression {
+    public var insertColumnSqlExpression: some SQLExpression {
+        _Insert()
+    }
+    
+    public var insertValueSqlExpression: some SQLExpression {
+        _Insert()
+    }
+    
+    public var insertIsNull: Bool { true }
+    
+    private struct _Insert: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
-    
-    var insertIsNull: Bool {
-        insertColumnSqlExpression.expressions.isEmpty && insertValueSqlExpression.expressions.isEmpty
-    }
-    
-    var insertColumnSqlExpression: SQLList {
+
+    public var insertColumnSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(column: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))
     }
     
-    var insertValueSqlExpression: SQLList {
+    public var insertValueSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(value: each content))
@@ -35,7 +49,7 @@ struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
 
 extension _ConditionalContent: InsertSQLExpression where T: InsertSQLExpression, U: InsertSQLExpression {
     
-    var insertColumnSqlExpression: some SQLExpression {
+    public var insertColumnSqlExpression: some SQLExpression {
         _InsertColumn(content: self)
     }
     
@@ -50,7 +64,7 @@ extension _ConditionalContent: InsertSQLExpression where T: InsertSQLExpression,
         }
     }
     
-    var insertValueSqlExpression: some SQLExpression {
+    public var insertValueSqlExpression: some SQLExpression {
         _InsertValue(content: self)
     }
     
@@ -67,16 +81,16 @@ extension _ConditionalContent: InsertSQLExpression where T: InsertSQLExpression,
 }
 
 @resultBuilder
-enum InsertBuilder {
+public enum InsertBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: InsertSQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

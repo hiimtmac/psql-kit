@@ -7,14 +7,28 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct UnionTouple<each T: UnionSQLExpression>: UnionSQLExpression {
+extension EmptyExpression: UnionSQLExpression {
+    public var unionSqlExpression: some SQLExpression {
+        _Union()
+    }
+    
+    public var unionIsNull: Bool { true }
+    
+    private struct _Union: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct UnionTouple<each T: UnionSQLExpression>: UnionSQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
     
-    var unionSqlExpression: SQLList {
+    public var unionSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
@@ -23,8 +37,7 @@ struct UnionTouple<each T: UnionSQLExpression>: UnionSQLExpression {
 }
 
 extension _ConditionalContent: UnionSQLExpression where T: UnionSQLExpression, U: UnionSQLExpression {
-    
-    var unionSqlExpression: some SQLExpression {
+    public var unionSqlExpression: some SQLExpression {
         _Union(content: self)
     }
     
@@ -41,16 +54,16 @@ extension _ConditionalContent: UnionSQLExpression where T: UnionSQLExpression, U
 }
 
 @resultBuilder
-enum UnionBuilder {
+public enum UnionBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: UnionSQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

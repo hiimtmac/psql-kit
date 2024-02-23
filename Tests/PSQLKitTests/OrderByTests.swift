@@ -1,7 +1,6 @@
 // OrderByTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -220,6 +219,18 @@ final class OrderByTests: PSQLTestCase {
                 p.$name
             }
         }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testEmpty() {
+        ORDERBY {}
+        .serialize(to: &fluentSerializer)
+
+        ORDERBY {}
         .serialize(to: &psqlkitSerializer)
 
         let compare = #""#

@@ -1,7 +1,6 @@
 // JoinTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -223,6 +222,18 @@ final class JoinTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testEmpty() {
+        JOIN(self.f.table) {}
+        .serialize(to: &fluentSerializer)
+
+        JOIN(self.p.table) {}
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

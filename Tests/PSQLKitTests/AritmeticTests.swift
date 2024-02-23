@@ -1,7 +1,6 @@
 // AritmeticTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 

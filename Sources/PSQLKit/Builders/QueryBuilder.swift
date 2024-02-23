@@ -7,18 +7,28 @@ import struct SQLKit.SQLSerializer
 import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
-struct QueryTouple<each T: QuerySQLExpression>: QuerySQLExpression {
+extension EmptyExpression: QuerySQLExpression {
+    public var querySqlExpression: some SQLExpression {
+        _Query()
+    }
+    
+    public var queryIsNull: Bool { true }
+    
+    private struct _Query: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
+    }
+}
+
+public struct QueryTouple<each T: QuerySQLExpression>: QuerySQLExpression {
     let content: (repeat each T)
     
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
     
-    var queryIsNull: Bool {
-        querySqlExpression.expressions.isEmpty
-    }
-    
-    var querySqlExpression: SQLList {
+    public var querySqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
@@ -27,8 +37,7 @@ struct QueryTouple<each T: QuerySQLExpression>: QuerySQLExpression {
 }
 
 extension _ConditionalContent: QuerySQLExpression where T: QuerySQLExpression, U: QuerySQLExpression {
-    
-    var querySqlExpression: some SQLExpression {
+    public var querySqlExpression: some SQLExpression {
         _Query(content: self)
     }
     
@@ -45,16 +54,16 @@ extension _ConditionalContent: QuerySQLExpression where T: QuerySQLExpression, U
 }
 
 @resultBuilder
-enum QueryBuilder {
+public enum QueryBuilder {
     public static func buildExpression<Content>(
         _ content: Content
     ) -> Content where Content: QuerySQLExpression {
         content
     }
 
-//    public static func buildBlock() -> EmptyView {
-//        EmptyView()
-//    }
+    public static func buildBlock() -> EmptyExpression {
+        EmptyExpression()
+    }
 
     public static func buildBlock<Content>(
         _ content: Content

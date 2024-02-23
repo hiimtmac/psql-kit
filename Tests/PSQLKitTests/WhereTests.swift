@@ -1,7 +1,6 @@
 // WhereTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -443,6 +442,18 @@ final class WhereTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"WHERE ("x"."age" = 29)"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testEmpty() {
+        WHERE {}
+        .serialize(to: &fluentSerializer)
+
+        WHERE {}
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

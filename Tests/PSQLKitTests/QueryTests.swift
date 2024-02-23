@@ -1,7 +1,6 @@
 // QueryTests.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -249,6 +248,18 @@ final class QueryTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'taylor' WHERE ("x"."name" = 'tmac') RETURNING "x"."id"::UUID"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testEmpty() {
+        QUERY {}
+        .serialize(to: &fluentSerializer)
+
+        QUERY {}
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

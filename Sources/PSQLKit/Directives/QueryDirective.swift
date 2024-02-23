@@ -17,6 +17,7 @@ public struct QueryDirective<T: QuerySQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.queryIsNull else { return }
         content.querySqlExpression.serialize(to: &serializer)
     }
 }
