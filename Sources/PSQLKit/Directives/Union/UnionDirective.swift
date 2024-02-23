@@ -4,18 +4,19 @@
 import Foundation
 import SQLKit
 
-public struct UnionDirective: SQLExpression {
-    let content: [any UnionSQLExpression]
-
-    public init(@UnionBuilder builder: () -> [any UnionSQLExpression]) {
-        self.content = builder()
+public struct UnionDirective<T: UnionSQLExpression>: SQLExpression {
+    let content: T
+    
+    init(_ content: T) {
+        self.content = content
     }
-
+    
+    init(@UnionBuilder content: () -> T) {
+        self.content = content()
+    }
+    
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            SQLList(self.content.map(\.unionSqlExpression), separator: SQLRaw(" UNION "))
-//                .serialize(to: &serializer)
-//        }
+        content.unionSqlExpression.serialize(to: &serializer)
     }
 }
 

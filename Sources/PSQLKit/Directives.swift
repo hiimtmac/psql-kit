@@ -102,6 +102,11 @@ extension WithSQLExpression {
 public protocol UnionSQLExpression {
     associatedtype UnionExpression: SQLExpression
     var unionSqlExpression: UnionExpression { get }
+    var unionIsNull: Bool { get }
+}
+
+extension UnionSQLExpression {
+    public var unionIsNull: Bool { false }
 }
 
 public protocol MutationSQLExpression {

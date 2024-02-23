@@ -35,4 +35,9 @@ struct Collector {
         guard !exp.orderByIsNull else { return }
         expressions.append(exp.orderBySqlExpression)
     }
+    
+    mutating func append(exp: some UnionSQLExpression) {
+        guard !exp.unionIsNull else { return }
+        expressions.append(exp.unionSqlExpression)
+    }
 }
