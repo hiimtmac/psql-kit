@@ -4,24 +4,21 @@
 import Foundation
 import SQLKit
 
-public struct ReturningDirective: SQLExpression {
-    let content: [any SelectSQLExpression]
-
-    public init(@SelectBuilder builder: () -> [any SelectSQLExpression]) {
-        self.content = builder()
-    }
-
-    init(content: [any SelectSQLExpression]) {
+public struct ReturningDirective<T: SelectSQLExpression>: SQLExpression {
+    let content: T
+    
+    init(_ content: T) {
         self.content = content
     }
-
+    
+    init(@SelectBuilder content: () -> T) {
+        self.content = content()
+    }
+    
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            serializer.write("RETURNING")
-//            serializer.writeSpace()
-//            SQLList(self.content.map(\.selectSqlExpression))
-//                .serialize(to: &serializer)
-//        }
+        serializer.write("RETURNING")
+        serializer.writeSpace()
+        content.selectSqlExpression.serialize(to: &serializer)
     }
 }
 
