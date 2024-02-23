@@ -35,6 +35,11 @@ extension Optional: HavingSQLExpression where Wrapped: HavingSQLExpression {
     public var havingIsNull: Bool { self == nil }
 }
 
+extension Optional: GroupBySQLExpression where Wrapped: GroupBySQLExpression {
+    public var groupBySqlExpression: some SQLExpression { self?.groupBySqlExpression }
+    public var groupByIsNull: Bool { self == nil }
+}
+
 extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self?.compareSqlExpression }
 }

@@ -20,4 +20,9 @@ struct Collector {
         guard !exp.havingIsNull else { return }
         expressions.append(exp.havingSqlExpression)
     }
+    
+    mutating func append(exp: some GroupBySQLExpression) {
+        guard !exp.groupByIsNull else { return }
+        expressions.append(exp.groupBySqlExpression)
+    }
 }

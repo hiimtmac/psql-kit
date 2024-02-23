@@ -42,6 +42,11 @@ public protocol FromSQLExpression {
 public protocol GroupBySQLExpression {
     associatedtype GroupByExpression: SQLExpression
     var groupBySqlExpression: GroupByExpression { get }
+    var groupByIsNull: Bool { get }
+}
+
+extension GroupBySQLExpression {
+    public var groupByIsNull: Bool { false }
 }
 
 public protocol OrderBySQLExpression {

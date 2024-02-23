@@ -4,20 +4,21 @@
 import Foundation
 import SQLKit
 
-public struct GroupByDirective: SQLExpression {
-    let content: [any GroupBySQLExpression]
-
-    public init(@GroupByBuilder builder: () -> [any GroupBySQLExpression]) {
-        self.content = builder()
+public struct GroupByDirective<T: GroupBySQLExpression>: SQLExpression {
+    let content: T
+    
+    init(_ content: T) {
+        self.content = content
     }
-
+    
+    init(@GroupByBuilder content: () -> T) {
+        self.content = content()
+    }
+    
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            serializer.write("GROUP BY")
-//            serializer.writeSpace()
-//            SQLList(self.content.map(\.groupBySqlExpression))
-//                .serialize(to: &serializer)
-//        }
+        serializer.write("GROUP BY")
+        serializer.writeSpace()
+        content.groupBySqlExpression.serialize(to: &serializer)
     }
 }
 
