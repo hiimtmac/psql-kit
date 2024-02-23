@@ -1,7 +1,9 @@
 // CoalesceExpression.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLList
+import struct SQLKit.SQLSerializer
 
 public protocol Coalescable: BaseSQLExpression {}
 

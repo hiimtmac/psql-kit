@@ -2,6 +2,7 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import protocol FluentKit.Database
+import protocol PostgresKit.PostgresDatabase
 import protocol PostgresNIO.PostgresDatabase
 import protocol SQLKit.SQLDatabase
 import protocol SQLKit.SQLExpression

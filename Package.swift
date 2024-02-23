@@ -13,7 +13,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.47.0"),
-        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.20.0"),
         .package(url: "https://github.com/vapor/postgres-kit.git", from: "2.12.0"),
     ],
     targets: [
@@ -21,7 +20,7 @@ let package = Package(
             name: "PSQLKit",
             dependencies: [
                 .product(name: "FluentKit", package: "fluent-kit"),
-                .product(name: "PostgresNIO", package: "postgres-nio"),
+                .product(name: "PostgresKit", package: "postgres-kit"),
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),

@@ -1,8 +1,10 @@
 // ConcatenateExpression.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLList
+import struct SQLKit.SQLSerializer
 
 public protocol Concatenatable: BaseSQLExpression {}
 
