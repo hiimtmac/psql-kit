@@ -4,20 +4,21 @@
 import Foundation
 import SQLKit
 
-public struct WithDirective: SQLExpression {
-    let content: [any WithSQLExpression]
-
-    public init(@WithBuilder builder: () -> [any WithSQLExpression]) {
-        self.content = builder()
+public struct WithDirective<T: WithSQLExpression>: SQLExpression {
+    let content: T
+    
+    init(_ content: T) {
+        self.content = content
     }
-
+    
+    init(@WithBuilder content: () -> T) {
+        self.content = content()
+    }
+    
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            serializer.write("WITH")
-//            serializer.writeSpace()
-//            SQLList(self.content.map(\.withSqlExpression))
-//                .serialize(to: &serializer)
-//        }
+        serializer.write("WITH")
+        serializer.writeSpace()
+        content.withSqlExpression.serialize(to: &serializer)
     }
 }
 

@@ -40,6 +40,11 @@ extension Optional: GroupBySQLExpression where Wrapped: GroupBySQLExpression {
     public var groupByIsNull: Bool { self == nil }
 }
 
+extension Optional: WithSQLExpression where Wrapped: WithSQLExpression {
+    public var withSqlExpression: some SQLExpression { self?.withSqlExpression }
+    public var withIsNull: Bool { self == nil }
+}
+
 extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self?.compareSqlExpression }
 }

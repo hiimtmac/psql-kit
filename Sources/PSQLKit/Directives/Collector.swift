@@ -25,4 +25,9 @@ struct Collector {
         guard !exp.groupByIsNull else { return }
         expressions.append(exp.groupBySqlExpression)
     }
+    
+    mutating func append(exp: some WithSQLExpression) {
+        guard !exp.withIsNull else { return }
+        expressions.append(exp.withSqlExpression)
+    }
 }

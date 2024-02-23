@@ -87,6 +87,11 @@ public protocol QuerySQLExpression {
 public protocol WithSQLExpression {
     associatedtype WithExpression: SQLExpression
     var withSqlExpression: WithExpression { get }
+    var withIsNull: Bool { get }
+}
+
+extension WithSQLExpression {
+    public var withIsNull: Bool { false }
 }
 
 public protocol UnionSQLExpression {
