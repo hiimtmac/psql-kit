@@ -50,4 +50,9 @@ struct Collector {
         guard !exp.fromIsNull else { return }
         expressions.append(exp.fromSqlExpression)
     }
+    
+    mutating func append(exp: some JoinSQLExpression) {
+        guard !exp.joinIsNull else { return }
+        expressions.append(exp.joinSqlExpression)
+    }
 }

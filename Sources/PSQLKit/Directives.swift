@@ -72,6 +72,11 @@ public protocol CompareSQLExpression {
 public protocol JoinSQLExpression {
     associatedtype JoinExpression: SQLExpression
     var joinSqlExpression: JoinExpression { get }
+    var joinIsNull: Bool { get }
+}
+
+extension JoinSQLExpression {
+    public var joinIsNull: Bool { false }
 }
 
 public protocol WhereSQLExpression {

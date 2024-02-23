@@ -65,6 +65,11 @@ extension Optional: FromSQLExpression where Wrapped: FromSQLExpression {
     public var fromIsNull: Bool { self == nil }
 }
 
+extension Optional: JoinSQLExpression where Wrapped: JoinSQLExpression {
+    public var joinSqlExpression: some SQLExpression { self?.joinSqlExpression }
+    public var joinIsNull: Bool { self == nil }
+}
+
 extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self?.compareSqlExpression }
 }
