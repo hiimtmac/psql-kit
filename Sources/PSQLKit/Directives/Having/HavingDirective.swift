@@ -16,6 +16,7 @@ public struct HavingDirective<T: HavingSQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.havingIsNull else { return }
         serializer.write("HAVING")
         serializer.writeSpace()
         content.havingSqlExpression.serialize(to: &serializer)

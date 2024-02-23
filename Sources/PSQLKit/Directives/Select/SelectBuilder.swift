@@ -15,6 +15,10 @@ struct SelectTouple<each T: SelectSQLExpression>: SelectSQLExpression {
         self.content = (repeat each content)
     }
     
+    var selectIsNull: Bool {
+        selectSqlExpression.expressions.isEmpty
+    }
+    
     var selectSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()

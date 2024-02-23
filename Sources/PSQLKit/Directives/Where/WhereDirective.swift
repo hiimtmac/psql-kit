@@ -16,6 +16,7 @@ public struct WhereDirective<T: WhereSQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.whereIsNull else { return }
         serializer.write("WHERE")
         serializer.writeSpace()
         content.whereSqlExpression.serialize(to: &serializer)

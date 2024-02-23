@@ -11,6 +11,10 @@ struct OrderByTouple<each T: OrderBySQLExpression>: OrderBySQLExpression {
         self.content = (repeat each content)
     }
     
+    var orderByIsNull: Bool {
+        orderBySqlExpression.expressions.isEmpty
+    }
+    
     var orderBySqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()

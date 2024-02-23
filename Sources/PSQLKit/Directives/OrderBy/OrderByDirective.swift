@@ -25,6 +25,7 @@ public struct OrderByDirective<T: OrderBySQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.orderByIsNull else { return }
         serializer.write("ORDER BY")
         serializer.writeSpace()
         content.orderBySqlExpression.serialize(to: &serializer)
@@ -40,6 +41,7 @@ public struct OrderByModifier<Content: OrderBySQLExpression>: OrderBySQLExpressi
         let direction: OrderByDirection
 
         func serialize(to serializer: inout SQLSerializer) {
+            guard !content.orderByIsNull else { return }
             self.content.orderBySqlExpression.serialize(to: &serializer)
             serializer.writeSpace()
             self.direction.serialize(to: &serializer)

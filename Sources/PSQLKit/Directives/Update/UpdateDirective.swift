@@ -19,6 +19,7 @@ public struct UpdateDirective<Table: FromSQLExpression, T: UpdateSQLExpression>:
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.updateIsNull else { return }
         serializer.write("UPDATE")
         serializer.writeSpace()
         self.table.fromSqlExpression.serialize(to: &serializer)

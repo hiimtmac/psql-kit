@@ -19,6 +19,7 @@ public struct InsertDirective<Table: FromSQLExpression, T: InsertSQLExpression>:
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.insertIsNull else { return }
         serializer.write("INSERT INTO")
         serializer.writeSpace()
         self.table.fromSqlExpression.serialize(to: &serializer)

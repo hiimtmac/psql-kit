@@ -16,6 +16,7 @@ public struct WithDirective<T: WithSQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.withIsNull else { return }
         serializer.write("WITH")
         serializer.writeSpace()
         content.withSqlExpression.serialize(to: &serializer)

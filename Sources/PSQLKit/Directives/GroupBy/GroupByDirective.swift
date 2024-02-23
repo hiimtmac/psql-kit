@@ -16,6 +16,7 @@ public struct GroupByDirective<T: GroupBySQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.groupByIsNull else { return }
         serializer.write("GROUP BY")
         serializer.writeSpace()
         content.groupBySqlExpression.serialize(to: &serializer)

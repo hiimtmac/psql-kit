@@ -11,6 +11,10 @@ struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
         self.content = (repeat each content)
     }
     
+    var insertIsNull: Bool {
+        insertColumnSqlExpression.expressions.isEmpty && insertValueSqlExpression.expressions.isEmpty
+    }
+    
     var insertColumnSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()

@@ -31,6 +31,7 @@ public struct SubQuery<T: QuerySQLExpression>: SQLExpression {
     let content: T
 
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.queryIsNull else { return }
         serializer.write("(")
         content.querySqlExpression.serialize(to: &serializer)
         serializer.write(")")
@@ -84,6 +85,7 @@ public struct WithQuery<T: QuerySQLExpression>: SQLExpression {
     let content: T
 
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.queryIsNull else { return }
         serializer.writeQuote()
         serializer.write(self.name)
         serializer.writeQuote()

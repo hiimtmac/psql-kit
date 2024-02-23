@@ -16,6 +16,7 @@ public struct ReturningDirective<T: SelectSQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.selectIsNull else { return }
         serializer.write("RETURNING")
         serializer.writeSpace()
         content.selectSqlExpression.serialize(to: &serializer)

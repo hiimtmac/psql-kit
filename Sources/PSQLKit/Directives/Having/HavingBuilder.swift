@@ -11,6 +11,10 @@ struct HavingTouple<each T: HavingSQLExpression>: HavingSQLExpression {
         self.content = (repeat each content)
     }
     
+    var havingIsNull: Bool {
+        havingSqlExpression.expressions.isEmpty
+    }
+    
     var havingSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()

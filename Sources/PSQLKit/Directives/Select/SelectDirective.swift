@@ -34,6 +34,7 @@ public struct SelectDirective<T: SelectSQLExpression>: SelectSQLExpression, SQLE
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.selectIsNull else { return }
         serializer.write("SELECT")
         serializer.writeSpace()
         content.selectSqlExpression.serialize(to: &serializer)
@@ -45,6 +46,7 @@ public struct SelectModifier<T: SelectSQLExpression, U: SelectSQLExpression>: SQ
     let modifier: U
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !select.selectIsNull else { return }
         serializer.write("SELECT")
         serializer.writeSpace()
         
@@ -77,6 +79,7 @@ public struct DistinctModifier<T: SelectSQLExpression>: SelectSQLExpression {
             if T.self == EmptyExpression.self {
                 serializer.write("DISTINCT")
             } else {
+                guard !content.selectIsNull else { return }
                 serializer.write("DISTINCT ON")
                 serializer.writeSpace()
                 serializer.write("(")

@@ -11,6 +11,10 @@ struct GroupByTouple<each T: GroupBySQLExpression>: GroupBySQLExpression {
         self.content = (repeat each content)
     }
     
+    var groupByIsNull: Bool {
+        groupBySqlExpression.expressions.isEmpty
+    }
+    
     var groupBySqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()

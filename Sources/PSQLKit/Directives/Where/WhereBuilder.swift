@@ -11,6 +11,10 @@ struct WhereTouple<each T: WhereSQLExpression>: WhereSQLExpression {
         self.content = (repeat each content)
     }
     
+    var whereIsNull: Bool {
+        whereSqlExpression.expressions.isEmpty
+    }
+    
     var whereSqlExpression: SQLList {
         // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()

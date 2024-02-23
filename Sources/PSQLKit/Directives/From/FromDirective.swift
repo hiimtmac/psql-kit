@@ -16,6 +16,7 @@ public struct FromDirective<T: FromSQLExpression>: SQLExpression {
     }
     
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.fromIsNull else { return }
         serializer.write("FROM")
         serializer.writeSpace()
         content.fromSqlExpression.serialize(to: &serializer)

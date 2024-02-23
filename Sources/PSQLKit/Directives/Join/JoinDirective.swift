@@ -22,6 +22,7 @@ public struct JoinDirective<Table: FromSQLExpression, T: JoinSQLExpression>: SQL
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
+        guard !content.joinIsNull else { return }
         self.method.serialize(to: &serializer)
         serializer.writeSpace()
         serializer.write("JOIN")
