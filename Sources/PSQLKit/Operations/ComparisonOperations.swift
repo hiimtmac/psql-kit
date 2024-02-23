@@ -1,8 +1,6 @@
 // ComparisonOperations.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-
 public typealias PSQLEquatable = PSQLExpression & Equatable
 public typealias PSQLComparable = PSQLExpression & Comparable
 

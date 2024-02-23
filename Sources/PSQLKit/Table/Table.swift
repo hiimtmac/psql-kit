@@ -9,7 +9,6 @@ import class FluentKit.OptionalFieldProperty
 import class FluentKit.OptionalParentProperty
 import class FluentKit.ParentProperty
 import class FluentKit.TimestampProperty
-import Foundation
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 

@@ -6,7 +6,6 @@ import class FluentKit.GroupProperty
 import class FluentKit.IDProperty
 import class FluentKit.OptionalFieldProperty
 import class FluentKit.TimestampProperty
-import Foundation
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLList
 import struct SQLKit.SQLSerializer

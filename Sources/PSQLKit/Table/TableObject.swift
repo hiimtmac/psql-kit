@@ -1,7 +1,6 @@
 // TableObject.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
 import struct PostgresNIO.PostgresDataType
 
 public protocol TableObject: PSQLExpression {

@@ -1,8 +1,6 @@
 // MutationOperations.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-
 // MARK: - =>
 
 public func => <T, U>(_ column: T, _ value: U) -> Mutation<T, U> where

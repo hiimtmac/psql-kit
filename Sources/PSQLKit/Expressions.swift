@@ -1,8 +1,6 @@
 // Expressions.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-
 public typealias GENERATE_SERIES = GenerateSeriesExpression
 public typealias MAX = MaxExpression
 public typealias MIN = MinExpression

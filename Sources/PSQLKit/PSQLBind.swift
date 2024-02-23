@@ -1,7 +1,6 @@
 // PSQLBind.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
 import struct SQLKit.SQLBind
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer

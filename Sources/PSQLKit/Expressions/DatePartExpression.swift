@@ -1,7 +1,6 @@
 // DatePartExpression.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
