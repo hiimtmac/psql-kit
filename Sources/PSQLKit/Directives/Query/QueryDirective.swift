@@ -4,20 +4,19 @@
 import Foundation
 import SQLKit
 
-public struct QueryDirective: SQLExpression {
-    let content: [any QuerySQLExpression]
-
-    public init(@QueryBuilder builder: () -> [any QuerySQLExpression]) {
-        self.content = builder()
-    }
-
-    init(content: [any QuerySQLExpression]) {
+public struct QueryDirective<T: QuerySQLExpression>: SQLExpression {
+    let content: T
+    
+    init(_ content: T) {
         self.content = content
     }
-
+    
+    init(@QueryBuilder content: () -> T) {
+        self.content = content()
+    }
+    
     public func serialize(to serializer: inout SQLSerializer) {
-//        SQLList(self.content.map(\.querySqlExpression), separator: SQLRaw(" "))
-//            .serialize(to: &serializer)
+        content.querySqlExpression.serialize(to: &serializer)
     }
 }
 
@@ -27,34 +26,33 @@ extension QueryDirective: UnionSQLExpression {
 
 // MARK: - SubqueryModifier
 
-public struct SubQuery: SQLExpression {
+public struct SubQuery<T: QuerySQLExpression>: SQLExpression {
     let name: String
-    let content: [any QuerySQLExpression]
+    let content: T
 
     public func serialize(to serializer: inout SQLSerializer) {
-//        serializer.write("(")
-//        SQLList(self.content.map(\.querySqlExpression), separator: SQLRaw(" "))
-//            .serialize(to: &serializer)
-//        serializer.write(")")
-//        serializer.writeSpace()
-//        serializer.write("AS")
-//        serializer.writeSpace()
-//        serializer.writeQuote()
-//        serializer.write(self.name)
-//        serializer.writeQuote()
+        serializer.write("(")
+        content.querySqlExpression.serialize(to: &serializer)
+        serializer.write(")")
+        serializer.writeSpace()
+        serializer.write("AS")
+        serializer.writeSpace()
+        serializer.writeQuote()
+        serializer.write(self.name)
+        serializer.writeQuote()
     }
 }
 
 extension QueryDirective {
-    public func asSubquery<T>(_ table: T) -> SubQuery where T: Table {
+    public func asSubquery<U: Table>(_ table: U) -> SubQuery<T> {
         SubQuery(name: type(of: table).schema, content: self.content)
     }
 
-    public func asSubquery<T>(_ alias: TableAlias<T>) -> SubQuery where T: Table {
+    public func asSubquery<U: Table>(_ alias: TableAlias<U>) -> SubQuery<T> {
         SubQuery(name: alias.alias, content: self.content)
     }
 
-    public func asSubquery(_ name: String) -> SubQuery {
+    public func asSubquery(_ name: String) -> SubQuery<T> {
         SubQuery(name: name, content: self.content)
     }
 }
@@ -64,17 +62,8 @@ extension SubQuery: FromSQLExpression {
 }
 
 extension QueryDirective: FromSQLExpression {
-    private struct _From: SQLExpression {
-        let content: [any QuerySQLExpression]
-
-        func serialize(to serializer: inout SQLSerializer) {
-//            SQLList(self.content.map(\.querySqlExpression), separator: SQLRaw(" "))
-//                .serialize(to: &serializer)
-        }
-    }
-
     public var fromSqlExpression: some SQLExpression {
-        _From(content: self.content)
+        content.querySqlExpression
     }
 }
 
@@ -83,50 +72,40 @@ extension SubQuery: SelectSQLExpression {
 }
 
 extension QueryDirective: SelectSQLExpression {
-    private struct _Select: SQLExpression {
-        let content: [any QuerySQLExpression]
-
-        func serialize(to serializer: inout SQLSerializer) {
-//            SQLList(self.content.map(\.querySqlExpression), separator: SQLRaw(" "))
-//                .serialize(to: &serializer)
-        }
-    }
-
     public var selectSqlExpression: some SQLExpression {
-        _Select(content: self.content)
+        content.querySqlExpression
     }
 }
 
 // MARK: - WithModifier
 
-public struct WithQuery: SQLExpression {
+public struct WithQuery<T: QuerySQLExpression>: SQLExpression {
     let name: String
-    let content: [any QuerySQLExpression]
+    let content: T
 
     public func serialize(to serializer: inout SQLSerializer) {
-//        serializer.writeQuote()
-//        serializer.write(self.name)
-//        serializer.writeQuote()
-//        serializer.writeSpace()
-//        serializer.write("AS")
-//        serializer.writeSpace()
-//        serializer.write("(")
-//        SQLList(self.content.map(\.querySqlExpression), separator: SQLRaw(" "))
-//            .serialize(to: &serializer)
-//        serializer.write(")")
+        serializer.writeQuote()
+        serializer.write(self.name)
+        serializer.writeQuote()
+        serializer.writeSpace()
+        serializer.write("AS")
+        serializer.writeSpace()
+        serializer.write("(")
+        content.querySqlExpression.serialize(to: &serializer)
+        serializer.write(")")
     }
 }
 
 extension QueryDirective {
-    public func asWith<T>(_ table: T) -> WithQuery where T: Table {
+    public func asWith<U: Table>(_ table: U) -> WithQuery<T> {
         WithQuery(name: type(of: table).schema, content: self.content)
     }
 
-    public func asWith<T>(_ alias: TableAlias<T>) -> WithQuery where T: Table {
+    public func asWith<U>(_ alias: TableAlias<U>) -> WithQuery<T> {
         WithQuery(name: alias.alias, content: self.content)
     }
 
-    public func asWith(_ name: String) -> WithQuery {
+    public func asWith(_ name: String) -> WithQuery<T> {
         WithQuery(name: name, content: self.content)
     }
 }
@@ -136,16 +115,7 @@ extension WithQuery: WithSQLExpression {
 }
 
 extension QueryDirective: WithSQLExpression {
-    private struct _With: SQLExpression {
-        let content: [any QuerySQLExpression]
-
-        func serialize(to serializer: inout SQLSerializer) {
-//            SQLList(self.content.map(\.querySqlExpression), separator: SQLRaw(" "))
-//                .serialize(to: &serializer)
-        }
-    }
-
     public var withSqlExpression: some SQLExpression {
-        _With(content: self.content)
+        content.querySqlExpression
     }
 }

@@ -55,6 +55,11 @@ extension Optional: UnionSQLExpression where Wrapped: UnionSQLExpression {
     public var unionIsNull: Bool { self == nil }
 }
 
+extension Optional: QuerySQLExpression where Wrapped: QuerySQLExpression {
+    public var querySqlExpression: some SQLExpression { self?.querySqlExpression }
+    public var queryIsNull: Bool { self == nil }
+}
+
 extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self?.compareSqlExpression }
 }

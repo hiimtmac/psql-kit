@@ -87,6 +87,11 @@ extension HavingSQLExpression {
 public protocol QuerySQLExpression {
     associatedtype QueryExpression: SQLExpression
     var querySqlExpression: QueryExpression { get }
+    var queryIsNull: Bool { get }
+}
+
+extension QuerySQLExpression {
+    public var queryIsNull: Bool { false }
 }
 
 public protocol WithSQLExpression {

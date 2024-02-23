@@ -40,4 +40,9 @@ struct Collector {
         guard !exp.unionIsNull else { return }
         expressions.append(exp.unionSqlExpression)
     }
+    
+    mutating func append(exp: some QuerySQLExpression) {
+        guard !exp.queryIsNull else { return }
+        expressions.append(exp.querySqlExpression)
+    }
 }
