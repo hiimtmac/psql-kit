@@ -65,4 +65,14 @@ struct Collector {
         guard !exp.updateIsNull else { return }
         expressions.append(exp.updateSqlExpression)
     }
+    
+    mutating func append(column: some InsertSQLExpression) {
+        guard !column.insertIsNull else { return }
+        expressions.append(column.insertColumnSqlExpression)
+    }
+    
+    mutating func append(value: some InsertSQLExpression) {
+        guard !value.insertIsNull else { return }
+        expressions.append(value.insertValueSqlExpression)
+    }
 }

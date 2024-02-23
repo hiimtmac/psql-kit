@@ -4,33 +4,34 @@
 import Foundation
 import SQLKit
 
-public struct InsertDirective<Table>: SQLExpression where Table: FromSQLExpression {
+public struct InsertDirective<Table: FromSQLExpression, T: InsertSQLExpression>: SQLExpression {
     let table: Table
-    let content: [any InsertSQLExpression]
-
-    public init(into table: Table, @InsertBuilder builder: () -> [any InsertSQLExpression]) {
+    let content: T
+    
+    init(into table: Table, content: T) {
         self.table = table
-        self.content = builder()
+        self.content = content
+    }
+
+    public init(into table: Table, @InsertBuilder content: () -> T) {
+        self.table = table
+        self.content = content()
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            serializer.write("INSERT INTO")
-//            serializer.writeSpace()
-//            self.table.fromSqlExpression.serialize(to: &serializer)
-//            serializer.writeSpace()
-//            serializer.write("(")
-//            SQLList(self.content.map(\.insertColumnSqlExpression))
-//                .serialize(to: &serializer)
-//            serializer.write(")")
-//            serializer.writeSpace()
-//            serializer.write("VALUES")
-//            serializer.writeSpace()
-//            serializer.write("(")
-//            SQLList(self.content.map(\.insertValueSqlExpression))
-//                .serialize(to: &serializer)
-//            serializer.write(")")
-//        }
+        serializer.write("INSERT INTO")
+        serializer.writeSpace()
+        self.table.fromSqlExpression.serialize(to: &serializer)
+        serializer.writeSpace()
+        serializer.write("(")
+        content.insertColumnSqlExpression.serialize(to: &serializer)
+        serializer.write(")")
+        serializer.writeSpace()
+        serializer.write("VALUES")
+        serializer.writeSpace()
+        serializer.write("(")
+        content.insertValueSqlExpression.serialize(to: &serializer)
+        serializer.write(")")
     }
 }
 

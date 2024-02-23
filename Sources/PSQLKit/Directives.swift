@@ -139,6 +139,11 @@ public protocol InsertSQLExpression {
     associatedtype InsertValueExpression: SQLExpression
     var insertColumnSqlExpression: InsertColumnExpression { get }
     var insertValueSqlExpression: InsertValueExpression { get }
+    var insertIsNull: Bool { get }
+}
+
+extension InsertSQLExpression {
+    public var insertIsNull: Bool { false }
 }
 
 public protocol UpdateSQLExpression {

@@ -83,3 +83,9 @@ extension Optional: UpdateSQLExpression where Wrapped: UpdateSQLExpression {
     public var updateSqlExpression: some SQLExpression { self?.updateSqlExpression }
     public var updateIsNull: Bool { self == nil }
 }
+
+extension Optional: InsertSQLExpression where Wrapped: InsertSQLExpression {
+    public var insertColumnSqlExpression: some SQLExpression { self?.insertColumnSqlExpression }
+    public var insertValueSqlExpression: some SQLExpression { self?.insertValueSqlExpression }
+    public var insertIsNull: Bool { self == nil }
+}
