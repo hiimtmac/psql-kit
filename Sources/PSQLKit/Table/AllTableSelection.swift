@@ -12,13 +12,13 @@ public struct AllTableSelection<T> where T: Table {
 
 extension AllTableSelection: SelectSQLExpression {
     private struct _Select: SQLExpression {
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            if let path = pathName {
+            if let space = spaceName {
                 serializer.writeQuote()
-                serializer.write(path)
+                serializer.write(space)
                 serializer.writeQuote()
                 serializer.writePeriod()
             }
@@ -32,7 +32,7 @@ extension AllTableSelection: SelectSQLExpression {
     }
 
     public var selectSqlExpression: some SQLExpression {
-        _Select(pathName: T.path, schemaName: T.schema)
+        _Select(spaceName: T.path, schemaName: T.schema)
     }
 }
 

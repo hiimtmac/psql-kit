@@ -26,7 +26,7 @@ extension ColumnExpression.Alias: BaseSQLExpression {
     public var baseSqlExpression: some SQLExpression {
         _Base(
             aliasName: column.aliasName,
-            pathName: column.pathName,
+            spaceName: column.spaceName,
             schemaName: column.schemaName,
             columnName: column.columnName,
             columnAlias: alias
@@ -35,7 +35,7 @@ extension ColumnExpression.Alias: BaseSQLExpression {
 
     private struct _Base: SQLExpression {
         let aliasName: String?
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String?
         let columnName: String
         let columnAlias: String
@@ -47,9 +47,9 @@ extension ColumnExpression.Alias: BaseSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let path = pathName {
+                if let space = spaceName {
                     serializer.writeQuote()
-                    serializer.write(path)
+                    serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
@@ -83,7 +83,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: column.aliasName,
-            pathName: column.pathName,
+            spaceName: column.spaceName,
             schemaName: column.schemaName,
             columnName: column.columnName,
             dataType: T.postgresDataType,
@@ -93,7 +93,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
 
     private struct _Select: SQLExpression {
         let aliasName: String?
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String?
         let columnName: String
         let dataType: PostgresDataType
@@ -106,9 +106,9 @@ extension ColumnExpression.Alias: SelectSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let path = pathName {
+                if let space = spaceName {
                     serializer.writeQuote()
-                    serializer.write(path)
+                    serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
@@ -142,7 +142,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
     public var mutationSqlExpression: some SQLExpression {
         _Mutation(
             aliasName: column.aliasName,
-            pathName: column.pathName,
+            spaceName: column.spaceName,
             schemaName: column.schemaName,
             columnName: column.columnName,
             dataType: T.postgresDataType,
@@ -152,7 +152,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
 
     private struct _Mutation: SQLExpression {
         let aliasName: String?
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String?
         let columnName: String
         let dataType: PostgresDataType
@@ -165,9 +165,9 @@ extension ColumnExpression.Alias: MutationSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let path = pathName {
+                if let space = spaceName {
                     serializer.writeQuote()
-                    serializer.write(path)
+                    serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
