@@ -27,7 +27,7 @@ extension Optional: PSQLExpression where Wrapped: PSQLExpression {
 
 extension Optional: SelectSQLExpression where Wrapped: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression { self?.selectSqlExpression }
-    public var isNull: Bool { self == nil }
+    public var selectIsNull: Bool { self == nil }
 }
 
 extension Optional: CompareSQLExpression where Wrapped: CompareSQLExpression {

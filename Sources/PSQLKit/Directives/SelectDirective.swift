@@ -6,9 +6,15 @@ import SQLKit
 
 // https://github.com/apple/swift-evolution/blob/main/proposals/0289-result-builders.md
 
-public struct EmptySelection: SelectSQLExpression {
+extension EmptyExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        SQLRaw("")
+        _Select()
+    }
+    
+    private struct _Select: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            fatalError("Should not be serialized")
+        }
     }
 }
 
@@ -25,20 +31,9 @@ struct SelectTouple<each T: SelectSQLExpression>: SelectSQLExpression {
         _ = (repeat collector.append(exp: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))
     }
-    
-    struct Collector {
-        var expressions: [any SQLExpression] = []
-        
-        mutating func append(exp: some SelectSQLExpression) {
-            guard !exp.isNull else { return }
-            expressions.append(exp.selectSqlExpression)
-        }
-    }
 }
 
-enum _ConditionalContent<T: SelectSQLExpression, U: SelectSQLExpression>: SelectSQLExpression {
-    case left(T)
-    case right(U)
+extension _ConditionalContent: SelectSQLExpression where T: SelectSQLExpression, U: SelectSQLExpression {
     
     var selectSqlExpression: some SQLExpression {
         _Select(content: self)
@@ -158,7 +153,7 @@ public struct DistinctModifier<T: SelectSQLExpression>: SelectSQLExpression {
         let content: T
         
         func serialize(to serializer: inout SQLSerializer) {
-            if T.self == EmptySelection.self {
+            if T.self == EmptyExpression.self {
                 serializer.write("DISTINCT")
             } else {
                 serializer.write("DISTINCT ON")
@@ -178,14 +173,14 @@ extension SelectDirective {
     /// SELECT DISTINCT first_name, last_name
     /// FROM people
     /// ```
-    public func distinct() -> SelectModifier<T, DistinctModifier<EmptySelection>> {
-        SelectModifier(select: self, modifier: DistinctModifier(content: EmptySelection.init))
+    public func distinct() -> SelectModifier<T, DistinctModifier<EmptyExpression>> {
+        SelectModifier(select: self, modifier: DistinctModifier(content: EmptyExpression.init))
     }
 }
 
 extension SelectDirective {
     /// Select Distinct On
-    /// 
+    ///
     /// ```sql
     /// SELECT DISTINCT ON (address_id) *
     /// FROM purchases

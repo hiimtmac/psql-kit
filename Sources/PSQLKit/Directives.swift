@@ -27,16 +27,21 @@ public protocol BaseSQLExpression {
 public protocol SelectSQLExpression {
     associatedtype SelectExpression: SQLExpression
     var selectSqlExpression: SelectExpression { get }
-    var isNull: Bool { get }
+    var selectIsNull: Bool { get }
 }
 
 extension SelectSQLExpression {
-    public var isNull: Bool { false }
+    public var selectIsNull: Bool { false }
 }
 
 public protocol FromSQLExpression {
     associatedtype FromExpression: SQLExpression
     var fromSqlExpression: FromExpression { get }
+    var fromIsNull: Bool { get }
+}
+
+extension FromSQLExpression {
+    public var fromIsNull: Bool { false }
 }
 
 public protocol GroupBySQLExpression {
