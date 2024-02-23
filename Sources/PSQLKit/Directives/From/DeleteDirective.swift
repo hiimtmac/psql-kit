@@ -4,21 +4,23 @@
 import Foundation
 import SQLKit
 
-public struct DeleteDirective: SQLExpression {
-    let content: [any FromSQLExpression]
-
-    public init(@FromBuilder builder: () -> [any FromSQLExpression]) {
-        self.content = builder()
+public struct DeleteDirective<T: FromSQLExpression>: SQLExpression {
+    let content: T
+    
+    init(_ content: T) {
+        self.content = content
     }
-
+    
+    init(@FromBuilder content: () -> T) {
+        self.content = content()
+    }
+    
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            serializer.write("DELETE FROM")
-//            serializer.writeSpace()
-//            SQLList(self.content.map(\.fromSqlExpression))
-//                .serialize(to: &serializer)
-//        }
+        serializer.write("DELETE FROM")
+        serializer.writeSpace()
+        content.fromSqlExpression.serialize(to: &serializer)
     }
+
 }
 
 extension DeleteDirective: QuerySQLExpression {

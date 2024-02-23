@@ -37,6 +37,11 @@ extension SelectSQLExpression {
 public protocol FromSQLExpression {
     associatedtype FromExpression: SQLExpression
     var fromSqlExpression: FromExpression { get }
+    var fromIsNull: Bool { get }
+}
+
+extension FromSQLExpression {
+    public var fromIsNull: Bool { false }
 }
 
 public protocol GroupBySQLExpression {
