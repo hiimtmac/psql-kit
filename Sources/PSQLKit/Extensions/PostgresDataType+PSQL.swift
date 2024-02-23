@@ -14,4 +14,15 @@ extension PostgresDataType: SQLExpression {
         serializer.write("::")
         serializer.write(knownSQLName)
     }
+    
+    static func array(_ type: Self) -> Self {
+        switch type {
+        case .text: .textArray
+        case .numeric: .numericArray
+        case .int4: .int4Array
+        case .uuid: .uuidArray
+        case .bool: .boolArray
+        default: fatalError("Unsupported array type for: \(type.rawValue)")
+        }
+    }
 }

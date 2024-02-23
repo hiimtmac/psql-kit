@@ -39,8 +39,7 @@ extension ArrayPrependExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            fatalError()
-//            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
+            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
         }
     }
 }

@@ -100,6 +100,7 @@ struct PSQLModel: Table {
         case no
         
         static var postgresDataType: PostgresDataType { .text }
+        
     }
 }
 

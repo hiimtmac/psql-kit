@@ -19,8 +19,7 @@ extension Array: TypeEquatable where Element: TypeEquatable {
 
 extension Array: PSQLExpression where Element: PSQLExpression {
     public static var postgresDataType: PostgresDataType {
-        fatalError()
-//        .array(Element.postgresColumnType)
+        .array(Element.postgresDataType)
     }
 }
 

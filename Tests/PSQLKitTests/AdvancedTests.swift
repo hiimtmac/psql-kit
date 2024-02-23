@@ -53,6 +53,9 @@ final class AdvancedTests: PSQLTestCase {
     }
 
 //    func testTypesCompile() {
+//        let ok1 = OwnerFilter.$id == OwnerDateSeries.$id
+//        let ok2 = Owner.$id == OwnerDateSeries.$id
+//        let ok3 = Owner.$id == OwnerFilter.$id
 //        _ = WHERE {
 //            // Custom UUID vs Custom UUID?
 //            OwnerFilter.$id == OwnerDateSeries.$id
@@ -62,7 +65,7 @@ final class AdvancedTests: PSQLTestCase {
 //            Owner.$id == OwnerFilter.$id
 //        }
 //    }
-
+//
 //    func testExample() {
 //        let d1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 31).date!
 //        let d2 = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!

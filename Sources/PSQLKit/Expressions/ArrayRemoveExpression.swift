@@ -39,8 +39,7 @@ extension ArrayRemoveExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.remove.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            fatalError()
-//            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
+            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
         }
     }
 }
