@@ -78,3 +78,8 @@ extension Optional: WhereSQLExpression where Wrapped: WhereSQLExpression {
     public var whereSqlExpression: some SQLExpression { self?.whereSqlExpression }
     public var whereIsNull: Bool { self == nil }
 }
+
+extension Optional: UpdateSQLExpression where Wrapped: UpdateSQLExpression {
+    public var updateSqlExpression: some SQLExpression { self?.updateSqlExpression }
+    public var updateIsNull: Bool { self == nil }
+}

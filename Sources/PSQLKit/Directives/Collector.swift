@@ -60,4 +60,9 @@ struct Collector {
         guard !exp.whereIsNull else { return }
         expressions.append(exp.whereSqlExpression)
     }
+    
+    mutating func append(exp: some UpdateSQLExpression) {
+        guard !exp.updateIsNull else { return }
+        expressions.append(exp.updateSqlExpression)
+    }
 }

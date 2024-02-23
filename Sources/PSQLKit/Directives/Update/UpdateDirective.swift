@@ -4,26 +4,28 @@
 import Foundation
 import SQLKit
 
-public struct UpdateDirective<Table>: SQLExpression where Table: FromSQLExpression {
+public struct UpdateDirective<Table: FromSQLExpression, T: UpdateSQLExpression>: SQLExpression {
     let table: Table
-    let content: [any UpdateSQLExpression]
-
-    public init(_ table: Table, @UpdateBuilder builder: () -> [any UpdateSQLExpression]) {
+    let content: T
+    
+    init(_ table: Table, content: T) {
         self.table = table
-        self.content = builder()
+        self.content = content
+    }
+
+    public init(_ table: Table, @UpdateBuilder content: () -> T) {
+        self.table = table
+        self.content = content()
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
-//        if !self.content.isEmpty {
-//            serializer.write("UPDATE")
-//            serializer.writeSpace()
-//            self.table.fromSqlExpression.serialize(to: &serializer)
-//            serializer.writeSpace()
-//            serializer.write("SET")
-//            serializer.writeSpace()
-//            SQLList(self.content.map(\.updateSqlExpression))
-//                .serialize(to: &serializer)
-//        }
+        serializer.write("UPDATE")
+        serializer.writeSpace()
+        self.table.fromSqlExpression.serialize(to: &serializer)
+        serializer.writeSpace()
+        serializer.write("SET")
+        serializer.writeSpace()
+        content.updateSqlExpression.serialize(to: &serializer)
     }
 }
 

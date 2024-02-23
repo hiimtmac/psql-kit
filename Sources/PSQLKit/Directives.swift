@@ -144,4 +144,9 @@ public protocol InsertSQLExpression {
 public protocol UpdateSQLExpression {
     associatedtype UpdateExpression: SQLExpression
     var updateSqlExpression: UpdateExpression { get }
+    var updateIsNull: Bool { get }
+}
+
+extension UpdateSQLExpression {
+    public var updateIsNull: Bool { false }
 }
