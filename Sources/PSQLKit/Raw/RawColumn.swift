@@ -2,8 +2,9 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresKit
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import struct PostgresNIO.PostgresDataType
 
 public struct RawColumn<T> where T: PSQLExpression {
     let column: String

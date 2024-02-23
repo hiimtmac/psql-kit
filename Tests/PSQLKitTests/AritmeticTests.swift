@@ -74,7 +74,7 @@ final class ArithemticTests: PSQLTestCase {
         }
         .serialize(to: &psqlkitSerializer)
 
-        let compare = #"SELECT ("x"."money"::NUMERIC / 8.0)::NUMERIC"#
+        let compare = #"SELECT ("x"."money"::NUMERIC / 8.0::NUMERIC)::NUMERIC"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

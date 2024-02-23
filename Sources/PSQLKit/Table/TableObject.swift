@@ -2,7 +2,7 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresKit
+import struct PostgresNIO.PostgresDataType
 
 public protocol TableObject: PSQLExpression {
     init()

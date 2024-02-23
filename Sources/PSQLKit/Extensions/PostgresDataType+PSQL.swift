@@ -5,8 +5,9 @@
 //  Created by Taylor McIntyre on 2024-02-22.
 //
 
-import PostgresNIO
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import struct PostgresNIO.PostgresDataType
 
 extension PostgresDataType: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {

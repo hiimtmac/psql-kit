@@ -1,7 +1,7 @@
 // SQLSerializer+Extensions.swift
 // Copyright © 2022 hiimtmac
 
-import SQLKit
+import struct SQLKit.SQLSerializer
 
 extension SQLSerializer {
     mutating func writeComma() {

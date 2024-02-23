@@ -2,7 +2,8 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct UnionDirective<T: UnionSQLExpression>: SQLExpression {
     let content: T

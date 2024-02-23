@@ -2,7 +2,10 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import struct SQLKit.SQLList
+import struct SQLKit.SQLRaw
 
 struct WhereTouple<each T: WhereSQLExpression>: WhereSQLExpression {
     let content: (repeat each T)

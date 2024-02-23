@@ -11,17 +11,23 @@ infix operator ~~: ComparisonPrecedence
 infix operator ...: LogicalConjunctionPrecedence
 
 final class ReadmeTests: PSQLTestCase {
-//    func testWelcome() {
-//        QUERY {
-//            SELECT {
-//                Moon.$name
+    func testWelcome() {
+        let f = FluentModel.as("x")
+        QUERY {
+            SELECT { f.$name }
+            FROM { f.table }
+        }
+        .serialize(to: &fluentSerializer)
+        QUERY {
+            SELECT {
+                FluentModel.$name
 //                Moon.$craters
-//            }
-//            FROM { Moon.table }
-//        }
-//        .serialize(to: &fluentSerializer)
-//        print(fluentSerializer.sql)
-//    }
+            }
+            FROM { FluentModel.table }
+        }
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+    }
 //
 //    func testExecute() {
 //        let q = QUERY {

@@ -2,8 +2,9 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresNIO
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct ColumnExpression<T> where T: PSQLExpression {
     let aliasName: String?

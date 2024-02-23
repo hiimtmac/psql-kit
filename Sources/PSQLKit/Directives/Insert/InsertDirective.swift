@@ -2,7 +2,8 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct InsertDirective<Table: FromSQLExpression, T: InsertSQLExpression>: SQLExpression {
     let table: Table

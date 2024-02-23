@@ -1,7 +1,9 @@
 // PSQLQueryFetcher.swift
 // Copyright © 2022 hiimtmac
 
-import SQLKit
+import protocol SQLKit.SQLExpression
+import protocol SQLKit.SQLQueryFetcher
+import protocol SQLKit.SQLDatabase
 
 public final class PSQLQueryFetcher: SQLQueryFetcher {
     public var query: any SQLExpression

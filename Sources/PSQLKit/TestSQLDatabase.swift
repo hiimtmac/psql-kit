@@ -1,8 +1,15 @@
 // TestSQLDatabase.swift
 // Copyright © 2022 hiimtmac
 
-import PostgresKit
-import SQLKit
+import Logging
+import NIOCore
+import NIOEmbedded
+import struct PostgresKit.PostgresDialect
+import protocol SQLKit.SQLDialect
+import protocol SQLKit.SQLExpression
+import protocol SQLKit.SQLDatabase
+import protocol SQLKit.SQLRow
+import struct SQLKit.SQLSerializer
 
 final class TestSQLDatabase: SQLDatabase {
     let logger: Logger

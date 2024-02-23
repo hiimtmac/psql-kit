@@ -2,7 +2,9 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import struct SQLKit.SQLBind
 
 public struct PSQLBind<T> where T: PSQLExpression & Encodable {
     let value: T

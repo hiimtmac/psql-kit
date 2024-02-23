@@ -2,7 +2,9 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import enum SQLKit.SQLJoinMethod
 
 public struct JoinDirective<Table: FromSQLExpression, T: JoinSQLExpression>: SQLExpression {
     let table: Table

@@ -2,7 +2,8 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct AllTableSelection<T> where T: Table {
     let table: T

@@ -2,7 +2,8 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct AverageExpression<Content>: AggregateExpression {
     let content: Content

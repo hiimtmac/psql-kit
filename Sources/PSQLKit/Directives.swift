@@ -2,7 +2,7 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
 
 public typealias FROM = FromDirective
 public typealias GROUPBY = GroupByDirective

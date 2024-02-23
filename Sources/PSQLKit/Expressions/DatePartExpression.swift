@@ -2,8 +2,8 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresKit
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct DatePartExpression<Content>: AggregateExpression where
     Content: PSQLArrayRepresentable & TypeEquatable

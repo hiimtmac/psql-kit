@@ -2,7 +2,10 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import struct SQLKit.SQLList
+import struct PostgresNIO.PostgresDataType
 
 public protocol PSQLArrayRepresentable {}
 

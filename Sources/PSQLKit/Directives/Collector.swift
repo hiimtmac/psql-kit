@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
 
 struct Collector {
     var expressions: [any SQLExpression] = []

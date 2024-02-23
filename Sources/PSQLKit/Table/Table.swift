@@ -1,9 +1,17 @@
 // Table.swift
 // Copyright © 2022 hiimtmac
 
-import FluentKit
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import protocol FluentKit.Model
+import class FluentKit.OptionalFieldProperty
+import class FluentKit.FieldProperty
+import class FluentKit.IDProperty
+import class FluentKit.ParentProperty
+import class FluentKit.OptionalParentProperty
+import class FluentKit.TimestampProperty
+import class FluentKit.GroupProperty
 
 @dynamicMemberLookup
 public protocol Table: FromSQLExpression {

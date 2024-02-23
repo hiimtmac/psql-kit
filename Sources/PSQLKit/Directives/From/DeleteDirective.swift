@@ -2,7 +2,8 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import SQLKit
+import struct SQLKit.SQLSerializer
+import protocol SQLKit.SQLExpression
 
 public struct DeleteDirective<T: FromSQLExpression>: SQLExpression {
     let content: T

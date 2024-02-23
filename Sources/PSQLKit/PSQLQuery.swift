@@ -2,8 +2,11 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresKit
-import SQLKit
+import protocol PostgresNIO.PostgresDatabase
+import protocol SQLKit.SQLDatabase
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import protocol FluentKit.Database
 
 public protocol PSQLQuery: SQLExpression, QuerySQLExpression {}
 

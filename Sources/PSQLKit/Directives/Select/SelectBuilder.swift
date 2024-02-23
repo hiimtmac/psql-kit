@@ -6,7 +6,10 @@
 //
 
 import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
+import struct SQLKit.SQLList
+import struct SQLKit.SQLRaw
 
 struct SelectTouple<each T: SelectSQLExpression>: SelectSQLExpression {
     let content: (repeat each T)

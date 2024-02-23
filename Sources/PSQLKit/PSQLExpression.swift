@@ -2,7 +2,8 @@
 // Copyright © 2022 hiimtmac
 
 import Foundation
-import PostgresKit
+import protocol SQLKit.SQLExpression
+import struct PostgresNIO.PostgresDataType
 
 public protocol PSQLExpression {
     static var postgresDataType: PostgresDataType { get }
