@@ -1,8 +1,7 @@
 // ReadmeTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import FluentBenchmark
-import FluentKit
 import PSQLKit
 import XCTest
 
@@ -113,7 +112,7 @@ final class ReadmeTests: PSQLTestCase {
             m.$name ~~ "%moon" || m.$name !~~ "%moon" // LIKE / NOT LIKE
             m.$name ~~* "%moon" || m.$name !~~* "%moon" // ILIKE / NOT ILIKE
             m.$name === "moon" || m.$name !== "moon" // IS / IS NOT
-            m.$name === Optional<String>.none
+            m.$name === String?.none
         }
         .serialize(to: &fluentSerializer)
         print(fluentSerializer.sql)
@@ -324,7 +323,7 @@ final class ReadmeTests: PSQLTestCase {
             WITH {
                 QUERY {
                     SELECT { m.$name }
-                        .distinctOn {
+                        .distinct {
                             m.$name
                             m.$id
                         }

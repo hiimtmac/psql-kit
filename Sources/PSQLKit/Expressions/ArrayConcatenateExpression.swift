@@ -1,9 +1,9 @@
 // ArrayConcatenateExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct ArrayConcatenateExpression<T, U>: AggregateExpression where
     T: PSQLArrayRepresentable & TypeEquatable,
@@ -24,7 +24,7 @@ extension ArrayConcatenateExpression: SelectSQLExpression where
     U: SelectSQLExpression,
     T.CompareType: PSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(one: self.one, two: self.two)
     }
 
@@ -40,8 +40,7 @@ extension ArrayConcatenateExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.two.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.array(T.CompareType.postgresColumnType).serialize(to: &serializer)
+            PostgresDataType.array(T.CompareType.postgresDataType).serialize(to: &serializer)
         }
     }
 }
@@ -50,7 +49,7 @@ extension ArrayConcatenateExpression: CompareSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(one: self.one, two: self.two)
     }
 

@@ -1,8 +1,9 @@
 // ColumnExpression+Alias.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 extension ColumnExpression {
     public struct Alias {
@@ -22,10 +23,10 @@ extension ColumnExpression.Alias: TypeEquatable where T: TypeEquatable {
 // MARK: Base
 
 extension ColumnExpression.Alias: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression {
+    public var baseSqlExpression: some SQLExpression {
         _Base(
             aliasName: column.aliasName,
-            pathName: column.pathName,
+            spaceName: column.spaceName,
             schemaName: column.schemaName,
             columnName: column.columnName,
             columnAlias: alias
@@ -34,7 +35,7 @@ extension ColumnExpression.Alias: BaseSQLExpression {
 
     private struct _Base: SQLExpression {
         let aliasName: String?
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String?
         let columnName: String
         let columnAlias: String
@@ -46,9 +47,9 @@ extension ColumnExpression.Alias: BaseSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let path = pathName {
+                if let space = spaceName {
                     serializer.writeQuote()
-                    serializer.write(path)
+                    serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
@@ -79,23 +80,23 @@ extension ColumnExpression.Alias: BaseSQLExpression {
 // MARK: Select
 
 extension ColumnExpression.Alias: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: column.aliasName,
-            pathName: column.pathName,
+            spaceName: column.spaceName,
             schemaName: column.schemaName,
             columnName: column.columnName,
-            columnType: T.postgresColumnType,
+            dataType: T.postgresDataType,
             columnAlias: alias
         )
     }
 
     private struct _Select: SQLExpression {
         let aliasName: String?
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String?
         let columnName: String
-        let columnType: SQLExpression
+        let dataType: PostgresDataType
         let columnAlias: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -105,9 +106,9 @@ extension ColumnExpression.Alias: SelectSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let path = pathName {
+                if let space = spaceName {
                     serializer.writeQuote()
-                    serializer.write(path)
+                    serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
@@ -124,8 +125,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
             serializer.write(self.columnName)
             serializer.writeQuote()
 
-            serializer.write("::")
-            self.columnType.serialize(to: &serializer)
+            dataType.serialize(to: &serializer)
 
             serializer.writeSpace()
             serializer.write("AS")
@@ -139,23 +139,23 @@ extension ColumnExpression.Alias: SelectSQLExpression {
 }
 
 extension ColumnExpression.Alias: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression {
+    public var mutationSqlExpression: some SQLExpression {
         _Mutation(
             aliasName: column.aliasName,
-            pathName: column.pathName,
+            spaceName: column.spaceName,
             schemaName: column.schemaName,
             columnName: column.columnName,
-            columnType: T.postgresColumnType,
+            dataType: T.postgresDataType,
             columnAlias: alias
         )
     }
 
     private struct _Mutation: SQLExpression {
         let aliasName: String?
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String?
         let columnName: String
-        let columnType: SQLExpression
+        let dataType: PostgresDataType
         let columnAlias: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -165,9 +165,9 @@ extension ColumnExpression.Alias: MutationSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let path = pathName {
+                if let space = spaceName {
                     serializer.writeQuote()
-                    serializer.write(path)
+                    serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
@@ -184,8 +184,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
             serializer.write(self.columnName)
             serializer.writeQuote()
 
-            serializer.write("::")
-            self.columnType.serialize(to: &serializer)
+            self.dataType.serialize(to: &serializer)
 
             serializer.writeSpace()
             serializer.write("AS")

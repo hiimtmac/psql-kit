@@ -1,9 +1,9 @@
 // ArrayRemoveExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct ArrayRemoveExpression<Content, T>: AggregateExpression where
     Content: PSQLArrayRepresentable & TypeEquatable,
@@ -23,7 +23,7 @@ extension ArrayRemoveExpression: SelectSQLExpression where
     Content: SelectSQLExpression,
     T: PSQLExpression & SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content, remove: self.remove)
     }
 
@@ -39,8 +39,7 @@ extension ArrayRemoveExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.remove.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.array(T.postgresColumnType).serialize(to: &serializer)
+            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
         }
     }
 }
@@ -49,7 +48,7 @@ extension ArrayRemoveExpression: CompareSQLExpression where
     Content: CompareSQLExpression,
     T: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content, remove: self.remove)
     }
 

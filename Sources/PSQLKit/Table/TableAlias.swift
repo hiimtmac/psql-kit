@@ -1,28 +1,28 @@
 // TableAlias.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
-import Foundation
-import SQLKit
+import class FluentKit.FieldProperty
+import class FluentKit.GroupProperty
+import class FluentKit.IDProperty
+import protocol FluentKit.Model
+import class FluentKit.OptionalFieldProperty
+import class FluentKit.OptionalParentProperty
+import class FluentKit.ParentProperty
+import class FluentKit.TimestampProperty
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 @dynamicMemberLookup
 public struct TableAlias<T> where T: Table {
-    /// psql `schema`
-    let path: String?
     /// table alias
     let alias: String
 
-    init(path: String?, alias: String) {
+    init(alias: String) {
         self.alias = alias
-        self.path = path ?? T.path
     }
 }
 
 extension TableAlias {
-    func schema(_ schema: String) -> Self {
-        .init(path: schema, alias: self.alias)
-    }
-
     public var table: TableAlias { self }
 
     public static postfix func .* (_ alias: Self) -> AllTableSelection<T>.Alias {
@@ -37,7 +37,7 @@ extension TableAlias {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.path,
             schemaName: T.schema,
             columnName: field.key
         )
@@ -51,7 +51,7 @@ extension TableAlias {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.path,
             schemaName: T.schema,
             columnName: field.key
         )
@@ -65,7 +65,7 @@ extension TableAlias {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.path,
             schemaName: T.schema,
             columnName: field.key
         )
@@ -81,7 +81,7 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.space,
             schemaName: T.schema,
             columnName: field.key.description
         )
@@ -95,7 +95,7 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.space,
             schemaName: T.schema,
             columnName: field.key.description
         )
@@ -109,7 +109,7 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.space,
             schemaName: T.schema,
             columnName: field.key.description
         )
@@ -123,7 +123,7 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.space,
             schemaName: T.schema,
             columnName: field.$id.key.description
         )
@@ -137,7 +137,7 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.space,
             schemaName: T.schema,
             columnName: field.$id.key.description
         )
@@ -151,7 +151,7 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.space,
             schemaName: T.schema,
             columnName: field.$timestamp.key.description
         )
@@ -165,7 +165,7 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            pathName: self.path,
+            spaceName: T.space,
             schemaName: T.schema,
             columnName: field.key.description
         )
@@ -173,21 +173,21 @@ extension TableAlias where T: Model {
 }
 
 extension TableAlias: FromSQLExpression {
-    public var fromSqlExpression: SQLExpression {
+    public var fromSqlExpression: some SQLExpression {
         _From(
             aliasName: self.alias,
-            pathName: T.path,
+            spaceName: T.path,
             schemaName: T.schema
         )
     }
 
     private struct _From: SQLExpression {
         let aliasName: String
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            if let path = pathName {
+            if let path = spaceName {
                 serializer.writeQuote()
                 serializer.write(path)
                 serializer.writeQuote()

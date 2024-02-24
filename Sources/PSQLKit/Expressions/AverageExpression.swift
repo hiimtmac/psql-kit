@@ -1,8 +1,8 @@
 // AverageExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct AverageExpression<Content>: AggregateExpression {
     let content: Content
@@ -15,7 +15,7 @@ public struct AverageExpression<Content>: AggregateExpression {
 extension AverageExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content)
     }
 
@@ -34,7 +34,7 @@ extension AverageExpression: SelectSQLExpression where
 extension AverageExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content)
     }
 

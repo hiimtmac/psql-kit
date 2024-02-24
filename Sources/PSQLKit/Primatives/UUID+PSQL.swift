@@ -1,12 +1,13 @@
 // UUID+PSQL.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 extension UUID: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .uuid }
+    public static var postgresDataType: PostgresDataType { .uuid }
 }
 
 extension UUID: SQLExpression {
@@ -22,22 +23,22 @@ extension UUID: TypeEquatable {
 }
 
 extension UUID: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension UUID: Concatenatable {}
 extension UUID: Coalescable {}
 
 extension UUID: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension UUID: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension UUID: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

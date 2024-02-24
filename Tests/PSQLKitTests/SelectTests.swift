@@ -1,7 +1,6 @@
 // SelectTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -63,7 +62,7 @@ final class SelectTests: PSQLTestCase {
         SELECT {
             FluentModel.$name
         }
-        .distinctOn {
+        .distinct {
             FluentModel.$name
             f.$id
         }
@@ -72,7 +71,7 @@ final class SelectTests: PSQLTestCase {
         SELECT {
             PSQLModel.$name
         }
-        .distinctOn {
+        .distinct {
             PSQLModel.$name
             p.$id
         }
@@ -169,30 +168,6 @@ final class SelectTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER, 8::INTEGER AS "cool", '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE AS "date_alias", '2020-01-01'::DATE AS "raw_date_alias""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
-    }
-
-    func testSelectSubquery() {
-        SELECT {
-            QUERY {
-                SELECT { f.$age }
-                FROM { f.table }
-            }
-            .asSubquery(f.table)
-        }
-        .serialize(to: &fluentSerializer)
-
-        SELECT {
-            QUERY {
-                SELECT { p.$age }
-                FROM { p.table }
-            }
-            .asSubquery(p.table)
-        }
-        .serialize(to: &psqlkitSerializer)
-
-        let compare = #"SELECT (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
@@ -343,6 +318,18 @@ final class SelectTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"SELECT "x"."age"::INTEGER"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testEmpty() {
+        SELECT {}
+            .serialize(to: &fluentSerializer)
+
+        SELECT {}
+            .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

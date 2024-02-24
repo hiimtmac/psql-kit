@@ -1,8 +1,8 @@
 // ExpressionAlias.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct ExpressionAlias<Expression> {
     let expression: Expression
@@ -16,7 +16,7 @@ extension ExpressionAlias: TypeEquatable where Expression: TypeEquatable {
 extension ExpressionAlias: SelectSQLExpression where
     Expression: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(expression: self.expression, alias: self.alias)
     }
 
@@ -41,7 +41,7 @@ extension ExpressionAlias: SelectSQLExpression where
 extension ExpressionAlias: FromSQLExpression where
     Expression: FromSQLExpression
 {
-    public var fromSqlExpression: SQLExpression {
+    public var fromSqlExpression: some SQLExpression {
         _From(expression: self.expression, alias: self.alias)
     }
 

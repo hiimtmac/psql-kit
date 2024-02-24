@@ -1,23 +1,18 @@
 // PSQLQuery.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import protocol FluentKit.Database
+import protocol PostgresKit.PostgresDatabase
+import protocol PostgresNIO.PostgresDatabase
+import protocol SQLKit.SQLDatabase
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public protocol PSQLQuery: SQLExpression, QuerySQLExpression {}
 
 extension PSQLQuery {
-    public func raw(database: SQLDatabase = Self.testDB) -> (sql: String, binds: [Encodable]) {
-        var serializer = SQLSerializer(database: database)
-        self.serialize(to: &serializer)
-        return (serializer.sql, serializer.binds)
-    }
-
-    public static var testDB: SQLDatabase { TestSQLDatabase() }
-
-    public func execute(on database: Database) -> PSQLQueryFetcher {
-        let psqlDatabase = database as! PostgresDatabase
+    public func execute(on database: some Database) -> PSQLQueryFetcher {
+        let psqlDatabase = database as! (any PostgresDatabase)
         let sqlDatabase = psqlDatabase.sql()
 
         return PSQLQueryFetcher(query: self, database: sqlDatabase)
@@ -25,5 +20,5 @@ extension PSQLQuery {
 }
 
 extension QueryDirective: PSQLQuery {
-    public var querySqlExpression: SQLExpression { self }
+    public var querySqlExpression: some SQLExpression { self }
 }

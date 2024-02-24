@@ -1,9 +1,16 @@
 // Table.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
-import Foundation
-import SQLKit
+import class FluentKit.FieldProperty
+import class FluentKit.GroupProperty
+import class FluentKit.IDProperty
+import protocol FluentKit.Model
+import class FluentKit.OptionalFieldProperty
+import class FluentKit.OptionalParentProperty
+import class FluentKit.ParentProperty
+import class FluentKit.TimestampProperty
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 @dynamicMemberLookup
 public protocol Table: FromSQLExpression {
@@ -26,11 +33,11 @@ extension Table {
     public static var path: String? { nil }
 
     public static func `as`(_ alias: String) -> TableAlias<Self> {
-        .init(path: self.path, alias: alias)
+        .init(alias: alias)
     }
 
     public func `as`(_ alias: String) -> TableAlias<Self> {
-        .init(path: Self.path, alias: alias)
+        .init(alias: alias)
     }
 
     public static var table: Self { Self() }
@@ -39,8 +46,8 @@ extension Table {
         .init(table: table)
     }
 
-    public var fromSqlExpression: SQLExpression {
-        _From(pathName: Self.path, schemaName: Self.schema)
+    public var fromSqlExpression: some SQLExpression {
+        _From(spaceName: Self.path, schemaName: Self.schema)
     }
 
     // MARK: - ColumnProperty
@@ -51,7 +58,7 @@ extension Table {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.path,
             schemaName: Self.schema,
             columnName: field.key
         )
@@ -65,7 +72,7 @@ extension Table {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.path,
             schemaName: Self.schema,
             columnName: field.key
         )
@@ -79,7 +86,7 @@ extension Table {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.path,
             schemaName: Self.schema,
             columnName: field.key
         )
@@ -87,6 +94,8 @@ extension Table {
 }
 
 extension Table where Self: Model {
+    public static var path: String? { space }
+    
     // MARK: - FieldProperty
 
     public static subscript<T>(
@@ -95,7 +104,7 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.space,
             schemaName: Self.schema,
             columnName: field.key.description
         )
@@ -109,7 +118,7 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.space,
             schemaName: Self.schema,
             columnName: field.key.description
         )
@@ -123,7 +132,7 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.space,
             schemaName: Self.schema,
             columnName: field.key.description
         )
@@ -137,7 +146,7 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.space,
             schemaName: Self.schema,
             columnName: field.$id.key.description
         )
@@ -151,7 +160,7 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.space,
             schemaName: Self.schema,
             columnName: field.$id.key.description
         )
@@ -165,7 +174,7 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.space,
             schemaName: Self.schema,
             columnName: field.$timestamp.key.description
         )
@@ -179,7 +188,7 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            pathName: Self.path,
+            spaceName: Self.space,
             schemaName: Self.schema,
             columnName: field.key.description
         )
@@ -187,11 +196,11 @@ extension Table where Self: Model {
 }
 
 private struct _From: SQLExpression {
-    let pathName: String?
+    let spaceName: String?
     let schemaName: String
 
     func serialize(to serializer: inout SQLSerializer) {
-        if let path = pathName {
+        if let path = spaceName {
             serializer.writeQuote()
             serializer.write(path)
             serializer.writeQuote()

@@ -1,8 +1,10 @@
 // PSQLArray.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLList
+import struct SQLKit.SQLSerializer
 
 public protocol PSQLArrayRepresentable {}
 
@@ -23,20 +25,19 @@ extension PSQLArray: TypeEquatable where T: TypeEquatable {
 extension PSQLArray: SelectSQLExpression where
     T: SQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
-        _Select(items: self.items, arrayType: [T].postgresColumnType)
+    public var selectSqlExpression: some SQLExpression {
+        _Select(items: self.items, arrayType: [T].postgresDataType)
     }
 
     private struct _Select: SQLExpression {
         let items: [T]
-        let arrayType: SQLExpression
+        let arrayType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("ARRAY")
             serializer.write("[")
             SQLList(self.items).serialize(to: &serializer)
             serializer.write("]")
-            serializer.write("::")
             self.arrayType.serialize(to: &serializer)
         }
     }
@@ -45,7 +46,7 @@ extension PSQLArray: SelectSQLExpression where
 extension PSQLArray: CompareSQLExpression where
     T: SQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(items: self.items)
     }
 

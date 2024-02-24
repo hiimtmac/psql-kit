@@ -1,9 +1,8 @@
 // DatePartExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct DatePartExpression<Content>: AggregateExpression where
     Content: PSQLArrayRepresentable & TypeEquatable
@@ -20,7 +19,7 @@ public struct DatePartExpression<Content>: AggregateExpression where
 extension DatePartExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(precision: self.precision, content: self.content)
     }
 

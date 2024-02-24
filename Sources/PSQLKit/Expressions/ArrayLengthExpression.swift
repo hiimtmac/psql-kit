@@ -1,9 +1,9 @@
 // ArrayLengthExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct ArrayLengthExpression<Content>: AggregateExpression where
     Content: PSQLArrayRepresentable
@@ -20,7 +20,7 @@ public struct ArrayLengthExpression<Content>: AggregateExpression where
 extension ArrayLengthExpression: SelectSQLExpression where
     Content: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content, dimension: self.dimension)
     }
 
@@ -36,8 +36,7 @@ extension ArrayLengthExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.dimension.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.integer.serialize(to: &serializer)
+            PostgresDataType.int4.serialize(to: &serializer)
         }
     }
 }
@@ -45,7 +44,7 @@ extension ArrayLengthExpression: SelectSQLExpression where
 extension ArrayLengthExpression: CompareSQLExpression where
     Content: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content, dimension: self.dimension)
     }
 

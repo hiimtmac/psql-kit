@@ -1,9 +1,9 @@
 // ArrayReplaceExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct ArrayReplaceExpression<Content, T, U>: AggregateExpression where
     Content: PSQLArrayRepresentable & TypeEquatable,
@@ -29,7 +29,7 @@ extension ArrayReplaceExpression: SelectSQLExpression where
     T: SelectSQLExpression,
     U: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(content: self.content, find: self.find, replace: self.replace)
     }
 
@@ -49,8 +49,7 @@ extension ArrayReplaceExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.replace.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.array(T.postgresColumnType).serialize(to: &serializer)
+            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
         }
     }
 }
@@ -60,7 +59,7 @@ extension ArrayReplaceExpression: CompareSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(content: self.content, find: self.find, replace: self.replace)
     }
 

@@ -1,7 +1,6 @@
 // UpdateTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -141,6 +140,18 @@ final class UpdateTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "age" = 29"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testEmpty() {
+        UPDATE(f.table) {}
+            .serialize(to: &fluentSerializer)
+
+        UPDATE(p.table) {}
+            .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

@@ -1,12 +1,12 @@
 // Float+PSQL.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 extension Float: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .decimal }
+    public static var postgresDataType: PostgresDataType { .numeric }
 }
 
 extension Float: SQLExpression {
@@ -20,22 +20,22 @@ extension Float: TypeEquatable {
 }
 
 extension Float: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension Float: Concatenatable {}
 extension Float: Coalescable {}
 
 extension Float: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension Float: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension Float: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

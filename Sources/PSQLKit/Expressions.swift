@@ -1,7 +1,5 @@
 // Expressions.swift
-// Copyright © 2022 hiimtmac
-
-import Foundation
+// Copyright (c) 2024 hiimtmac inc.
 
 public typealias GENERATE_SERIES = GenerateSeriesExpression
 public typealias MAX = MaxExpression

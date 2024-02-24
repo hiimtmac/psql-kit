@@ -1,7 +1,8 @@
 // Mutation.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct Mutation<T, U> where
     T: TypeEquatable,
@@ -16,11 +17,11 @@ extension Mutation: InsertSQLExpression where
     T: MutationSQLExpression,
     U: MutationSQLExpression
 {
-    public var insertColumnSqlExpression: SQLExpression {
+    public var insertColumnSqlExpression: some SQLExpression {
         self.column.mutationSqlExpression
     }
 
-    public var insertValueSqlExpression: SQLExpression {
+    public var insertValueSqlExpression: some SQLExpression {
         self.value.mutationSqlExpression
     }
 }
@@ -42,7 +43,7 @@ extension Mutation: UpdateSQLExpression where
         }
     }
 
-    public var updateSqlExpression: SQLExpression {
+    public var updateSqlExpression: some SQLExpression {
         _Update(column: self.column, value: self.value)
     }
 }

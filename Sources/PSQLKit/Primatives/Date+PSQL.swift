@@ -1,12 +1,13 @@
 // Date+PSQL.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 extension Date: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .timestamp }
+    public static var postgresDataType: PostgresDataType { .timestamp }
 }
 
 extension Date: SQLExpression {
@@ -20,20 +21,20 @@ extension Date: TypeEquatable {
 }
 
 extension Date: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension Date: Concatenatable {}
 extension Date: Coalescable {}
 
 extension Date: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension Date: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension Date {
@@ -56,12 +57,12 @@ extension PSQLDateTime {
         Self.defaultFormatter.string(from: storage).serialize(to: &serializer)
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(storage)
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
         let decoded = try container.decode(Date.self)
         let string = Self.defaultFormatter.string(from: decoded)
@@ -86,24 +87,24 @@ public struct PSQLDate: PSQLDateTime {
 }
 
 extension PSQLDate: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .date }
+    public static var postgresDataType: PostgresDataType { .date }
 }
 
 extension PSQLDate: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension PSQLDate: Concatenatable {}
 extension PSQLDate: Coalescable {}
 
 extension PSQLDate: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension PSQLDate: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 public struct PSQLTimestamp: PSQLDateTime {
@@ -122,22 +123,22 @@ public struct PSQLTimestamp: PSQLDateTime {
 }
 
 extension PSQLTimestamp: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension PSQLTimestamp: Concatenatable {}
 extension PSQLTimestamp: Coalescable {}
 
 extension PSQLTimestamp: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension PSQLTimestamp: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension PSQLTimestamp: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .timestamp }
+    public static var postgresDataType: PostgresDataType { .timestamp }
 }

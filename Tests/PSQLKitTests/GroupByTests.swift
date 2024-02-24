@@ -1,7 +1,6 @@
 // GroupByTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -197,6 +196,18 @@ final class GroupByTests: PSQLTestCase {
             }
         }
         .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testEmpty() {
+        GROUPBY {}
+            .serialize(to: &fluentSerializer)
+
+        GROUPBY {}
+            .serialize(to: &psqlkitSerializer)
 
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)

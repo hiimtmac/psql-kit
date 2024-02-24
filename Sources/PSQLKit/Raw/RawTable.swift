@@ -1,8 +1,8 @@
 // RawTable.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct RawTable: SQLExpression {
     let table: String
@@ -19,5 +19,5 @@ public struct RawTable: SQLExpression {
 }
 
 extension RawTable: FromSQLExpression {
-    public var fromSqlExpression: SQLExpression { self }
+    public var fromSqlExpression: some SQLExpression { self }
 }

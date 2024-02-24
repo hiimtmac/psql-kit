@@ -1,8 +1,8 @@
 // Comparisons.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct CompareOperator: SQLExpression {
     let value: String
@@ -51,7 +51,7 @@ public struct CompareExpression<T, U> where
 }
 
 extension CompareExpression: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 
@@ -73,19 +73,19 @@ extension CompareExpression: CompareSQLExpression {
 }
 
 extension CompareExpression: WhereSQLExpression {
-    public var whereSqlExpression: SQLExpression {
+    public var whereSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
 
 extension CompareExpression: HavingSQLExpression {
-    public var havingSqlExpression: SQLExpression {
+    public var havingSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
 
 extension CompareExpression: JoinSQLExpression {
-    public var joinSqlExpression: SQLExpression {
+    public var joinSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }

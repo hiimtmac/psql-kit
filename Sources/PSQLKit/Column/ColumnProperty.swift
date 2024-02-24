@@ -1,7 +1,5 @@
 // ColumnProperty.swift
-// Copyright © 2022 hiimtmac
-
-import Foundation
+// Copyright (c) 2024 hiimtmac inc.
 
 @propertyWrapper
 public struct ColumnProperty<Table, Value>: Codable where

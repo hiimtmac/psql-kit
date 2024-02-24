@@ -1,5 +1,5 @@
 // AdvancedTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
 import FluentKit
 import PSQLKit
@@ -33,6 +33,25 @@ final class AdvancedTests: PSQLTestCase {
 
         init() {}
     }
+    
+    final class ModelSpace: Model, Table {
+        static let schema = "schema"
+        static let space: String? = "space"
+
+        @ID
+        var id: UUID?
+        @Field(key: "name")
+        var name: String
+
+        init() {}
+    }
+    
+    struct TableSpace: Table {
+        static let schema: String = "schema"
+        static let path: String? = "space"
+        @Column(key: "name")
+        var name: String
+    }
 
     struct DateRange: Table {
         static let schema: String = "date_range"
@@ -50,6 +69,45 @@ final class AdvancedTests: PSQLTestCase {
         var id: UUID?
         @Column(key: "date")
         var date: PSQLDate
+    }
+    
+    func testSpaces() {
+        QUERY {
+            SELECT { TableSpace.$name }
+            FROM { TableSpace.table }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        QUERY {
+            SELECT { ModelSpace.$name }
+            FROM { ModelSpace.table }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        let compare = #"SELECT "space"."schema"."name"::TEXT FROM "space"."schema""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+    
+    func testSpacesAlias() {
+        let p = TableSpace.as("a")
+        let f = ModelSpace.as("a")
+        
+        QUERY {
+            SELECT { p.$name }
+            FROM { p.table }
+        }
+        .serialize(to: &psqlkitSerializer)
+        
+        QUERY {
+            SELECT { f.$name }
+            FROM { f.table }
+        }
+        .serialize(to: &fluentSerializer)
+        
+        let compare = #"SELECT "a"."name"::TEXT FROM "space"."schema" AS "a""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testTypesCompile() {

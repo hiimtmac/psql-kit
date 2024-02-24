@@ -1,194 +1,246 @@
-# swift version
---swiftversion 5.6
-
 # Exclusions
---exclude .build,.swiftpm
+--exclude .github
 
-# Use comma rather than && where possible
+# Swift Version
+--swiftversion 5.9
+
+# Minimum SwiftFormat Version
+--minversion 0.51.00
+
+# Prefer comma over && in if, guard or while conditions.
 --rules andOperator
 
-# Use AnyObject instead of (deprecated) class
+# Prefer AnyObject over class in protocol definitions.
 --rules anyObjectProtocol
 
-# Use assertion/preconditionFailure() instead of assert/precondition(false)
+# Changes all instances of assert(false, ...) to assertionFailure(...) and precondition(false, ...) to preconditionFailure(...).
 --rules assertionFailures
 
-# Add blank line after MARK comments
+# Insert blank line before and after MARK: comments.
 --rules blankLinesAroundMark
 --lineaftermarks true
 
-# Remove leading and trailing blank lines inside scopes and between imports
---rules blankLinesAtEndOfScope, blankLinesAtStartOfScope, blankLinesBetweenImports
+# Remove trailing blank line at the end of a scope.
+--rules blankLinesAtEndOfScope
 
-# Add blank line between consecutive scopes
+# Remove leading blank line at the start of a scope.
+--rules blankLinesAtStartOfScope
+
+# Remove blank lines between import statements.
+--rules blankLinesBetweenImports
+
+# Insert blank line before class, struct, enum, extension, protocol or function declarations.
 --rules blankLinesBetweenScopes
 
-# Replace /* */ comments with // comments
+# Changes block comments to single line comments.
 --rules blockComments
 
-# Use K&R-style braces (same line)
+# Wrap braces in accordance with selected style (K&R or Allman).
 --rules braces
 --allman false
 
-# Collapse multiple blank lines into one
+# Replace consecutive blank lines with a single blank line.
 --rules consecutiveBlankLines
 
-# Remove duplicate imports
+# Replace consecutive spaces with a single space.
+--rules consecutiveSpaces
+
+# Remove duplicate import statements.
 --rules duplicateImports
 
-# Format if-else on same line with braces, guard-else appropriately to context
+# Place else, catch or while keyword in accordance with current style (same or next line).
 --rules elseOnSameLine
 --elseposition same-line
+--guardelse auto
 
-# No spaces inside empty braces
+# Remove whitespace inside empty braces.
 --rules emptyBraces
 --emptybraces no-space
 
-# Put access control modifiers for extensions on the declarations
+# Converts types used for hosting only static members into enums (an empty enum is the canonical way to create a namespace in Swift as it can't be instantiated).
+--rules enumNamespaces
+
+# Configure the placement of an extension's access control keyword.
 --rules extensionAccessControl
 --extensionacl on-declarations
 
-# File headers
+# Use specified source file header template for all files.
 --rules fileHeader
---header "{file}\nCopyright © {year} hiimtmac"
+--header "{file}\nCopyright (c) {year} hiimtmac inc."
 
-# Place let on the outside of patterns
+# Reposition let or var bindings within pattern.
 --rules hoistPatternLet
 --patternlet hoist
 
-# Normalize indentation to 4 spaces per scope
+# Indent code in accordance with the scope level.
 --rules indent
 --indent 4
 --smarttabs enabled
 --indentcase false
---ifdef indent
+--ifdef no-indent
 --xcodeindentation disabled
 --indentstrings true
 
-# Mark unimplmented init(coder:) methods unavailable
+# Add @available(*, unavailable) attribute to required init(coder:) when it hasn't been implemented.
 --rules initCoderUnavailable
 
-# Use .isEmpty instead of .count == 0
+# Prefer isEmpty over comparing count against zero.
 --rules isEmpty
 
-# Keep list commas at the end of lines
+# Move leading delimiters to the end of the previous line.
 --rules leadingDelimiters
 
-# Make sure files end in a newline
+# Add empty blank line at end of file.
 --rules linebreakAtEndOfFile
 
-# Normalize to UNIX newlines
+# Use specified linebreak character for all linebreaks (CR, LF or CRLF).
 --rules linebreaks
 --linebreaks lf
 
-# Normalize ordering of modifiers
-# Modifier list from:
-#  https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#grammar_declaration-modifiers
+# Use consistent ordering for member modifiers. (https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#grammar_declaration-modifiers)
 --rules modifierOrder
 --modifierorder open,public,internal,fileprivate,private,\
-                override,final,optional,\
-                class,static,\
-                mutating,nonmutating,\
-                isolated,nonisolated,\
-                dynamic,lazy,\
-                weak,unowned,\
-                required,convenience,\
-                prefix,infix,postfix
+        override,final,optional,\
+        class,static,\
+        mutating,nonmutating,\
+        isolated,nonisolated,\
+        dynamic,lazy,\
+        weak,unowned,\
+        required,convenience,\
+        prefix,infix,postfix
 
-# Use consistent formatting for numeric literals
+# Use consistent formatting for numeric literals.
 --rules numberFormatting
---decimalgrouping 3,5
+--decimalgrouping 3,6
 --binarygrouping 4,8
---hexgrouping 8,9
+--hexgrouping 4,8
 --fractiongrouping disabled
 --exponentgrouping disabled
 --hexliteralcase lowercase
 --exponentcase lowercase
 
-# Replace CGFloat with Double in Swift 5.6
---rules preferDouble
-
-# Replace .map { $0.foo } with .map(\.foo)
+# Convert trivial map { $0.foo } closures to keyPath-based syntax.
 --rules preferKeyPath
 
-# Remove unnecessary backtick escaping
+# Remove redundant backticks around identifiers.
 --rules redundantBackticks
 
-# Remove unnecessary break statements
+# Remove redundant break in switch case.
 --rules redundantBreak
 
-# Remove get {} in getter-only computed properties
+# Removes redundant closures bodies, containing a single statement, which are called immediately.
+--rules redundantClosure
+
+# Remove redundant access control modifiers.
+--rules redundantExtensionACL
+
+# Prefer private over fileprivate where equivalent.
+--rules redundantFileprivate
+
+# Remove unneeded get clause inside computed properties.
 --rules redundantGet
 
-# Remove let/var from _ = expressions
+# Remove redundant let/var from ignored variables.
 --rules redundantLet
 
-# Replace catch let error with catch
+# Remove redundant let error from catch clause.
 --rules redundantLetError
 
-# Remove unneeded explicit = nil initializer expressions
+# Remove redundant nil default value (Optional vars are nil by default).
 --rules redundantNilInit
 
-# Remove unnecessary grouping parenthesis
+# Remove redundant @objc annotations.
+--rules redundantObjc
+
+# Remove redundant parentheses.
 --rules redundantParens
 
-# Remove unnecesary pattern initializer syntax
+# Remove redundant pattern matching parameter syntax.
 --rules redundantPattern
 
-# Always explicitly refer to self
---rules redundantSelf
---self insert
+# Remove redundant raw string values for enum cases.
+--rules redundantRawValues
 
-# Remove unnecessary type declarations, but only on local variables
+# Remove unneeded return keyword.
+--rules redundantReturn
+
+# Remove redundant type from variable declarations.
 --rules redundantType
 --redundanttype infer-locals-only
 
-# Remove unnecessary Void return type on function declarations
+# Remove explicit Void return type.
 --rules redundantVoidReturnType
 --closurevoid preserve
 
-# Ditch semicolons on single-statement lines
+# Remove semicolons.
 --rules semicolons
 --semicolons inline
 
-# Sort import statements, putting testable imports last
---rules sortedImports
+# Sort import statements alphabetically.
+--rules sortImports
 --importgrouping testable-last
 
-# Normalize whitespace around and inside various things
---rules spaceAroundBraces,spaceAroundBrackets,\
-        spaceAroundComments,spaceAroundGenerics,\
-        spaceAroundOperators,spaceAroundParens,\
-        spaceInsideBraces,spaceInsideBrackets,\
-        spaceInsideComments,spaceInsideGenerics,\
-        spaceInsideParens
+# Add or remove space around curly braces.
+--rules spaceAroundBraces
 
+# Add or remove space around square brackets.
+--rules spaceAroundBrackets
+
+# Add space before and/or after comments.
+--rules spaceAroundComments
+
+# Remove space around angle brackets.
+--rules spaceAroundGenerics
+
+# Add or remove space around operators or delimiters.
+--rules spaceAroundOperators
 --operatorfunc spaced
 --ranges spaced
 
-# Cleanup guard self = self expressions
+# Add or remove space around parentheses.
+--rules spaceAroundParens
+
+# Add space inside curly braces.
+--rules spaceInsideBraces
+
+# Remove space inside square brackets.
+--rules spaceInsideBrackets
+
+# Add leading and/or trailing space inside comments.
+--rules spaceInsideComments
+
+# Remove space inside angle brackets.
+--rules spaceInsideGenerics
+
+# Remove space inside parentheses.
+--rules spaceInsideParens
+
+# Remove backticks around self in Optional unwrap expressions.
 --rules strongifiedSelf
 
-# Correct misformatted MARK, TODO, etc. comments
+# Use correct formatting for TODO:, MARK: or FIXME: comments.
 --rules todos
 
-# Always use trailing commas in collection literals
---rules trailingCommas
---commas always
+# Use trailing closure syntax where applicable.
+--rules trailingClosures
 
-# Trim lines with trailing whitespace
+# Remove trailing space at end of a line.
 --rules trailingSpace
 --trimwhitespace always
 
-# Name unused arguments _ always
---rules unusedArguments
---stripunusedargs always
+# Prefer shorthand syntax for Arrays, Dictionaries and Optionals.
+--rules typeSugar
+--shortoptionals always
 
-# Use Void instead of () in type context
+# Mark unused function arguments with _.
+--rules unusedArguments
+--stripunusedargs closure-only
+
+# Use Void for type declarations and () for values.
 --rules void
 --voidtype void
 
-# Align wrapped arguments and elements
+# Align wrapped function arguments or collection elements.
 --rules wrapArguments
 --wraparguments before-first
 --wrapparameters before-first
@@ -198,33 +250,14 @@
 --wrapconditions before-first
 --wraptypealiases before-first
 
-# Put @attributes on separate lines
+# Wrap @attributes onto a separate line, or keep them on the same line.
 --rules wrapAttributes
---funcattributes prev-line
+--funcattributes preserve
 --typeattributes prev-line
---varattributes prev-line
+--varattributes preserve
+
+# Writes one enum case per line.
+--rules wrapEnumCases
 
 # Put open braces of multiline conditions on their own line
 --rules wrapMultilineStatementBraces
-
-# Disabled rules
-# --rules acroynms
-# --rules consecutiveSpaces
-# --rules enumNamespaces
-# --rules marktypes
-# --rules organizeDeclarations
-# --rules redundantClosure
-# --rules redundantExtensionACL
-# --rules redundantFileprivate
-# --rules redundantObjc
-# --rules redundantRawValues
-# --rules redundantReturn
-# --rules sortedSwitchCases
-# --rules strongOutlets
-# --rules trailingClosures
-# --rules typeSugar
-# --rules wrap
-# --rules wrapConditionalBodies
-# --rules wrapEnumCases
-# --rules wrapSwitchCases
-# --rules yodaConditions

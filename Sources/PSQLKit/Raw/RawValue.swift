@@ -1,8 +1,8 @@
 // RawValue.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct RawValue<T> where T: PSQLExpression & SQLExpression {
     let value: T
@@ -23,17 +23,16 @@ extension RawValue: TypeEquatable where T: TypeEquatable {
 }
 
 extension RawValue: SelectSQLExpression {
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let value: T
 
         func serialize(to serializer: inout SQLSerializer) {
             self.value.serialize(to: &serializer)
-            serializer.write("::")
-            T.postgresColumnType.serialize(to: &serializer)
+            T.postgresDataType.serialize(to: &serializer)
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(value: self.value)
     }
 }
@@ -59,8 +58,7 @@ extension RawValue.Alias: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             self.value.serialize(to: &serializer)
-            serializer.write("::")
-            T.postgresColumnType.serialize(to: &serializer)
+            T.postgresDataType.serialize(to: &serializer)
 
             serializer.writeSpace()
             serializer.write("AS")
@@ -72,7 +70,7 @@ extension RawValue.Alias: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(value: self.value, alias: alias)
     }
 }

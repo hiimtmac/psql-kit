@@ -1,8 +1,9 @@
 // PSQLBind.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import struct SQLKit.SQLBind
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct PSQLBind<T> where T: PSQLExpression & Encodable {
     let value: T
@@ -19,11 +20,11 @@ extension PSQLBind: SQLExpression {
 }
 
 extension PSQLBind: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension PSQLBind: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression { self }
+    public var selectSqlExpression: some SQLExpression { self }
 }
 
 extension PSQLBind: Equatable where T: Equatable {

@@ -1,8 +1,6 @@
 // SQLExpressionTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
-import SQLKit
 import XCTest
 @testable import PSQLKit
 
@@ -15,7 +13,7 @@ final class SQLExpressionTests: XCTestCase {
     }
 
     func testExpressionRaw() {
-        let q: PSQLQuery = QUERY {
+        let q: some PSQLQuery = QUERY {
             SELECT {
                 Thing.$id
                 Thing.$name

@@ -1,7 +1,6 @@
 // NullTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -15,8 +14,8 @@ final class NullTests: PSQLTestCase {
             f.$name == "hi"
             f.$name == "hi" as String?
             f.$name == val
-            f.$name == Optional<String>.some("hi")
-            f.$name == Optional<String>.none
+            f.$name == String?.some("hi")
+            f.$name == String?.none
         }
         .serialize(to: &fluentSerializer)
 
@@ -24,8 +23,8 @@ final class NullTests: PSQLTestCase {
             p.$name == "hi"
             p.$name == "hi" as String?
             p.$name == val
-            p.$name == Optional<String>.some("hi")
-            p.$name == Optional<String>.none
+            p.$name == String?.some("hi")
+            p.$name == String?.none
         }
         .serialize(to: &psqlkitSerializer)
 
@@ -40,8 +39,8 @@ final class NullTests: PSQLTestCase {
             f.$name === "hi"
             f.$name === "hi" as String?
             f.$name === val
-            f.$name === Optional<String>.some("hi")
-            f.$name === Optional<String>.none
+            f.$name === String?.some("hi")
+            f.$name === String?.none
         }
         .serialize(to: &fluentSerializer)
 
@@ -49,8 +48,8 @@ final class NullTests: PSQLTestCase {
             p.$name === "hi"
             p.$name === "hi" as String?
             p.$name === val
-            p.$name === Optional<String>.some("hi")
-            p.$name === Optional<String>.none
+            p.$name === String?.some("hi")
+            p.$name === String?.none
         }
         .serialize(to: &psqlkitSerializer)
 
@@ -65,8 +64,8 @@ final class NullTests: PSQLTestCase {
             f.$name != "hi"
             f.$name != "hi" as String?
             f.$name != val
-            f.$name != Optional<String>.some("hi")
-            f.$name != Optional<String>.none
+            f.$name != String?.some("hi")
+            f.$name != String?.none
         }
         .serialize(to: &fluentSerializer)
 
@@ -74,8 +73,8 @@ final class NullTests: PSQLTestCase {
             p.$name != "hi"
             p.$name != "hi" as String?
             p.$name != val
-            p.$name != Optional<String>.some("hi")
-            p.$name != Optional<String>.none
+            p.$name != String?.some("hi")
+            p.$name != String?.none
         }
         .serialize(to: &psqlkitSerializer)
 
@@ -90,8 +89,8 @@ final class NullTests: PSQLTestCase {
             f.$name !== "hi"
             f.$name !== "hi" as String?
             f.$name !== val
-            f.$name !== Optional<String>.some("hi")
-            f.$name !== Optional<String>.none
+            f.$name !== String?.some("hi")
+            f.$name !== String?.none
         }
         .serialize(to: &fluentSerializer)
 
@@ -99,8 +98,8 @@ final class NullTests: PSQLTestCase {
             p.$name !== "hi"
             p.$name !== "hi" as String?
             p.$name !== val
-            p.$name !== Optional<String>.some("hi")
-            p.$name !== Optional<String>.none
+            p.$name !== String?.some("hi")
+            p.$name !== String?.none
         }
         .serialize(to: &psqlkitSerializer)
 

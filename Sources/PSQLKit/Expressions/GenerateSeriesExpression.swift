@@ -1,16 +1,16 @@
 // GenerateSeriesExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpression {
     let lower: Content
     let upper: Content
-    let interval: SQLExpression
+    let interval: any SQLExpression
 
-    public init(from lower: Content, to upper: Content, interval: SQLExpression) {
+    public init(from lower: Content, to upper: Content, interval: any SQLExpression) {
         self.lower = lower
         self.upper = upper
         self.interval = interval
@@ -26,13 +26,13 @@ public struct GenerateSeriesExpression<Content>: SQLExpression where Content: Se
         serializer.write(",")
         serializer.writeSpace()
         self.interval.serialize(to: &serializer)
-        serializer.write("::INTERVAL")
+        PostgresDataType.interval.serialize(to: &serializer)
         serializer.write(")")
     }
 }
 
 extension GenerateSeriesExpression: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression { self }
+    public var selectSqlExpression: some SQLExpression { self }
 }
 
 extension GenerateSeriesExpression {
@@ -42,5 +42,5 @@ extension GenerateSeriesExpression {
 }
 
 extension GenerateSeriesExpression: FromSQLExpression {
-    public var fromSqlExpression: SQLExpression { self }
+    public var fromSqlExpression: some SQLExpression { self }
 }

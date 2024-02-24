@@ -1,7 +1,6 @@
 // QueryTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -205,6 +204,30 @@ final class QueryTests: PSQLTestCase {
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
+    func testSelectSubquery() {
+        SELECT {
+            QUERY {
+                SELECT { f.$age }
+                FROM { f.table }
+            }
+            .asSubquery(f.table)
+        }
+        .serialize(to: &fluentSerializer)
+
+        SELECT {
+            QUERY {
+                SELECT { p.$age }
+                FROM { p.table }
+            }
+            .asSubquery(p.table)
+        }
+        .serialize(to: &psqlkitSerializer)
+
+        let compare = #"SELECT (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
     func testReturning() {
         QUERY {
             UPDATE(f.table) {
@@ -225,6 +248,18 @@ final class QueryTests: PSQLTestCase {
         .serialize(to: &psqlkitSerializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'taylor' WHERE ("x"."name" = 'tmac') RETURNING "x"."id"::UUID"#
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
+    }
+
+    func testEmpty() {
+        QUERY {}
+            .serialize(to: &fluentSerializer)
+
+        QUERY {}
+            .serialize(to: &psqlkitSerializer)
+
+        let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

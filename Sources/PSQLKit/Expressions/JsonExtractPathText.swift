@@ -1,14 +1,19 @@
 // JsonExtractPathText.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
-import Foundation
-import SQLKit
+import class FluentKit.FieldProperty
+import class FluentKit.GroupProperty
+import class FluentKit.IDProperty
+import class FluentKit.OptionalFieldProperty
+import class FluentKit.TimestampProperty
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLList
+import struct SQLKit.SQLSerializer
 
 public protocol JsonbExtractable: BaseSQLExpression {}
 
 public struct JsonbExtractPathTextExpression<Content> {
-    let content: SQLExpression
+    let content: any SQLExpression
     let pathElements: [String]
 
     public init<T>(_ content: T, _ paths: String..., as _: Content.Type) where
@@ -22,12 +27,12 @@ public struct JsonbExtractPathTextExpression<Content> {
 extension JsonbExtractPathTextExpression: Coalescable where Content: TypeEquatable {}
 
 extension JsonbExtractPathTextExpression: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression {
+    public var baseSqlExpression: some SQLExpression {
         _Base(content: self.content, pathElements: self.pathElements)
     }
 
     private struct _Base: SQLExpression {
-        let content: SQLExpression
+        let content: any SQLExpression
         let pathElements: [String]
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -45,18 +50,18 @@ extension JsonbExtractPathTextExpression: BaseSQLExpression {
 extension JsonbExtractPathTextExpression: SelectSQLExpression where
     Content: PSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(
             content: self.content,
             pathElements: self.pathElements,
-            columnType: Content.postgresColumnType
+            dataType: Content.postgresDataType
         )
     }
 
     private struct _Select: SQLExpression {
-        let content: SQLExpression
+        let content: any SQLExpression
         let pathElements: [String]
-        let columnType: SQLExpression
+        let dataType: any SQLExpression
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("JSONB_EXTRACT_PATH_TEXT")
@@ -66,8 +71,7 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
             serializer.writeSpace()
             SQLList(self.pathElements).serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            self.columnType.serialize(to: &serializer)
+            self.dataType.serialize(to: &serializer)
         }
     }
 }

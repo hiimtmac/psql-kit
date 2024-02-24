@@ -1,12 +1,12 @@
 // Int+PSQL.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 extension Int: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType { .integer }
+    public static var postgresDataType: PostgresDataType { .int4 }
 }
 
 extension Int: SQLExpression {
@@ -20,22 +20,22 @@ extension Int: TypeEquatable {
 }
 
 extension Int: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression { self }
+    public var baseSqlExpression: some SQLExpression { self }
 }
 
 extension Int: Concatenatable {}
 extension Int: Coalescable {}
 
 extension Int: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         RawValue(self).selectSqlExpression
     }
 }
 
 extension Int: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }
 
 extension Int: MutationSQLExpression {
-    public var mutationSqlExpression: SQLExpression { self }
+    public var mutationSqlExpression: some SQLExpression { self }
 }

@@ -1,9 +1,9 @@
 // RawColumn.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct RawColumn<T> where T: PSQLExpression {
     let column: String
@@ -26,19 +26,18 @@ extension RawColumn: TypeEquatable where T: TypeEquatable {
 extension RawColumn: SelectSQLExpression {
     private struct _Select: SQLExpression {
         let column: String
-        let type: PostgresColumnType
+        let dataType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.writeQuote()
             serializer.write(self.column)
             serializer.writeQuote()
-            serializer.write("::")
-            self.type.serialize(to: &serializer)
+            self.dataType.serialize(to: &serializer)
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
-        _Select(column: self.column, type: T.postgresColumnType)
+    public var selectSqlExpression: some SQLExpression {
+        _Select(column: self.column, dataType: T.postgresDataType)
     }
 }
 
@@ -53,7 +52,7 @@ extension RawColumn: GroupBySQLExpression {
         }
     }
 
-    public var groupBySqlExpression: SQLExpression {
+    public var groupBySqlExpression: some SQLExpression {
         _GroupBy(column: self.column)
     }
 }
@@ -69,7 +68,7 @@ extension RawColumn: OrderBySQLExpression {
         }
     }
 
-    public var orderBySqlExpression: SQLExpression {
+    public var orderBySqlExpression: some SQLExpression {
         _OrderBy(column: self.column)
     }
 
@@ -97,7 +96,7 @@ extension RawColumn: CompareSQLExpression {
         }
     }
 
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(column: self.column)
     }
 }
@@ -138,7 +137,7 @@ extension RawColumn.Alias: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(column: self.column, alias: alias)
     }
 }

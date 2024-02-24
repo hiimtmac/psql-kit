@@ -1,9 +1,10 @@
 // Array+PSQL.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLList
+import struct SQLKit.SQLSerializer
 
 extension Array: SQLExpression where Element: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
@@ -18,15 +19,15 @@ extension Array: TypeEquatable where Element: TypeEquatable {
 }
 
 extension Array: PSQLExpression where Element: PSQLExpression {
-    public static var postgresColumnType: PostgresColumnType {
-        .array(Element.postgresColumnType)
+    public static var postgresDataType: PostgresDataType {
+        .array(Element.postgresDataType)
     }
 }
 
 extension Array: SelectSQLExpression where Element: SQLExpression & SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression { self }
+    public var selectSqlExpression: some SQLExpression { self }
 }
 
 extension Array: CompareSQLExpression where Element: SQLExpression & CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression { self }
+    public var compareSqlExpression: some SQLExpression { self }
 }

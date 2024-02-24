@@ -1,7 +1,6 @@
 // AritmeticTests.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
 import XCTest
 @testable import PSQLKit
 
@@ -74,7 +73,7 @@ final class ArithemticTests: PSQLTestCase {
         }
         .serialize(to: &psqlkitSerializer)
 
-        let compare = #"SELECT ("x"."money"::NUMERIC / 8.0)::NUMERIC"#
+        let compare = #"SELECT ("x"."money"::NUMERIC / 8.0::NUMERIC)::NUMERIC"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(psqlkitSerializer.sql, compare)
     }

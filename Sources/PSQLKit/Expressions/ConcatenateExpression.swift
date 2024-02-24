@@ -1,16 +1,17 @@
 // ConcatenateExpression.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLList
+import struct SQLKit.SQLSerializer
 
 public protocol Concatenatable: BaseSQLExpression {}
 
 // MARK: ConcatenateExpression
 
 public struct ConcatenateExpression {
-    let values: [SQLExpression]
+    let values: [any SQLExpression]
 
     public init<T0, T1>
     (
@@ -92,12 +93,12 @@ extension ConcatenateExpression: TypeEquatable {
 }
 
 extension ConcatenateExpression: BaseSQLExpression {
-    public var baseSqlExpression: SQLExpression {
+    public var baseSqlExpression: some SQLExpression {
         _Base(values: self.values)
     }
 
     private struct _Base: SQLExpression {
-        let values: [SQLExpression]
+        let values: [any SQLExpression]
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
@@ -109,32 +110,31 @@ extension ConcatenateExpression: BaseSQLExpression {
 }
 
 extension ConcatenateExpression: SelectSQLExpression {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(values: self.values)
     }
 
     private struct _Select: SQLExpression {
-        let values: [SQLExpression]
+        let values: [any SQLExpression]
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
             SQLList(self.values).serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.text.serialize(to: &serializer)
+            PostgresDataType.text.serialize(to: &serializer)
         }
     }
 }
 
 extension ConcatenateExpression: GroupBySQLExpression {
-    public var groupBySqlExpression: SQLExpression {
+    public var groupBySqlExpression: some SQLExpression {
         _Base(values: self.values)
     }
 }
 
 extension ConcatenateExpression: CompareSQLExpression {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Base(values: self.values)
     }
 }

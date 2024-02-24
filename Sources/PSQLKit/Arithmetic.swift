@@ -1,9 +1,9 @@
 // Arithmetic.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import PostgresKit
-import SQLKit
+import struct PostgresNIO.PostgresDataType
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct ArithmeticOperator: SQLExpression {
     let value: String
@@ -46,7 +46,7 @@ extension ArithmeticExpression: SelectSQLExpression where
     T: SelectSQLExpression,
     U: SelectSQLExpression
 {
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 
@@ -63,8 +63,7 @@ extension ArithmeticExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.rhs.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            serializer.write("::")
-            PostgresColumnType.decimal.serialize(to: &serializer)
+            PostgresDataType.numeric.serialize(to: &serializer)
         }
     }
 }
@@ -79,7 +78,7 @@ extension ArithmeticExpression: CompareSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var compareSqlExpression: SQLExpression {
+    public var compareSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 
@@ -104,7 +103,7 @@ extension ArithmeticExpression: WhereSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var whereSqlExpression: SQLExpression {
+    public var whereSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
@@ -113,7 +112,7 @@ extension ArithmeticExpression: HavingSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var havingSqlExpression: SQLExpression {
+    public var havingSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }
@@ -122,7 +121,7 @@ extension ArithmeticExpression: JoinSQLExpression where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {
-    public var joinSqlExpression: SQLExpression {
+    public var joinSqlExpression: some SQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 }

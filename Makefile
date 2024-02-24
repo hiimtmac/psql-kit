@@ -1,0 +1,4 @@
+format:
+	@swiftformat .
+
+.PHONY: format

@@ -1,8 +1,8 @@
 // AllTableSelection.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
+import struct SQLKit.SQLSerializer
 
 public struct AllTableSelection<T> where T: Table {
     let table: T
@@ -12,13 +12,13 @@ public struct AllTableSelection<T> where T: Table {
 
 extension AllTableSelection: SelectSQLExpression {
     private struct _Select: SQLExpression {
-        let pathName: String?
+        let spaceName: String?
         let schemaName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            if let path = pathName {
+            if let space = spaceName {
                 serializer.writeQuote()
-                serializer.write(path)
+                serializer.write(space)
                 serializer.writeQuote()
                 serializer.writePeriod()
             }
@@ -31,8 +31,8 @@ extension AllTableSelection: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
-        _Select(pathName: T.path, schemaName: T.schema)
+    public var selectSqlExpression: some SQLExpression {
+        _Select(spaceName: T.path, schemaName: T.schema)
     }
 }
 
@@ -57,7 +57,7 @@ extension AllTableSelection.Alias: SelectSQLExpression {
         }
     }
 
-    public var selectSqlExpression: SQLExpression {
+    public var selectSqlExpression: some SQLExpression {
         _Select(aliasName: self.table.alias)
     }
 }

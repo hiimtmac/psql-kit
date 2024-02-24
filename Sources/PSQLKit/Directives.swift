@@ -1,8 +1,7 @@
 // Directives.swift
-// Copyright © 2022 hiimtmac
+// Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
-import SQLKit
+import protocol SQLKit.SQLExpression
 
 public typealias FROM = FromDirective
 public typealias GROUPBY = GroupByDirective
@@ -20,62 +19,138 @@ public typealias UPDATE = UpdateDirective
 public typealias DELETE = DeleteDirective
 
 public protocol BaseSQLExpression {
-    var baseSqlExpression: SQLExpression { get }
+    associatedtype BaseExpression: SQLExpression
+    var baseSqlExpression: BaseExpression { get }
 }
 
 public protocol SelectSQLExpression {
-    var selectSqlExpression: SQLExpression { get }
+    associatedtype SelectExpression: SQLExpression
+    var selectSqlExpression: SelectExpression { get }
+    var selectIsNull: Bool { get }
+}
+
+extension SelectSQLExpression {
+    public var selectIsNull: Bool { false }
 }
 
 public protocol FromSQLExpression {
-    var fromSqlExpression: SQLExpression { get }
+    associatedtype FromExpression: SQLExpression
+    var fromSqlExpression: FromExpression { get }
+    var fromIsNull: Bool { get }
+}
+
+extension FromSQLExpression {
+    public var fromIsNull: Bool { false }
 }
 
 public protocol GroupBySQLExpression {
-    var groupBySqlExpression: SQLExpression { get }
+    associatedtype GroupByExpression: SQLExpression
+    var groupBySqlExpression: GroupByExpression { get }
+    var groupByIsNull: Bool { get }
+}
+
+extension GroupBySQLExpression {
+    public var groupByIsNull: Bool { false }
 }
 
 public protocol OrderBySQLExpression {
-    var orderBySqlExpression: SQLExpression { get }
+    associatedtype OrderByExpression: SQLExpression
+    var orderBySqlExpression: OrderByExpression { get }
+    var orderByIsNull: Bool { get }
+}
+
+extension OrderBySQLExpression {
+    public var orderByIsNull: Bool { false }
 }
 
 public protocol CompareSQLExpression {
-    var compareSqlExpression: SQLExpression { get }
+    associatedtype CompareExpression: SQLExpression
+    var compareSqlExpression: CompareExpression { get }
 }
 
 public protocol JoinSQLExpression {
-    var joinSqlExpression: SQLExpression { get }
+    associatedtype JoinExpression: SQLExpression
+    var joinSqlExpression: JoinExpression { get }
+    var joinIsNull: Bool { get }
+}
+
+extension JoinSQLExpression {
+    public var joinIsNull: Bool { false }
 }
 
 public protocol WhereSQLExpression {
-    var whereSqlExpression: SQLExpression { get }
+    associatedtype WhereExpression: SQLExpression
+    var whereSqlExpression: WhereExpression { get }
+    var whereIsNull: Bool { get }
+}
+
+extension WhereSQLExpression {
+    public var whereIsNull: Bool { false }
 }
 
 public protocol HavingSQLExpression {
-    var havingSqlExpression: SQLExpression { get }
+    associatedtype HavingExpression: SQLExpression
+    var havingSqlExpression: HavingExpression { get }
+    var havingIsNull: Bool { get }
+}
+
+extension HavingSQLExpression {
+    public var havingIsNull: Bool { false }
 }
 
 public protocol QuerySQLExpression {
-    var querySqlExpression: SQLExpression { get }
+    associatedtype QueryExpression: SQLExpression
+    var querySqlExpression: QueryExpression { get }
+    var queryIsNull: Bool { get }
+}
+
+extension QuerySQLExpression {
+    public var queryIsNull: Bool { false }
 }
 
 public protocol WithSQLExpression {
-    var withSqlExpression: SQLExpression { get }
+    associatedtype WithExpression: SQLExpression
+    var withSqlExpression: WithExpression { get }
+    var withIsNull: Bool { get }
+}
+
+extension WithSQLExpression {
+    public var withIsNull: Bool { false }
 }
 
 public protocol UnionSQLExpression {
-    var unionSqlExpression: SQLExpression { get }
+    associatedtype UnionExpression: SQLExpression
+    var unionSqlExpression: UnionExpression { get }
+    var unionIsNull: Bool { get }
+}
+
+extension UnionSQLExpression {
+    public var unionIsNull: Bool { false }
 }
 
 public protocol MutationSQLExpression {
-    var mutationSqlExpression: SQLExpression { get }
+    associatedtype MutationExpression: SQLExpression
+    var mutationSqlExpression: MutationExpression { get }
 }
 
 public protocol InsertSQLExpression {
-    var insertColumnSqlExpression: SQLExpression { get }
-    var insertValueSqlExpression: SQLExpression { get }
+    associatedtype InsertColumnExpression: SQLExpression
+    associatedtype InsertValueExpression: SQLExpression
+    var insertColumnSqlExpression: InsertColumnExpression { get }
+    var insertValueSqlExpression: InsertValueExpression { get }
+    var insertIsNull: Bool { get }
+}
+
+extension InsertSQLExpression {
+    public var insertIsNull: Bool { false }
 }
 
 public protocol UpdateSQLExpression {
-    var updateSqlExpression: SQLExpression { get }
+    associatedtype UpdateExpression: SQLExpression
+    var updateSqlExpression: UpdateExpression { get }
+    var updateIsNull: Bool { get }
+}
+
+extension UpdateSQLExpression {
+    public var updateIsNull: Bool { false }
 }
