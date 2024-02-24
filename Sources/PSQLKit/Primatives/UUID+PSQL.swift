@@ -31,7 +31,7 @@ extension UUID: Coalescable {}
 
 extension UUID: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue._Select(value: self)
+        RawValue(self).selectSqlExpression
     }
 }
 

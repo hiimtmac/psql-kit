@@ -6,7 +6,7 @@ PSQL query function builders for [FluentKit](https://github.com/vapor/fluent-kit
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hiimtmac/psql-kit.git", from: "0.17.0")
+    .package(url: "https://github.com/hiimtmac/psql-kit.git", from: "0.18.0")
 ],
 ```
 
@@ -78,7 +78,7 @@ struct MyModel: Codable {
     let name: String
 }
 
-func index(_ req: Request) throws -> EventLoopFuture<[MyModel]> {
+func index(_ req: Request) async throws -> [MyModel] {
     QUERY {
         SELECT { Moon.$name }
         FROM { Moon.table }
@@ -195,7 +195,7 @@ WHERE {
     m.$name ~~ "%moon" || m.$name !~~ "%moon" // LIKE / NOT LIKE
     m.$name ~~* "%moon" || m.$name !~~* "%moon" // ILIKE / NOT ILIKE
     m.$name === "moon" || m.$name !== "moon" // IS / IS NOT
-    m.$name === Optional<String>.none
+    m.$name === String?.none
 }
 ```
 
@@ -602,7 +602,7 @@ QUERY {
     WITH {
         QUERY {
             SELECT { m.$name }
-                .distinctOn {
+                .distinct {
                     m.$name
                     m.$id
                 }

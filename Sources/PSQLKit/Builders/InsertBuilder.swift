@@ -31,15 +31,15 @@ public struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
         self.content = (repeat each content)
     }
 
+    // typing this `some SQLExpression` causes "SwiftEmitModule failed with nonzero exit code"
     public var insertColumnSqlExpression: SQLList {
-        // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(column: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))
     }
 
+    // typing this `some SQLExpression` causes "SwiftEmitModule failed with nonzero exit code"
     public var insertValueSqlExpression: SQLList {
-        // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(value: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))

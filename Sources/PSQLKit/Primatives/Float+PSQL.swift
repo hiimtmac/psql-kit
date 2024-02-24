@@ -28,7 +28,7 @@ extension Float: Coalescable {}
 
 extension Float: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        RawValue._Select(value: self)
+        RawValue(self).selectSqlExpression
     }
 }
 

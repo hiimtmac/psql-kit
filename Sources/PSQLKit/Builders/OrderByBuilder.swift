@@ -27,8 +27,8 @@ public struct OrderByTouple<each T: OrderBySQLExpression>: OrderBySQLExpression 
         self.content = (repeat each content)
     }
 
+    // typing this `some SQLExpression` causes "SwiftEmitModule failed with nonzero exit code"
     public var orderBySqlExpression: SQLList {
-        // required until swift 6 https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))

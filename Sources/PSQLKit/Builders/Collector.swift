@@ -3,6 +3,8 @@
 
 import protocol SQLKit.SQLExpression
 
+// required until swift 6 to iterate and collect packs until
+// we can iterate natively https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
 struct Collector {
     var expressions: [any SQLExpression] = []
 
