@@ -9,7 +9,7 @@ extension Float: PSQLExpression {
     public static var postgresDataType: PostgresDataType { .numeric }
 }
 
-extension Float: SQLExpression {
+extension Float: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("\(self)")
     }

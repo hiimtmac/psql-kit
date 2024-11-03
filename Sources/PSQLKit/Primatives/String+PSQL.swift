@@ -9,7 +9,7 @@ extension String: PSQLExpression {
     public static var postgresDataType: PostgresDataType { .text }
 }
 
-extension String: SQLExpression {
+extension String: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("'")
         serializer.write("\(self)")

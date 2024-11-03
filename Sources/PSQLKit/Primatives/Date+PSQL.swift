@@ -10,7 +10,7 @@ extension Date: PSQLExpression {
     public static var postgresDataType: PostgresDataType { .timestamp }
 }
 
-extension Date: SQLExpression {
+extension Date: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("'\(self)'")
     }

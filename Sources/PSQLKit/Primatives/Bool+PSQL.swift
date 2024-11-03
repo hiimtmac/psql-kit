@@ -9,7 +9,7 @@ extension Bool: PSQLExpression {
     public static var postgresDataType: PostgresDataType { .bool }
 }
 
-extension Bool: SQLExpression {
+extension Bool: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("\(self)")
     }

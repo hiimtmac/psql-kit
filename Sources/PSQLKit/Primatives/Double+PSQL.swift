@@ -9,7 +9,7 @@ extension Double: PSQLExpression {
     public static var postgresDataType: PostgresDataType { .numeric }
 }
 
-extension Double: SQLExpression {
+extension Double: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("\(self)")
     }

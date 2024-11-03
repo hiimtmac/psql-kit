@@ -10,7 +10,7 @@ extension UUID: PSQLExpression {
     public static var postgresDataType: PostgresDataType { .uuid }
 }
 
-extension UUID: SQLExpression {
+extension UUID: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("'")
         serializer.write("\(self.uuidString)")
