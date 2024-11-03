@@ -1,6 +1,8 @@
 // ColumnProperty.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+#warning("change to macro")
+
 @propertyWrapper
 public struct ColumnProperty<Table, Value>: Codable where
     Value: Codable

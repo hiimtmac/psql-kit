@@ -23,7 +23,7 @@ public protocol BaseSQLExpression {
     var baseSqlExpression: BaseExpression { get }
 }
 
-public protocol SelectSQLExpression {
+public protocol SelectSQLExpression: Sendable {
     associatedtype SelectExpression: SQLExpression
     var selectSqlExpression: SelectExpression { get }
     var selectIsNull: Bool { get }
@@ -33,7 +33,7 @@ extension SelectSQLExpression {
     public var selectIsNull: Bool { false }
 }
 
-public protocol FromSQLExpression {
+public protocol FromSQLExpression: Sendable {
     associatedtype FromExpression: SQLExpression
     var fromSqlExpression: FromExpression { get }
     var fromIsNull: Bool { get }
@@ -43,7 +43,7 @@ extension FromSQLExpression {
     public var fromIsNull: Bool { false }
 }
 
-public protocol GroupBySQLExpression {
+public protocol GroupBySQLExpression: Sendable {
     associatedtype GroupByExpression: SQLExpression
     var groupBySqlExpression: GroupByExpression { get }
     var groupByIsNull: Bool { get }
@@ -53,7 +53,7 @@ extension GroupBySQLExpression {
     public var groupByIsNull: Bool { false }
 }
 
-public protocol OrderBySQLExpression {
+public protocol OrderBySQLExpression: Sendable {
     associatedtype OrderByExpression: SQLExpression
     var orderBySqlExpression: OrderByExpression { get }
     var orderByIsNull: Bool { get }
@@ -68,7 +68,7 @@ public protocol CompareSQLExpression {
     var compareSqlExpression: CompareExpression { get }
 }
 
-public protocol JoinSQLExpression {
+public protocol JoinSQLExpression: Sendable {
     associatedtype JoinExpression: SQLExpression
     var joinSqlExpression: JoinExpression { get }
     var joinIsNull: Bool { get }
@@ -78,7 +78,7 @@ extension JoinSQLExpression {
     public var joinIsNull: Bool { false }
 }
 
-public protocol WhereSQLExpression {
+public protocol WhereSQLExpression: Sendable {
     associatedtype WhereExpression: SQLExpression
     var whereSqlExpression: WhereExpression { get }
     var whereIsNull: Bool { get }
@@ -88,7 +88,7 @@ extension WhereSQLExpression {
     public var whereIsNull: Bool { false }
 }
 
-public protocol HavingSQLExpression {
+public protocol HavingSQLExpression: Sendable {
     associatedtype HavingExpression: SQLExpression
     var havingSqlExpression: HavingExpression { get }
     var havingIsNull: Bool { get }
@@ -98,7 +98,7 @@ extension HavingSQLExpression {
     public var havingIsNull: Bool { false }
 }
 
-public protocol QuerySQLExpression {
+public protocol QuerySQLExpression: Sendable {
     associatedtype QueryExpression: SQLExpression
     var querySqlExpression: QueryExpression { get }
     var queryIsNull: Bool { get }
@@ -108,7 +108,7 @@ extension QuerySQLExpression {
     public var queryIsNull: Bool { false }
 }
 
-public protocol WithSQLExpression {
+public protocol WithSQLExpression: Sendable {
     associatedtype WithExpression: SQLExpression
     var withSqlExpression: WithExpression { get }
     var withIsNull: Bool { get }
@@ -118,7 +118,7 @@ extension WithSQLExpression {
     public var withIsNull: Bool { false }
 }
 
-public protocol UnionSQLExpression {
+public protocol UnionSQLExpression: Sendable {
     associatedtype UnionExpression: SQLExpression
     var unionSqlExpression: UnionExpression { get }
     var unionIsNull: Bool { get }
@@ -133,7 +133,7 @@ public protocol MutationSQLExpression {
     var mutationSqlExpression: MutationExpression { get }
 }
 
-public protocol InsertSQLExpression {
+public protocol InsertSQLExpression: Sendable {
     associatedtype InsertColumnExpression: SQLExpression
     associatedtype InsertValueExpression: SQLExpression
     var insertColumnSqlExpression: InsertColumnExpression { get }
@@ -145,7 +145,7 @@ extension InsertSQLExpression {
     public var insertIsNull: Bool { false }
 }
 
-public protocol UpdateSQLExpression {
+public protocol UpdateSQLExpression: Sendable {
     associatedtype UpdateExpression: SQLExpression
     var updateSqlExpression: UpdateExpression { get }
     var updateIsNull: Bool { get }

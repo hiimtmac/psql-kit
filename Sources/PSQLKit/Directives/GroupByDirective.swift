@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct GroupByDirective<T: GroupBySQLExpression & Sendable>: SQLExpression {
+public struct GroupByDirective<T>: SQLExpression where T: GroupBySQLExpression & Sendable {
     let content: T
 
     init(_ content: T) {

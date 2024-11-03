@@ -22,9 +22,9 @@ public struct ArithmeticOperator: SQLExpression {
     }
 }
 
-public struct ArithmeticExpression<T: Sendable, U: Sendable>: Sendable where
-    T: TypeEquatable,
-    U: TypeEquatable,
+public struct ArithmeticExpression<T, U>: Sendable where
+    T: TypeEquatable & Sendable,
+    U: TypeEquatable & Sendable,
     T.CompareType == U.CompareType
 {
     let lhs: T

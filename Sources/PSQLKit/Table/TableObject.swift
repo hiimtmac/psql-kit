@@ -3,6 +3,8 @@
 
 import struct PostgresNIO.PostgresDataType
 
+#warning("figure out")
+
 public protocol TableObject: PSQLExpression {
     init()
 }

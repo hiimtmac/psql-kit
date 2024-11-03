@@ -5,7 +5,7 @@ import struct SQLKit.SQLBind
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct PSQLBind<T: Sendable> where T: PSQLExpression & Encodable {
+public struct PSQLBind<T> where T: PSQLExpression & Encodable & Sendable {
     let value: T
 
     public init(_ value: T) {

@@ -5,7 +5,7 @@ import protocol SQLKit.SQLExpression
 import enum SQLKit.SQLJoinMethod
 import struct SQLKit.SQLSerializer
 
-public struct JoinDirective<Table: FromSQLExpression & Sendable, T: JoinSQLExpression & Sendable>: SQLExpression {
+public struct JoinDirective<Table, T>: SQLExpression where Table: FromSQLExpression & Sendable, T: JoinSQLExpression & Sendable {
     let table: Table
     let method: SQLJoinMethod
     let content: T

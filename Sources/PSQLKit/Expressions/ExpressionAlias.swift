@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct ExpressionAlias<Expression: Sendable>: Sendable {
+public struct ExpressionAlias<Expression>: Sendable where Expression: Sendable {
     let expression: Expression
     let alias: String
 }

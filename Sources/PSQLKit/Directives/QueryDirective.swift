@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct QueryDirective<T: QuerySQLExpression & Sendable>: SQLExpression {
+public struct QueryDirective<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let content: T
 
     init(_ content: T) {
@@ -27,7 +27,7 @@ extension QueryDirective: UnionSQLExpression {
 
 // MARK: - SubqueryModifier
 
-public struct SubQuery<T: QuerySQLExpression & Sendable>: SQLExpression {
+public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let name: String
     let content: T
 
@@ -46,11 +46,11 @@ public struct SubQuery<T: QuerySQLExpression & Sendable>: SQLExpression {
 }
 
 extension QueryDirective {
-    public func asSubquery<U: Table>(_ table: U) -> SubQuery<T> {
+    public func asSubquery<U>(_ table: U) -> SubQuery<T> where U: Table {
         SubQuery(name: type(of: table).schema, content: self.content)
     }
 
-    public func asSubquery<U: Table>(_ alias: TableAlias<U>) -> SubQuery<T> {
+    public func asSubquery<U>(_ alias: TableAlias<U>) -> SubQuery<T> where U: Table {
         SubQuery(name: alias.alias, content: self.content)
     }
 
@@ -81,7 +81,7 @@ extension QueryDirective: SelectSQLExpression {
 
 // MARK: - WithModifier
 
-public struct WithQuery<T: QuerySQLExpression & Sendable>: SQLExpression {
+public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let name: String
     let content: T
 
@@ -100,7 +100,7 @@ public struct WithQuery<T: QuerySQLExpression & Sendable>: SQLExpression {
 }
 
 extension QueryDirective {
-    public func asWith<U: Table>(_ table: U) -> WithQuery<T> {
+    public func asWith<U>(_ table: U) -> WithQuery<T> where U: Table {
         WithQuery(name: type(of: table).schema, content: self.content)
     }
 

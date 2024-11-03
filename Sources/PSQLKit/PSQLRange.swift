@@ -4,9 +4,9 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct PSQLRange<T: Sendable, U: Sendable>: Sendable where
-    T: TypeEquatable,
-    U: TypeEquatable,
+public struct PSQLRange<T, U>: Sendable where
+    T: TypeEquatable & Sendable,
+    U: TypeEquatable & Sendable,
     T.CompareType == U.CompareType
 {
     let lower: T

@@ -35,9 +35,9 @@ public struct CompareOperator: SQLExpression {
     }
 }
 
-public struct CompareExpression<T: Sendable, U: Sendable>: Sendable where
-    T: CompareSQLExpression,
-    U: CompareSQLExpression
+public struct CompareExpression<T, U>: Sendable where
+    T: CompareSQLExpression & Sendable,
+    U: CompareSQLExpression & Sendable
 {
     let lhs: T
     let `operator`: CompareOperator

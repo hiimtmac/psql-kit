@@ -5,10 +5,10 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct ArrayReplaceExpression<Content: Sendable, T: Sendable, U: Sendable>: AggregateExpression, Sendable where
-    Content: PSQLArrayRepresentable & TypeEquatable,
-    T: TypeEquatable,
-    U: TypeEquatable,
+public struct ArrayReplaceExpression<Content, T, U>: AggregateExpression, Sendable where
+    Content: PSQLArrayRepresentable & TypeEquatable & Sendable,
+        T: TypeEquatable & Sendable,
+        U: TypeEquatable & Sendable,
     Content.CompareType == T.CompareType,
     T.CompareType == U.CompareType
 {

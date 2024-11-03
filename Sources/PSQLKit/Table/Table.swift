@@ -12,6 +12,8 @@ import class FluentKit.TimestampProperty
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
+#warning("move and figure out")
+
 @dynamicMemberLookup
 public protocol Table: FromSQLExpression, Sendable {
     init()

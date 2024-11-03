@@ -12,6 +12,8 @@ import class FluentKit.TimestampProperty
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
+#warning("move and figure out")
+
 @dynamicMemberLookup
 public struct TableAlias<T: Sendable>: Sendable where T: Table {
     /// table alias

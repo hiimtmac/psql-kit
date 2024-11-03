@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct WithDirective<T: WithSQLExpression & Sendable>: SQLExpression {
+public struct WithDirective<T>: SQLExpression where T: WithSQLExpression & Sendable {
     let content: T
 
     init(_ content: T) {

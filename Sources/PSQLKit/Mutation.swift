@@ -4,9 +4,9 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct Mutation<T: Sendable, U: Sendable>: Sendable where
-    T: TypeEquatable,
-    U: TypeEquatable,
+public struct Mutation<T, U>: Sendable where
+    T: TypeEquatable & Sendable,
+    U: TypeEquatable & Sendable,
     T.CompareType == U.CompareType
 {
     let column: T

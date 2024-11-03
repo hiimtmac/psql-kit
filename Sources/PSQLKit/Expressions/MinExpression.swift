@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct MinExpression<Content: Sendable>: AggregateExpression, Sendable {
+public struct MinExpression<Content>: AggregateExpression, Sendable where Content: Sendable {
     let content: Content
 
     public init(_ content: Content) {
