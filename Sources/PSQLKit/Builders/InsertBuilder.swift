@@ -8,31 +8,24 @@ import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: InsertSQLExpression {
     public var insertColumnSqlExpression: some SQLExpression {
-        _Insert()
+        _Empty()
     }
 
     public var insertValueSqlExpression: some SQLExpression {
-        _Insert()
+        _Empty()
     }
 
     public var insertIsNull: Bool { true }
-
-    private struct _Insert: SQLExpression {
-        func serialize(to serializer: inout SQLSerializer) {
-            fatalError("Should not be serialized")
-        }
-    }
 }
 
-public struct InsertTouple<each T: InsertSQLExpression & Sendable>: InsertSQLExpression, Sendable {
+public struct InsertTouple<each T>: InsertSQLExpression where repeat each T: InsertSQLExpression {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
 
-    // typing this `some SQLExpression` causes "SwiftEmitModule failed with nonzero exit code"
-    public var insertColumnSqlExpression: SQLList {
+    public var insertColumnSqlExpression: some SQLExpression {
         var collector = Collector()
         _ = (repeat collector.append(column: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))

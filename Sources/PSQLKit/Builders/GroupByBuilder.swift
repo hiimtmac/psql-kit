@@ -8,27 +8,20 @@ import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
-        _GroupBy()
+        _Empty()
     }
 
     public var groupByIsNull: Bool { true }
-
-    private struct _GroupBy: SQLExpression {
-        func serialize(to serializer: inout SQLSerializer) {
-            fatalError("Should not be serialized")
-        }
-    }
 }
 
-public struct GroupByTouple<each T: GroupBySQLExpression & Sendable>: GroupBySQLExpression, Sendable {
+public struct GroupByTouple<each T>: GroupBySQLExpression where repeat each T: GroupBySQLExpression {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
 
-    // typing this `some SQLExpression` causes "SwiftEmitModule failed with nonzero exit code"
-    public var groupBySqlExpression: SQLList {
+    public var groupBySqlExpression: some SQLExpression {
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
         return SQLList(collector.expressions, separator: SQLRaw(", "))

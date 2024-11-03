@@ -23,6 +23,9 @@ let package = Package(
                 .product(name: "FluentKit", package: "fluent-kit"),
                 .product(name: "SQLKit", package: "sql-kit"),
                 .product(name: "PostgresKit", package: "postgres-kit"),
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny")
             ]
         ),
         .target(

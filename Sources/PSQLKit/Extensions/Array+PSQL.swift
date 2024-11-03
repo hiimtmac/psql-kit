@@ -6,7 +6,7 @@ import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLList
 import struct SQLKit.SQLSerializer
 
-extension Array: SQLExpression where Element: SQLExpression {
+extension Array: @retroactive SQLExpression where Element: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("(")
         SQLList(self).serialize(to: &serializer)

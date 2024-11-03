@@ -8,27 +8,20 @@ import struct SQLKit.SQLSerializer
 
 extension EmptyExpression: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression {
-        _Query()
+        _Empty()
     }
 
     public var queryIsNull: Bool { true }
-
-    private struct _Query: SQLExpression {
-        func serialize(to serializer: inout SQLSerializer) {
-            fatalError("Should not be serialized")
-        }
-    }
 }
 
-public struct QueryTouple<each T: QuerySQLExpression & Sendable>: QuerySQLExpression, Sendable {
+public struct QueryTouple<each T>: QuerySQLExpression where repeat each T: QuerySQLExpression {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
 
-    // typing this `some SQLExpression` causes "SwiftEmitModule failed with nonzero exit code"
-    public var querySqlExpression: SQLList {
+    public var querySqlExpression: some SQLExpression {
         var collector = Collector()
         _ = (repeat collector.append(exp: each content))
         return SQLList(collector.expressions, separator: SQLRaw(" "))

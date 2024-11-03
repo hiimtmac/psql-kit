@@ -5,7 +5,7 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-extension Optional: SQLExpression where Wrapped: SQLExpression {
+extension Optional: @retroactive SQLExpression where Wrapped: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         if let self = self {
             self.serialize(to: &serializer)

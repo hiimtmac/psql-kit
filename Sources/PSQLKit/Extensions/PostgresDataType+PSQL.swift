@@ -5,7 +5,7 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-extension PostgresDataType: SQLExpression {
+extension PostgresDataType: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         guard let knownSQLName else { return }
         serializer.write("::")
