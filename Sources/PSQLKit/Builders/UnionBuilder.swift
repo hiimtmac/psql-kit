@@ -20,7 +20,7 @@ extension EmptyExpression: UnionSQLExpression {
     }
 }
 
-public struct UnionTouple<each T: UnionSQLExpression>: UnionSQLExpression {
+public struct UnionTouple<each T: UnionSQLExpression & Sendable>: UnionSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

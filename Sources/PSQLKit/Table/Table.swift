@@ -13,7 +13,7 @@ import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
 @dynamicMemberLookup
-public protocol Table: FromSQLExpression {
+public protocol Table: FromSQLExpression, Sendable {
     init()
     /// fluent `table`
     static var schema: String { get }

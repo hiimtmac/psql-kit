@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct QueryDirective<T: QuerySQLExpression>: SQLExpression {
+public struct QueryDirective<T: QuerySQLExpression & Sendable>: SQLExpression {
     let content: T
 
     init(_ content: T) {
@@ -27,7 +27,7 @@ extension QueryDirective: UnionSQLExpression {
 
 // MARK: - SubqueryModifier
 
-public struct SubQuery<T: QuerySQLExpression>: SQLExpression {
+public struct SubQuery<T: QuerySQLExpression & Sendable>: SQLExpression {
     let name: String
     let content: T
 
@@ -81,7 +81,7 @@ extension QueryDirective: SelectSQLExpression {
 
 // MARK: - WithModifier
 
-public struct WithQuery<T: QuerySQLExpression>: SQLExpression {
+public struct WithQuery<T: QuerySQLExpression & Sendable>: SQLExpression {
     let name: String
     let content: T
 

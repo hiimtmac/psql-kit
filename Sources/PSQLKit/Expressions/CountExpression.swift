@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct CountExpression<Content>: AggregateExpression {
+public struct CountExpression<Content: Sendable>: AggregateExpression, Sendable {
     let content: Content
     let isDistinct: Bool
 

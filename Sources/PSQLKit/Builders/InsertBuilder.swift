@@ -24,7 +24,7 @@ extension EmptyExpression: InsertSQLExpression {
     }
 }
 
-public struct InsertTouple<each T: InsertSQLExpression>: InsertSQLExpression {
+public struct InsertTouple<each T: InsertSQLExpression & Sendable>: InsertSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

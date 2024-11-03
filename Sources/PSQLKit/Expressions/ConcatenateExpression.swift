@@ -10,7 +10,7 @@ public protocol Concatenatable: BaseSQLExpression {}
 
 // MARK: ConcatenateExpression
 
-public struct ConcatenateExpression {
+public struct ConcatenateExpression: Sendable {
     let values: [any SQLExpression]
 
     public init<T0, T1>

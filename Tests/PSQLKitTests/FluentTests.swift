@@ -6,7 +6,7 @@ import XCTest
 @testable import PSQLKit
 
 final class FluentTests: PSQLTestCase {
-    final class Pet: Model, Table {
+    final class Pet: Model, Table, @unchecked Sendable {
         static let schema = "pet"
 
         @ID
@@ -21,7 +21,7 @@ final class FluentTests: PSQLTestCase {
         init() {}
     }
 
-    final class Thing: Model, Table {
+    final class Thing: Model, Table, @unchecked Sendable {
         static let schema = "pet"
 
         @ID
@@ -34,7 +34,7 @@ final class FluentTests: PSQLTestCase {
         init() {}
     }
 
-    final class Owner: Model, Table {
+    final class Owner: Model, Table, @unchecked Sendable {
         static let schema = "owner"
 
         @ID

@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct AllTableSelection<T> where T: Table {
+public struct AllTableSelection<T: Sendable>: Sendable where T: Table {
     let table: T
 }
 
@@ -39,7 +39,7 @@ extension AllTableSelection: SelectSQLExpression {
 // MARK: - Alias
 
 extension AllTableSelection {
-    public struct Alias {
+    public struct Alias: Sendable {
         let table: TableAlias<T>
     }
 }

@@ -13,7 +13,7 @@ public enum OrderByDirection: String, SQLExpression {
     }
 }
 
-public struct OrderByDirective<T: OrderBySQLExpression>: SQLExpression {
+public struct OrderByDirective<T: OrderBySQLExpression & Sendable>: SQLExpression {
     let content: T
 
     init(_ content: T) {
@@ -32,7 +32,7 @@ public struct OrderByDirective<T: OrderBySQLExpression>: SQLExpression {
     }
 }
 
-public struct OrderByModifier<Content: OrderBySQLExpression>: OrderBySQLExpression {
+public struct OrderByModifier<Content: OrderBySQLExpression & Sendable>: OrderBySQLExpression, Sendable {
     let content: Content
     let direction: OrderByDirection
 

@@ -5,7 +5,7 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct ArrayLengthExpression<Content>: AggregateExpression where
+public struct ArrayLengthExpression<Content: Sendable>: AggregateExpression, Sendable where
     Content: PSQLArrayRepresentable
 {
     let content: Content

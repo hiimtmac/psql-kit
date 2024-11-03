@@ -20,7 +20,7 @@ extension EmptyExpression: SelectSQLExpression {
     }
 }
 
-public struct SelectTouple<each T: SelectSQLExpression>: SelectSQLExpression {
+public struct SelectTouple<each T: SelectSQLExpression & Sendable>: SelectSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

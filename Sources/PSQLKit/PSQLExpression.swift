@@ -14,7 +14,7 @@ extension PSQLExpression where Self: SQLExpression {
     }
 }
 
-extension PSQLExpression where Self: Encodable {
+extension PSQLExpression where Self: Encodable & Sendable {
     public func asBind() -> PSQLBind<Self> {
         .init(self)
     }

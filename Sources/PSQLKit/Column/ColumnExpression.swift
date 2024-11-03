@@ -6,7 +6,7 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct ColumnExpression<T> where T: PSQLExpression {
+public struct ColumnExpression<T>: Sendable where T: PSQLExpression {
     let aliasName: String?
     let spaceName: String?
     let schemaName: String?

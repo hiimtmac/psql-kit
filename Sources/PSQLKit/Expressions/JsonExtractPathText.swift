@@ -12,7 +12,7 @@ import struct SQLKit.SQLSerializer
 
 public protocol JsonbExtractable: BaseSQLExpression {}
 
-public struct JsonbExtractPathTextExpression<Content> {
+public struct JsonbExtractPathTextExpression<Content>: Sendable {
     let content: any SQLExpression
     let pathElements: [String]
 

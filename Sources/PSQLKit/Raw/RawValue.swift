@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct RawValue<T> where T: PSQLExpression & SQLExpression {
+public struct RawValue<T>: Sendable where T: PSQLExpression & SQLExpression {
     let value: T
 
     public init(_ value: T) {
@@ -40,7 +40,7 @@ extension RawValue: SelectSQLExpression {
 // MARK: - Alias
 
 extension RawValue {
-    public struct Alias {
+    public struct Alias: Sendable {
         let value: T
         let alias: String
 

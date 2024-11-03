@@ -5,7 +5,7 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct GenerateSeriesExpression<Content>: SQLExpression where Content: SelectSQLExpression {
+public struct GenerateSeriesExpression<Content: Sendable>: SQLExpression where Content: SelectSQLExpression {
     let lower: Content
     let upper: Content
     let interval: any SQLExpression

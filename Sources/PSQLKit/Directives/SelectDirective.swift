@@ -6,7 +6,7 @@ import struct SQLKit.SQLSerializer
 
 // https://github.com/apple/swift-evolution/blob/main/proposals/0289-result-builders.md
 
-public struct SelectDirective<T: SelectSQLExpression>: SelectSQLExpression, SQLExpression {
+public struct SelectDirective<T: SelectSQLExpression & Sendable>: SelectSQLExpression, SQLExpression, Sendable {
     let content: T
 
     init(_ content: T) {
@@ -29,7 +29,7 @@ public struct SelectDirective<T: SelectSQLExpression>: SelectSQLExpression, SQLE
     }
 }
 
-public struct SelectModifier<T: SelectSQLExpression, U: SelectSQLExpression>: SQLExpression {
+public struct SelectModifier<T: SelectSQLExpression & Sendable, U: SelectSQLExpression & Sendable>: SQLExpression {
     let select: SelectDirective<T>
     let modifier: U
 
@@ -45,7 +45,7 @@ public struct SelectModifier<T: SelectSQLExpression, U: SelectSQLExpression>: SQ
     }
 }
 
-public struct DistinctModifier<T: SelectSQLExpression>: SelectSQLExpression {
+public struct DistinctModifier<T: SelectSQLExpression & Sendable>: SelectSQLExpression, Sendable {
     let content: T
 
     init(_ content: T) {

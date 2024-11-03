@@ -5,7 +5,7 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct ArrayConcatenateExpression<T, U>: AggregateExpression where
+public struct ArrayConcatenateExpression<T: Sendable, U: Sendable>: AggregateExpression & Sendable where
     T: PSQLArrayRepresentable & TypeEquatable,
     U: PSQLArrayRepresentable & TypeEquatable,
     T.CompareType == U.CompareType

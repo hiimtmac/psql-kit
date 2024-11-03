@@ -6,7 +6,7 @@ import PSQLKit
 import XCTest
 
 final class AdvancedTests: PSQLTestCase {
-    final class Pet: Model, Table {
+    final class Pet: Model, Table, @unchecked Sendable {
         static let schema = "pet"
 
         @ID
@@ -19,7 +19,7 @@ final class AdvancedTests: PSQLTestCase {
         init() {}
     }
 
-    final class Owner: Model, Table {
+    final class Owner: Model, Table, @unchecked Sendable {
         static let schema = "owner"
 
         @ID
@@ -34,7 +34,7 @@ final class AdvancedTests: PSQLTestCase {
         init() {}
     }
     
-    final class ModelSpace: Model, Table {
+    final class ModelSpace: Model, Table, @unchecked Sendable {
         static let schema = "schema"
         static let space: String? = "space"
 
@@ -46,25 +46,25 @@ final class AdvancedTests: PSQLTestCase {
         init() {}
     }
     
-    struct TableSpace: Table {
+    struct TableSpace: Table, @unchecked Sendable {
         static let schema: String = "schema"
         static let path: String? = "space"
         @Column(key: "name")
         var name: String
     }
 
-    struct DateRange: Table {
+    struct DateRange: Table, @unchecked Sendable {
         static let schema: String = "date_range"
         @Column(key: "date")
         var date: PSQLDate
     }
 
-    struct OwnerFilter: Table {
+    struct OwnerFilter: Table, @unchecked Sendable {
         @Column(key: "id")
         var id: UUID
     }
 
-    struct OwnerDateSeries: Table {
+    struct OwnerDateSeries: Table, @unchecked Sendable {
         @OptionalColumn(key: "id")
         var id: UUID?
         @Column(key: "date")

@@ -20,7 +20,7 @@ extension EmptyExpression: UpdateSQLExpression {
     }
 }
 
-public struct UpdateTouple<each T: UpdateSQLExpression>: UpdateSQLExpression {
+public struct UpdateTouple<each T: UpdateSQLExpression & Sendable>: UpdateSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

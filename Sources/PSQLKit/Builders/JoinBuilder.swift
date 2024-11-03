@@ -20,7 +20,7 @@ extension EmptyExpression: JoinSQLExpression {
     }
 }
 
-public struct JoinTouple<each T: JoinSQLExpression>: JoinSQLExpression {
+public struct JoinTouple<each T: JoinSQLExpression & Sendable>: JoinSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

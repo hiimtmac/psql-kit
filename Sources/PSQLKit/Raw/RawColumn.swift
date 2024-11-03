@@ -5,7 +5,7 @@ import struct PostgresNIO.PostgresDataType
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct RawColumn<T> where T: PSQLExpression {
+public struct RawColumn<T>: Sendable where T: PSQLExpression {
     let column: String
 
     public init(_ column: String) {
@@ -104,7 +104,7 @@ extension RawColumn: CompareSQLExpression {
 // MARK: - Alias
 
 extension RawColumn {
-    public struct Alias {
+    public struct Alias: Sendable {
         let column: RawColumn<T>
         let alias: String
 

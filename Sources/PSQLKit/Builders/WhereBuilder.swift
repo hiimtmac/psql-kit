@@ -20,7 +20,7 @@ extension EmptyExpression: WhereSQLExpression {
     }
 }
 
-public struct WhereTouple<each T: WhereSQLExpression>: WhereSQLExpression {
+public struct WhereTouple<each T: WhereSQLExpression & Sendable>: WhereSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

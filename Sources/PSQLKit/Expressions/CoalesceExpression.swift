@@ -17,7 +17,7 @@ public protocol Coalescable: BaseSQLExpression {}
 //
 // }
 
-public struct CoalesceExpression<T> where
+public struct CoalesceExpression<T>: Sendable where
     T: TypeEquatable
 {
     let values: [any SQLExpression]

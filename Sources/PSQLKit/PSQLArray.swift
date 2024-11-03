@@ -8,7 +8,7 @@ import struct SQLKit.SQLSerializer
 
 public protocol PSQLArrayRepresentable {}
 
-public struct PSQLArray<T>: PSQLArrayRepresentable where
+public struct PSQLArray<T: Sendable>: PSQLArrayRepresentable, Sendable where
     T: PSQLExpression
 {
     let items: [T]

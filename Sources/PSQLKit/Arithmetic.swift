@@ -22,7 +22,7 @@ public struct ArithmeticOperator: SQLExpression {
     }
 }
 
-public struct ArithmeticExpression<T, U> where
+public struct ArithmeticExpression<T: Sendable, U: Sendable>: Sendable where
     T: TypeEquatable,
     U: TypeEquatable,
     T.CompareType == U.CompareType

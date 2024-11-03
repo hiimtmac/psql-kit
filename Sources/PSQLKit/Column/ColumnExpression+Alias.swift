@@ -6,7 +6,7 @@ import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
 extension ColumnExpression {
-    public struct Alias {
+    public struct Alias: Sendable {
         let column: ColumnExpression<T>
         let alias: String
     }

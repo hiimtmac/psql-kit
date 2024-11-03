@@ -20,7 +20,7 @@ extension EmptyExpression: QuerySQLExpression {
     }
 }
 
-public struct QueryTouple<each T: QuerySQLExpression>: QuerySQLExpression {
+public struct QueryTouple<each T: QuerySQLExpression & Sendable>: QuerySQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

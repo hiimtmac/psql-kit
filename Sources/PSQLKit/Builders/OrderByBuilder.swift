@@ -20,7 +20,7 @@ extension EmptyExpression: OrderBySQLExpression {
     }
 }
 
-public struct OrderByTouple<each T: OrderBySQLExpression>: OrderBySQLExpression {
+public struct OrderByTouple<each T: OrderBySQLExpression & Sendable>: OrderBySQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

@@ -5,7 +5,7 @@ import XCTest
 @testable import PSQLKit
 
 final class SQLExpressionTests: XCTestCase {
-    struct Thing: Table {
+    struct Thing: Table, @unchecked Sendable {
         @OptionalColumn(key: "id")
         var id: UUID?
         @Column(key: "name")

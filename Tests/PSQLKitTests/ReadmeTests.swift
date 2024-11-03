@@ -253,7 +253,7 @@ final class ReadmeTests: PSQLTestCase {
     }
 
     func testTransform() {
-        final class FluentModel: Model, Table {
+        final class FluentModel: Model, Table, @unchecked Sendable {
             static let schema = "my_model"
             @ID
             var id: UUID?
@@ -344,7 +344,7 @@ final class ReadmeTests: PSQLTestCase {
     }
 
     func testSchema() {
-        final class FluentModel: Model, Table {
+        final class FluentModel: Model, Table, @unchecked Sendable {
             static let schema = "my_model"
             static let path: String? = "custom_path"
             @ID

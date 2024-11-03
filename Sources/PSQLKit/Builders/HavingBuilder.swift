@@ -20,7 +20,7 @@ extension EmptyExpression: HavingSQLExpression {
     }
 }
 
-public struct HavingTouple<each T: HavingSQLExpression>: HavingSQLExpression {
+public struct HavingTouple<each T: HavingSQLExpression & Sendable>: HavingSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

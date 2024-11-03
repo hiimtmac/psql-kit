@@ -12,7 +12,7 @@ import protocol SQLKit.SQLExpression
 import protocol SQLKit.SQLRow
 import struct SQLKit.SQLSerializer
 
-final class TestSQLDatabase: SQLDatabase {
+final class TestSQLDatabase: SQLDatabase, @unchecked Sendable {
     let logger: Logger
     let eventLoop: any EventLoop
     var results: [String]

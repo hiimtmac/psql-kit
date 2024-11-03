@@ -13,7 +13,7 @@ import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
 @dynamicMemberLookup
-public struct TableAlias<T> where T: Table {
+public struct TableAlias<T: Sendable>: Sendable where T: Table {
     /// table alias
     let alias: String
 

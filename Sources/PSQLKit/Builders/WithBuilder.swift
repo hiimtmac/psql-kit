@@ -20,7 +20,7 @@ extension EmptyExpression: WithSQLExpression {
     }
 }
 
-public struct WithTouple<each T: WithSQLExpression>: WithSQLExpression {
+public struct WithTouple<each T: WithSQLExpression & Sendable>: WithSQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

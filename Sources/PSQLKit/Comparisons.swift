@@ -35,7 +35,7 @@ public struct CompareOperator: SQLExpression {
     }
 }
 
-public struct CompareExpression<T, U> where
+public struct CompareExpression<T: Sendable, U: Sendable>: Sendable where
     T: CompareSQLExpression,
     U: CompareSQLExpression
 {

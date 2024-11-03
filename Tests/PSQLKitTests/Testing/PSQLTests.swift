@@ -7,7 +7,7 @@ import SQLKit
 import XCTest
 @testable import PSQLKit
 
-final class FluentModel: Model, Table {
+final class FluentModel: Model, Table, @unchecked Sendable {
     static let schema = "my_model"
 
     @ID
@@ -29,7 +29,7 @@ final class FluentModel: Model, Table {
 
     init() {}
 
-    final class Pet: Fields, TableObject {
+    final class Pet: Fields, TableObject, @unchecked Sendable {
         @Field(key: "name")
         var name: String
         @Field(key: "type")
@@ -39,7 +39,7 @@ final class FluentModel: Model, Table {
 
         init() {}
 
-        final class Info: Fields, TableObject {
+        final class Info: Fields, TableObject, @unchecked Sendable {
             @Field(key: "name")
             var name: String
 
@@ -55,7 +55,7 @@ final class FluentModel: Model, Table {
     }
 }
 
-struct PSQLModel: Table {
+struct PSQLModel: Table, @unchecked Sendable {
     static let schema = "my_model"
 
     @Column(key: "id")

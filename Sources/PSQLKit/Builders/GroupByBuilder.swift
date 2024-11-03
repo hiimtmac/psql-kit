@@ -20,7 +20,7 @@ extension EmptyExpression: GroupBySQLExpression {
     }
 }
 
-public struct GroupByTouple<each T: GroupBySQLExpression>: GroupBySQLExpression {
+public struct GroupByTouple<each T: GroupBySQLExpression & Sendable>: GroupBySQLExpression, Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {

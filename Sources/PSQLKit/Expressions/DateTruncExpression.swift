@@ -4,7 +4,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLSerializer
 
-public struct DateTruncExpression<Content>: AggregateExpression where
+public struct DateTruncExpression<Content: Sendable>: AggregateExpression, Sendable where
     Content: PSQLArrayRepresentable & TypeEquatable
 {
     let precision: String
