@@ -14,20 +14,6 @@ extension EmptyExpression: WithSQLExpression {
     public var withIsNull: Bool { true }
 }
 
-public struct WithTouple<each T>: WithSQLExpression where repeat each T: WithSQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var withSqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(", "))
-    }
-}
-
 extension _ConditionalContent: WithSQLExpression where T: WithSQLExpression, U: WithSQLExpression {
     public var withSqlExpression: some SQLExpression {
         _With(content: self)
@@ -62,11 +48,11 @@ public enum WithBuilder {
     ) -> Content where Content: WithSQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> WithTouple< repeat each Content> where repeat each Content: WithSQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: WithSQLExpression {
         .init(repeat each content)
     }
 }

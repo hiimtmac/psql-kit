@@ -14,20 +14,6 @@ extension EmptyExpression: OrderBySQLExpression {
     public var orderByIsNull: Bool { true }
 }
 
-public struct OrderByTouple<each T>: OrderBySQLExpression where repeat each T: OrderBySQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var orderBySqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(", "))
-    }
-}
-
 extension _ConditionalContent: OrderBySQLExpression where T: OrderBySQLExpression, U: OrderBySQLExpression {
     public var orderBySqlExpression: some SQLExpression {
         _OrderBy(content: self)
@@ -62,11 +48,11 @@ public enum OrderByBuilder {
     ) -> Content where Content: OrderBySQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> OrderByTouple< repeat each Content> where repeat each Content: OrderBySQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: OrderBySQLExpression {
         .init(repeat each content)
     }
 }

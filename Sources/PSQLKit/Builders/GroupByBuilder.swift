@@ -14,20 +14,6 @@ extension EmptyExpression: GroupBySQLExpression {
     public var groupByIsNull: Bool { true }
 }
 
-public struct GroupByTouple<each T>: GroupBySQLExpression where repeat each T: GroupBySQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var groupBySqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(", "))
-    }
-}
-
 extension _ConditionalContent: GroupBySQLExpression where T: GroupBySQLExpression, U: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
         _GroupBY(content: self)
@@ -62,13 +48,14 @@ public enum GroupByBuilder {
     ) -> Content where Content: GroupBySQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> GroupByTouple< repeat each Content> where repeat each Content: GroupBySQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: GroupBySQLExpression {
         .init(repeat each content)
     }
+
 }
 
 extension GroupByBuilder {

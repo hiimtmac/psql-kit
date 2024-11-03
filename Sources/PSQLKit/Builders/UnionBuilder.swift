@@ -14,20 +14,6 @@ extension EmptyExpression: UnionSQLExpression {
     public var unionIsNull: Bool { true }
 }
 
-public struct UnionTouple<each T>: UnionSQLExpression where repeat each T: UnionSQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var unionSqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(" UNION "))
-    }
-}
-
 extension _ConditionalContent: UnionSQLExpression where T: UnionSQLExpression, U: UnionSQLExpression {
     public var unionSqlExpression: some SQLExpression {
         _Union(content: self)
@@ -62,11 +48,11 @@ public enum UnionBuilder {
     ) -> Content where Content: UnionSQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> UnionTouple< repeat each Content> where repeat each Content: UnionSQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: UnionSQLExpression {
         .init(repeat each content)
     }
 }

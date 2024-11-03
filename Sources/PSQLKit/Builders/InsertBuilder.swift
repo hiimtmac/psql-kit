@@ -18,27 +18,6 @@ extension EmptyExpression: InsertSQLExpression {
     public var insertIsNull: Bool { true }
 }
 
-public struct InsertTouple<each T>: InsertSQLExpression where repeat each T: InsertSQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var insertColumnSqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(column: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(", "))
-    }
-
-    // typing this `some SQLExpression` causes "SwiftEmitModule failed with nonzero exit code"
-    public var insertValueSqlExpression: SQLList {
-        var collector = Collector()
-        _ = (repeat collector.append(value: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(", "))
-    }
-}
-
 extension _ConditionalContent: InsertSQLExpression where T: InsertSQLExpression, U: InsertSQLExpression {
     public var insertColumnSqlExpression: some SQLExpression {
         _InsertColumn(content: self)
@@ -88,11 +67,11 @@ public enum InsertBuilder {
     ) -> Content where Content: InsertSQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> InsertTouple< repeat each Content> where repeat each Content: InsertSQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: InsertSQLExpression {
         .init(repeat each content)
     }
 }

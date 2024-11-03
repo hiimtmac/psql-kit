@@ -14,20 +14,6 @@ extension EmptyExpression: JoinSQLExpression {
     public var joinIsNull: Bool { true }
 }
 
-public struct JoinTouple<each T>: JoinSQLExpression where repeat each T: JoinSQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var joinSqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(" AND "))
-    }
-}
-
 extension _ConditionalContent: JoinSQLExpression where T: JoinSQLExpression, U: JoinSQLExpression {
     public var joinSqlExpression: some SQLExpression {
         _Join(content: self)
@@ -62,11 +48,11 @@ public enum JoinBuilder {
     ) -> Content where Content: JoinSQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> JoinTouple< repeat each Content> where repeat each Content: JoinSQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: JoinSQLExpression {
         .init(repeat each content)
     }
 }

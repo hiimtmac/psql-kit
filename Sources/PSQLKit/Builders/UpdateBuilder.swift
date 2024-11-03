@@ -14,20 +14,6 @@ extension EmptyExpression: UpdateSQLExpression {
     public var updateIsNull: Bool { true }
 }
 
-public struct UpdateTouple<each T>: UpdateSQLExpression where repeat each T: UpdateSQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var updateSqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(", "))
-    }
-}
-
 extension _ConditionalContent: UpdateSQLExpression where T: UpdateSQLExpression, U: UpdateSQLExpression {
     public var updateSqlExpression: some SQLExpression {
         _Update(content: self)
@@ -62,11 +48,11 @@ public enum UpdateBuilder {
     ) -> Content where Content: UpdateSQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> UpdateTouple< repeat each Content> where repeat each Content: UpdateSQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: UpdateSQLExpression {
         .init(repeat each content)
     }
 }

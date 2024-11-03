@@ -14,20 +14,6 @@ extension EmptyExpression: WhereSQLExpression {
     public var whereIsNull: Bool { true }
 }
 
-public struct WhereTouple<each T>: WhereSQLExpression where repeat each T: WhereSQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var whereSqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(" AND "))
-    }
-}
-
 extension _ConditionalContent: WhereSQLExpression where T: WhereSQLExpression, U: WhereSQLExpression {
     public var whereSqlExpression: some SQLExpression {
         _Where(content: self)
@@ -66,7 +52,7 @@ public enum WhereBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> WhereTouple< repeat each Content> where repeat each Content: WhereSQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: WhereSQLExpression {
         .init(repeat each content)
     }
 }

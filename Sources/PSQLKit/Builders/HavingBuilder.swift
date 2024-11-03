@@ -14,20 +14,6 @@ extension EmptyExpression: HavingSQLExpression {
     public var havingIsNull: Bool { true }
 }
 
-public struct HavingTouple<each T>: HavingSQLExpression where repeat each T: HavingSQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var havingSqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(" AND "))
-    }
-}
-
 extension _ConditionalContent: HavingSQLExpression where T: HavingSQLExpression, U: HavingSQLExpression {
     public var havingSqlExpression: some SQLExpression {
         _Having(content: self)
@@ -62,11 +48,11 @@ public enum HavingBuilder {
     ) -> Content where Content: HavingSQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> HavingTouple< repeat each Content> where repeat each Content: HavingSQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: HavingSQLExpression {
         .init(repeat each content)
     }
 }

@@ -14,20 +14,6 @@ extension EmptyExpression: QuerySQLExpression {
     public var queryIsNull: Bool { true }
 }
 
-public struct QueryTouple<each T>: QuerySQLExpression where repeat each T: QuerySQLExpression {
-    let content: (repeat each T)
-
-    init(_ content: repeat each T) {
-        self.content = (repeat each content)
-    }
-
-    public var querySqlExpression: some SQLExpression {
-        var collector = Collector()
-        _ = (repeat collector.append(exp: each content))
-        return SQLList(collector.expressions, separator: SQLRaw(" "))
-    }
-}
-
 extension _ConditionalContent: QuerySQLExpression where T: QuerySQLExpression, U: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression {
         _Query(content: self)
@@ -62,11 +48,11 @@ public enum QueryBuilder {
     ) -> Content where Content: QuerySQLExpression {
         content
     }
-
+    
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTouple< repeat each Content> where repeat each Content: QuerySQLExpression {
+    ) -> Touple<repeat each Content> where repeat each Content: QuerySQLExpression {
         .init(repeat each content)
     }
 }
