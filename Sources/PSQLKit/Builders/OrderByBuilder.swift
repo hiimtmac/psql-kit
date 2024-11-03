@@ -52,7 +52,7 @@ public enum OrderByBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> Touple<repeat each Content> where repeat each Content: OrderBySQLExpression {
+    ) -> QueryTuple<repeat each Content> where repeat each Content: OrderBySQLExpression {
         .init(repeat each content)
     }
 }

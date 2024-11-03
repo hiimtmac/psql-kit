@@ -52,7 +52,7 @@ public enum FromBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> Touple<repeat each Content> where repeat each Content: FromSQLExpression {
+    ) -> QueryTuple<repeat each Content> where repeat each Content: FromSQLExpression {
         .init(repeat each content)
     }
 }

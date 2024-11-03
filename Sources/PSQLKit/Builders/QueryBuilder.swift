@@ -52,7 +52,7 @@ public enum QueryBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> Touple<repeat each Content> where repeat each Content: QuerySQLExpression {
+    ) -> QueryTuple<repeat each Content> where repeat each Content: QuerySQLExpression {
         .init(repeat each content)
     }
 }

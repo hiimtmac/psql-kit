@@ -8,7 +8,7 @@
 import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLList
 
-public struct Touple<each T>: Sendable where repeat each T: Sendable {
+public struct QueryTuple<each T>: Sendable where repeat each T: Sendable {
     let content: (repeat each T)
 
     init(_ content: repeat each T) {
@@ -16,25 +16,25 @@ public struct Touple<each T>: Sendable where repeat each T: Sendable {
     }
 }
 
-extension Touple: FromSQLExpression where repeat each T: FromSQLExpression {
+extension QueryTuple: FromSQLExpression where repeat each T: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression {
         SQLList(fromSQLExpressions: repeat each content)
     }
 }
 
-extension Touple: GroupBySQLExpression where repeat each T: GroupBySQLExpression {
+extension QueryTuple: GroupBySQLExpression where repeat each T: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
         SQLList(groupBySQLExpressions: repeat each content)
     }
 }
 
-extension Touple: HavingSQLExpression where repeat each T: HavingSQLExpression {
+extension QueryTuple: HavingSQLExpression where repeat each T: HavingSQLExpression {
     public var havingSqlExpression: some SQLExpression {
         SQLList(havingSQLExpressions: repeat each content)
     }
 }
 
-extension Touple: InsertSQLExpression where repeat each T: InsertSQLExpression {
+extension QueryTuple: InsertSQLExpression where repeat each T: InsertSQLExpression {
     public var insertColumnSqlExpression: some SQLExpression {
         SQLList(insertColumnSQLExpressions: repeat each content)
     }
@@ -44,49 +44,49 @@ extension Touple: InsertSQLExpression where repeat each T: InsertSQLExpression {
     }
 }
 
-extension Touple: JoinSQLExpression where repeat each T: JoinSQLExpression {
+extension QueryTuple: JoinSQLExpression where repeat each T: JoinSQLExpression {
     public var joinSqlExpression: some SQLExpression {
         SQLList(joinSQLExpressions: repeat each content)
     }
 }
 
-extension Touple: OrderBySQLExpression where repeat each T: OrderBySQLExpression {
+extension QueryTuple: OrderBySQLExpression where repeat each T: OrderBySQLExpression {
     public var orderBySqlExpression: some SQLExpression {
         SQLList(orderBySQLExpressions: repeat each content)
     }
 }
 
-extension Touple: QuerySQLExpression where repeat each T: QuerySQLExpression {
+extension QueryTuple: QuerySQLExpression where repeat each T: QuerySQLExpression {
     public var querySqlExpression: some SQLExpression {
         SQLList(querySQLExpressions: repeat each content)
     }
 }
 
-extension Touple: SelectSQLExpression where repeat each T: SelectSQLExpression {
+extension QueryTuple: SelectSQLExpression where repeat each T: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         SQLList(selectSQLExpressions: repeat each content)
     }
 }
 
-extension Touple: UnionSQLExpression where repeat each T: UnionSQLExpression {
+extension QueryTuple: UnionSQLExpression where repeat each T: UnionSQLExpression {
     public var unionSqlExpression: some SQLExpression {
         SQLList(unionSQLExpressions: repeat each content)
     }
 }
 
-extension Touple: UpdateSQLExpression where repeat each T: UpdateSQLExpression {
+extension QueryTuple: UpdateSQLExpression where repeat each T: UpdateSQLExpression {
     public var updateSqlExpression: some SQLExpression {
         SQLList(updateSQLExpressions: repeat each content)
     }
 }
 
-extension Touple: WhereSQLExpression where repeat each T: WhereSQLExpression {
+extension QueryTuple: WhereSQLExpression where repeat each T: WhereSQLExpression {
     public var whereSqlExpression: some SQLExpression {
         SQLList(whereSQLExpressions: repeat each content)
     }
 }
 
-extension Touple: WithSQLExpression where repeat each T: WithSQLExpression {
+extension QueryTuple: WithSQLExpression where repeat each T: WithSQLExpression {
     public var withSqlExpression: some SQLExpression {
         SQLList(withSQLExpressions: repeat each content)
     }

@@ -71,7 +71,7 @@ public enum InsertBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> Touple<repeat each Content> where repeat each Content: InsertSQLExpression {
+    ) -> QueryTuple<repeat each Content> where repeat each Content: InsertSQLExpression {
         .init(repeat each content)
     }
 }

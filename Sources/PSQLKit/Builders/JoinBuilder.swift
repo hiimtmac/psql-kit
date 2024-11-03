@@ -52,7 +52,7 @@ public enum JoinBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> Touple<repeat each Content> where repeat each Content: JoinSQLExpression {
+    ) -> QueryTuple<repeat each Content> where repeat each Content: JoinSQLExpression {
         .init(repeat each content)
     }
 }

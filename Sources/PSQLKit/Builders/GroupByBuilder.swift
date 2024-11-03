@@ -52,7 +52,7 @@ public enum GroupByBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> Touple<repeat each Content> where repeat each Content: GroupBySQLExpression {
+    ) -> QueryTuple<repeat each Content> where repeat each Content: GroupBySQLExpression {
         .init(repeat each content)
     }
 
