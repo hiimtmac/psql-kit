@@ -1,8 +1,7 @@
 // RawValue.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct RawValue<T>: Sendable where T: PSQLExpression & SQLExpression {
     let value: T

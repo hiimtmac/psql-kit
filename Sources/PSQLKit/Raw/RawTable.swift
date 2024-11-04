@@ -1,8 +1,7 @@
 // RawTable.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct RawTable: SQLExpression {
     let table: String
