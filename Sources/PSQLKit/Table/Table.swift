@@ -1,18 +1,7 @@
 // Table.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import class FluentKit.FieldProperty
-import class FluentKit.GroupProperty
-import class FluentKit.IDProperty
-import protocol FluentKit.Model
-import class FluentKit.OptionalFieldProperty
-import class FluentKit.OptionalParentProperty
-import class FluentKit.ParentProperty
-import class FluentKit.TimestampProperty
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
-
-#warning("move and figure out")
+import SQLKit
 
 @dynamicMemberLookup
 public protocol Table: FromSQLExpression, Sendable {
@@ -91,108 +80,6 @@ extension Table {
             spaceName: Self.path,
             schemaName: Self.schema,
             columnName: field.key
-        )
-    }
-}
-
-extension Table where Self: Model {
-    public static var path: String? { space }
-    
-    // MARK: - FieldProperty
-
-    public static subscript<T>(
-        dynamicMember keyPath: KeyPath<Self, FieldProperty<Self, T>>
-    ) -> ColumnExpression<T> {
-        let field = Self()[keyPath: keyPath]
-        return ColumnExpression(
-            aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
-            columnName: field.key.description
-        )
-    }
-
-    // MARK: - OptionalFieldProperty
-
-    public static subscript<T>(
-        dynamicMember keyPath: KeyPath<Self, OptionalFieldProperty<Self, T>>
-    ) -> ColumnExpression<T> {
-        let field = Self()[keyPath: keyPath]
-        return ColumnExpression(
-            aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
-            columnName: field.key.description
-        )
-    }
-
-    // MARK: - IDProperty
-
-    public static subscript<T>(
-        dynamicMember keyPath: KeyPath<Self, IDProperty<Self, T>>
-    ) -> ColumnExpression<T> {
-        let field = Self()[keyPath: keyPath]
-        return ColumnExpression(
-            aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
-            columnName: field.key.description
-        )
-    }
-
-    // MARK: - ParentProperty
-
-    public static subscript<T>(
-        dynamicMember keyPath: KeyPath<Self, ParentProperty<Self, T>>
-    ) -> ColumnExpression<T.IDValue> where T: Model {
-        let field = Self()[keyPath: keyPath]
-        return ColumnExpression(
-            aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
-            columnName: field.$id.key.description
-        )
-    }
-
-    // MARK: - OptionalParentProperty
-
-    public static subscript<T>(
-        dynamicMember keyPath: KeyPath<Self, OptionalParentProperty<Self, T>>
-    ) -> ColumnExpression<T.IDValue> where T: Model {
-        let field = Self()[keyPath: keyPath]
-        return ColumnExpression(
-            aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
-            columnName: field.$id.key.description
-        )
-    }
-
-    // MARK: - TimestampProperty
-
-    public static subscript<T>(
-        dynamicMember keyPath: KeyPath<Self, TimestampProperty<Self, T>>
-    ) -> ColumnExpression<T.Value> {
-        let field = Self()[keyPath: keyPath]
-        return ColumnExpression(
-            aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
-            columnName: field.$timestamp.key.description
-        )
-    }
-
-    // MARK: - GroupProperty
-
-    public static subscript<T>(
-        dynamicMember keyPath: KeyPath<Self, GroupProperty<Self, T>>
-    ) -> ColumnExpression<T> {
-        let field = Self()[keyPath: keyPath]
-        return ColumnExpression(
-            aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
-            columnName: field.key.description
         )
     }
 }

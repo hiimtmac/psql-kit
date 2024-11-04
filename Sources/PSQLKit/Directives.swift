@@ -1,7 +1,7 @@
 // Directives.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
+import SQLKit
 
 public typealias FROM = FromDirective
 public typealias GROUPBY = GroupByDirective

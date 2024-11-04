@@ -2,9 +2,8 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import Foundation
-import struct PostgresNIO.PostgresDataType
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import PostgresNIO
+import SQLKit
 
 public struct ColumnExpression<T>: Sendable where T: PSQLExpression {
     let aliasName: String?
