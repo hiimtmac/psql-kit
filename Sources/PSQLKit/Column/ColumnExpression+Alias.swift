@@ -1,9 +1,8 @@
 // ColumnExpression+Alias.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import struct PostgresNIO.PostgresDataType
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import PostgresNIO
+import SQLKit
 
 extension ColumnExpression {
     public struct Alias: Sendable {
