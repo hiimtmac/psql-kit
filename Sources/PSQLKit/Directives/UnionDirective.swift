@@ -1,8 +1,7 @@
 // UnionDirective.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct UnionDirective<T>: SQLExpression where T: UnionSQLExpression & Sendable {
     let content: T

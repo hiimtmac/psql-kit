@@ -1,8 +1,7 @@
 // DateTruncExpression.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct DateTruncExpression<Content>: AggregateExpression, Sendable where
     Content: PSQLArrayRepresentable & TypeEquatable & Sendable

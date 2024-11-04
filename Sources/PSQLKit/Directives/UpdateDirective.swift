@@ -1,8 +1,7 @@
 // UpdateDirective.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct UpdateDirective<Table, T>: SQLExpression where Table: FromSQLExpression & Sendable, T: UpdateSQLExpression & Sendable {
     let table: Table

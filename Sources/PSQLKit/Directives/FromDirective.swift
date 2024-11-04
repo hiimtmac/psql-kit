@@ -1,8 +1,7 @@
 // FromDirective.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct FromDirective<T>: SQLExpression where T: FromSQLExpression & Sendable {
     let content: T

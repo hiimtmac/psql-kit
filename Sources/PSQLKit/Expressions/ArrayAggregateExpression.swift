@@ -1,8 +1,7 @@
 // ArrayAggregateExpression.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct ArrayAggregateExpression<Content>: AggregateExpression, Sendable where Content: Sendable {
     let content: Content

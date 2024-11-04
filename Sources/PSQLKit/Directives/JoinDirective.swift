@@ -1,9 +1,7 @@
 // JoinDirective.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import enum SQLKit.SQLJoinMethod
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct JoinDirective<Table, T>: SQLExpression where Table: FromSQLExpression & Sendable, T: JoinSQLExpression & Sendable {
     let table: Table

@@ -1,8 +1,7 @@
 // GroupByDirective.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct GroupByDirective<T>: SQLExpression where T: GroupBySQLExpression & Sendable {
     let content: T

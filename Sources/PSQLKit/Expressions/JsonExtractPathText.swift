@@ -10,6 +10,8 @@ import protocol SQLKit.SQLExpression
 import struct SQLKit.SQLList
 import struct SQLKit.SQLSerializer
 
+#warning("move and fix me")
+
 public protocol JsonbExtractable: BaseSQLExpression {}
 
 public struct JsonbExtractPathTextExpression<Content>: Sendable {

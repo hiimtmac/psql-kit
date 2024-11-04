@@ -1,8 +1,7 @@
 // HavingDirective.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct HavingDirective<T>: SQLExpression where T: HavingSQLExpression & Sendable {
     let content: T

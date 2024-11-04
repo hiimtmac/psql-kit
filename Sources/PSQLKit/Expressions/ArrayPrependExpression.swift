@@ -1,9 +1,8 @@
 // ArrayPrependExpression.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import struct PostgresNIO.PostgresDataType
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import PostgresNIO
+import SQLKit
 
 public struct ArrayPrependExpression<Content, T>: AggregateExpression, Sendable where
     Content: PSQLArrayRepresentable & TypeEquatable & Sendable,

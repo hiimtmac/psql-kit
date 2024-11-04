@@ -1,8 +1,7 @@
 // ReturningDirective.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLSerializer
+import SQLKit
 
 public struct ReturningDirective<T>: SQLExpression where T: SelectSQLExpression & Sendable {
     let content: T

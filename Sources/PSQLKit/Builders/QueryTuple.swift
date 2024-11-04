@@ -1,12 +1,7 @@
-//
-//  File.swift
-//  psql-kit
-//
-//  Created by Taylor McIntyre on 2024-11-03.
-//
+// QueryTuple.swift
+// Copyright (c) 2024 hiimtmac inc.
 
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLList
+import SQLKit
 
 public struct QueryTuple<each T>: Sendable where repeat each T: Sendable {
     let content: (repeat each T)
