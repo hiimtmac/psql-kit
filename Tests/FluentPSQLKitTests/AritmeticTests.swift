@@ -6,7 +6,6 @@ import XCTest
 
 final class ArithemticTests: PSQLTestCase {
     let f = FluentModel.as("x")
-    let p = PSQLModel.as("x")
 
     func testSelect() {
         SELECT {
@@ -16,16 +15,8 @@ final class ArithemticTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        SELECT {
-            p.$money / p.$money
-            p.$money + p.$money
-            (p.$money * p.$money).as("money")
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"SELECT ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC, ("x"."money"::NUMERIC + "x"."money"::NUMERIC)::NUMERIC, ("x"."money"::NUMERIC * "x"."money"::NUMERIC)::NUMERIC AS "money""#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testWhere() {
@@ -34,14 +25,8 @@ final class ArithemticTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            (p.$money / p.$money) > 4
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE (("x"."money" / "x"."money") > 4.0)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testTypeSwap() {
@@ -50,14 +35,8 @@ final class ArithemticTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        SELECT {
-            p.$money / p.$age.transform(to: Double.self)
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"SELECT ("x"."money"::NUMERIC / "x"."age"::NUMERIC)::NUMERIC"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testOptional() {
@@ -68,13 +47,7 @@ final class ArithemticTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        SELECT {
-            p.$money / double
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"SELECT ("x"."money"::NUMERIC / 8.0::NUMERIC)::NUMERIC"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }

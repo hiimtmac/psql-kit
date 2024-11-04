@@ -10,18 +10,12 @@ infix operator ...: LogicalConjunctionPrecedence
 
 final class WhereTests: PSQLTestCase {
     let f = FluentModel.as("x")
-    let p = PSQLModel.as("x")
 
     func testEqual() {
         WHERE {
             FluentModel.$name == FluentModel.$title
         }
         .serialize(to: &fluentSerializer)
-
-        WHERE {
-            PSQLModel.$name == PSQLModel.$title
-        }
-        .serialize(to: &psqlkitSerializer)
 
         let compare = #"WHERE ("my_model"."name" = "my_model"."title")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
@@ -35,12 +29,6 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            PSQLModel.$category != PSQLModel.$category
-            PSQLModel.$category == PSQLModel.Category.yes.rawValue
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("my_model"."category" != "my_model"."category") AND ("my_model"."category" = 'yes')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
         XCTAssertEqual(fluentSerializer.sql, compare)
@@ -53,15 +41,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            PSQLModel.$name == p.$title
-            p.$name != PSQLModel.$title
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("my_model"."name" = "x"."title") AND ("x"."name" != "my_model"."title")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testNotEqual() {
@@ -70,14 +51,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name != p.$title
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" != "x"."title")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIn() {
@@ -86,14 +61,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name <> ["name", "hi"]
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" NOT IN ('name', 'hi'))"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testNotIn() {
@@ -102,14 +71,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name >< ["name", "hi"]
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" IN ('name', 'hi'))"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testBetween() {
@@ -119,15 +82,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$age >< (20 ... 30)
-            p.$age >< ((p.$age) ... (p.$age))
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."age" BETWEEN 20 AND 30) AND ("x"."age" BETWEEN "x"."age" AND "x"."age")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testNotBetween() {
@@ -135,15 +91,9 @@ final class WhereTests: PSQLTestCase {
             f.$age <> (20 ... 30)
         }
         .serialize(to: &fluentSerializer)
-
-        WHERE {
-            p.$age <> (20 ... 30)
-        }
-        .serialize(to: &psqlkitSerializer)
-
+        
         let compare = #"WHERE ("x"."age" NOT BETWEEN 20 AND 30)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testLiteral() {
@@ -156,18 +106,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name == "hello"
-            p.$name != "hello"
-            p.$age < 29
-            p.$age <= 29
-            p.$age > 29
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" = 'hello') AND ("x"."name" != 'hello') AND ("x"."age" < 29) AND ("x"."age" <= 29) AND ("x"."age" > 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testWhereOr() {
@@ -176,14 +116,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name <> ["name", "hi"] || PSQLModel.$name != PSQLModel.$name
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE (("x"."name" NOT IN ('name', 'hi')) OR ("my_model"."name" != "my_model"."name"))"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testWhereRaw() {
@@ -192,14 +126,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name == RawColumn<String>("cool")
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" = "cool")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testWhereBind() {
@@ -208,14 +136,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            RawColumn<String>("cool") == PSQLBind("yes")
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("cool" = $1)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testWhereLikes() {
@@ -227,17 +149,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name ~~ "like"
-            p.$name !~~ "not like"
-            p.$name ~~* "ilike"
-            p.$name !~~* "not ilike"
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" LIKE 'like') AND ("x"."name" NOT LIKE 'not like') AND ("x"."name" ILIKE 'ilike') AND ("x"."name" NOT ILIKE 'not ilike')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testWhereTransforms() {
@@ -248,16 +161,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$name == "hi"
-            p.$name.transform(to: Int.self) == 8
-            p.$name.transform(to: Int.self) >< (8 ... 9)
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" = 'hi') AND ("x"."name" = 8) AND ("x"."name" BETWEEN 8 AND 9)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testWhereControlFlow() {
@@ -290,28 +195,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
-
-            switch t1 {
-            case .current:
-                p.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
-            case .missing:
-                p.$birthday >< PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
-            }
-
-            switch t2 {
-            case .current:
-                p.$birthday >< PSQLRange(from: date.psqlDate, to: date.psqlDate)
-            case .missing:
-                p.$birthday >< PSQLRange(from: date.psqlTimestamp, to: date.psqlTimestamp)
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01' AND '2020-01-01') AND ("x"."birthday" BETWEEN '2020-01-01 01:01 AM' AND '2020-01-01 01:01 AM')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseTrue() {
@@ -325,18 +210,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            if bool {
-                p.$name == "tmac"
-            } else {
-                p.$age == 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."name" = 'tmac')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseFalse() {
@@ -350,18 +225,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            if bool {
-                p.$name == "tmac"
-            } else {
-                p.$age == 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testSwitch() {
@@ -384,20 +249,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            switch option {
-            case .one: p.$name == "tmac"
-            case .two: p.$age == 29
-            case .three:
-                p.$age == 29
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfTrue() {
@@ -410,17 +263,8 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$age == 29
-            if bool {
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."age" = 29) AND ("x"."name" = 'tmac')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfFalse() {
@@ -433,28 +277,15 @@ final class WhereTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        WHERE {
-            p.$age == 29
-            if bool {
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"WHERE ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testEmpty() {
         WHERE {}
             .serialize(to: &fluentSerializer)
 
-        WHERE {}
-            .serialize(to: &psqlkitSerializer)
-
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }

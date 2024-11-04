@@ -73,12 +73,6 @@ final class AdvancedTests: PSQLTestCase {
     
     func testSpaces() {
         QUERY {
-            SELECT { TableSpace.$name }
-            FROM { TableSpace.table }
-        }
-        .serialize(to: &psqlkitSerializer)
-        
-        QUERY {
             SELECT { ModelSpace.$name }
             FROM { ModelSpace.table }
         }
@@ -86,19 +80,11 @@ final class AdvancedTests: PSQLTestCase {
         
         let compare = #"SELECT "space"."schema"."name"::TEXT FROM "space"."schema""#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
     
     func testSpacesAlias() {
-        let p = TableSpace.as("a")
         let f = ModelSpace.as("a")
-        
-        QUERY {
-            SELECT { p.$name }
-            FROM { p.table }
-        }
-        .serialize(to: &psqlkitSerializer)
-        
+
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
@@ -107,7 +93,6 @@ final class AdvancedTests: PSQLTestCase {
         
         let compare = #"SELECT "a"."name"::TEXT FROM "space"."schema" AS "a""#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testTypesCompile() {

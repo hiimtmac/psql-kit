@@ -6,7 +6,6 @@ import XCTest
 
 final class UpdateTests: PSQLTestCase {
     let f = FluentModel.as("x")
-    let p = PSQLModel.as("x")
 
     func testModel() {
         UPDATE(FluentModel.table) {
@@ -14,14 +13,8 @@ final class UpdateTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        UPDATE(PSQLModel.table) {
-            PSQLModel.$name => "hi"
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"UPDATE "my_model" SET "name" = 'hi'"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testModelAlias() {
@@ -30,14 +23,8 @@ final class UpdateTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        UPDATE(self.p.table) {
-            p.$name => "hi"
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi'"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testBoth() {
@@ -47,15 +34,8 @@ final class UpdateTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        UPDATE(self.p.table) {
-            PSQLModel.$name => "hi"
-            p.$name => "hi"
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi', "name" = 'hi'"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseTrue() {
@@ -69,18 +49,8 @@ final class UpdateTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        UPDATE(self.p.table) {
-            if bool {
-                p.$name => "hi"
-            } else {
-                p.$age => 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi'"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseFalse() {
@@ -94,18 +64,8 @@ final class UpdateTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        UPDATE(self.p.table) {
-            if bool {
-                p.$name => "hi"
-            } else {
-                p.$age => 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"UPDATE "my_model" AS "x" SET "age" = 29"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testSwitch() {
@@ -128,31 +88,15 @@ final class UpdateTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        UPDATE(self.p.table) {
-            switch option {
-            case .one: p.$name => "hi"
-            case .two: p.$age => 29
-            case .three:
-                p.$age => 29
-                p.$name => "hi"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"UPDATE "my_model" AS "x" SET "age" = 29"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testEmpty() {
         UPDATE(f.table) {}
             .serialize(to: &fluentSerializer)
 
-        UPDATE(p.table) {}
-            .serialize(to: &psqlkitSerializer)
-
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }

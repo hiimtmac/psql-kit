@@ -6,7 +6,6 @@ import XCTest
 
 final class NestedTests: PSQLTestCase {
     let f = FluentModel.as("x")
-    let p = PSQLModel.as("x")
 
     func testGroup() {
         SELECT {
@@ -15,14 +14,7 @@ final class NestedTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        SELECT {
-            JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$name)
-            JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$info, \.$name)
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet", 'name')::TEXT, JSONB_EXTRACT_PATH_TEXT("x"."pet", 'info', 'name')::TEXT"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }

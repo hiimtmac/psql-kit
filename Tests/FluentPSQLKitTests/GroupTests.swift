@@ -26,28 +26,7 @@ final class GroupTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        SELECT {
-            PSQLModel.$id
-            PSQLModel.$age
-            PSQLModel.$name
-            PSQLModel.$id
-            PSQLModel.$age
-            PSQLModel.$name
-            PSQLModel.$id
-            PSQLModel.$age
-            PSQLModel.$id
-            PSQLModel.$age
-            PSQLModel.$name
-            PSQLModel.$id
-            PSQLModel.$age
-            PSQLModel.$name
-            PSQLModel.$id
-            PSQLModel.$age
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }

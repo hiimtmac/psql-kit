@@ -6,7 +6,6 @@ import XCTest
 
 final class JoinTests: PSQLTestCase {
     let f = FluentModel.as("x")
-    let p = PSQLModel.as("x")
 
     func testJoinModel() {
         JOIN(FluentModel.table) {
@@ -14,14 +13,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(PSQLModel.table) {
-            PSQLModel.$name == PSQLModel.$name
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" ON ("my_model"."name" = "my_model"."name")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testJoinModelAlias() {
@@ -31,15 +24,8 @@ final class JoinTests: PSQLTestCase {
 
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {
-            p.$name == p.$name
-        }
-
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testJoinBoth() {
@@ -49,15 +35,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table, method: .left) {
-            p.$name == PSQLModel.$name
-            PSQLModel.$name == p.$name
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"LEFT JOIN "my_model" AS "x" ON ("x"."name" = "my_model"."name") AND ("my_model"."name" = "x"."name")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testJoinN() {
@@ -67,15 +46,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {
-            p.$name == p.$name
-            p.$name == PSQLModel.$name || p.$name != p.$name
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."name" = "x"."name") AND (("x"."name" = "my_model"."name") OR ("x"."name" != "x"."name"))"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testJoinRaw() {
@@ -84,14 +56,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(RawTable("cool")) {
-            p.$name == p.$name
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "cool" ON ("x"."name" = "x"."name")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseTrue() {
@@ -105,18 +71,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {
-            if bool {
-                p.$name == "tmac"
-            } else {
-                p.$age == 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."name" = 'tmac')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseFalse() {
@@ -130,18 +86,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {
-            if bool {
-                p.$name == "tmac"
-            } else {
-                p.$age == 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testSwitch() {
@@ -164,20 +110,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {
-            switch option {
-            case .one: p.$name == "tmac"
-            case .two: p.$age == 29
-            case .three:
-                p.$age == 29
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfTrue() {
@@ -190,17 +124,8 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {
-            p.$age == 29
-            if bool {
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."age" = 29) AND ("x"."name" = 'tmac')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfFalse() {
@@ -213,28 +138,15 @@ final class JoinTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {
-            p.$age == 29
-            if bool {
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"INNER JOIN "my_model" AS "x" ON ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testEmpty() {
         JOIN(self.f.table) {}
             .serialize(to: &fluentSerializer)
 
-        JOIN(self.p.table) {}
-            .serialize(to: &psqlkitSerializer)
-
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }

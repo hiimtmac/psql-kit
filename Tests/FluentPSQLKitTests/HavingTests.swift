@@ -6,7 +6,6 @@ import XCTest
 
 final class HavingTests: PSQLTestCase {
     let f = FluentModel.as("x")
-    let p = PSQLModel.as("x")
 
     func testHaving1() {
         HAVING {
@@ -14,14 +13,8 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            PSQLModel.$name == PSQLModel.$title
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("my_model"."name" = "my_model"."title")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testHaving2() {
@@ -30,14 +23,8 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            p.$name != p.$name
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("x"."name" != "x"."name")"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testHavingN() {
@@ -48,16 +35,8 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            PSQLModel.$name == p.$name
-            p.$name == PSQLModel.$name
-            p.$name != p.$name || PSQLModel.$name != PSQLModel.$name
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("my_model"."name" = "x"."name") AND ("x"."name" = "my_model"."name") AND (("x"."name" != "x"."name") OR ("my_model"."name" != "my_model"."name"))"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseTrue() {
@@ -71,18 +50,8 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            if bool {
-                p.$name == "tmac"
-            } else {
-                p.$age == 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("x"."name" = 'tmac')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfElseFalse() {
@@ -96,18 +65,8 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            if bool {
-                p.$name == "tmac"
-            } else {
-                p.$age == 29
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testSwitch() {
@@ -130,20 +89,8 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            switch option {
-            case .one: p.$name == "tmac"
-            case .two: p.$age == 29
-            case .three:
-                p.$age == 29
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfTrue() {
@@ -155,16 +102,8 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            if bool {
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("x"."name" = 'tmac')"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testIfFalse() {
@@ -177,28 +116,15 @@ final class HavingTests: PSQLTestCase {
         }
         .serialize(to: &fluentSerializer)
 
-        HAVING {
-            p.$age == 29
-            if bool {
-                p.$name == "tmac"
-            }
-        }
-        .serialize(to: &psqlkitSerializer)
-
         let compare = #"HAVING ("x"."age" = 29)"#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 
     func testEmpty() {
         HAVING {}
             .serialize(to: &fluentSerializer)
 
-        HAVING {}
-            .serialize(to: &psqlkitSerializer)
-
         let compare = #""#
         XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }
