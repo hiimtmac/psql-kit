@@ -30,7 +30,7 @@ extension PSQLRange: CompareSQLExpression where
         _Compare(lower: self.lower, upper: self.upper)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let lower: T
         let upper: U
 

@@ -20,7 +20,7 @@ extension ExpressionAlias: SelectSQLExpression where
         _Select(expression: self.expression, alias: self.alias)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let expression: Expression
         let alias: String
 
@@ -45,7 +45,7 @@ extension ExpressionAlias: FromSQLExpression where
         _From(expression: self.expression, alias: self.alias)
     }
 
-    private struct _From: SQLExpression {
+    struct _From: SQLExpression {
         let expression: Expression
         let alias: String
 

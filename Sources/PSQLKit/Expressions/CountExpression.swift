@@ -26,7 +26,7 @@ extension CountExpression: SelectSQLExpression where
         _Select(content: self.content, distinct: self.isDistinct)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: Content
         let distinct: Bool
 
@@ -50,7 +50,7 @@ extension CountExpression: CompareSQLExpression where
         _Compare(content: self.content)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let content: Content
 
         func serialize(to serializer: inout SQLSerializer) {

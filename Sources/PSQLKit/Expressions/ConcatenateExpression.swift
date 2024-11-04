@@ -10,11 +10,11 @@ public protocol Concatenatable: BaseSQLExpression {}
 
 // MARK: ConcatenateExpression
 
-public struct ConcatenateExpression: Sendable {
-    let list: SQLList
+public struct ConcatenateExpression<each T>: Sendable where repeat each T: Concatenatable & Sendable {
+    let content: (repeat each T)
     
-    public init<each T>(_ content: repeat each T) where repeat each T: Concatenatable {
-        self.list = SQLList(concatSQLExpressions: repeat each content)
+    public init(_ content: repeat each T) {
+        self.content = (repeat each content)
     }
 }
 
@@ -24,16 +24,20 @@ extension ConcatenateExpression: TypeEquatable {
 
 extension ConcatenateExpression: BaseSQLExpression {
     public var baseSqlExpression: some SQLExpression {
-        _Base(list: list)
+        _Base(content: repeat each content)
     }
 
-    private struct _Base: SQLExpression {
-        let list: SQLList
+    struct _Base: SQLExpression {
+        let content: (repeat each T)
+        
+        init(content: repeat each T) {
+            self.content = (repeat each content)
+        }
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            list.serialize(to: &serializer)
+            SQLList(concatSQLExpressions: repeat each content).serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -41,16 +45,20 @@ extension ConcatenateExpression: BaseSQLExpression {
 
 extension ConcatenateExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        _Select(list: list)
+        _Select(content: repeat each content)
     }
 
-    private struct _Select: SQLExpression {
-        let list: SQLList
+    struct _Select: SQLExpression {
+        let content: (repeat each T)
+        
+        init(content: repeat each T) {
+            self.content = (repeat each content)
+        }
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            list.serialize(to: &serializer)
+            SQLList(concatSQLExpressions: repeat each content).serialize(to: &serializer)
             serializer.write(")")
             PostgresDataType.text.serialize(to: &serializer)
         }
@@ -59,13 +67,13 @@ extension ConcatenateExpression: SelectSQLExpression {
 
 extension ConcatenateExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
-        _Base(list: list)
+        _Base(content: repeat each content)
     }
 }
 
 extension ConcatenateExpression: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression {
-        _Base(list: list)
+        _Base(content: repeat each content)
     }
 }
 

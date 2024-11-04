@@ -50,7 +50,7 @@ extension ArithmeticExpression: SelectSQLExpression where
         _Select(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let lhs: T
         let `operator`: ArithmeticOperator
         let rhs: U
@@ -82,7 +82,7 @@ extension ArithmeticExpression: CompareSQLExpression where
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let lhs: T
         let `operator`: ArithmeticOperator
         let rhs: U

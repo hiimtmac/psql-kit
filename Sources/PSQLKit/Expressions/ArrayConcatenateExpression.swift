@@ -28,7 +28,7 @@ extension ArrayConcatenateExpression: SelectSQLExpression where
         _Select(one: self.one, two: self.two)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let one: T
         let two: U
 
@@ -53,7 +53,7 @@ extension ArrayConcatenateExpression: CompareSQLExpression where
         _Compare(one: self.one, two: self.two)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let one: T
         let two: U
 

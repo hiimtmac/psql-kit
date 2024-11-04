@@ -26,7 +26,7 @@ extension ArrayToStringExpression: SelectSQLExpression where
         _Select(content: self.content, delimiter: self.delimiter, ifNull: self.ifNull)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: Content
         let delimiter: String
         let ifNull: String?
@@ -56,7 +56,7 @@ extension ArrayToStringExpression: CompareSQLExpression where
         _Compare(content: self.content, delimiter: self.delimiter, ifNull: self.ifNull)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let content: Content
         let delimiter: String
         let ifNull: String?

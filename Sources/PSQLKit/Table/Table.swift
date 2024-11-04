@@ -197,7 +197,7 @@ extension Table where Self: Model {
     }
 }
 
-private struct _From: SQLExpression {
+struct _From: SQLExpression {
     let spaceName: String?
     let schemaName: String
 

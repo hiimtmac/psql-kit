@@ -24,7 +24,7 @@ extension ArrayUpperExpression: SelectSQLExpression where
         _Select(content: self.content, dimension: self.dimension)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: Content
         let dimension: Int
 
@@ -48,7 +48,7 @@ extension ArrayUpperExpression: CompareSQLExpression where
         _Compare(content: self.content, dimension: self.dimension)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let content: Content
         let dimension: Int
 

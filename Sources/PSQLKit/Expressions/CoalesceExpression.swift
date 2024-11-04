@@ -118,7 +118,7 @@ extension CoalesceExpression: BaseSQLExpression {
         _Base(values: self.values)
     }
 
-    private struct _Base: SQLExpression {
+    struct _Base: SQLExpression {
         let values: [any SQLExpression]
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -137,7 +137,7 @@ extension CoalesceExpression: SelectSQLExpression where
         _Select(values: self.values)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let values: [any SQLExpression]
 
         func serialize(to serializer: inout SQLSerializer) {

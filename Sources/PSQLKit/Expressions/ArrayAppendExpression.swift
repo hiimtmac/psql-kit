@@ -27,7 +27,7 @@ extension ArrayAppendExpression: SelectSQLExpression where
         _Select(content: self.content, append: self.append)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: Content
         let append: T
 
@@ -52,7 +52,7 @@ extension ArrayAppendExpression: CompareSQLExpression where
         _Compare(content: self.content, append: self.append)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let content: Content
         let append: T
 

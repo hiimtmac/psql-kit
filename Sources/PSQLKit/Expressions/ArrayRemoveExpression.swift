@@ -27,7 +27,7 @@ extension ArrayRemoveExpression: SelectSQLExpression where
         _Select(content: self.content, remove: self.remove)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: Content
         let remove: T
 
@@ -52,7 +52,7 @@ extension ArrayRemoveExpression: CompareSQLExpression where
         _Compare(content: self.content, remove: self.remove)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let content: Content
         let remove: T
 

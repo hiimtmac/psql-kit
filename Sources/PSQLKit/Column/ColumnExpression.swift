@@ -37,7 +37,7 @@ extension ColumnExpression: BaseSQLExpression {
         )
     }
 
-    private struct _Base: SQLExpression {
+    struct _Base: SQLExpression {
         let aliasName: String?
         let spaceName: String?
         let schemaName: String?
@@ -85,7 +85,7 @@ extension ColumnExpression: SelectSQLExpression {
         )
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let aliasName: String?
         let spaceName: String?
         let schemaName: String?
@@ -194,7 +194,7 @@ extension ColumnExpression: MutationSQLExpression {
         _Mutation(columnName: self.columnName)
     }
 
-    private struct _Mutation: SQLExpression {
+    struct _Mutation: SQLExpression {
         let columnName: String
 
         func serialize(to serializer: inout SQLSerializer) {

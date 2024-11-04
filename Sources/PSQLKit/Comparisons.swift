@@ -55,7 +55,7 @@ extension CompareExpression: CompareSQLExpression {
         _Compare(lhs: self.lhs, operator: self.operator, rhs: self.rhs)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let lhs: T
         let `operator`: CompareOperator
         let rhs: U

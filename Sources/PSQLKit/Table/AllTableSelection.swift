@@ -11,7 +11,7 @@ public struct AllTableSelection<T: Sendable>: Sendable where T: Table {
 // MARK: Select
 
 extension AllTableSelection: SelectSQLExpression {
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let spaceName: String?
         let schemaName: String
 
@@ -45,7 +45,7 @@ extension AllTableSelection {
 }
 
 extension AllTableSelection.Alias: SelectSQLExpression {
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let aliasName: String
 
         func serialize(to serializer: inout SQLSerializer) {

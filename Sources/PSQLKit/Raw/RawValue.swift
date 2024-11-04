@@ -52,7 +52,7 @@ extension RawValue {
 }
 
 extension RawValue.Alias: SelectSQLExpression {
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let value: T
         let alias: String
 

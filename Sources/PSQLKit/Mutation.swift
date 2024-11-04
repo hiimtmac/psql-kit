@@ -30,7 +30,7 @@ extension Mutation: UpdateSQLExpression where
     T: MutationSQLExpression,
     U: MutationSQLExpression
 {
-    private struct _Update: SQLExpression {
+    struct _Update: SQLExpression {
         let column: T
         let value: U
 

@@ -183,7 +183,7 @@ extension TableAlias: FromSQLExpression {
         )
     }
 
-    private struct _From: SQLExpression {
+    struct _From: SQLExpression {
         let aliasName: String
         let spaceName: String?
         let schemaName: String

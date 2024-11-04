@@ -24,7 +24,7 @@ extension RawColumn: TypeEquatable where T: TypeEquatable {
 }
 
 extension RawColumn: SelectSQLExpression {
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let column: String
         let dataType: PostgresDataType
 
@@ -42,7 +42,7 @@ extension RawColumn: SelectSQLExpression {
 }
 
 extension RawColumn: GroupBySQLExpression {
-    private struct _GroupBy: SQLExpression {
+    struct _GroupBy: SQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -58,7 +58,7 @@ extension RawColumn: GroupBySQLExpression {
 }
 
 extension RawColumn: OrderBySQLExpression {
-    private struct _OrderBy: SQLExpression {
+    struct _OrderBy: SQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -86,7 +86,7 @@ extension RawColumn: OrderBySQLExpression {
 }
 
 extension RawColumn: CompareSQLExpression {
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -120,7 +120,7 @@ extension RawColumn.Alias: TypeEquatable where T: TypeEquatable {
 }
 
 extension RawColumn.Alias: SelectSQLExpression {
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let column: RawColumn<T>
         let alias: String
 

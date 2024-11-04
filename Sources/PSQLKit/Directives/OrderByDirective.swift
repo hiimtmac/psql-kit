@@ -36,7 +36,7 @@ public struct OrderByModifier<Content>: OrderBySQLExpression, Sendable where Con
     let content: Content
     let direction: OrderByDirection
 
-    private struct _OrderBy: SQLExpression {
+    struct _OrderBy: SQLExpression {
         let content: Content
         let direction: OrderByDirection
 

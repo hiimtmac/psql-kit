@@ -23,7 +23,7 @@ extension DateTruncExpression: SelectSQLExpression where
         _Select(precision: self.precision, content: self.content)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let precision: String
         let content: Content
 

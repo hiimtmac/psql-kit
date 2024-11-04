@@ -22,7 +22,7 @@ extension ArrayDimensionsExpression: SelectSQLExpression where
         _Select(content: self.content)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: Content
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -42,7 +42,7 @@ extension ArrayDimensionsExpression: CompareSQLExpression where
         _Compare(content: self.content)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let content: Content
 
         func serialize(to serializer: inout SQLSerializer) {

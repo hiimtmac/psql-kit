@@ -29,7 +29,7 @@ extension PSQLArray: SelectSQLExpression where
         _Select(items: self.items, arrayType: [T].postgresDataType)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let items: [T]
         let arrayType: PostgresDataType
 
@@ -50,7 +50,7 @@ extension PSQLArray: CompareSQLExpression where
         _Compare(items: self.items)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let items: [T]
 
         func serialize(to serializer: inout SQLSerializer) {

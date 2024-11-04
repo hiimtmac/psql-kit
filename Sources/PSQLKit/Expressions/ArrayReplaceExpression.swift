@@ -33,7 +33,7 @@ extension ArrayReplaceExpression: SelectSQLExpression where
         _Select(content: self.content, find: self.find, replace: self.replace)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: Content
         let find: T
         let replace: U
@@ -63,7 +63,7 @@ extension ArrayReplaceExpression: CompareSQLExpression where
         _Compare(content: self.content, find: self.find, replace: self.replace)
     }
 
-    private struct _Compare: SQLExpression {
+    struct _Compare: SQLExpression {
         let content: Content
         let find: T
         let replace: U

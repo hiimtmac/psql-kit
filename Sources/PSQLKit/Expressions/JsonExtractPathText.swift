@@ -31,7 +31,7 @@ extension JsonbExtractPathTextExpression: BaseSQLExpression {
         _Base(content: self.content, pathElements: self.pathElements)
     }
 
-    private struct _Base: SQLExpression {
+    struct _Base: SQLExpression {
         let content: any SQLExpression
         let pathElements: [String]
 
@@ -58,7 +58,7 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
         )
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: any SQLExpression
         let pathElements: [String]
         let dataType: any SQLExpression

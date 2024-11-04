@@ -60,7 +60,7 @@ public struct DistinctModifier<T>: SelectSQLExpression, Sendable where T: Select
         _Select(content: content)
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let content: T
 
         func serialize(to serializer: inout SQLSerializer) {

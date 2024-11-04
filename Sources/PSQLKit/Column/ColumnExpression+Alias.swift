@@ -33,7 +33,7 @@ extension ColumnExpression.Alias: BaseSQLExpression {
         )
     }
 
-    private struct _Base: SQLExpression {
+    struct _Base: SQLExpression {
         let aliasName: String?
         let spaceName: String?
         let schemaName: String?
@@ -91,7 +91,7 @@ extension ColumnExpression.Alias: SelectSQLExpression {
         )
     }
 
-    private struct _Select: SQLExpression {
+    struct _Select: SQLExpression {
         let aliasName: String?
         let spaceName: String?
         let schemaName: String?
@@ -150,7 +150,7 @@ extension ColumnExpression.Alias: MutationSQLExpression {
         )
     }
 
-    private struct _Mutation: SQLExpression {
+    struct _Mutation: SQLExpression {
         let aliasName: String?
         let spaceName: String?
         let schemaName: String?
