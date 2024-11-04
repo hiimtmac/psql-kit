@@ -4,9 +4,13 @@
 import Logging
 import NIOCore
 import NIOEmbedded
-import PostgresKit
+import struct PostgresKit.PostgresDialect
 import PSQLKit
-import SQLKit
+import protocol SQLKit.SQLDatabase
+import protocol SQLKit.SQLDialect
+import protocol SQLKit.SQLExpression
+import protocol SQLKit.SQLRow
+import struct SQLKit.SQLSerializer
 
 final class TestSQLDatabase: SQLDatabase, @unchecked Sendable {
     let logger: Logger

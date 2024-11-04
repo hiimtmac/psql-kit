@@ -7,6 +7,26 @@ import XCTest
 final class GroupTests: PSQLTestCase {
     func testLength() {
         SELECT {
+            FluentModel.$id
+            FluentModel.$age
+            FluentModel.$name
+            FluentModel.$id
+            FluentModel.$age
+            FluentModel.$name
+            FluentModel.$id
+            FluentModel.$age
+            FluentModel.$id
+            FluentModel.$age
+            FluentModel.$name
+            FluentModel.$id
+            FluentModel.$age
+            FluentModel.$name
+            FluentModel.$id
+            FluentModel.$age
+        }
+        .serialize(to: &fluentSerializer)
+
+        SELECT {
             PSQLModel.$id
             PSQLModel.$age
             PSQLModel.$name
@@ -24,9 +44,10 @@ final class GroupTests: PSQLTestCase {
             PSQLModel.$id
             PSQLModel.$age
         }
-        .serialize(to: &serializer)
+        .serialize(to: &psqlkitSerializer)
 
         let compare = #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#
-        XCTAssertEqual(serializer.sql, compare)
+        XCTAssertEqual(fluentSerializer.sql, compare)
+        XCTAssertEqual(psqlkitSerializer.sql, compare)
     }
 }

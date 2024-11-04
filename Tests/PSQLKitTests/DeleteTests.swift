@@ -5,67 +5,44 @@ import XCTest
 @testable import PSQLKit
 
 final class DeleteTests: PSQLTestCase {
-    let f = FluentModel.as("x")
     let p = PSQLModel.as("x")
 
     func testModel() {
         DELETE {
-            FluentModel.table
-        }
-        .serialize(to: &fluentSerializer)
-
-        DELETE {
             PSQLModel.table
         }
-        .serialize(to: &psqlkitSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "my_model""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"DELETE FROM "my_model""#)
+        .serialize(to: &serializer)
+        
+        XCTAssertEqual(serializer.sql, #"DELETE FROM "my_model""#)
     }
 
     func testModelAlias() {
         DELETE {
-            f.table
-        }
-        .serialize(to: &fluentSerializer)
-
-        DELETE {
             p.table
         }
-        .serialize(to: &psqlkitSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "my_model" AS "x""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"DELETE FROM "my_model" AS "x""#)
+        .serialize(to: &serializer)
+        
+        XCTAssertEqual(serializer.sql, #"DELETE FROM "my_model" AS "x""#)
     }
 
     func testBoth() {
-        DELETE {
-            f.table
-            FluentModel.table
-            FluentModel.table.as("cool")
-        }
-        .serialize(to: &fluentSerializer)
-
         DELETE {
             p.table
             PSQLModel.table
             PSQLModel.table.as("cool")
         }
-        .serialize(to: &psqlkitSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"DELETE FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
+        .serialize(to: &serializer)
+        
+        XCTAssertEqual(serializer.sql, #"DELETE FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
     }
 
     func testRaw() {
         DELETE {
             RawTable("tableName")
         }
-        .serialize(to: &fluentSerializer)
-
-        DELETE {
-            RawTable("tableName")
-        }
-        .serialize(to: &psqlkitSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "tableName""#)
-        XCTAssertEqual(psqlkitSerializer.sql, #"DELETE FROM "tableName""#)
+        .serialize(to: &serializer)
+        
+        XCTAssertEqual(serializer.sql, #"DELETE FROM "tableName""#)
     }
 
     func testGenerateSeries() {
@@ -76,29 +53,13 @@ final class DeleteTests: PSQLTestCase {
             GENERATE_SERIES(from: date1, to: date2, interval: "1 day").as("dates")
             GENERATE_SERIES(from: date1, to: date2, interval: "1 day")
         }
-        .serialize(to: &fluentSerializer)
-
-        DELETE {
-            GENERATE_SERIES(from: date1, to: date2, interval: "1 day").as("dates")
-            GENERATE_SERIES(from: date1, to: date2, interval: "1 day")
-        }
-        .serialize(to: &psqlkitSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates", GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL)"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 
     func testSubquery() {
-        DELETE {
-            QUERY {
-                SELECT { f.$age }
-                FROM { f.table }
-            }
-            .asSubquery(f.table)
-        }
-        .serialize(to: &fluentSerializer)
-
         DELETE {
             QUERY {
                 SELECT { p.$age }
@@ -106,23 +67,14 @@ final class DeleteTests: PSQLTestCase {
             }
             .asSubquery(p.table)
         }
-        .serialize(to: &psqlkitSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 
     func testIfElseTrue() {
         let bool = true
-        DELETE {
-            if bool {
-                f.table
-            } else {
-                FluentModel.table
-            }
-        }
-        .serialize(to: &fluentSerializer)
 
         DELETE {
             if bool {
@@ -131,23 +83,14 @@ final class DeleteTests: PSQLTestCase {
                 PSQLModel.table
             }
         }
-        .serialize(to: &psqlkitSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model" AS "x""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 
     func testIfElseFalse() {
         let bool = false
-        DELETE {
-            if bool {
-                f.table
-            } else {
-                FluentModel.table
-            }
-        }
-        .serialize(to: &fluentSerializer)
 
         DELETE {
             if bool {
@@ -156,11 +99,10 @@ final class DeleteTests: PSQLTestCase {
                 PSQLModel.table
             }
         }
-        .serialize(to: &psqlkitSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 
     func testSwitch() {
@@ -174,17 +116,6 @@ final class DeleteTests: PSQLTestCase {
 
         FROM {
             switch option {
-            case .one: f.table
-            case .two: FluentModel.table
-            case .three:
-                FluentModel.table
-                f.table
-            }
-        }
-        .serialize(to: &fluentSerializer)
-
-        FROM {
-            switch option {
             case .one: p.table
             case .two: PSQLModel.table
             case .three:
@@ -192,22 +123,14 @@ final class DeleteTests: PSQLTestCase {
                 p.table
             }
         }
-        .serialize(to: &psqlkitSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"FROM "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 
     func testIfTrue() {
         let bool = true
-        DELETE {
-            if bool {
-                f.table
-                FluentModel.table
-            }
-        }
-        .serialize(to: &fluentSerializer)
 
         DELETE {
             if bool {
@@ -215,22 +138,14 @@ final class DeleteTests: PSQLTestCase {
                 PSQLModel.table
             }
         }
-        .serialize(to: &psqlkitSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model" AS "x", "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 
     func testIfFalse() {
         let bool = false
-        DELETE {
-            FluentModel.table
-            if bool {
-                f.table
-            }
-        }
-        .serialize(to: &fluentSerializer)
 
         DELETE {
             PSQLModel.table
@@ -238,22 +153,17 @@ final class DeleteTests: PSQLTestCase {
                 p.table
             }
         }
-        .serialize(to: &psqlkitSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 
     func testEmpty() {
         DELETE {}
-            .serialize(to: &fluentSerializer)
-
-        DELETE {}
-            .serialize(to: &psqlkitSerializer)
+            .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        XCTAssertEqual(psqlkitSerializer.sql, compare)
+        XCTAssertEqual(serializer.sql, compare)
     }
 }

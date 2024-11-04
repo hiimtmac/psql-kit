@@ -1,59 +1,10 @@
 // PSQLTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import FluentKit
 import PostgresKit
 import SQLKit
 import XCTest
 @testable import PSQLKit
-
-final class FluentModel: Model, Table, @unchecked Sendable {
-    static let schema = "my_model"
-
-    @ID
-    var id: UUID?
-    @OptionalField(key: "name")
-    var name: String?
-    @Field(key: "title")
-    var title: String
-    @Field(key: "age")
-    var age: Int
-    @Field(key: "money")
-    var money: Double
-    @Field(key: "birthday")
-    var birthday: Date
-    @Field(key: "category")
-    var category: Category
-    @Group(key: "pet")
-    var pet: Pet
-
-    init() {}
-
-    final class Pet: Fields, TableObject, @unchecked Sendable {
-        @Field(key: "name")
-        var name: String
-        @Field(key: "type")
-        var type: String
-        @Group(key: "info")
-        var info: Info
-
-        init() {}
-
-        final class Info: Fields, TableObject, @unchecked Sendable {
-            @Field(key: "name")
-            var name: String
-
-            init() {}
-        }
-    }
-
-    enum Category: String, Codable, Equatable, TypeEquatable, PSQLExpression {
-        case yes
-        case no
-
-        static var postgresDataType: PostgresDataType { .text }
-    }
-}
 
 struct PSQLModel: Table, @unchecked Sendable {
     static let schema = "my_model"
@@ -104,6 +55,5 @@ struct PSQLModel: Table, @unchecked Sendable {
 }
 
 class PSQLTestCase: XCTestCase {
-    var fluentSerializer = SQLSerializer(database: TestSQLDatabase())
-    var psqlkitSerializer = SQLSerializer(database: TestSQLDatabase())
+    var serializer = SQLSerializer(database: TestSQLDatabase())
 }
