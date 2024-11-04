@@ -11,80 +11,10 @@ public protocol Concatenatable: BaseSQLExpression {}
 // MARK: ConcatenateExpression
 
 public struct ConcatenateExpression: Sendable {
-    let values: [any SQLExpression]
-
-    public init<T0, T1>
-    (
-        _ t0: T0,
-        _ t1: T1
-    ) where
-        T0: Concatenatable,
-        T1: Concatenatable
-    {
-        self.values = [
-            t0.baseSqlExpression,
-            t1.baseSqlExpression,
-        ]
-    }
-
-    public init<T0, T1, T2>
-    (
-        _ t0: T0,
-        _ t1: T1,
-        _ t2: T2
-    ) where
-        T0: Concatenatable,
-        T1: Concatenatable,
-        T2: Concatenatable
-    {
-        self.values = [
-            t0.baseSqlExpression,
-            t1.baseSqlExpression,
-            t2.baseSqlExpression,
-        ]
-    }
-
-    public init<T0, T1, T2, T3>
-    (
-        _ t0: T0,
-        _ t1: T1,
-        _ t2: T2,
-        _ t3: T3
-    ) where
-        T0: Concatenatable,
-        T1: Concatenatable,
-        T2: Concatenatable,
-        T3: Concatenatable
-    {
-        self.values = [
-            t0.baseSqlExpression,
-            t1.baseSqlExpression,
-            t2.baseSqlExpression,
-            t3.baseSqlExpression,
-        ]
-    }
-
-    public init<T0, T1, T2, T3, T4>
-    (
-        _ t0: T0,
-        _ t1: T1,
-        _ t2: T2,
-        _ t3: T3,
-        _ t4: T4
-    ) where
-        T0: Concatenatable,
-        T1: Concatenatable,
-        T2: Concatenatable,
-        T3: Concatenatable,
-        T4: Concatenatable
-    {
-        self.values = [
-            t0.baseSqlExpression,
-            t1.baseSqlExpression,
-            t2.baseSqlExpression,
-            t3.baseSqlExpression,
-            t4.baseSqlExpression,
-        ]
+    let list: SQLList
+    
+    public init<each T>(_ content: repeat each T) where repeat each T: Concatenatable {
+        self.list = SQLList(concatSQLExpressions: repeat each content)
     }
 }
 
@@ -94,16 +24,16 @@ extension ConcatenateExpression: TypeEquatable {
 
 extension ConcatenateExpression: BaseSQLExpression {
     public var baseSqlExpression: some SQLExpression {
-        _Base(values: self.values)
+        _Base(list: list)
     }
 
     private struct _Base: SQLExpression {
-        let values: [any SQLExpression]
+        let list: SQLList
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            SQLList(self.values).serialize(to: &serializer)
+            list.serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -111,16 +41,16 @@ extension ConcatenateExpression: BaseSQLExpression {
 
 extension ConcatenateExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        _Select(values: self.values)
+        _Select(list: list)
     }
 
     private struct _Select: SQLExpression {
-        let values: [any SQLExpression]
+        let list: SQLList
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            SQLList(self.values).serialize(to: &serializer)
+            list.serialize(to: &serializer)
             serializer.write(")")
             PostgresDataType.text.serialize(to: &serializer)
         }
@@ -129,13 +59,13 @@ extension ConcatenateExpression: SelectSQLExpression {
 
 extension ConcatenateExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
-        _Base(values: self.values)
+        _Base(list: list)
     }
 }
 
 extension ConcatenateExpression: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression {
-        _Base(values: self.values)
+        _Base(list: list)
     }
 }
 

@@ -6,6 +6,14 @@ import struct SQLKit.SQLList
 import struct SQLKit.SQLRaw
 
 extension SQLList {
+    init<each T>(concatSQLExpressions expressions: repeat each T) where repeat each T: BaseSQLExpression {
+        var collector = Collector()
+        _ = (repeat collector.append(concat: each expressions))
+        self.init(collector.expressions, separator: SQLRaw(", "))
+    }
+}
+
+extension SQLList {
     init<each T>(fromSQLExpressions expressions: repeat each T) where repeat each T: FromSQLExpression {
         var collector = Collector()
         _ = (repeat collector.append(exp: each expressions))

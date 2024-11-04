@@ -7,6 +7,10 @@ import protocol SQLKit.SQLExpression
 // we can iterate natively https://github.com/apple/swift-evolution/blob/main/proposals/0408-pack-iteration.md
 struct Collector {
     var expressions: [any SQLExpression] = []
+    
+    mutating func append(concat: some BaseSQLExpression) {
+        expressions.append(concat.baseSqlExpression)
+    }
 
     mutating func append(exp: some SelectSQLExpression) {
         guard !exp.selectIsNull else { return }
