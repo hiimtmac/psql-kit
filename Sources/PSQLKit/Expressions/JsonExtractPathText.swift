@@ -1,16 +1,7 @@
 // JsonExtractPathText.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import class FluentKit.FieldProperty
-import class FluentKit.GroupProperty
-import class FluentKit.IDProperty
-import class FluentKit.OptionalFieldProperty
-import class FluentKit.TimestampProperty
-import protocol SQLKit.SQLExpression
-import struct SQLKit.SQLList
-import struct SQLKit.SQLSerializer
-
-#warning("move and fix me")
+import SQLKit
 
 public protocol JsonbExtractable: BaseSQLExpression {}
 
@@ -86,78 +77,6 @@ extension JsonbExtractPathTextExpression {
 
 extension JsonbExtractPathTextExpression: TypeEquatable where Content: TypeEquatable {
     public typealias CompareType = Content.CompareType
-}
-
-// MARK: Fluent
-
-extension JsonbExtractPathTextExpression {
-    public init<T>(
-        _ group: ColumnExpression<T>,
-        _ keyPath: KeyPath<T, FieldProperty<T, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: keyPath].key.description]
-    }
-
-    public init<T>(
-        _ group: ColumnExpression<T>,
-        _ keyPath: KeyPath<T, OptionalFieldProperty<T, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: keyPath].key.description]
-    }
-
-    public init<T>(
-        _ group: ColumnExpression<T>,
-        _ keyPath: KeyPath<T, TimestampProperty<T, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: keyPath].$timestamp.key.description]
-    }
-
-    public init<T>(
-        _ group: ColumnExpression<T>,
-        _ keyPath: KeyPath<T, IDProperty<T, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: keyPath].key.description]
-    }
-
-    public init<T, U>(
-        _ group: ColumnExpression<T>,
-        _ first: KeyPath<T, GroupProperty<T, U>>,
-        _ second: KeyPath<U, FieldProperty<U, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
-    }
-
-    public init<T, U>(
-        _ group: ColumnExpression<T>,
-        _ first: KeyPath<T, GroupProperty<T, U>>,
-        _ second: KeyPath<U, OptionalFieldProperty<U, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
-    }
-
-    public init<T, U>(
-        _ group: ColumnExpression<T>,
-        _ first: KeyPath<T, GroupProperty<T, U>>,
-        _ second: KeyPath<U, TimestampProperty<U, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].$timestamp.key.description]
-    }
-
-    public init<T, U>(
-        _ group: ColumnExpression<T>,
-        _ first: KeyPath<T, GroupProperty<T, U>>,
-        _ second: KeyPath<U, IDProperty<U, Content>>
-    ) {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
-    }
 }
 
 // MARK: PSQLKit
