@@ -1,4 +1,5 @@
 {
+  "originHash" : "d71d2085c3a8d152023533748a320c6f6bb814d07e30292fd1e62827bc137522",
   "pins" : [
     {
       "identity" : "async-kit",
@@ -136,6 +137,15 @@
       }
     },
     {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "revision" : "0687f71944021d616d34d922343dcef086855920",
+        "version" : "600.0.1"
+      }
+    },
+    {
       "identity" : "swift-system",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-system.git",
@@ -145,5 +155,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

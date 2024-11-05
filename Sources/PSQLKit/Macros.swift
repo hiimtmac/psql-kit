@@ -1,0 +1,23 @@
+@attached(peer)
+public macro CTECol(
+    _ name: String
+) = #externalMacro(
+    module: "PSQLKitMacros",
+    type: "ColumnMacro"
+)
+
+@attached(peer)
+public macro CTEIgnore() = #externalMacro(
+    module: "PSQLKitMacros",
+    type: "IgnoreMacro"
+)
+
+@attached(extension, conformances: CTE, names: named(queryContainer), named(tableName), named(schemaName))
+@attached(member, names: named(queryContainer), named(tableName), named(schemaName), arbitrary)
+public macro CTE(
+    _ tableName: String,
+    schemaName: String? = nil
+) = #externalMacro(
+    module: "PSQLKitMacros",
+    type: "TableMacro"
+)

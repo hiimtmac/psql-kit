@@ -4,6 +4,40 @@
 import SQLKit
 
 @dynamicMemberLookup
+public protocol CTE: FromSQLExpression {
+    associatedtype QueryContainer
+    static var queryContainer: QueryContainer { get }
+    static var tableName: String { get }
+    static var schemaName: String? { get }
+}
+
+extension CTE {
+    public static subscript<T>(
+        dynamicMember keyPath: KeyPath<QueryContainer, ColumnAccessor<T>>
+    ) -> ColumnExpression<T> {
+        let field = Self.queryContainer[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: nil,
+            spaceName: Self.schemaName,
+            schemaName: Self.tableName,
+            columnName: field.column
+        )
+    }
+    
+    public static func `as`(_ alias: String) -> CTEAlias<Self> {
+        .init(alias: alias)
+    }
+    
+    public var fromSqlExpression: some SQLExpression {
+        _From(spaceName: Self.schemaName, schemaName: Self.tableName)
+    }
+    
+    public static postfix func .* (cte: Self) -> AllCTESelection<Self> {
+        .init(cte: cte)
+    }
+}
+
+@dynamicMemberLookup
 public protocol Table: FromSQLExpression, Sendable {
     init()
     /// fluent `table`

@@ -4,6 +4,33 @@
 import SQLKit
 
 @dynamicMemberLookup
+public struct CTEAlias<T>: Sendable where T: CTE {
+    public let alias: String
+    
+    init(alias: String) {
+        self.alias = alias
+    }
+}
+
+extension CTEAlias {
+    public subscript<U>(
+        dynamicMember keyPath: KeyPath<T.QueryContainer, ColumnAccessor<U>>
+    ) -> ColumnExpression<U> where U: PSQLExpression {
+        let field = T.queryContainer[keyPath: keyPath]
+        return ColumnExpression(
+            aliasName: self.alias,
+            spaceName: T.schemaName,
+            schemaName: T.tableName,
+            columnName: field.column
+        )
+    }
+    
+    public static postfix func .* (_ alias: Self) -> AllCTESelection<T>.Alias {
+        .init(cte: alias)
+    }
+}
+
+@dynamicMemberLookup
 public struct TableAlias<T: Sendable>: Sendable where T: Table {
     /// table alias
     public let alias: String
