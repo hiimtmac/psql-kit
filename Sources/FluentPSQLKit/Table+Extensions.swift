@@ -19,8 +19,8 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
+            schemaName: Self.space,
+            tableName: Self.schema,
             columnName: field.key.description
         )
     }
@@ -33,8 +33,8 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
+            schemaName: Self.space,
+            tableName: Self.schema,
             columnName: field.key.description
         )
     }
@@ -47,8 +47,8 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
+            schemaName: Self.space,
+            tableName: Self.schema,
             columnName: field.key.description
         )
     }
@@ -61,8 +61,8 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
+            schemaName: Self.space,
+            tableName: Self.schema,
             columnName: field.$id.key.description
         )
     }
@@ -75,8 +75,8 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
+            schemaName: Self.space,
+            tableName: Self.schema,
             columnName: field.$id.key.description
         )
     }
@@ -89,8 +89,8 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
+            schemaName: Self.space,
+            tableName: Self.schema,
             columnName: field.$timestamp.key.description
         )
     }
@@ -103,8 +103,8 @@ extension Table where Self: Model {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.space,
-            schemaName: Self.schema,
+            schemaName: Self.space,
+            tableName: Self.schema,
             columnName: field.key.description
         )
     }

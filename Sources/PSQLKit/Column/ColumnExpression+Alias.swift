@@ -25,8 +25,8 @@ extension ColumnExpression.Alias: BaseSQLExpression {
     public var baseSqlExpression: some SQLExpression {
         _Base(
             aliasName: column.aliasName,
-            spaceName: column.spaceName,
             schemaName: column.schemaName,
+            tableName: column.tableName,
             columnName: column.columnName,
             columnAlias: alias
         )
@@ -34,8 +34,8 @@ extension ColumnExpression.Alias: BaseSQLExpression {
 
     struct _Base: SQLExpression {
         let aliasName: String?
-        let spaceName: String?
         let schemaName: String?
+        let tableName: String?
         let columnName: String
         let columnAlias: String
 
@@ -46,14 +46,14 @@ extension ColumnExpression.Alias: BaseSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let space = spaceName {
+                if let space = schemaName {
                     serializer.writeQuote()
                     serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
 
-                if let schema = schemaName {
+                if let schema = tableName {
                     serializer.writeQuote()
                     serializer.write(schema)
                     serializer.writeQuote()
@@ -82,8 +82,8 @@ extension ColumnExpression.Alias: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: column.aliasName,
-            spaceName: column.spaceName,
             schemaName: column.schemaName,
+            tableName: column.tableName,
             columnName: column.columnName,
             dataType: T.postgresDataType,
             columnAlias: alias
@@ -92,8 +92,8 @@ extension ColumnExpression.Alias: SelectSQLExpression {
 
     struct _Select: SQLExpression {
         let aliasName: String?
-        let spaceName: String?
         let schemaName: String?
+        let tableName: String?
         let columnName: String
         let dataType: PostgresDataType
         let columnAlias: String
@@ -105,14 +105,14 @@ extension ColumnExpression.Alias: SelectSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let space = spaceName {
+                if let space = schemaName {
                     serializer.writeQuote()
                     serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
 
-                if let schema = schemaName {
+                if let schema = tableName {
                     serializer.writeQuote()
                     serializer.write(schema)
                     serializer.writeQuote()
@@ -141,8 +141,8 @@ extension ColumnExpression.Alias: MutationSQLExpression {
     public var mutationSqlExpression: some SQLExpression {
         _Mutation(
             aliasName: column.aliasName,
-            spaceName: column.spaceName,
             schemaName: column.schemaName,
+            tableName: column.tableName,
             columnName: column.columnName,
             dataType: T.postgresDataType,
             columnAlias: alias
@@ -151,8 +151,8 @@ extension ColumnExpression.Alias: MutationSQLExpression {
 
     struct _Mutation: SQLExpression {
         let aliasName: String?
-        let spaceName: String?
         let schemaName: String?
+        let tableName: String?
         let columnName: String
         let dataType: PostgresDataType
         let columnAlias: String
@@ -164,14 +164,14 @@ extension ColumnExpression.Alias: MutationSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let space = spaceName {
+                if let space = schemaName {
                     serializer.writeQuote()
                     serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
 
-                if let schema = schemaName {
+                if let schema = tableName {
                     serializer.writeQuote()
                     serializer.write(schema)
                     serializer.writeQuote()

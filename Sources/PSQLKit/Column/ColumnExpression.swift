@@ -7,19 +7,19 @@ import SQLKit
 
 public struct ColumnExpression<T>: Sendable where T: PSQLExpression {
     let aliasName: String?
-    let spaceName: String?
     let schemaName: String?
+    let tableName: String
     let columnName: String
 
     public init(
         aliasName: String?,
-        spaceName: String?,
         schemaName: String?,
+        tableName: String,
         columnName: String
     ) {
         self.aliasName = aliasName
-        self.spaceName = spaceName
         self.schemaName = schemaName
+        self.tableName = tableName
         self.columnName = columnName
     }
 }
@@ -30,16 +30,16 @@ extension ColumnExpression: BaseSQLExpression {
     public var baseSqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
-            spaceName: self.spaceName,
             schemaName: self.schemaName,
+            tableName: self.tableName,
             columnName: self.columnName
         )
     }
 
     struct _Base: SQLExpression {
         let aliasName: String?
-        let spaceName: String?
         let schemaName: String?
+        let tableName: String?
         let columnName: String
 
         func serialize(to serializer: inout SQLSerializer) {
@@ -49,14 +49,14 @@ extension ColumnExpression: BaseSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let space = spaceName {
+                if let space = schemaName {
                     serializer.writeQuote()
                     serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
 
-                if let schema = schemaName {
+                if let schema = tableName {
                     serializer.writeQuote()
                     serializer.write(schema)
                     serializer.writeQuote()
@@ -77,8 +77,8 @@ extension ColumnExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(
             aliasName: self.aliasName,
-            spaceName: self.spaceName,
             schemaName: self.schemaName,
+            tableName: self.tableName,
             columnName: self.columnName,
             dataType: T.postgresDataType
         )
@@ -86,8 +86,8 @@ extension ColumnExpression: SelectSQLExpression {
 
     struct _Select: SQLExpression {
         let aliasName: String?
-        let spaceName: String?
         let schemaName: String?
+        let tableName: String?
         let columnName: String
         let dataType: PostgresDataType
 
@@ -98,14 +98,14 @@ extension ColumnExpression: SelectSQLExpression {
                 serializer.writeQuote()
                 serializer.writePeriod()
             } else {
-                if let space = spaceName {
+                if let space = schemaName {
                     serializer.writeQuote()
                     serializer.write(space)
                     serializer.writeQuote()
                     serializer.writePeriod()
                 }
 
-                if let schema = schemaName {
+                if let schema = tableName {
                     serializer.writeQuote()
                     serializer.write(schema)
                     serializer.writeQuote()
@@ -128,8 +128,8 @@ extension ColumnExpression {
     public func transform<U>(to _: U.Type) -> ColumnExpression<U> where U: PSQLExpression {
         ColumnExpression<U>(
             aliasName: self.aliasName,
-            spaceName: self.spaceName,
             schemaName: self.schemaName,
+            tableName: self.tableName,
             columnName: self.columnName
         )
     }
@@ -141,8 +141,8 @@ extension ColumnExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
-            spaceName: self.spaceName,
             schemaName: self.schemaName,
+            tableName: self.tableName,
             columnName: self.columnName
         )
     }
@@ -154,8 +154,8 @@ extension ColumnExpression: OrderBySQLExpression {
     public var orderBySqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
-            spaceName: self.spaceName,
             schemaName: self.schemaName,
+            tableName: self.tableName,
             columnName: self.columnName
         )
     }
@@ -179,8 +179,8 @@ extension ColumnExpression: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression {
         _Base(
             aliasName: self.aliasName,
-            spaceName: self.spaceName,
             schemaName: self.schemaName,
+            tableName: self.tableName,
             columnName: self.columnName
         )
     }
@@ -216,8 +216,8 @@ extension ColumnExpression where T == Date {
     public func `as`<U>(_: U.Type) -> ColumnExpression<U> where U: PSQLDateTime {
         ColumnExpression<U>(
             aliasName: self.aliasName,
-            spaceName: self.spaceName,
             schemaName: self.schemaName,
+            tableName: self.tableName,
             columnName: self.columnName
         )
     }

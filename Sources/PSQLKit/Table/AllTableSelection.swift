@@ -11,11 +11,11 @@ public struct AllCTESelection<T>: Sendable where T: CTE {
 
 extension AllCTESelection: SelectSQLExpression {
     struct _Select: SQLExpression {
-        let spaceName: String?
-        let schemaName: String
+        let schemaName: String?
+        let tableName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            if let space = spaceName {
+            if let space = schemaName {
                 serializer.writeQuote()
                 serializer.write(space)
                 serializer.writeQuote()
@@ -23,7 +23,7 @@ extension AllCTESelection: SelectSQLExpression {
             }
 
             serializer.writeQuote()
-            serializer.write(self.schemaName)
+            serializer.write(self.tableName)
             serializer.writeQuote()
             serializer.writePeriod()
             serializer.write("*")
@@ -31,7 +31,7 @@ extension AllCTESelection: SelectSQLExpression {
     }
 
     public var selectSqlExpression: some SQLExpression {
-        _Select(spaceName: T.schemaName, schemaName: T.tableName)
+        _Select(schemaName: T.schemaName, tableName: T.tableName)
     }
 }
 
@@ -69,11 +69,11 @@ public struct AllTableSelection<T: Sendable>: Sendable where T: Table {
 
 extension AllTableSelection: SelectSQLExpression {
     struct _Select: SQLExpression {
-        let spaceName: String?
-        let schemaName: String
+        let schemaName: String?
+        let tableName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            if let space = spaceName {
+            if let space = schemaName {
                 serializer.writeQuote()
                 serializer.write(space)
                 serializer.writeQuote()
@@ -81,7 +81,7 @@ extension AllTableSelection: SelectSQLExpression {
             }
 
             serializer.writeQuote()
-            serializer.write(self.schemaName)
+            serializer.write(self.tableName)
             serializer.writeQuote()
             serializer.writePeriod()
             serializer.write("*")
@@ -89,7 +89,7 @@ extension AllTableSelection: SelectSQLExpression {
     }
 
     public var selectSqlExpression: some SQLExpression {
-        _Select(spaceName: T.path, schemaName: T.schema)
+        _Select(schemaName: T.path, tableName: T.schema)
     }
 }
 

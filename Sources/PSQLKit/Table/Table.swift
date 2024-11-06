@@ -18,8 +18,8 @@ extension CTE {
         let field = Self.queryContainer[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.schemaName,
-            schemaName: Self.tableName,
+            schemaName: Self.schemaName,
+            tableName: Self.tableName,
             columnName: field.column
         )
     }
@@ -29,7 +29,7 @@ extension CTE {
     }
     
     public var fromSqlExpression: some SQLExpression {
-        _From(spaceName: Self.schemaName, schemaName: Self.tableName)
+        _From(schemaName: Self.schemaName, tableName: Self.tableName)
     }
     
     public static postfix func .* (cte: Self) -> AllCTESelection<Self> {
@@ -72,7 +72,7 @@ extension Table {
     }
 
     public var fromSqlExpression: some SQLExpression {
-        _From(spaceName: Self.path, schemaName: Self.schema)
+        _From(schemaName: Self.path, tableName: Self.schema)
     }
 
     // MARK: - ColumnProperty
@@ -83,8 +83,8 @@ extension Table {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.path,
-            schemaName: Self.schema,
+            schemaName: Self.path,
+            tableName: Self.schema,
             columnName: field.key
         )
     }
@@ -97,8 +97,8 @@ extension Table {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.path,
-            schemaName: Self.schema,
+            schemaName: Self.path,
+            tableName: Self.schema,
             columnName: field.key
         )
     }
@@ -111,19 +111,19 @@ extension Table {
         let field = Self()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: nil,
-            spaceName: Self.path,
-            schemaName: Self.schema,
+            schemaName: Self.path,
+            tableName: Self.schema,
             columnName: field.key
         )
     }
 }
 
 struct _From: SQLExpression {
-    let spaceName: String?
-    let schemaName: String
+    let schemaName: String?
+    let tableName: String
 
     func serialize(to serializer: inout SQLSerializer) {
-        if let path = spaceName {
+        if let path = schemaName {
             serializer.writeQuote()
             serializer.write(path)
             serializer.writeQuote()
@@ -131,7 +131,7 @@ struct _From: SQLExpression {
         }
 
         serializer.writeQuote()
-        serializer.write(self.schemaName)
+        serializer.write(self.tableName)
         serializer.writeQuote()
     }
 }

@@ -17,8 +17,8 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.space,
-            schemaName: T.schema,
+            schemaName: T.space,
+            tableName: T.schema,
             columnName: field.key.description
         )
     }
@@ -31,8 +31,8 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.space,
-            schemaName: T.schema,
+            schemaName: T.space,
+            tableName: T.schema,
             columnName: field.key.description
         )
     }
@@ -45,8 +45,8 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.space,
-            schemaName: T.schema,
+            schemaName: T.space,
+            tableName: T.schema,
             columnName: field.key.description
         )
     }
@@ -59,8 +59,8 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.space,
-            schemaName: T.schema,
+            schemaName: T.space,
+            tableName: T.schema,
             columnName: field.$id.key.description
         )
     }
@@ -73,8 +73,8 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.space,
-            schemaName: T.schema,
+            schemaName: T.space,
+            tableName: T.schema,
             columnName: field.$id.key.description
         )
     }
@@ -87,8 +87,8 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.space,
-            schemaName: T.schema,
+            schemaName: T.space,
+            tableName: T.schema,
             columnName: field.$timestamp.key.description
         )
     }
@@ -101,8 +101,8 @@ extension TableAlias where T: Model {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.space,
-            schemaName: T.schema,
+            schemaName: T.space,
+            tableName: T.schema,
             columnName: field.key.description
         )
     }

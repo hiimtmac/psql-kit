@@ -19,8 +19,8 @@ extension CTEAlias {
         let field = T.queryContainer[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.schemaName,
-            schemaName: T.tableName,
+            schemaName: T.schemaName,
+            tableName: T.tableName,
             columnName: field.column
         )
     }
@@ -55,8 +55,8 @@ extension TableAlias {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.path,
-            schemaName: T.schema,
+            schemaName: T.path,
+            tableName: T.schema,
             columnName: field.key
         )
     }
@@ -69,8 +69,8 @@ extension TableAlias {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.path,
-            schemaName: T.schema,
+            schemaName: T.path,
+            tableName: T.schema,
             columnName: field.key
         )
     }
@@ -83,8 +83,8 @@ extension TableAlias {
         let field = T()[keyPath: keyPath]
         return ColumnExpression(
             aliasName: self.alias,
-            spaceName: T.path,
-            schemaName: T.schema,
+            schemaName: T.path,
+            tableName: T.schema,
             columnName: field.key
         )
     }
@@ -94,18 +94,18 @@ extension TableAlias: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression {
         _From(
             aliasName: self.alias,
-            spaceName: T.path,
-            schemaName: T.schema
+            schemaName: T.path,
+            tableName: T.schema
         )
     }
 
     struct _From: SQLExpression {
         let aliasName: String
-        let spaceName: String?
-        let schemaName: String
+        let schemaName: String?
+        let tableName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            if let path = spaceName {
+            if let path = schemaName {
                 serializer.writeQuote()
                 serializer.write(path)
                 serializer.writeQuote()
@@ -113,7 +113,7 @@ extension TableAlias: FromSQLExpression {
             }
 
             serializer.writeQuote()
-            serializer.write(self.schemaName)
+            serializer.write(self.tableName)
             serializer.writeQuote()
 
             serializer.writeSpace()
