@@ -11,7 +11,7 @@ let package = Package(
     ],
     products: [
         .library(name: "PSQLKit", targets: ["PSQLKit"]),
-//        .library(name: "FluentPSQLKit", targets: ["FluentPSQLKit"]),
+        .library(name: "FluentPSQLKit", targets: ["FluentPSQLKit"]),
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.49.0"),
@@ -39,28 +39,29 @@ let package = Package(
                 .enableUpcomingFeature("ExistentialAny")
             ]
         ),
-//        .target(
-//            name: "FluentPSQLKit",
-//            dependencies: [
-//                .target(name: "PSQLKit"),
-//                .product(name: "FluentKit", package: "fluent-kit"),
-//                .product(name: "PostgresKit", package: "postgres-kit")
-//            ],
-//            swiftSettings: [
-//                .enableUpcomingFeature("ExistentialAny")
-//            ]
-//        ),
+        .target(
+            name: "FluentPSQLKit",
+            dependencies: [
+                .target(name: "PSQLKit"),
+                .target(name: "PSQLKitMacros"),
+                .product(name: "FluentKit", package: "fluent-kit"),
+                .product(name: "PostgresKit", package: "postgres-kit")
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny")
+            ]
+        ),
         .testTarget(name: "PSQLKitTests", dependencies: [
             .target(name: "PSQLKit"),
             .product(name: "PostgresKit", package: "postgres-kit"),
             .product(name: "FluentBenchmark", package: "fluent-kit"),
         ]),
-//        .testTarget(name: "FluentPSQLKitTests", dependencies: [
-//            .target(name: "FluentPSQLKit"),
-//            .product(name: "PostgresKit", package: "postgres-kit"),
-//            .product(name: "FluentBenchmark", package: "fluent-kit"),
-//            .product(name: "FluentKit", package: "fluent-kit"),
-//        ]),
+        .testTarget(name: "FluentPSQLKitTests", dependencies: [
+            .target(name: "FluentPSQLKit"),
+            .product(name: "PostgresKit", package: "postgres-kit"),
+            .product(name: "FluentBenchmark", package: "fluent-kit"),
+            .product(name: "FluentKit", package: "fluent-kit"),
+        ]),
         .testTarget(
             name: "PSQLKitMacroTests",
             dependencies: [

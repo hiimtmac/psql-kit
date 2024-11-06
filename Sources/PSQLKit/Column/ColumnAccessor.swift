@@ -11,7 +11,7 @@ import Foundation
 public struct ColumnAccessor<Value>: Sendable where Value: PSQLExpression {
     let column: String
     
-    init(_ column: String) {
+    public init(_ column: String) {
         self.column = column
     }
     

@@ -5,7 +5,7 @@ import FluentKit
 import PostgresKit
 import SQLKit
 import XCTest
-@testable import PSQLKit
+@testable import FluentPSQLKit
 
 final class FluentModel: Model, Table, @unchecked Sendable {
     static let schema = "my_model"

@@ -2,7 +2,7 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
-@testable import PSQLKit
+@testable import FluentPSQLKit
 
 // needed because https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5
 infix operator ~~: ComparisonPrecedence

@@ -3,7 +3,7 @@
 
 import FluentKit
 import XCTest
-@testable import PSQLKit
+@testable import FluentPSQLKit
 
 final class FluentTests: PSQLTestCase {
     final class Pet: Model, Table, @unchecked Sendable {

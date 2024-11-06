@@ -2,7 +2,7 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import FluentBenchmark
-import PSQLKit
+import FluentPSQLKit
 import XCTest
 
 // needed because https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5

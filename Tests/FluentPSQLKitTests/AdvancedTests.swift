@@ -2,7 +2,7 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import FluentKit
-import PSQLKit
+import FluentPSQLKit
 import XCTest
 
 final class AdvancedTests: PSQLTestCase {

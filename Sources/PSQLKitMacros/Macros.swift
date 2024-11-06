@@ -6,6 +6,7 @@ struct PSQLKitPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         ColumnMacro.self,
         IgnoreMacro.self,
-        TableMacro.self
+        TableMacro.self,
+        FluentTableMacro.self
     ]
 }

@@ -2,7 +2,7 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import XCTest
-@testable import PSQLKit
+@testable import FluentPSQLKit
 
 final class UpdateTests: PSQLTestCase {
     let f = FluentModel.as("x")
