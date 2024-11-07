@@ -32,8 +32,22 @@ extension CTE {
         _From(schemaName: Self.schemaName, tableName: Self.tableName)
     }
     
-    public static postfix func .* (cte: Self) -> AllCTESelection<Self> {
+    public static var table: CTETable<Self> {
+        CTETable()
+    }
+}
+
+public struct CTETable<T>: FromSQLExpression where T: CTE {
+    public var fromSqlExpression: some SQLExpression {
+        _From(schemaName: T.schemaName, tableName: T.tableName)
+    }
+    
+    public static postfix func .* (cte: Self) -> AllCTESelection<T> {
         .init(cte: cte)
+    }
+    
+    public func `as`(_ alias: String) -> CTEAlias<T> {
+        .init(alias: alias)
     }
 }
 
@@ -118,9 +132,13 @@ extension Table {
     }
 }
 
-struct _From: SQLExpression {
+struct _From: SQLExpression, FromSQLExpression {
     let schemaName: String?
     let tableName: String
+    
+    var fromSqlExpression: some SQLExpression {
+        self
+    }
 
     func serialize(to serializer: inout SQLSerializer) {
         if let path = schemaName {

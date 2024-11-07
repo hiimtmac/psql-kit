@@ -229,4 +229,4 @@ extension ColumnExpression: Coalescable {}
 
 extension ColumnExpression: Concatenatable where T: CustomStringConvertible {}
 
-extension ColumnExpression: JsonbExtractable where T: Codable {}
+extension ColumnExpression: JsonbExtractable where T: Decodable {}

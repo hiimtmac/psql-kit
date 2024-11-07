@@ -84,35 +84,21 @@ extension JsonbExtractPathTextExpression: TypeEquatable where Content: TypeEquat
 extension JsonbExtractPathTextExpression {
     public init<T>(
         _ group: ColumnExpression<T>,
-        _ keyPath: KeyPath<T, ColumnProperty<T, Content>>
-    ) where T: TableObject {
+        _ keyPath: KeyPath<T.QueryContainer, ColumnAccessor<Content>>
+    ) where T: CTE {
         self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: keyPath].key.description]
-    }
-
-    public init<T>(
-        _ group: ColumnExpression<T>,
-        _ keyPath: KeyPath<T, OptionalColumnProperty<T, Content>>
-    ) where T: TableObject {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: keyPath].key.description]
+        self.pathElements = [T.queryContainer[keyPath: keyPath].column]
     }
 
     public init<T, U>(
         _ group: ColumnExpression<T>,
-        _ first: KeyPath<T, NestedObjectProperty<T, U>>,
-        _ second: KeyPath<U, ColumnProperty<U, Content>>
-    ) where T: TableObject, U: TableObject {
+        _ first: KeyPath<T.QueryContainer, ColumnAccessor<U>>,
+        _ second: KeyPath<U.QueryContainer, ColumnAccessor<Content>>
+    ) where T: CTE, U: CTE {
         self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
-    }
-
-    public init<T, U>(
-        _ group: ColumnExpression<T>,
-        _ first: KeyPath<T, NestedObjectProperty<T, U>>,
-        _ second: KeyPath<U, OptionalColumnProperty<U, Content>>
-    ) where T: TableObject, U: TableObject {
-        self.content = group.baseSqlExpression
-        self.pathElements = [T()[keyPath: first].key.description, U()[keyPath: second].key.description]
+        self.pathElements = [
+            T.queryContainer[keyPath: first].column,
+            U.queryContainer[keyPath: second].column
+        ]
     }
 }

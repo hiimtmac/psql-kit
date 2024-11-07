@@ -5,28 +5,13 @@ import PSQLKit
 import XCTest
 
 final class AdvancedTests: PSQLTestCase {
-    struct TableSpace: Table, @unchecked Sendable {
-        static let schema: String = "schema"
-        static let path: String? = "space"
-        @Column(key: "name")
+    @CTE("schema", schemaName: "space")
+    struct TableSpace {
         var name: String
     }
 
-    struct DateRange: Table, @unchecked Sendable {
-        static let schema: String = "date_range"
-        @Column(key: "date")
-        var date: PSQLDate
-    }
-
-    struct OwnerFilter: Table, @unchecked Sendable {
-        @Column(key: "id")
-        var id: UUID
-    }
-
-    struct OwnerDateSeries: Table, @unchecked Sendable {
-        @OptionalColumn(key: "id")
-        var id: UUID?
-        @Column(key: "date")
+    @CTE("date_range")
+    struct DateRange {
         var date: PSQLDate
     }
     

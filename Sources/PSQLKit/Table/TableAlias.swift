@@ -28,6 +28,45 @@ extension CTEAlias {
     public static postfix func .* (_ alias: Self) -> AllCTESelection<T>.Alias {
         .init(cte: alias)
     }
+    
+    public var table: Self { self }
+}
+
+extension CTEAlias: FromSQLExpression {
+    public var fromSqlExpression: some SQLExpression {
+        _From(
+            aliasName: self.alias,
+            schemaName: T.schemaName,
+            tableName: T.tableName
+        )
+    }
+
+    struct _From: SQLExpression {
+        let aliasName: String
+        let schemaName: String?
+        let tableName: String
+
+        func serialize(to serializer: inout SQLSerializer) {
+            if let path = schemaName {
+                serializer.writeQuote()
+                serializer.write(path)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            }
+
+            serializer.writeQuote()
+            serializer.write(self.tableName)
+            serializer.writeQuote()
+
+            serializer.writeSpace()
+            serializer.write("AS")
+            serializer.writeSpace()
+
+            serializer.writeQuote()
+            serializer.write(self.aliasName)
+            serializer.writeQuote()
+        }
+    }
 }
 
 @dynamicMemberLookup

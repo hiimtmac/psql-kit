@@ -5,9 +5,13 @@ import struct PostgresNIO.PostgresDataType
 
 #warning("figure out")
 
-public protocol TableObject: PSQLExpression {
-    init()
+public protocol NestedCTE: CTE, PSQLExpression, Decodable {}
+
+extension NestedCTE {
+    public static var postgresDataType: PostgresDataType { .jsonb }
 }
+
+public protocol TableObject: PSQLExpression {}
 
 extension TableObject {
     public static var postgresDataType: PostgresDataType { .jsonb }

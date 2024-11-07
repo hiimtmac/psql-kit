@@ -52,6 +52,14 @@ extension QueryDirective {
     public func asSubquery<U>(_ alias: TableAlias<U>) -> SubQuery<T> where U: Table {
         SubQuery(name: alias.alias, content: self.content)
     }
+    
+    public func asSubquery<U>(_ table: CTETable<U>) -> SubQuery<T> where U: CTE {
+        SubQuery(name: U.tableName, content: self.content)
+    }
+
+    public func asSubquery<U>(_ alias: CTEAlias<U>) -> SubQuery<T> where U: CTE {
+        SubQuery(name: alias.alias, content: self.content)
+    }
 
     public func asSubquery(_ name: String) -> SubQuery<T> {
         SubQuery(name: name, content: self.content)
@@ -104,6 +112,14 @@ extension QueryDirective {
     }
 
     public func asWith<U>(_ alias: TableAlias<U>) -> WithQuery<T> {
+        WithQuery(name: alias.alias, content: self.content)
+    }
+    
+    public func asWith<U>(_ table: CTETable<U>) -> WithQuery<T> where U: CTE {
+        WithQuery(name: U.tableName, content: self.content)
+    }
+
+    public func asWith<U>(_ alias: CTEAlias<U>) -> WithQuery<T> {
         WithQuery(name: alias.alias, content: self.content)
     }
 
