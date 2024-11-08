@@ -84,7 +84,7 @@ extension FluentTableMacro: ExtensionMacro {
                 bindings: PatternBindingListSyntax(
                     arrayLiteral: PatternBindingSyntax(
                         pattern: IdentifierPatternSyntax(
-                            identifier: .identifier("tableName")
+                            identifier: .identifier("schema")
                         ),
                         typeAnnotation: TypeAnnotationSyntax(
                             colon: .colonToken(),
@@ -120,7 +120,7 @@ extension FluentTableMacro: ExtensionMacro {
                 bindings: PatternBindingListSyntax(
                     arrayLiteral: PatternBindingSyntax(
                         pattern: IdentifierPatternSyntax(
-                            identifier: .identifier("schemaName")
+                            identifier: .identifier("space")
                         ),
                         typeAnnotation: TypeAnnotationSyntax(
                             colon: .colonToken(),

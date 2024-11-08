@@ -69,8 +69,8 @@ final class FluentTableMacroTests: XCTestCase {
                 }
 
                 extension Test: Table {
-                    public static let tableName: String = "test_table"
-                    public static let schemaName: String? = "test_schema"
+                    public static let schema: String = "test_table"
+                    public static let space: String? = "test_schema"
                     public static let queryContainer = QueryContainer()
                 }
                 """,

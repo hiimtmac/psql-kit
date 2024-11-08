@@ -6,6 +6,6 @@ import PSQLKit
 import SQLKit
 
 extension Table where Self: Model {
-    public static var space: String? { schemaName }
-    public static var schema: String { tableName }
+    public static var schemaName: String? { space }
+    public static var tableName: String { schema }
 }
