@@ -29,7 +29,7 @@ extension QueryDirective: UnionSQLExpression {
 public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let name: String
     let content: T
-    
+
     package init(name: String, content: T) {
         self.name = name
         self.content = content
@@ -88,7 +88,7 @@ extension QueryDirective: SelectSQLExpression {
 public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let name: String
     package let content: T
-    
+
     package init(name: String, content: T) {
         self.name = name
         self.content = content

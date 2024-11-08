@@ -33,7 +33,7 @@ extension QueryTuple: InsertSQLExpression where repeat each T: InsertSQLExpressi
     public var insertColumnSqlExpression: some SQLExpression {
         SQLList(insertColumnSQLExpressions: repeat each content)
     }
-    
+
     public var insertValueSqlExpression: some SQLExpression {
         SQLList(insertValueSQLExpressions: repeat each content)
     }

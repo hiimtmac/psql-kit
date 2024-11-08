@@ -12,7 +12,7 @@ struct WithTests {
     @Test
     func testWith1() {
         var serializer = SQLSerializer.test
-        
+
         WITH {
             QUERY {
                 SELECT { FluentModel.$name }
@@ -29,7 +29,7 @@ struct WithTests {
     @Test
     func testWith2() {
         var serializer = SQLSerializer.test
-        
+
         WITH {
             QUERY {
                 SELECT { f.$title }
@@ -44,9 +44,9 @@ struct WithTests {
     }
 
     @Test
-	func testWithInQuery() {
-		var serializer = SQLSerializer.test
-        
+    func testWithInQuery() {
+        var serializer = SQLSerializer.test
+
         QUERY {
             WITH {
                 QUERY {
@@ -65,9 +65,9 @@ struct WithTests {
     }
 
     @Test
-	func testWithErased() {
-		var serializer = SQLSerializer.test
-        
+    func testWithErased() {
+        var serializer = SQLSerializer.test
+
         let f = QUERY {
             SELECT { FluentModel.$name }
             FROM { FluentModel.table }
@@ -85,9 +85,9 @@ struct WithTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
-        
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
+
         let bool = true
         WITH {
             if bool {
@@ -103,9 +103,9 @@ struct WithTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
-        
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
+
         let bool = false
         WITH {
             if bool {
@@ -121,9 +121,9 @@ struct WithTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
-        
+    func testSwitch() {
+        var serializer = SQLSerializer.test
+
         enum Test {
             case one
             case two
@@ -148,9 +148,9 @@ struct WithTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
-        
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
+
         let bool = true
         WITH {
             if bool {
@@ -164,9 +164,9 @@ struct WithTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
-        
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
+
         let bool = false
         WITH {
             if bool {
@@ -180,9 +180,9 @@ struct WithTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
-        
+    func testEmpty() {
+        var serializer = SQLSerializer.test
+
         WITH {}
             .serialize(to: &serializer)
 

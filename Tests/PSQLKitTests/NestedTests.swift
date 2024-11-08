@@ -12,7 +12,7 @@ struct NestedTests {
     @Test
     func testGroup() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$name)
             JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$info, \.$name)

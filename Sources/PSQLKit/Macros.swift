@@ -1,3 +1,6 @@
+// Macros.swift
+// Copyright (c) 2024 hiimtmac inc.
+
 @attached(peer)
 public macro CTECol(
     _ name: String

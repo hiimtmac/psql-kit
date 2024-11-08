@@ -1,12 +1,8 @@
-//
-//  File.swift
-//  psql-kit
-//
-//  Created by Taylor McIntyre on 2024-11-08.
-//
+// AllTableSelection+Extensions.swift
+// Copyright (c) 2024 hiimtmac inc.
 
-import SQLKit
 import PSQLKit
+import SQLKit
 
 public struct AllFluentCTESelection<T>: Sendable where T: FluentCTE {
     let cte: T
@@ -33,4 +29,3 @@ extension AllFluentCTESelection.Alias: SelectSQLExpression {
         _AllTableSelectAlias(aliasName: self.cte.alias)
     }
 }
-

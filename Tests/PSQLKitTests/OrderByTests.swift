@@ -12,7 +12,7 @@ struct OrderByTests {
     @Test
     func testOrderModel() {
         var serializer = SQLSerializer.test
-        
+
         ORDERBY {
             PSQLModel.$name
         }
@@ -25,7 +25,7 @@ struct OrderByTests {
     @Test
     func testOrderModelAlias() {
         var serializer = SQLSerializer.test
-        
+
         ORDERBY {
             p.$name.asc()
         }
@@ -38,7 +38,7 @@ struct OrderByTests {
     @Test
     func testOrderMultiple() {
         var serializer = SQLSerializer.test
-        
+
         ORDERBY {
             PSQLModel.$name.asc()
             p.$name.desc()
@@ -53,7 +53,7 @@ struct OrderByTests {
     @Test
     func testOrderDirections() {
         var serializer = SQLSerializer.test
-        
+
         ORDERBY {
             p.$name
             PSQLModel.$name.asc()
@@ -69,7 +69,7 @@ struct OrderByTests {
     @Test
     func testOrderRaw() {
         var serializer = SQLSerializer.test
-        
+
         ORDERBY {
             RawColumn<String>("cool").desc()
         }
@@ -82,7 +82,7 @@ struct OrderByTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         ORDERBY {
@@ -101,7 +101,7 @@ struct OrderByTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         ORDERBY {
@@ -120,7 +120,7 @@ struct OrderByTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -147,7 +147,7 @@ struct OrderByTests {
     @Test
     func testIfTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         ORDERBY {
@@ -164,7 +164,7 @@ struct OrderByTests {
     @Test
     func testIfFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         ORDERBY {
@@ -181,7 +181,7 @@ struct OrderByTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         ORDERBY {}
             .serialize(to: &serializer)
 

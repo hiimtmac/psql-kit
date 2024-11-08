@@ -1,9 +1,9 @@
 // AdvancedTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
 import FluentKit
 import FluentPSQLKit
+import Foundation
 import SQLKit
 import Testing
 
@@ -34,7 +34,7 @@ struct AdvancedTests {
 
         init() {}
     }
-    
+
     @FluentCTE("schema", schemaName: "space")
     final class ModelSpace: Model, @unchecked Sendable {
         @ID
@@ -44,7 +44,7 @@ struct AdvancedTests {
 
         init() {}
     }
-    
+
     @CTE("schema", schemaName: "space")
     struct TableSpace {
         var name: String
@@ -65,23 +65,23 @@ struct AdvancedTests {
         var id: UUID?
         var date: PSQLDate
     }
-    
+
     @Test
-	func testSpaces() {
-		var serializer = SQLSerializer.test
+    func testSpaces() {
+        var serializer = SQLSerializer.test
         QUERY {
             SELECT { ModelSpace.$name }
             FROM { ModelSpace.table }
         }
         .serialize(to: &serializer)
-        
+
         let compare = #"SELECT "space"."schema"."name"::TEXT FROM "space"."schema""#
         #expect(serializer.sql == compare)
     }
-    
+
     @Test
-	func testSpacesAlias() {
-		var serializer = SQLSerializer.test
+    func testSpacesAlias() {
+        var serializer = SQLSerializer.test
         let f = ModelSpace.as("a")
 
         QUERY {
@@ -89,13 +89,13 @@ struct AdvancedTests {
             FROM { f.table }
         }
         .serialize(to: &serializer)
-        
+
         let compare = #"SELECT "a"."name"::TEXT FROM "space"."schema" AS "a""#
         #expect(serializer.sql == compare)
     }
 
     @Test
-	func testTypesCompile() {
+    func testTypesCompile() {
         _ = WHERE {
             // Custom UUID vs Custom UUID?
             OwnerFilter.$id == OwnerDateSeries.$id
@@ -107,8 +107,8 @@ struct AdvancedTests {
     }
 
     @Test
-	func testExample() {
-		var serializer = SQLSerializer.test
+    func testExample() {
+        var serializer = SQLSerializer.test
         let d1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 31).date!
         let d2 = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!
         let r = DateRange.as("r")

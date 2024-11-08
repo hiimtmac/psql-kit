@@ -49,7 +49,7 @@ public enum WhereBuilder {
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTuple<repeat each Content> where repeat each Content: WhereSQLExpression {
+    ) -> QueryTuple< repeat each Content> where repeat each Content: WhereSQLExpression {
         .init(repeat each content)
     }
 }

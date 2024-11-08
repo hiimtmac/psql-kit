@@ -10,8 +10,8 @@ struct UpdateTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testModel() {
-		var serializer = SQLSerializer.test
+    func testModel() {
+        var serializer = SQLSerializer.test
         UPDATE(FluentModel.table) {
             FluentModel.$name => "hi"
         }
@@ -22,8 +22,8 @@ struct UpdateTests {
     }
 
     @Test
-	func testModelAlias() {
-		var serializer = SQLSerializer.test
+    func testModelAlias() {
+        var serializer = SQLSerializer.test
         UPDATE(self.f.table) {
             f.$name => "hi"
         }
@@ -34,8 +34,8 @@ struct UpdateTests {
     }
 
     @Test
-	func testBoth() {
-		var serializer = SQLSerializer.test
+    func testBoth() {
+        var serializer = SQLSerializer.test
         UPDATE(self.f.table) {
             FluentModel.$name => "hi"
             f.$name => "hi"
@@ -47,8 +47,8 @@ struct UpdateTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         UPDATE(self.f.table) {
             if bool {
@@ -64,8 +64,8 @@ struct UpdateTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         UPDATE(self.f.table) {
             if bool {
@@ -81,8 +81,8 @@ struct UpdateTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -107,8 +107,8 @@ struct UpdateTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         UPDATE(f.table) {}
             .serialize(to: &serializer)
 

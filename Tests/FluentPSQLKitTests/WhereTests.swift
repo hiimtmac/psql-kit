@@ -15,8 +15,8 @@ struct WhereTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testEqual() {
-		var serializer = SQLSerializer.test
+    func testEqual() {
+        var serializer = SQLSerializer.test
         WHERE {
             FluentModel.$name == FluentModel.$title
         }
@@ -28,8 +28,8 @@ struct WhereTests {
     }
 
     @Test
-	func testEnum() {
-		var serializer = SQLSerializer.test
+    func testEnum() {
+        var serializer = SQLSerializer.test
         WHERE {
             FluentModel.$category != FluentModel.$category
             FluentModel.$category == FluentModel.Category.yes.rawValue
@@ -42,8 +42,8 @@ struct WhereTests {
     }
 
     @Test
-	func testMultiple() {
-		var serializer = SQLSerializer.test
+    func testMultiple() {
+        var serializer = SQLSerializer.test
         WHERE {
             FluentModel.$name == f.$title
             f.$name != FluentModel.$title
@@ -55,8 +55,8 @@ struct WhereTests {
     }
 
     @Test
-	func testNotEqual() {
-		var serializer = SQLSerializer.test
+    func testNotEqual() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name != f.$title
         }
@@ -67,8 +67,8 @@ struct WhereTests {
     }
 
     @Test
-	func testIn() {
-		var serializer = SQLSerializer.test
+    func testIn() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name <> ["name", "hi"]
         }
@@ -79,8 +79,8 @@ struct WhereTests {
     }
 
     @Test
-	func testNotIn() {
-		var serializer = SQLSerializer.test
+    func testNotIn() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name >< ["name", "hi"]
         }
@@ -91,8 +91,8 @@ struct WhereTests {
     }
 
     @Test
-	func testBetween() {
-		var serializer = SQLSerializer.test
+    func testBetween() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$age >< (20 ... 30)
             f.$age >< ((f.$age) ... (f.$age))
@@ -104,20 +104,20 @@ struct WhereTests {
     }
 
     @Test
-	func testNotBetween() {
-		var serializer = SQLSerializer.test
+    func testNotBetween() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$age <> (20 ... 30)
         }
         .serialize(to: &serializer)
-        
+
         let compare = #"WHERE ("x"."age" NOT BETWEEN 20 AND 30)"#
         #expect(serializer.sql == compare)
     }
 
     @Test
-	func testLiteral() {
-		var serializer = SQLSerializer.test
+    func testLiteral() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name == "hello"
             f.$name != "hello"
@@ -132,8 +132,8 @@ struct WhereTests {
     }
 
     @Test
-	func testWhereOr() {
-		var serializer = SQLSerializer.test
+    func testWhereOr() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name <> ["name", "hi"] || FluentModel.$name != FluentModel.$name
         }
@@ -144,8 +144,8 @@ struct WhereTests {
     }
 
     @Test
-	func testWhereRaw() {
-		var serializer = SQLSerializer.test
+    func testWhereRaw() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name == RawColumn<String>("cool")
         }
@@ -156,8 +156,8 @@ struct WhereTests {
     }
 
     @Test
-	func testWhereBind() {
-		var serializer = SQLSerializer.test
+    func testWhereBind() {
+        var serializer = SQLSerializer.test
         WHERE {
             RawColumn<String>("cool") == PSQLBind("yes")
         }
@@ -168,8 +168,8 @@ struct WhereTests {
     }
 
     @Test
-	func testWhereLikes() {
-		var serializer = SQLSerializer.test
+    func testWhereLikes() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name ~~ "like"
             f.$name !~~ "not like"
@@ -183,8 +183,8 @@ struct WhereTests {
     }
 
     @Test
-	func testWhereTransforms() {
-		var serializer = SQLSerializer.test
+    func testWhereTransforms() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name == "hi"
             f.$name.transform(to: Int.self) == 8
@@ -197,8 +197,8 @@ struct WhereTests {
     }
 
     @Test
-	func testWhereControlFlow() {
-		var serializer = SQLSerializer.test
+    func testWhereControlFlow() {
+        var serializer = SQLSerializer.test
         let date = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 01, hour: 01, minute: 01, second: 01).date!
 
         enum Type {
@@ -233,8 +233,8 @@ struct WhereTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         WHERE {
             if bool {
@@ -250,8 +250,8 @@ struct WhereTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         WHERE {
             if bool {
@@ -267,8 +267,8 @@ struct WhereTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -293,8 +293,8 @@ struct WhereTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         WHERE {
             f.$age == 29
@@ -309,8 +309,8 @@ struct WhereTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         WHERE {
             f.$age == 29
@@ -325,8 +325,8 @@ struct WhereTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         WHERE {}
             .serialize(to: &serializer)
 

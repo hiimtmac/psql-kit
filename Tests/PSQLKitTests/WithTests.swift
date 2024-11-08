@@ -12,7 +12,7 @@ struct WithTests {
     @Test
     func testWith1() {
         var serializer = SQLSerializer.test
-        
+
         WITH {
             QUERY {
                 SELECT { PSQLModel.$name }
@@ -29,7 +29,7 @@ struct WithTests {
     @Test
     func testWith2() {
         var serializer = SQLSerializer.test
-        
+
         WITH {
             QUERY {
                 SELECT { p.$title }
@@ -46,7 +46,7 @@ struct WithTests {
     @Test
     func testWithInQuery() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             WITH {
                 QUERY {
@@ -67,7 +67,7 @@ struct WithTests {
     @Test
     func testWithErased() {
         var serializer = SQLSerializer.test
-        
+
         let p = QUERY {
             SELECT { PSQLModel.$name }
             FROM { PSQLModel.table }
@@ -87,7 +87,7 @@ struct WithTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         WITH {
@@ -106,7 +106,7 @@ struct WithTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         WITH {
@@ -125,7 +125,7 @@ struct WithTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -152,7 +152,7 @@ struct WithTests {
     @Test
     func testIfTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         WITH {
@@ -169,7 +169,7 @@ struct WithTests {
     @Test
     func testIfFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         WITH {
@@ -186,7 +186,7 @@ struct WithTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         WITH {}
             .serialize(to: &serializer)
 

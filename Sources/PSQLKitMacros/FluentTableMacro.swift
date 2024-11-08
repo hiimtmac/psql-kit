@@ -1,11 +1,14 @@
+// FluentTableMacro.swift
+// Copyright (c) 2024 hiimtmac inc.
+
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public struct FluentTableMacro {
+public enum FluentTableMacro {
     enum TableMacroError: Error, CustomStringConvertible {
         case nonClass
-        
+
         var description: String {
             switch self {
             case .nonClass: "@FluentCTE can only be applied to `class`s"
@@ -25,14 +28,14 @@ extension FluentTableMacro: ExtensionMacro {
         let publicKeyword = TokenSyntax.keyword(.public)
         let publicMod = DeclModifierSyntax(name: .keyword(.public))
         let staticMod = DeclModifierSyntax(name: .keyword(.static))
-        
+
         guard
             let identified = declaration.asProtocol(NamedDeclSyntax.self),
             let classDecl = identified.as(ClassDeclSyntax.self)
         else {
             throw TableMacroError.nonClass
         }
-        
+
         guard
             let attribute = classDecl.attributes.first?.as(AttributeSyntax.self),
             let argumentList = attribute.arguments?.as(LabeledExprListSyntax.self),
@@ -42,7 +45,7 @@ extension FluentTableMacro: ExtensionMacro {
         else {
             return []
         }
-        
+
         let schemaInitializer = if
             argumentList.count > 1,
             let schemaArgument = argumentList.last,
@@ -69,14 +72,14 @@ extension FluentTableMacro: ExtensionMacro {
                 value: NilLiteralExprSyntax(nilKeyword: .keyword(.nil))
             )
         }
-        
+
         let isPublic = classDecl.modifiers.contains(where: { $0.name.text == publicKeyword.text })
-        
+
         let tableName = MemberBlockItemListSyntax.Element(
             decl: VariableDeclSyntax(
                 modifiers: isPublic
-                ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
-                : DeclModifierListSyntax(arrayLiteral: staticMod),
+                    ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
+                    : DeclModifierListSyntax(arrayLiteral: staticMod),
                 bindingSpecifier: .keyword(.let),
                 bindings: PatternBindingListSyntax(
                     arrayLiteral: PatternBindingSyntax(
@@ -107,12 +110,12 @@ extension FluentTableMacro: ExtensionMacro {
                 )
             )
         )
-        
+
         let schemaName = MemberBlockItemListSyntax.Element(
             decl: VariableDeclSyntax(
                 modifiers: isPublic
-                ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
-                : DeclModifierListSyntax(arrayLiteral: staticMod),
+                    ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
+                    : DeclModifierListSyntax(arrayLiteral: staticMod),
                 bindingSpecifier: .keyword(.let),
                 bindings: PatternBindingListSyntax(
                     arrayLiteral: PatternBindingSyntax(
@@ -133,7 +136,7 @@ extension FluentTableMacro: ExtensionMacro {
                 )
             )
         )
-        
+
 //        let queryContainer = MemberBlockItemListSyntax.Element(
 //            decl: VariableDeclSyntax(
 //                modifiers: isPublic
@@ -161,7 +164,7 @@ extension FluentTableMacro: ExtensionMacro {
 //                )
 //            )
 //        )
-        
+
         let tableRecord = ExtensionDeclSyntax(
             extensionKeyword: .keyword(.extension),
             extendedType: IdentifierTypeSyntax(name: .identifier(classDecl.name.text)),
@@ -178,24 +181,24 @@ extension FluentTableMacro: ExtensionMacro {
             memberBlock: MemberBlockSyntax(
                 leftBrace: .leftBraceToken(),
                 members: MemberBlockItemListSyntax(
-                    arrayLiteral: tableName, schemaName//, queryContainer
+                    arrayLiteral: tableName, schemaName // , queryContainer
                 ),
                 rightBrace: .rightBraceToken()
             )
         )
-        
+
         return [tableRecord]
     }
 }
 
-//extension FluentTableMacro: MemberMacro {
+// extension FluentTableMacro: MemberMacro {
 //    struct ColumnInfo {
 //        let variableName: String
 //        let columnName: String
 //        let type: String
 //        let isPublic: Bool
 //    }
-//    
+//
 //    public static func expansion(
 //        of node: AttributeSyntax,
 //        providingMembersOf declaration: some DeclGroupSyntax,
@@ -203,16 +206,16 @@ extension FluentTableMacro: ExtensionMacro {
 //    ) throws -> [DeclSyntax] {
 //        let publicKeyword = TokenSyntax.keyword(.public)
 //        let publicMod = DeclModifierSyntax(name: .keyword(.public))
-//        
+//
 //        guard
 //            let identified = declaration.asProtocol(NamedDeclSyntax.self),
 //            let classDecl = identified.as(ClassDeclSyntax.self)
 //        else {
 //            throw TableMacroError.nonClass
 //        }
-//        
+//
 //        let isPublic = classDecl.modifiers.contains(where: { $0.name.text == publicKeyword.text })
-//        
+//
 //        let columnList = declaration
 //            .memberBlock
 //            .members
@@ -227,14 +230,14 @@ extension FluentTableMacro: ExtensionMacro {
 //                else {
 //                    return nil
 //                }
-//                
+//
 //                guard
 //                    let attribute = variable.attributes.first?.as(AttributeSyntax.self),
 //                    let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)
 //                else {
 //                    return nil
 //                }
-//                
+//
 //                let columnName: String
 //                let isID = attributeName.name.text == "ID"
 //                let isField = attributeName.name.text == "Field"
@@ -243,7 +246,7 @@ extension FluentTableMacro: ExtensionMacro {
 //                let isParent = attributeName.name.text == "Parent"
 //                let isOptionalParent = attributeName.name.text == "OptionalParent"
 //                let isTimestamp = attributeName.name.text == "Timestamp"
-//                
+//
 //                if isID {
 //                    columnName = identifier.identifier.text
 //                } else if
@@ -257,7 +260,7 @@ extension FluentTableMacro: ExtensionMacro {
 //                } else {
 //                    return nil
 //                }
-//                
+//
 //                var type: String
 //                if let simple = typeAnnotation.as(IdentifierTypeSyntax.self) {
 //                    type = simple.name.text
@@ -274,9 +277,9 @@ extension FluentTableMacro: ExtensionMacro {
 //                } else {
 //                    return nil
 //                }
-//                
+//
 //                let isPublic = variable.modifiers.contains(where: { $0.name.text == publicKeyword.text })
-//                
+//
 //                return .init(
 //                    variableName: identifier.identifier.text,
 //                    columnName: columnName,
@@ -284,7 +287,7 @@ extension FluentTableMacro: ExtensionMacro {
 //                    isPublic: isPublic
 //                )
 //            }
-//        
+//
 //        let columnAccessors = columnList.map { columnInfo -> MemberBlockItemSyntax in
 //            MemberBlockItemSyntax(
 //                decl: VariableDeclSyntax(
@@ -348,7 +351,7 @@ extension FluentTableMacro: ExtensionMacro {
 //                )
 //            )
 //        }
-//        
+//
 //        let query = DeclSyntax(
 //            StructDeclSyntax(
 //                attributes: AttributeListSyntax(),
@@ -364,7 +367,7 @@ extension FluentTableMacro: ExtensionMacro {
 //                )
 //            )
 //        )
-//        
+//
 //        return [query]
 //    }
-//}
+// }

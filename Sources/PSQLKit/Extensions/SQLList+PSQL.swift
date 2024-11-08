@@ -55,7 +55,7 @@ extension SQLList {
         }
         self.init(collector, separator: SQLRaw(", "))
     }
-    
+
     init<each T>(insertValueSQLExpressions expressions: repeat each T) where repeat each T: InsertSQLExpression {
         var collector = [any SQLExpression]()
         for expression in repeat each expressions {
@@ -64,7 +64,6 @@ extension SQLList {
         }
         self.init(collector, separator: SQLRaw(", "))
     }
-
 }
 
 extension SQLList {

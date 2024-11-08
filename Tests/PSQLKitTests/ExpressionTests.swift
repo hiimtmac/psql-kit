@@ -13,7 +13,7 @@ struct ExpressionTests {
     @Test
     func testMax() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             MAX(p.$name)
             MAX(p.$age).as("age")
@@ -27,7 +27,7 @@ struct ExpressionTests {
     @Test
     func testMin() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             MIN(p.$name)
             MIN(p.$age).as("age")
@@ -41,7 +41,7 @@ struct ExpressionTests {
     @Test
     func testCount() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             COUNT(p.$name)
             COUNT(p.$age).as("age")
@@ -55,7 +55,7 @@ struct ExpressionTests {
     @Test
     func testCountDistinct() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             COUNT(p.$name)
                 .distinct()
@@ -72,7 +72,7 @@ struct ExpressionTests {
     @Test
     func testSum() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             SUM(p.$name)
             SUM(p.$age).as("age")
@@ -86,7 +86,7 @@ struct ExpressionTests {
     @Test
     func testGenerateSeries() {
         var serializer = SQLSerializer.test
-        
+
         let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
 
@@ -103,7 +103,7 @@ struct ExpressionTests {
     @Test
     func testConcat() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             CONCAT(p.$name, " ", p.$title, " ", p.$name)
             CONCAT(p.$name, " ", p.$title, " ").as("cool")
@@ -119,7 +119,7 @@ struct ExpressionTests {
     @Test
     func testCoalesce() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             COALESCE(p.$name, p.$name, p.$name, p.$name, "hello").as("cool")
             COALESCE(p.$name, p.$name, p.$name, "hello").as("cool")
@@ -136,7 +136,7 @@ struct ExpressionTests {
     @Test
     func testJsonExtractPathText() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello", as: String.self).as("cool")
             JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello", "cool", as: String.self)
@@ -150,7 +150,7 @@ struct ExpressionTests {
     @Test
     func testNestedJsonExtract() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             COALESCE(
                 JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$name),
@@ -166,7 +166,7 @@ struct ExpressionTests {
     @Test
     func testCoalesceCompare() {
         var serializer = SQLSerializer.test
-        
+
         let date = DateComponents(calendar: .current, year: 2021, month: 01, day: 21).date!
 
         WHERE {
@@ -182,7 +182,7 @@ struct ExpressionTests {
     @Test
     func testConcatCompare() {
         var serializer = SQLSerializer.test
-        
+
         WHERE {
             CONCAT(p.$name, "tmac") == "taylor"
         }
@@ -195,7 +195,7 @@ struct ExpressionTests {
     @Test
     func testArrayAggregate() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             ARRAY_AGG(p.$name).as("agg")
             ARRAY_AGG(PSQLArray([1, 2, 3])).as("array")
@@ -209,7 +209,7 @@ struct ExpressionTests {
     @Test
     func testArrayToString() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_TO_STRING(p.$name, delimiter: ",", ifNull: "*")
@@ -229,7 +229,7 @@ struct ExpressionTests {
     @Test
     func testArrayUpper() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_UPPER(p.$name, dimension: 1).as("upp")
@@ -248,7 +248,7 @@ struct ExpressionTests {
     @Test
     func testArrayNDims() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_NDIMS(p.$name).as("upp")
@@ -267,7 +267,7 @@ struct ExpressionTests {
     @Test
     func testArrayLower() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_LOWER(p.$name, dimension: 1).as("low")
@@ -286,7 +286,7 @@ struct ExpressionTests {
     @Test
     func testArrayLength() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_LENGTH(p.$name, dimension: 1).as("low")
@@ -305,7 +305,7 @@ struct ExpressionTests {
     @Test
     func testArrayDims() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_DIMS(p.$name).as("dim")
@@ -324,7 +324,7 @@ struct ExpressionTests {
     @Test
     func testArrayReplace() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_REPLACE(p.$name, find: "hi", replace: "bye").as("rep")
@@ -343,7 +343,7 @@ struct ExpressionTests {
     @Test
     func testArrayRemove() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_REMOVE(p.$name, remove: "hi").as("rep")
@@ -362,7 +362,7 @@ struct ExpressionTests {
     @Test
     func testArrayPrepend() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_PREPEND(p.$name, prepend: "hi").as("pre")
@@ -381,7 +381,7 @@ struct ExpressionTests {
     @Test
     func testArrayConcatenate() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_CAT(p.$name, p.$name).as("app")
@@ -400,7 +400,7 @@ struct ExpressionTests {
     @Test
     func testArrayAppend() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 ARRAY_APPEND(p.$name, append: "hi").as("app")
@@ -419,7 +419,7 @@ struct ExpressionTests {
     @Test
     func testConcateWithCoalesce() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             CONCAT(COALESCE(p.$name, "hi"), " there")
         }
@@ -432,7 +432,7 @@ struct ExpressionTests {
     @Test
     func testDateTrunc() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             DATE_TRUNC("hour", p.$birthday).as("datehour")
         }
@@ -445,7 +445,7 @@ struct ExpressionTests {
     @Test
     func testDatePart() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             DATE_PART("hour", p.$birthday).as("hour")
         }

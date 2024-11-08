@@ -1,14 +1,14 @@
 // PSQLTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
 import FluentKit
+import Foundation
 import PostgresKit
 import SQLKit
 @testable import FluentPSQLKit
 
 @FluentCTE("my_model")
-final class FluentModel: Model, @unchecked Sendable {    
+final class FluentModel: Model, @unchecked Sendable {
     @ID
     var id: UUID?
     @OptionalField(key: "name")

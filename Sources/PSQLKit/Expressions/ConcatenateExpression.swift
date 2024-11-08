@@ -10,7 +10,7 @@ public protocol Concatenatable: BaseSQLExpression {}
 
 public struct ConcatenateExpression<each T>: Sendable where repeat each T: Concatenatable & Sendable {
     let content: (repeat each T)
-    
+
     public init(_ content: repeat each T) {
         self.content = (repeat each content)
     }
@@ -27,7 +27,7 @@ extension ConcatenateExpression: BaseSQLExpression {
 
     struct _Base: SQLExpression {
         let content: (repeat each T)
-        
+
         init(content: repeat each T) {
             self.content = (repeat each content)
         }
@@ -48,7 +48,7 @@ extension ConcatenateExpression: SelectSQLExpression {
 
     struct _Select: SQLExpression {
         let content: (repeat each T)
-        
+
         init(content: repeat each T) {
             self.content = (repeat each content)
         }

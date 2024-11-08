@@ -14,8 +14,8 @@ struct BindTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testBindSimple() {
-		var serializer = SQLSerializer.test
+    func testBindSimple() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$name == "tmac".asBind()
             f.$age > PSQLBind(8)
@@ -29,8 +29,8 @@ struct BindTests {
     }
 
     @Test
-	func testBindComplex() {
-		var serializer = SQLSerializer.test
+    func testBindComplex() {
+        var serializer = SQLSerializer.test
         WHERE {
             f.$age >< (1.asBind() ... PSQLBind(2))
             f.$age >< [PSQLBind(1), 2.asBind(), PSQLBind(3)]
@@ -47,8 +47,8 @@ struct BindTests {
     }
 
     @Test
-	func testBindDate() {
-		var serializer = SQLSerializer.test
+    func testBindDate() {
+        var serializer = SQLSerializer.test
         let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
 
         WHERE {

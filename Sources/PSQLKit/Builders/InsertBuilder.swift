@@ -64,11 +64,11 @@ public enum InsertBuilder {
     ) -> Content where Content: InsertSQLExpression {
         content
     }
-    
+
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTuple<repeat each Content> where repeat each Content: InsertSQLExpression {
+    ) -> QueryTuple< repeat each Content> where repeat each Content: InsertSQLExpression {
         .init(repeat each content)
     }
 }

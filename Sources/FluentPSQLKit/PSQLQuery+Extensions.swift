@@ -1,9 +1,5 @@
-//
-//  File.swift
-//  psql-kit
-//
-//  Created by Taylor McIntyre on 2024-11-04.
-//
+// PSQLQuery+Extensions.swift
+// Copyright (c) 2024 hiimtmac inc.
 
 import FluentKit
 import PostgresKit

@@ -2,8 +2,8 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import FluentBenchmark
-import PSQLKit
 import FluentPSQLKit
+import PSQLKit
 import SQLKit
 import Testing
 
@@ -14,8 +14,8 @@ infix operator ...: LogicalConjunctionPrecedence
 @Suite
 struct ReadmeTests {
     @Test
-	func testWelcome() {
-		var serializer = SQLSerializer.test
+    func testWelcome() {
+        var serializer = SQLSerializer.test
         QUERY {
             SELECT {
                 Moon.$name
@@ -28,7 +28,7 @@ struct ReadmeTests {
     }
 
     @Test
-	func testExecute() {
+    func testExecute() {
         let q = QUERY {
             SELECT {
                 Moon.$name
@@ -44,8 +44,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testColumnAlias() {
-		var serializer = SQLSerializer.test
+    func testColumnAlias() {
+        var serializer = SQLSerializer.test
         SELECT {
             Moon.$name.as("moon_name")
         }
@@ -54,8 +54,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testTableAlias() {
-		var serializer = SQLSerializer.test
+    func testTableAlias() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         SELECT {
             m.$name
@@ -66,8 +66,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testSelect() {
-		var serializer = SQLSerializer.test
+    func testSelect() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         SELECT {
             m.*
@@ -79,8 +79,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testFrom() {
-		var serializer = SQLSerializer.test
+    func testFrom() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         FROM {
             m.table
@@ -90,8 +90,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testJoin() {
-		var serializer = SQLSerializer.test
+    func testJoin() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         let p = Planet.as("p")
         QUERY {
@@ -108,8 +108,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testWhere() {
-		var serializer = SQLSerializer.test
+    func testWhere() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         WHERE {
             m.$name == "the moon"
@@ -120,8 +120,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testComparisons() {
-		var serializer = SQLSerializer.test
+    func testComparisons() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         WHERE {
             m.$craters == 3 || m.$craters != 3 // = / !=
@@ -139,8 +139,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testHaving() {
-		var serializer = SQLSerializer.test
+    func testHaving() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         HAVING {
             AVG(m.$craters) > 1
@@ -150,8 +150,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testGroupBy() {
-		var serializer = SQLSerializer.test
+    func testGroupBy() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         GROUPBY {
             m.$name
@@ -163,8 +163,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testOrderBy() {
-		var serializer = SQLSerializer.test
+    func testOrderBy() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         ORDERBY {
             m.$name
@@ -177,8 +177,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testInsert() {
-		var serializer = SQLSerializer.test
+    func testInsert() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         INSERT(into: m.table) {
             m.$name => "the moon"
@@ -191,8 +191,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testUpdate() {
-		var serializer = SQLSerializer.test
+    func testUpdate() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         UPDATE(m.table) {
             m.$name => "cool moon"
@@ -203,8 +203,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testDelete() {
-		var serializer = SQLSerializer.test
+    func testDelete() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         DELETE { m.table }
             .serialize(to: &serializer)
@@ -212,8 +212,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testQuery() {
-		var serializer = SQLSerializer.test
+    func testQuery() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         QUERY {
             SELECT { m.* }
@@ -224,8 +224,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testWith() {
-		var serializer = SQLSerializer.test
+    func testWith() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         WITH {
             QUERY {
@@ -239,8 +239,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testSubquery() {
-		var serializer = SQLSerializer.test
+    func testSubquery() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         QUERY {
             SELECT {
@@ -263,8 +263,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testArithmetic() {
-		var serializer = SQLSerializer.test
+    func testArithmetic() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         SELECT {
             (m.$craters / m.$comets).as("division")
@@ -277,8 +277,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testExpressions() {
-		var serializer = SQLSerializer.test
+    func testExpressions() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         SELECT {
             AVG(m.$craters)
@@ -302,10 +302,10 @@ struct ReadmeTests {
         var createdAt: Date?
         init() {}
     }
-    
+
     @Test
-	func testTransform() {
-		var serializer = SQLSerializer.test
+    func testTransform() {
+        var serializer = SQLSerializer.test
         let m = FluentModel1.as("m")
         QUERY {
             SELECT {
@@ -323,8 +323,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testRaw() {
-		var serializer = SQLSerializer.test
+    func testRaw() {
+        var serializer = SQLSerializer.test
         SELECT {
             RawColumn<String>("raw_column")
             RawColumn<Int>("raw_column").as("rawer")
@@ -336,8 +336,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testBinding() {
-		var serializer = SQLSerializer.test
+    func testBinding() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         WHERE {
             m.$name == "the moon".asBind()
@@ -349,8 +349,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testUnion() {
-		var serializer = SQLSerializer.test
+    func testUnion() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         let p = Planet.as("p")
         UNION {
@@ -368,8 +368,8 @@ struct ReadmeTests {
     }
 
     @Test
-	func testDistinct() {
-		var serializer = SQLSerializer.test
+    func testDistinct() {
+        var serializer = SQLSerializer.test
         let m = Moon.as("m")
         let p = Planet.as("p")
         QUERY {
@@ -404,9 +404,10 @@ struct ReadmeTests {
         var name: String
         init() {}
     }
+
     @Test
-	func testSchema() {
-		var serializer = SQLSerializer.test
+    func testSchema() {
+        var serializer = SQLSerializer.test
         let m = FluentModel2.as("m")
         QUERY {
             SELECT { m.* }

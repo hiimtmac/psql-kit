@@ -10,8 +10,8 @@ struct GroupByTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testGroupModel() {
-		var serializer = SQLSerializer.test
+    func testGroupModel() {
+        var serializer = SQLSerializer.test
         GROUPBY {
             FluentModel.$name
         }
@@ -22,8 +22,8 @@ struct GroupByTests {
     }
 
     @Test
-	func testGroupModelAlias() {
-		var serializer = SQLSerializer.test
+    func testGroupModelAlias() {
+        var serializer = SQLSerializer.test
         GROUPBY {
             f.$name
         }
@@ -34,21 +34,21 @@ struct GroupByTests {
     }
 
     @Test
-	func testGroupBoth() {
-		var serializer = SQLSerializer.test
+    func testGroupBoth() {
+        var serializer = SQLSerializer.test
         GROUPBY {
             FluentModel.$name
             f.$name
         }
         .serialize(to: &serializer)
-        
+
         let compare = #"GROUP BY "my_model"."name", "x"."name""#
         #expect(serializer.sql == compare)
     }
 
     @Test
-	func testGroupRaw() {
-		var serializer = SQLSerializer.test
+    func testGroupRaw() {
+        var serializer = SQLSerializer.test
         GROUPBY {
             RawColumn<String>("cool")
         }
@@ -59,8 +59,8 @@ struct GroupByTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         GROUPBY {
             if bool {
@@ -76,8 +76,8 @@ struct GroupByTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         GROUPBY {
             if bool {
@@ -93,8 +93,8 @@ struct GroupByTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -119,8 +119,8 @@ struct GroupByTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         GROUPBY {
             if bool {
@@ -134,8 +134,8 @@ struct GroupByTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         GROUPBY {
             if bool {
@@ -149,8 +149,8 @@ struct GroupByTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         GROUPBY {}
             .serialize(to: &serializer)
 

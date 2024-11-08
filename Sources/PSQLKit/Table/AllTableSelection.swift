@@ -12,7 +12,7 @@ public struct AllCTESelection<T>: Sendable where T: CTE {
 package struct _AllTableSelect: SQLExpression {
     let schemaName: String?
     let tableName: String
-    
+
     package init(schemaName: String?, tableName: String) {
         self.schemaName = schemaName
         self.tableName = tableName
@@ -56,7 +56,7 @@ extension AllCTESelection.Alias: SelectSQLExpression {
 
 package struct _AllTableSelectAlias: SQLExpression {
     let aliasName: String
-    
+
     package init(aliasName: String) {
         self.aliasName = aliasName
     }

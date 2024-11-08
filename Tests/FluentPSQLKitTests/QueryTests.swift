@@ -10,8 +10,8 @@ struct QueryTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testQuery() {
-		var serializer = SQLSerializer.test
+    func testQuery() {
+        var serializer = SQLSerializer.test
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
@@ -23,8 +23,8 @@ struct QueryTests {
     }
 
     @Test
-	func testQueryAsSub() {
-		var serializer = SQLSerializer.test
+    func testQueryAsSub() {
+        var serializer = SQLSerializer.test
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
@@ -37,8 +37,8 @@ struct QueryTests {
     }
 
     @Test
-	func testQueryAsWith() {
-		var serializer = SQLSerializer.test
+    func testQueryAsWith() {
+        var serializer = SQLSerializer.test
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
@@ -51,8 +51,8 @@ struct QueryTests {
     }
 
     @Test
-	func testQueryN() {
-		var serializer = SQLSerializer.test
+    func testQueryN() {
+        var serializer = SQLSerializer.test
         QUERY {
             SELECT {
                 f.$name
@@ -69,8 +69,8 @@ struct QueryTests {
     }
 
     @Test
-	func testUnion() {
-		var serializer = SQLSerializer.test
+    func testUnion() {
+        var serializer = SQLSerializer.test
         QUERY {
             UNION {
                 QUERY { SELECT { f.$name } }
@@ -85,8 +85,8 @@ struct QueryTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         QUERY {
             if bool {
@@ -102,8 +102,8 @@ struct QueryTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         QUERY {
             if bool {
@@ -119,8 +119,8 @@ struct QueryTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -145,8 +145,8 @@ struct QueryTests {
     }
 
     @Test
-	func testSelectSubquery() {
-		var serializer = SQLSerializer.test
+    func testSelectSubquery() {
+        var serializer = SQLSerializer.test
         SELECT {
             QUERY {
                 SELECT { f.$age }
@@ -161,8 +161,8 @@ struct QueryTests {
     }
 
     @Test
-	func testReturning() {
-		var serializer = SQLSerializer.test
+    func testReturning() {
+        var serializer = SQLSerializer.test
         QUERY {
             UPDATE(f.table) {
                 f.$name => "taylor"
@@ -177,8 +177,8 @@ struct QueryTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         QUERY {}
             .serialize(to: &serializer)
 

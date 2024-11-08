@@ -1,8 +1,4 @@
-//
-//  File.swift
-//  psql-kit
-//
-//  Created by Taylor McIntyre on 2024-11-04.
-//
+// exported.swift
+// Copyright (c) 2024 hiimtmac inc.
 
 @_exported import PSQLKit

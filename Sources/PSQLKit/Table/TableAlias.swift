@@ -6,7 +6,7 @@ import SQLKit
 @dynamicMemberLookup
 public struct CTEAlias<T>: Sendable where T: CTE {
     public let alias: String
-    
+
     init(alias: String) {
         self.alias = alias
     }
@@ -24,11 +24,11 @@ extension CTEAlias {
             columnName: field.column
         )
     }
-    
+
     public static postfix func .* (_ alias: Self) -> AllCTESelection<T>.Alias {
         .init(cte: alias)
     }
-    
+
     public var table: Self { self }
 }
 
@@ -46,7 +46,7 @@ package struct _TableAliasFrom: SQLExpression {
     let aliasName: String
     let schemaName: String?
     let tableName: String
-    
+
     package init(aliasName: String, schemaName: String?, tableName: String) {
         self.aliasName = aliasName
         self.schemaName = schemaName

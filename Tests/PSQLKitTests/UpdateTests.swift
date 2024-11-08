@@ -12,7 +12,7 @@ struct UpdateTests {
     @Test
     func testModel() {
         var serializer = SQLSerializer.test
-        
+
         UPDATE(PSQLModel.table) {
             PSQLModel.$name => "hi"
         }
@@ -25,7 +25,7 @@ struct UpdateTests {
     @Test
     func testModelAlias() {
         var serializer = SQLSerializer.test
-        
+
         UPDATE(self.p.table) {
             p.$name => "hi"
         }
@@ -38,7 +38,7 @@ struct UpdateTests {
     @Test
     func testBoth() {
         var serializer = SQLSerializer.test
-        
+
         UPDATE(self.p.table) {
             PSQLModel.$name => "hi"
             p.$name => "hi"
@@ -52,7 +52,7 @@ struct UpdateTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         UPDATE(self.p.table) {
@@ -71,7 +71,7 @@ struct UpdateTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         UPDATE(self.p.table) {
@@ -90,7 +90,7 @@ struct UpdateTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -117,7 +117,7 @@ struct UpdateTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         UPDATE(p.table) {}
             .serialize(to: &serializer)
 

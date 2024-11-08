@@ -12,7 +12,7 @@ struct InsertTests {
     @Test
     func testModel() {
         var serializer = SQLSerializer.test
-        
+
         INSERT(into: PSQLModel.table) {
             PSQLModel.$name => "hi"
         }
@@ -25,7 +25,7 @@ struct InsertTests {
     @Test
     func testModelAlias() {
         var serializer = SQLSerializer.test
-        
+
         INSERT(into: self.p.table) {
             p.$name => "hi"
         }
@@ -38,7 +38,7 @@ struct InsertTests {
     @Test
     func testBoth() {
         var serializer = SQLSerializer.test
-        
+
         INSERT(into: self.p.table) {
             PSQLModel.$name => "hi"
             p.$name => "hi"
@@ -52,7 +52,7 @@ struct InsertTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         INSERT(into: self.p.table) {
@@ -71,7 +71,7 @@ struct InsertTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         INSERT(into: self.p.table) {
@@ -90,7 +90,7 @@ struct InsertTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -117,7 +117,7 @@ struct InsertTests {
     @Test
     func testIfTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         INSERT(into: self.p.table) {
@@ -134,7 +134,7 @@ struct InsertTests {
     @Test
     func testIfFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         INSERT(into: self.p.table) {
@@ -152,7 +152,7 @@ struct InsertTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         INSERT(into: self.p.table) {}
             .serialize(to: &serializer)
 

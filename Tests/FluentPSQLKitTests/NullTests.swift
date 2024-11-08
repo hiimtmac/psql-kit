@@ -10,8 +10,8 @@ struct NullTests {
     let f = FluentModel.as("m")
 
     @Test
-	func testNullEqual() {
-		var serializer = SQLSerializer.test
+    func testNullEqual() {
+        var serializer = SQLSerializer.test
         let val = nil as String?
         WHERE {
             f.$name == "hi"
@@ -27,8 +27,8 @@ struct NullTests {
     }
 
     @Test
-	func testNullIs() {
-		var serializer = SQLSerializer.test
+    func testNullIs() {
+        var serializer = SQLSerializer.test
         let val = nil as String?
         WHERE {
             f.$name === "hi"
@@ -44,8 +44,8 @@ struct NullTests {
     }
 
     @Test
-	func testNullNotEqual() {
-		var serializer = SQLSerializer.test
+    func testNullNotEqual() {
+        var serializer = SQLSerializer.test
         let val = nil as String?
         WHERE {
             f.$name != "hi"
@@ -61,8 +61,8 @@ struct NullTests {
     }
 
     @Test
-	func testNullIsNot() {
-		var serializer = SQLSerializer.test
+    func testNullIsNot() {
+        var serializer = SQLSerializer.test
         let val = nil as String?
         WHERE {
             f.$name !== "hi"

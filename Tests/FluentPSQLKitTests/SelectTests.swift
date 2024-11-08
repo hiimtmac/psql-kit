@@ -11,8 +11,8 @@ struct SelectTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testSelectModel() {
-		var serializer = SQLSerializer.test
+    func testSelectModel() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
         }
@@ -23,8 +23,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSelectModelAlias() {
-		var serializer = SQLSerializer.test
+    func testSelectModelAlias() {
+        var serializer = SQLSerializer.test
         SELECT {
             f.$name
         }
@@ -35,8 +35,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSelectBoth() {
-		var serializer = SQLSerializer.test
+    func testSelectBoth() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
             f.$name
@@ -48,8 +48,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSelectDistinctOn() {
-		var serializer = SQLSerializer.test
+    func testSelectDistinctOn() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
         }
@@ -64,8 +64,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSelectDistinct() {
-		var serializer = SQLSerializer.test
+    func testSelectDistinct() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
             f.$name
@@ -78,8 +78,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSelectAliasSingle() {
-		var serializer = SQLSerializer.test
+    func testSelectAliasSingle() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name.as("nam")
         }
@@ -90,8 +90,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSelectAliasMultiple() {
-		var serializer = SQLSerializer.test
+    func testSelectAliasMultiple() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name.as("nam")
             f.$name.as("nam")
@@ -104,8 +104,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSelectRaw() {
-		var serializer = SQLSerializer.test
+    func testSelectRaw() {
+        var serializer = SQLSerializer.test
         let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
 
         SELECT {
@@ -126,8 +126,8 @@ struct SelectTests {
     }
 
     @Test
-	func testPostfix() {
-		var serializer = SQLSerializer.test
+    func testPostfix() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.table.*
             f.table.*
@@ -139,8 +139,8 @@ struct SelectTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         SELECT {
             f.$age
@@ -155,8 +155,8 @@ struct SelectTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         SELECT {
             f.$age
@@ -171,8 +171,8 @@ struct SelectTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         SELECT {
             if bool {
@@ -188,8 +188,8 @@ struct SelectTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         SELECT {
             if bool {
@@ -205,8 +205,8 @@ struct SelectTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -231,8 +231,8 @@ struct SelectTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         SELECT {}
             .serialize(to: &serializer)
 

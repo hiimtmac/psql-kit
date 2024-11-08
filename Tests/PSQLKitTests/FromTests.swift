@@ -13,7 +13,7 @@ struct FromTests {
     @Test
     func testFromModel() {
         var serializer = SQLSerializer.test
-        
+
         FROM {
             PSQLModel.table
         }
@@ -24,7 +24,7 @@ struct FromTests {
     @Test
     func testFromModelAlias() {
         var serializer = SQLSerializer.test
-        
+
         FROM {
             p.table
         }
@@ -35,7 +35,7 @@ struct FromTests {
     @Test
     func testFromBoth() {
         var serializer = SQLSerializer.test
-        
+
         FROM {
             p.table
             PSQLModel.table
@@ -48,7 +48,7 @@ struct FromTests {
     @Test
     func testFromRaw() {
         var serializer = SQLSerializer.test
-        
+
         FROM {
             RawTable("tableName")
         }
@@ -59,7 +59,7 @@ struct FromTests {
     @Test
     func testFromGenerateSeries() {
         var serializer = SQLSerializer.test
-        
+
         let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
 
@@ -76,7 +76,7 @@ struct FromTests {
     @Test
     func testSubquery() {
         var serializer = SQLSerializer.test
-        
+
         FROM {
             QUERY {
                 SELECT { p.$age }
@@ -93,7 +93,7 @@ struct FromTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         FROM {
@@ -112,7 +112,7 @@ struct FromTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         FROM {
@@ -131,7 +131,7 @@ struct FromTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -158,7 +158,7 @@ struct FromTests {
     @Test
     func testIfTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         FROM {
@@ -176,7 +176,7 @@ struct FromTests {
     @Test
     func testIfFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         FROM {
@@ -194,7 +194,7 @@ struct FromTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         FROM {}
             .serialize(to: &serializer)
 

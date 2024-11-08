@@ -8,8 +8,8 @@ import Testing
 @Suite
 struct GroupTests {
     @Test
-	func testLength() {
-		var serializer = SQLSerializer.test
+    func testLength() {
+        var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$id
             FluentModel.$age

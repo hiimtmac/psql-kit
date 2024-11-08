@@ -12,7 +12,7 @@ struct HavingTests {
     @Test
     func testHaving1() {
         var serializer = SQLSerializer.test
-        
+
         HAVING {
             PSQLModel.$name == PSQLModel.$title
         }
@@ -25,7 +25,7 @@ struct HavingTests {
     @Test
     func testHaving2() {
         var serializer = SQLSerializer.test
-        
+
         HAVING {
             p.$name != p.$name
         }
@@ -38,7 +38,7 @@ struct HavingTests {
     @Test
     func testHavingN() {
         var serializer = SQLSerializer.test
-        
+
         HAVING {
             PSQLModel.$name == p.$name
             p.$name == PSQLModel.$name
@@ -53,7 +53,7 @@ struct HavingTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         HAVING {
@@ -72,7 +72,7 @@ struct HavingTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         HAVING {
@@ -91,7 +91,7 @@ struct HavingTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -118,7 +118,7 @@ struct HavingTests {
     @Test
     func testIfTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         HAVING {
@@ -135,7 +135,7 @@ struct HavingTests {
     @Test
     func testIfFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         HAVING {
@@ -153,7 +153,7 @@ struct HavingTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         HAVING {}
             .serialize(to: &serializer)
 

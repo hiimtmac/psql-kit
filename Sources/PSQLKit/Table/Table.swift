@@ -23,15 +23,15 @@ extension CTE {
             columnName: field.column
         )
     }
-    
+
     public static func `as`(_ alias: String) -> CTEAlias<Self> {
         .init(alias: alias)
     }
-    
+
     public var fromSqlExpression: some SQLExpression {
         _TableFrom(schemaName: Self.schemaName, tableName: Self.tableName)
     }
-    
+
     public static var table: CTETable<Self> {
         CTETable()
     }
@@ -41,11 +41,11 @@ public struct CTETable<T>: FromSQLExpression where T: CTE {
     public var fromSqlExpression: some SQLExpression {
         _TableFrom(schemaName: T.schemaName, tableName: T.tableName)
     }
-    
+
     public static postfix func .* (cte: Self) -> AllCTESelection<T> {
         .init(cte: cte)
     }
-    
+
     public func `as`(_ alias: String) -> CTEAlias<T> {
         .init(alias: alias)
     }
@@ -54,12 +54,12 @@ public struct CTETable<T>: FromSQLExpression where T: CTE {
 package struct _TableFrom: SQLExpression, FromSQLExpression {
     let schemaName: String?
     let tableName: String
-    
+
     package init(schemaName: String?, tableName: String) {
         self.schemaName = schemaName
         self.tableName = tableName
     }
-    
+
     package var fromSqlExpression: some SQLExpression {
         self
     }

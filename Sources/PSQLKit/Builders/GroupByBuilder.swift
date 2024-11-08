@@ -45,14 +45,13 @@ public enum GroupByBuilder {
     ) -> Content where Content: GroupBySQLExpression {
         content
     }
-    
+
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTuple<repeat each Content> where repeat each Content: GroupBySQLExpression {
+    ) -> QueryTuple< repeat each Content> where repeat each Content: GroupBySQLExpression {
         .init(repeat each content)
     }
-
 }
 
 extension GroupByBuilder {

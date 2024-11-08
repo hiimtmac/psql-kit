@@ -11,8 +11,8 @@ struct FromTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testFromModel() {
-		var serializer = SQLSerializer.test
+    func testFromModel() {
+        var serializer = SQLSerializer.test
         FROM {
             FluentModel.table
         }
@@ -22,8 +22,8 @@ struct FromTests {
     }
 
     @Test
-	func testFromModelAlias() {
-		var serializer = SQLSerializer.test
+    func testFromModelAlias() {
+        var serializer = SQLSerializer.test
         FROM {
             f.table
         }
@@ -33,8 +33,8 @@ struct FromTests {
     }
 
     @Test
-	func testFromBoth() {
-		var serializer = SQLSerializer.test
+    func testFromBoth() {
+        var serializer = SQLSerializer.test
         FROM {
             f.table
             FluentModel.table
@@ -46,8 +46,8 @@ struct FromTests {
     }
 
     @Test
-	func testFromRaw() {
-		var serializer = SQLSerializer.test
+    func testFromRaw() {
+        var serializer = SQLSerializer.test
         FROM {
             RawTable("tableName")
         }
@@ -57,8 +57,8 @@ struct FromTests {
     }
 
     @Test
-	func testFromGenerateSeries() {
-		var serializer = SQLSerializer.test
+    func testFromGenerateSeries() {
+        var serializer = SQLSerializer.test
         let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
 
@@ -73,8 +73,8 @@ struct FromTests {
     }
 
     @Test
-	func testSubquery() {
-		var serializer = SQLSerializer.test
+    func testSubquery() {
+        var serializer = SQLSerializer.test
         FROM {
             QUERY {
                 SELECT { f.$age }
@@ -89,8 +89,8 @@ struct FromTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         FROM {
             if bool {
@@ -106,8 +106,8 @@ struct FromTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         FROM {
             if bool {
@@ -123,8 +123,8 @@ struct FromTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -149,8 +149,8 @@ struct FromTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         FROM {
             FluentModel.table
@@ -165,8 +165,8 @@ struct FromTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         FROM {
             FluentModel.table
@@ -181,8 +181,8 @@ struct FromTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         FROM {}
             .serialize(to: &serializer)
 

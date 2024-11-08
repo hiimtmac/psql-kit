@@ -1,18 +1,14 @@
-//
-//  File.swift
-//  psql-kit
-//
-//  Created by Taylor McIntyre on 2024-11-04.
-//
+// FluentTableAlias.swift
+// Copyright (c) 2024 hiimtmac inc.
 
-import SQLKit
-import PSQLKit
 import FluentKit
+import PSQLKit
+import SQLKit
 
 @dynamicMemberLookup
 public struct FluentCTEAlias<T>: Sendable where T: FluentCTE {
     public let alias: String
-    
+
     init(alias: String) {
         self.alias = alias
     }
@@ -20,7 +16,7 @@ public struct FluentCTEAlias<T>: Sendable where T: FluentCTE {
 
 extension FluentCTEAlias {
     public var table: Self { self }
-    
+
     public static postfix func .* (_ alias: Self) -> AllFluentCTESelection<T>.Alias {
         .init(cte: alias)
     }

@@ -11,8 +11,8 @@ struct DeleteTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testModel() {
-		var serializer = SQLSerializer.test
+    func testModel() {
+        var serializer = SQLSerializer.test
         DELETE {
             FluentModel.table
         }
@@ -22,8 +22,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testModelAlias() {
-		var serializer = SQLSerializer.test
+    func testModelAlias() {
+        var serializer = SQLSerializer.test
         DELETE {
             f.table
         }
@@ -33,8 +33,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testBoth() {
-		var serializer = SQLSerializer.test
+    func testBoth() {
+        var serializer = SQLSerializer.test
         DELETE {
             f.table
             FluentModel.table
@@ -46,8 +46,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testRaw() {
-		var serializer = SQLSerializer.test
+    func testRaw() {
+        var serializer = SQLSerializer.test
         DELETE {
             RawTable("tableName")
         }
@@ -57,8 +57,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testGenerateSeries() {
-		var serializer = SQLSerializer.test
+    func testGenerateSeries() {
+        var serializer = SQLSerializer.test
         let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
 
@@ -68,14 +68,13 @@ struct DeleteTests {
         }
         .serialize(to: &serializer)
 
-
         let compare = #"DELETE FROM GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates", GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL)"#
         #expect(serializer.sql == compare)
     }
 
     @Test
-	func testSubquery() {
-		var serializer = SQLSerializer.test
+    func testSubquery() {
+        var serializer = SQLSerializer.test
         DELETE {
             QUERY {
                 SELECT { f.$age }
@@ -90,8 +89,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         DELETE {
             if bool {
@@ -107,8 +106,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         DELETE {
             if bool {
@@ -124,8 +123,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -150,8 +149,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         DELETE {
             if bool {
@@ -166,8 +165,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         DELETE {
             FluentModel.table
@@ -182,8 +181,8 @@ struct DeleteTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         DELETE {}
             .serialize(to: &serializer)
 

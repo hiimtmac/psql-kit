@@ -12,7 +12,7 @@ struct GroupByTests {
     @Test
     func testGroupModel() {
         var serializer = SQLSerializer.test
-        
+
         GROUPBY {
             PSQLModel.$name
         }
@@ -25,7 +25,7 @@ struct GroupByTests {
     @Test
     func testGroupModelAlias() {
         var serializer = SQLSerializer.test
-        
+
         GROUPBY {
             p.$name
         }
@@ -38,7 +38,7 @@ struct GroupByTests {
     @Test
     func testGroupBoth() {
         var serializer = SQLSerializer.test
-        
+
         GROUPBY {
             PSQLModel.$name
             p.$name
@@ -52,7 +52,7 @@ struct GroupByTests {
     @Test
     func testGroupRaw() {
         var serializer = SQLSerializer.test
-        
+
         GROUPBY {
             RawColumn<String>("cool")
         }
@@ -65,7 +65,7 @@ struct GroupByTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         GROUPBY {
@@ -84,7 +84,7 @@ struct GroupByTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         GROUPBY {
@@ -103,7 +103,7 @@ struct GroupByTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -130,7 +130,7 @@ struct GroupByTests {
     @Test
     func testIfTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
 
         GROUPBY {
@@ -147,7 +147,7 @@ struct GroupByTests {
     @Test
     func testIfFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         GROUPBY {
@@ -164,7 +164,7 @@ struct GroupByTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         GROUPBY {}
             .serialize(to: &serializer)
 

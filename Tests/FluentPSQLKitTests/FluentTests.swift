@@ -1,8 +1,8 @@
 // FluentTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import Foundation
 import FluentKit
+import Foundation
 import SQLKit
 import Testing
 @testable import FluentPSQLKit
@@ -50,8 +50,8 @@ struct FluentTests {
     }
 
     @Test
-	func testRelationships() {
-		var serializer = SQLSerializer.test
+    func testRelationships() {
+        var serializer = SQLSerializer.test
         let p = Pet.as("p")
         let o = Owner.as("o")
         let t = Thing.as("t")
@@ -82,8 +82,8 @@ struct FluentTests {
     }
 
     @Test
-	func testDates() {
-		var serializer = SQLSerializer.test
+    func testDates() {
+        var serializer = SQLSerializer.test
         let p = Pet.as("p")
         let date1 = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 01, hour: 01, minute: 01, second: 01).date!
         let date2 = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 30, hour: 01, minute: 01, second: 01).date!

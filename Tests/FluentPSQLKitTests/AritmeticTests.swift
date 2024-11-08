@@ -10,8 +10,8 @@ struct ArithemticTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testSelect() {
-		var serializer = SQLSerializer.test
+    func testSelect() {
+        var serializer = SQLSerializer.test
         SELECT {
             f.$money / f.$money
             f.$money + f.$money
@@ -24,8 +24,8 @@ struct ArithemticTests {
     }
 
     @Test
-	func testWhere() {
-		var serializer = SQLSerializer.test
+    func testWhere() {
+        var serializer = SQLSerializer.test
         WHERE {
             (f.$money / f.$money) > 4
         }
@@ -36,8 +36,8 @@ struct ArithemticTests {
     }
 
     @Test
-	func testTypeSwap() {
-		var serializer = SQLSerializer.test
+    func testTypeSwap() {
+        var serializer = SQLSerializer.test
         SELECT {
             f.$money / f.$age.transform(to: Double.self)
         }
@@ -48,8 +48,8 @@ struct ArithemticTests {
     }
 
     @Test
-	func testOptional() {
-		var serializer = SQLSerializer.test
+    func testOptional() {
+        var serializer = SQLSerializer.test
         let double: Double? = 8
 
         SELECT {

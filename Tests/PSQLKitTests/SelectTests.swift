@@ -207,7 +207,7 @@ struct SelectTests {
         var serializer = SQLSerializer.test
 
         let bool = false
- 
+
         SELECT {
             if bool {
                 p.$name

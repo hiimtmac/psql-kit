@@ -1,11 +1,14 @@
+// TableMacro.swift
+// Copyright (c) 2024 hiimtmac inc.
+
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public struct TableMacro {
+public enum TableMacro {
     enum TableMacroError: Error, CustomStringConvertible {
         case nonStruct
-        
+
         var description: String {
             switch self {
             case .nonStruct: "@CTE can only be applied to `struct`s"
@@ -25,14 +28,14 @@ extension TableMacro: ExtensionMacro {
         let publicKeyword = TokenSyntax.keyword(.public)
         let publicMod = DeclModifierSyntax(name: .keyword(.public))
         let staticMod = DeclModifierSyntax(name: .keyword(.static))
-        
+
         guard
             let identified = declaration.asProtocol(NamedDeclSyntax.self),
             let structDecl = identified.as(StructDeclSyntax.self)
         else {
             throw TableMacroError.nonStruct
         }
-        
+
         guard
             let attribute = structDecl.attributes.first?.as(AttributeSyntax.self),
             let argumentList = attribute.arguments?.as(LabeledExprListSyntax.self),
@@ -42,7 +45,7 @@ extension TableMacro: ExtensionMacro {
         else {
             return []
         }
-        
+
         let schemaInitializer = if
             argumentList.count > 1,
             let schemaArgument = argumentList.last,
@@ -69,14 +72,14 @@ extension TableMacro: ExtensionMacro {
                 value: NilLiteralExprSyntax(nilKeyword: .keyword(.nil))
             )
         }
-        
+
         let isPublic = structDecl.modifiers.contains(where: { $0.name.text == publicKeyword.text })
-        
+
         let tableName = MemberBlockItemListSyntax.Element(
             decl: VariableDeclSyntax(
                 modifiers: isPublic
-                ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
-                : DeclModifierListSyntax(arrayLiteral: staticMod),
+                    ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
+                    : DeclModifierListSyntax(arrayLiteral: staticMod),
                 bindingSpecifier: .keyword(.let),
                 bindings: PatternBindingListSyntax(
                     arrayLiteral: PatternBindingSyntax(
@@ -107,12 +110,12 @@ extension TableMacro: ExtensionMacro {
                 )
             )
         )
-        
+
         let schemaName = MemberBlockItemListSyntax.Element(
             decl: VariableDeclSyntax(
                 modifiers: isPublic
-                ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
-                : DeclModifierListSyntax(arrayLiteral: staticMod),
+                    ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
+                    : DeclModifierListSyntax(arrayLiteral: staticMod),
                 bindingSpecifier: .keyword(.let),
                 bindings: PatternBindingListSyntax(
                     arrayLiteral: PatternBindingSyntax(
@@ -133,12 +136,12 @@ extension TableMacro: ExtensionMacro {
                 )
             )
         )
-        
+
         let queryContainer = MemberBlockItemListSyntax.Element(
             decl: VariableDeclSyntax(
                 modifiers: isPublic
-                ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
-                : DeclModifierListSyntax(arrayLiteral: staticMod),
+                    ? DeclModifierListSyntax(arrayLiteral: publicMod, staticMod)
+                    : DeclModifierListSyntax(arrayLiteral: staticMod),
                 bindingSpecifier: .keyword(.let),
                 bindings: PatternBindingListSyntax(
                     arrayLiteral: PatternBindingSyntax(
@@ -161,7 +164,7 @@ extension TableMacro: ExtensionMacro {
                 )
             )
         )
-        
+
         let tableRecord = ExtensionDeclSyntax(
             extensionKeyword: .keyword(.extension),
             extendedType: IdentifierTypeSyntax(name: .identifier(structDecl.name.text)),
@@ -183,7 +186,7 @@ extension TableMacro: ExtensionMacro {
                 rightBrace: .rightBraceToken()
             )
         )
-        
+
         return [tableRecord]
     }
 }
@@ -195,7 +198,7 @@ extension TableMacro: MemberMacro {
         let type: String
         let isPublic: Bool
     }
-    
+
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -203,16 +206,16 @@ extension TableMacro: MemberMacro {
     ) throws -> [DeclSyntax] {
         let publicKeyword = TokenSyntax.keyword(.public)
         let publicMod = DeclModifierSyntax(name: .keyword(.public))
-        
+
         guard
             let identified = declaration.asProtocol(NamedDeclSyntax.self),
             let structDecl = identified.as(StructDeclSyntax.self)
         else {
             throw TableMacroError.nonStruct
         }
-        
+
         let isPublic = structDecl.modifiers.contains(where: { $0.name.text == publicKeyword.text })
-        
+
         let columnList = declaration
             .memberBlock
             .members
@@ -227,7 +230,7 @@ extension TableMacro: MemberMacro {
                 else {
                     return nil
                 }
-                
+
                 let columnName: String
                 if
                     let attribute = variable.attributes.first?.as(AttributeSyntax.self),
@@ -249,7 +252,7 @@ extension TableMacro: MemberMacro {
                 } else {
                     columnName = identifier.identifier.text
                 }
-                
+
                 let type: String
                 if let simple = typeAnnotation.as(IdentifierTypeSyntax.self) {
                     type = simple.name.text
@@ -266,9 +269,9 @@ extension TableMacro: MemberMacro {
                 } else {
                     return nil
                 }
-                
+
                 let isPublic = variable.modifiers.contains(where: { $0.name.text == publicKeyword.text })
-                
+
                 return .init(
                     variableName: identifier.identifier.text,
                     columnName: columnName,
@@ -276,7 +279,7 @@ extension TableMacro: MemberMacro {
                     isPublic: isPublic
                 )
             }
-        
+
         let columnAccessors = columnList.map { columnInfo -> MemberBlockItemSyntax in
             MemberBlockItemSyntax(
                 decl: VariableDeclSyntax(
@@ -321,8 +324,8 @@ extension TableMacro: MemberMacro {
                         )
                     ),
                     modifiers: columnInfo.isPublic
-                    ? DeclModifierListSyntax(arrayLiteral: publicMod)
-                    : DeclModifierListSyntax(),
+                        ? DeclModifierListSyntax(arrayLiteral: publicMod)
+                        : DeclModifierListSyntax(),
                     bindingSpecifier: .keyword(.var),
                     bindings: PatternBindingListSyntax(
                         arrayLiteral: PatternBindingSyntax(
@@ -340,13 +343,13 @@ extension TableMacro: MemberMacro {
                 )
             )
         }
-        
+
         let query = DeclSyntax(
             StructDeclSyntax(
                 attributes: AttributeListSyntax(),
                 modifiers: isPublic
-                ? DeclModifierListSyntax(arrayLiteral: publicMod)
-                : DeclModifierListSyntax(),
+                    ? DeclModifierListSyntax(arrayLiteral: publicMod)
+                    : DeclModifierListSyntax(),
                 structKeyword: .keyword(.struct),
                 name: .identifier("QueryContainer"),
                 memberBlock: MemberBlockSyntax(
@@ -356,7 +359,7 @@ extension TableMacro: MemberMacro {
                 )
             )
         )
-        
+
         return [query]
     }
 }

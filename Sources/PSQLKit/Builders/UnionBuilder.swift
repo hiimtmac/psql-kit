@@ -45,11 +45,11 @@ public enum UnionBuilder {
     ) -> Content where Content: UnionSQLExpression {
         content
     }
-    
+
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTuple<repeat each Content> where repeat each Content: UnionSQLExpression {
+    ) -> QueryTuple< repeat each Content> where repeat each Content: UnionSQLExpression {
         .init(repeat each content)
     }
 }

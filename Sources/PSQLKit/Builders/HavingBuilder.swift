@@ -45,11 +45,11 @@ public enum HavingBuilder {
     ) -> Content where Content: HavingSQLExpression {
         content
     }
-    
+
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTuple<repeat each Content> where repeat each Content: HavingSQLExpression {
+    ) -> QueryTuple< repeat each Content> where repeat each Content: HavingSQLExpression {
         .init(repeat each content)
     }
 }

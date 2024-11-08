@@ -10,8 +10,8 @@ struct NestedTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testGroup() {
-		var serializer = SQLSerializer.test
+    func testGroup() {
+        var serializer = SQLSerializer.test
         SELECT {
             JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$name)
             JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$info, \.$name)

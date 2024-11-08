@@ -1,42 +1,42 @@
 // IssueTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import FluentKit
 import Foundation
 import SQLKit
 import Testing
-import FluentKit
 @testable import FluentPSQLKit
 
 @Suite
 struct IssueTests {
     let f = FluentModel.as("x")
-    
+
     final class Test: CTE {
         static let tableName: String = "test"
         static let schemaName: String? = nil
-        
+
         static let queryContainer = QueryContainer()
         struct QueryContainer {
             @ColumnAccessor<String>("test") var test: Never
         }
     }
-    
+
     @FluentCTE("test")
-    final class Test1: Model, @unchecked Sendable {        
+    final class Test1: Model, @unchecked Sendable {
         @ID
         var id: UUID?
-        
+
         @Field(key: "test")
         var test: String
-        
+
         init() {}
     }
-    
+
     @Test
-	func testNew() {
-		var serializer = SQLSerializer.test
+    func testNew() {
+        var serializer = SQLSerializer.test
         let a = Test.as("a")
-        
+
         SELECT {
             Test.$test
             a.$test
@@ -44,16 +44,16 @@ struct IssueTests {
             a.$test.as("a")
         }
         .serialize(to: &serializer)
-        
+
         let compare = #"SELECT "test"."test"::TEXT, "a"."test"::TEXT, "test"."test"::TEXT AS "a", "a"."test"::TEXT AS "a""#
         #expect(serializer.sql == compare)
     }
-    
+
     @Test
     func testNew1() {
         var serializer = SQLSerializer.test
         let a = Test1.as("a")
-        
+
         SELECT {
             Test1.$test
             a.$test
@@ -61,7 +61,7 @@ struct IssueTests {
             a.$test.as("a")
         }
         .serialize(to: &serializer)
-        
+
         let compare = #"SELECT "test"."test"::TEXT, "a"."test"::TEXT, "test"."test"::TEXT AS "a", "a"."test"::TEXT AS "a""#
         #expect(serializer.sql == compare)
     }

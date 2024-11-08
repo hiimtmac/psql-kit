@@ -12,7 +12,7 @@ struct ArithemticTests {
     @Test
     func testSelect() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             p.$money / p.$money
             p.$money + p.$money
@@ -27,7 +27,7 @@ struct ArithemticTests {
     @Test
     func testWhere() {
         var serializer = SQLSerializer.test
-        
+
         WHERE {
             (p.$money / p.$money) > 4
         }
@@ -40,7 +40,7 @@ struct ArithemticTests {
     @Test
     func testTypeSwap() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             p.$money / p.$age.transform(to: Double.self)
         }
@@ -53,7 +53,7 @@ struct ArithemticTests {
     @Test
     func testOptional() {
         var serializer = SQLSerializer.test
-        
+
         let double: Double? = 8
 
         SELECT {

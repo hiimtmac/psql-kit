@@ -12,7 +12,7 @@ struct NullTests {
     @Test
     func testNullEqual() {
         var serializer = SQLSerializer.test
-        
+
         let val = nil as String?
 
         WHERE {
@@ -31,7 +31,7 @@ struct NullTests {
     @Test
     func testNullIs() {
         var serializer = SQLSerializer.test
-        
+
         let val = nil as String?
 
         WHERE {
@@ -50,7 +50,7 @@ struct NullTests {
     @Test
     func testNullNotEqual() {
         var serializer = SQLSerializer.test
-        
+
         let val = nil as String?
 
         WHERE {
@@ -69,7 +69,7 @@ struct NullTests {
     @Test
     func testNullIsNot() {
         var serializer = SQLSerializer.test
-        
+
         let val = nil as String?
 
         WHERE {

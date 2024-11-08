@@ -1,13 +1,9 @@
-//
-//  File.swift
-//  psql-kit
-//
-//  Created by Taylor McIntyre on 2024-11-04.
-//
+// FluentTable.swift
+// Copyright (c) 2024 hiimtmac inc.
 
-import SQLKit
-import PSQLKit
 import FluentKit
+import PSQLKit
+import SQLKit
 
 @dynamicMemberLookup
 public protocol FluentCTE: Schema, FromSQLExpression {}
@@ -16,23 +12,23 @@ extension FluentCTE {
     public var fromSqlExpression: some SQLExpression {
         _TableFrom(schemaName: Self.space, tableName: Self.schema)
     }
- 
+
     public static func `as`(_ alias: String) -> FluentCTEAlias<Self> {
         .init(alias: alias)
     }
-    
+
     public func `as`(_ alias: String) -> FluentCTEAlias<Self> {
         .init(alias: alias)
     }
-    
+
     public static postfix func .* (table: Self) -> AllFluentCTESelection<Self> {
         .init(cte: table)
     }
-    
+
     public static var table: Self {
         Self()
     }
-    
+
     // MARK: - FieldProperty
 
     public static subscript<T>(

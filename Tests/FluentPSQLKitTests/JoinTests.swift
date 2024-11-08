@@ -10,8 +10,8 @@ struct JoinTests {
     let f = FluentModel.as("x")
 
     @Test
-	func testJoinModel() {
-		var serializer = SQLSerializer.test
+    func testJoinModel() {
+        var serializer = SQLSerializer.test
         JOIN(FluentModel.table) {
             FluentModel.$name == FluentModel.$name
         }
@@ -22,8 +22,8 @@ struct JoinTests {
     }
 
     @Test
-	func testJoinModelAlias() {
-		var serializer = SQLSerializer.test
+    func testJoinModelAlias() {
+        var serializer = SQLSerializer.test
         JOIN(self.f.table) {
             f.$name == f.$name
         }
@@ -35,8 +35,8 @@ struct JoinTests {
     }
 
     @Test
-	func testJoinBoth() {
-		var serializer = SQLSerializer.test
+    func testJoinBoth() {
+        var serializer = SQLSerializer.test
         JOIN(self.f.table, method: .left) {
             f.$name == FluentModel.$name
             FluentModel.$name == f.$name
@@ -48,8 +48,8 @@ struct JoinTests {
     }
 
     @Test
-	func testJoinN() {
-		var serializer = SQLSerializer.test
+    func testJoinN() {
+        var serializer = SQLSerializer.test
         JOIN(self.f.table) {
             f.$name == f.$name
             f.$name == FluentModel.$name || f.$name != f.$name
@@ -61,8 +61,8 @@ struct JoinTests {
     }
 
     @Test
-	func testJoinRaw() {
-		var serializer = SQLSerializer.test
+    func testJoinRaw() {
+        var serializer = SQLSerializer.test
         JOIN(RawTable("cool")) {
             f.$name == f.$name
         }
@@ -73,8 +73,8 @@ struct JoinTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         JOIN(self.f.table) {
             if bool {
@@ -90,8 +90,8 @@ struct JoinTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         JOIN(self.f.table) {
             if bool {
@@ -107,8 +107,8 @@ struct JoinTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -133,8 +133,8 @@ struct JoinTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         JOIN(self.f.table) {
             f.$age == 29
@@ -149,8 +149,8 @@ struct JoinTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         JOIN(self.f.table) {
             f.$age == 29
@@ -165,8 +165,8 @@ struct JoinTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         JOIN(self.f.table) {}
             .serialize(to: &serializer)
 

@@ -1,9 +1,9 @@
 // PSQLTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import Foundation
 import PostgresKit
 import SQLKit
-import Foundation
 @testable import PSQLKit
 
 @CTE("my_model")

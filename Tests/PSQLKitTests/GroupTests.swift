@@ -10,7 +10,7 @@ struct GroupTests {
     @Test
     func testLength() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             PSQLModel.$id
             PSQLModel.$age

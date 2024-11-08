@@ -34,8 +34,8 @@ struct HavingTests {
     }
 
     @Test
-	func testHavingN() {
-		var serializer = SQLSerializer.test
+    func testHavingN() {
+        var serializer = SQLSerializer.test
         HAVING {
             FluentModel.$name == f.$name
             f.$name == FluentModel.$name
@@ -48,8 +48,8 @@ struct HavingTests {
     }
 
     @Test
-	func testIfElseTrue() {
-		var serializer = SQLSerializer.test
+    func testIfElseTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         HAVING {
             if bool {
@@ -65,8 +65,8 @@ struct HavingTests {
     }
 
     @Test
-	func testIfElseFalse() {
-		var serializer = SQLSerializer.test
+    func testIfElseFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         HAVING {
             if bool {
@@ -82,8 +82,8 @@ struct HavingTests {
     }
 
     @Test
-	func testSwitch() {
-		var serializer = SQLSerializer.test
+    func testSwitch() {
+        var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -108,8 +108,8 @@ struct HavingTests {
     }
 
     @Test
-	func testIfTrue() {
-		var serializer = SQLSerializer.test
+    func testIfTrue() {
+        var serializer = SQLSerializer.test
         let bool = true
         HAVING {
             if bool {
@@ -123,8 +123,8 @@ struct HavingTests {
     }
 
     @Test
-	func testIfFalse() {
-		var serializer = SQLSerializer.test
+    func testIfFalse() {
+        var serializer = SQLSerializer.test
         let bool = false
         HAVING {
             f.$age == 29
@@ -139,8 +139,8 @@ struct HavingTests {
     }
 
     @Test
-	func testEmpty() {
-		var serializer = SQLSerializer.test
+    func testEmpty() {
+        var serializer = SQLSerializer.test
         HAVING {}
             .serialize(to: &serializer)
 

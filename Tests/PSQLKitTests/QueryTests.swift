@@ -12,7 +12,7 @@ struct QueryTests {
     @Test
     func testQuery() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT { p.$name }
             FROM { p.table }
@@ -26,7 +26,7 @@ struct QueryTests {
     @Test
     func testQueryAsSub() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT { p.$name }
             FROM { p.table }
@@ -41,7 +41,7 @@ struct QueryTests {
     @Test
     func testQueryAsWith() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT { p.$name }
             FROM { p.table }
@@ -56,7 +56,7 @@ struct QueryTests {
     @Test
     func testQueryN() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             SELECT {
                 p.$name
@@ -75,7 +75,7 @@ struct QueryTests {
     @Test
     func testUnion() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             UNION {
                 QUERY { SELECT { p.$name } }
@@ -92,9 +92,9 @@ struct QueryTests {
     @Test
     func testIfElseTrue() {
         var serializer = SQLSerializer.test
-        
+
         let bool = true
-        
+
         QUERY {
             if bool {
                 SELECT { p.$name }
@@ -111,7 +111,7 @@ struct QueryTests {
     @Test
     func testIfElseFalse() {
         var serializer = SQLSerializer.test
-        
+
         let bool = false
 
         QUERY {
@@ -130,7 +130,7 @@ struct QueryTests {
     @Test
     func testSwitch() {
         var serializer = SQLSerializer.test
-        
+
         enum Test {
             case one
             case two
@@ -157,7 +157,7 @@ struct QueryTests {
     @Test
     func testSelectSubquery() {
         var serializer = SQLSerializer.test
-        
+
         SELECT {
             QUERY {
                 SELECT { p.$age }
@@ -174,7 +174,7 @@ struct QueryTests {
     @Test
     func testReturning() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {
             UPDATE(p.table) {
                 p.$name => "taylor"
@@ -191,7 +191,7 @@ struct QueryTests {
     @Test
     func testEmpty() {
         var serializer = SQLSerializer.test
-        
+
         QUERY {}
             .serialize(to: &serializer)
 

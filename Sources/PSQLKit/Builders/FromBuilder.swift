@@ -7,7 +7,7 @@ extension EmptyExpression: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression {
         _Empty()
     }
-    
+
     public var fromIsNull: Bool { true }
 }
 
@@ -45,11 +45,11 @@ public enum FromBuilder {
     ) -> Content where Content: FromSQLExpression {
         content
     }
-    
+
     @_disfavoredOverload
     public static func buildBlock<each Content>(
         _ content: repeat each Content
-    ) -> QueryTuple<repeat each Content> where repeat each Content: FromSQLExpression {
+    ) -> QueryTuple< repeat each Content> where repeat each Content: FromSQLExpression {
         .init(repeat each content)
     }
 }
