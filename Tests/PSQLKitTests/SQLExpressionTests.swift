@@ -3,7 +3,7 @@
 
 import Foundation
 import Testing
-@testable import PSQLKit
+import PSQLKit
 
 @Suite
 struct SQLExpressionTests {

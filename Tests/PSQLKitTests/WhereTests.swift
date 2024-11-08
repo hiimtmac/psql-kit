@@ -4,7 +4,7 @@
 import Foundation
 import SQLKit
 import Testing
-@testable import PSQLKit
+import PSQLKit
 
 // needed because https://forums.swift.org/t/exported-import-does-not-properly-export-custom-operators/39090/5
 infix operator ~~: ComparisonPrecedence

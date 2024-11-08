@@ -4,7 +4,7 @@
 import Foundation
 import SQLKit
 import Testing
-@testable import PSQLKit
+import PSQLKit
 
 @Suite
 struct DeleteTests {

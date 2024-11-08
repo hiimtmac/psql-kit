@@ -3,7 +3,7 @@
 
 import SQLKit
 import Testing
-@testable import PSQLKit
+import PSQLKit
 
 @Suite
 struct QueryTests {
