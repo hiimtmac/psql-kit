@@ -1,44 +1,55 @@
 // SelectTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import Foundation
+import SQLKit
+import Testing
 @testable import FluentPSQLKit
 
-final class SelectTests: PSQLTestCase {
+@Suite
+struct SelectTests {
     let f = FluentModel.as("x")
 
-    func testSelectModel() {
+    @Test
+	func testSelectModel() {
+		var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "my_model"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectModelAlias() {
+    @Test
+	func testSelectModelAlias() {
+		var serializer = SQLSerializer.test
         SELECT {
             f.$name
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectBoth() {
+    @Test
+	func testSelectBoth() {
+		var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
             f.$name
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "my_model"."name"::TEXT, "x"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectDistinctOn() {
+    @Test
+	func testSelectDistinctOn() {
+		var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
         }
@@ -46,47 +57,55 @@ final class SelectTests: PSQLTestCase {
             FluentModel.$name
             f.$id
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT DISTINCT ON ("my_model"."name"::TEXT, "x"."id"::UUID) "my_model"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectDistinct() {
+    @Test
+	func testSelectDistinct() {
+		var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name
             f.$name
         }
         .distinct()
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT DISTINCT "my_model"."name"::TEXT, "x"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectAliasSingle() {
+    @Test
+	func testSelectAliasSingle() {
+		var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name.as("nam")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "my_model"."name"::TEXT AS "nam""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectAliasMultiple() {
+    @Test
+	func testSelectAliasMultiple() {
+		var serializer = SQLSerializer.test
         SELECT {
             FluentModel.$name.as("nam")
             f.$name.as("nam")
             f.$id
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "my_model"."name"::TEXT AS "nam", "x"."name"::TEXT AS "nam", "x"."id"::UUID"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectRaw() {
+    @Test
+	func testSelectRaw() {
+		var serializer = SQLSerializer.test
         let date = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!
 
         SELECT {
@@ -100,24 +119,28 @@ final class SelectTests: PSQLTestCase {
             date.psqlDate.as("date_alias")
             RawValue(date.psqlDate).as("raw_date_alias")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER, 8::INTEGER AS "cool", '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE AS "date_alias", '2020-01-01'::DATE AS "raw_date_alias""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testPostfix() {
+    @Test
+	func testPostfix() {
+		var serializer = SQLSerializer.test
         SELECT {
             FluentModel.table.*
             f.table.*
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "my_model".*, "x".*"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfTrue() {
+    @Test
+	func testIfTrue() {
+		var serializer = SQLSerializer.test
         let bool = true
         SELECT {
             f.$age
@@ -125,13 +148,15 @@ final class SelectTests: PSQLTestCase {
                 f.$name
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."age"::INTEGER, "x"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfFalse() {
+    @Test
+	func testIfFalse() {
+		var serializer = SQLSerializer.test
         let bool = false
         SELECT {
             f.$age
@@ -139,13 +164,15 @@ final class SelectTests: PSQLTestCase {
                 f.$name
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."age"::INTEGER"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseTrue() {
+    @Test
+	func testIfElseTrue() {
+		var serializer = SQLSerializer.test
         let bool = true
         SELECT {
             if bool {
@@ -154,13 +181,15 @@ final class SelectTests: PSQLTestCase {
                 f.$age
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseFalse() {
+    @Test
+	func testIfElseFalse() {
+		var serializer = SQLSerializer.test
         let bool = false
         SELECT {
             if bool {
@@ -169,13 +198,15 @@ final class SelectTests: PSQLTestCase {
                 f.$age
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."age"::INTEGER"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSwitch() {
+    @Test
+	func testSwitch() {
+		var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -193,17 +224,19 @@ final class SelectTests: PSQLTestCase {
                 f.$name
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."age"::INTEGER"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testEmpty() {
+    @Test
+	func testEmpty() {
+		var serializer = SQLSerializer.test
         SELECT {}
-            .serialize(to: &fluentSerializer)
+            .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

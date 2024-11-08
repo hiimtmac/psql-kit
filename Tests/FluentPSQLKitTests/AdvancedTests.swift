@@ -1,11 +1,14 @@
 // AdvancedTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import Foundation
 import FluentKit
 import FluentPSQLKit
-import XCTest
+import SQLKit
+import Testing
 
-final class AdvancedTests: PSQLTestCase {
+@Suite
+struct AdvancedTests {
     @FluentCTE("pet")
     final class Pet: Model, @unchecked Sendable {
         @ID
@@ -63,31 +66,36 @@ final class AdvancedTests: PSQLTestCase {
         var date: PSQLDate
     }
     
-    func testSpaces() {
+    @Test
+	func testSpaces() {
+		var serializer = SQLSerializer.test
         QUERY {
             SELECT { ModelSpace.$name }
             FROM { ModelSpace.table }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
         
         let compare = #"SELECT "space"."schema"."name"::TEXT FROM "space"."schema""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
     
-    func testSpacesAlias() {
+    @Test
+	func testSpacesAlias() {
+		var serializer = SQLSerializer.test
         let f = ModelSpace.as("a")
 
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
         
         let compare = #"SELECT "a"."name"::TEXT FROM "space"."schema" AS "a""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testTypesCompile() {
+    @Test
+	func testTypesCompile() {
         _ = WHERE {
             // Custom UUID vs Custom UUID?
             OwnerFilter.$id == OwnerDateSeries.$id
@@ -98,7 +106,9 @@ final class AdvancedTests: PSQLTestCase {
         }
     }
 
-    func testExample() {
+    @Test
+	func testExample() {
+		var serializer = SQLSerializer.test
         let d1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 31).date!
         let d2 = DateComponents(calendar: .current, year: 2020, month: 07, day: 31).date!
         let r = DateRange.as("r")
@@ -144,7 +154,7 @@ final class AdvancedTests: PSQLTestCase {
             JOIN(o.table, method: .left) { f.$id == o.$id }
             JOIN(OwnerDateSeries.table) { o.$bday == OwnerDateSeries.$date }
         }
-        query.serialize(to: &fluentSerializer)
+        query.serialize(to: &serializer)
 
         let sub1 = [
             #"SELECT "date"::DATE"#,
@@ -175,7 +185,7 @@ final class AdvancedTests: PSQLTestCase {
             #"INNER JOIN "owner_date_series" ON ("o"."bday" = "owner_date_series"."date")"#,
         ].joined(separator: " ")
 
-        XCTAssertEqual(fluentSerializer.sql, compare)
-        print(fluentSerializer.sql)
+        #expect(serializer.sql == compare)
+        print(serializer.sql)
     }
 }

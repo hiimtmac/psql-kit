@@ -1,51 +1,64 @@
 // DeleteTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import Foundation
+import SQLKit
+import Testing
 @testable import FluentPSQLKit
 
-final class DeleteTests: PSQLTestCase {
+@Suite
+struct DeleteTests {
     let f = FluentModel.as("x")
 
-    func testModel() {
+    @Test
+	func testModel() {
+		var serializer = SQLSerializer.test
         DELETE {
             FluentModel.table
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "my_model""#)
+        #expect(serializer.sql == #"DELETE FROM "my_model""#)
     }
 
-    func testModelAlias() {
+    @Test
+	func testModelAlias() {
+		var serializer = SQLSerializer.test
         DELETE {
             f.table
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "my_model" AS "x""#)
+        #expect(serializer.sql == #"DELETE FROM "my_model" AS "x""#)
     }
 
-    func testBoth() {
+    @Test
+	func testBoth() {
+		var serializer = SQLSerializer.test
         DELETE {
             f.table
             FluentModel.table
             FluentModel.table.as("cool")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
+        #expect(serializer.sql == #"DELETE FROM "my_model" AS "x", "my_model", "my_model" AS "cool""#)
     }
 
-    func testRaw() {
+    @Test
+	func testRaw() {
+		var serializer = SQLSerializer.test
         DELETE {
             RawTable("tableName")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
-        XCTAssertEqual(fluentSerializer.sql, #"DELETE FROM "tableName""#)
+        #expect(serializer.sql == #"DELETE FROM "tableName""#)
     }
 
-    func testGenerateSeries() {
+    @Test
+	func testGenerateSeries() {
+		var serializer = SQLSerializer.test
         let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
 
@@ -53,14 +66,16 @@ final class DeleteTests: PSQLTestCase {
             GENERATE_SERIES(from: date1, to: date2, interval: "1 day").as("dates")
             GENERATE_SERIES(from: date1, to: date2, interval: "1 day")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
 
         let compare = #"DELETE FROM GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates", GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL)"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSubquery() {
+    @Test
+	func testSubquery() {
+		var serializer = SQLSerializer.test
         DELETE {
             QUERY {
                 SELECT { f.$age }
@@ -68,13 +83,15 @@ final class DeleteTests: PSQLTestCase {
             }
             .asSubquery(f.table)
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseTrue() {
+    @Test
+	func testIfElseTrue() {
+		var serializer = SQLSerializer.test
         let bool = true
         DELETE {
             if bool {
@@ -83,13 +100,15 @@ final class DeleteTests: PSQLTestCase {
                 FluentModel.table
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model" AS "x""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseFalse() {
+    @Test
+	func testIfElseFalse() {
+		var serializer = SQLSerializer.test
         let bool = false
         DELETE {
             if bool {
@@ -98,13 +117,15 @@ final class DeleteTests: PSQLTestCase {
                 FluentModel.table
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSwitch() {
+    @Test
+	func testSwitch() {
+		var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -122,13 +143,15 @@ final class DeleteTests: PSQLTestCase {
                 f.table
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"FROM "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfTrue() {
+    @Test
+	func testIfTrue() {
+		var serializer = SQLSerializer.test
         let bool = true
         DELETE {
             if bool {
@@ -136,13 +159,15 @@ final class DeleteTests: PSQLTestCase {
                 FluentModel.table
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model" AS "x", "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfFalse() {
+    @Test
+	func testIfFalse() {
+		var serializer = SQLSerializer.test
         let bool = false
         DELETE {
             FluentModel.table
@@ -150,17 +175,19 @@ final class DeleteTests: PSQLTestCase {
                 f.table
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"DELETE FROM "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testEmpty() {
+    @Test
+	func testEmpty() {
+		var serializer = SQLSerializer.test
         DELETE {}
-            .serialize(to: &fluentSerializer)
+            .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

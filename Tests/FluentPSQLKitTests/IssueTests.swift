@@ -1,11 +1,14 @@
 // IssueTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import Foundation
+import SQLKit
+import Testing
 import FluentKit
 @testable import FluentPSQLKit
 
-final class IssueTests: PSQLTestCase {
+@Suite
+struct IssueTests {
     let f = FluentModel.as("x")
     
     final class Test: CTE {
@@ -29,7 +32,9 @@ final class IssueTests: PSQLTestCase {
         init() {}
     }
     
-    func testNew() {
+    @Test
+	func testNew() {
+		var serializer = SQLSerializer.test
         let a = Test.as("a")
         
         SELECT {
@@ -38,13 +43,15 @@ final class IssueTests: PSQLTestCase {
             Test.$test.as("a")
             a.$test.as("a")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
         
         let compare = #"SELECT "test"."test"::TEXT, "a"."test"::TEXT, "test"."test"::TEXT AS "a", "a"."test"::TEXT AS "a""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
     
+    @Test
     func testNew1() {
+        var serializer = SQLSerializer.test
         let a = Test1.as("a")
         
         SELECT {
@@ -53,20 +60,22 @@ final class IssueTests: PSQLTestCase {
             Test1.$test.as("a")
             a.$test.as("a")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
         
         let compare = #"SELECT "test"."test"::TEXT, "a"."test"::TEXT, "test"."test"::TEXT AS "a", "a"."test"::TEXT AS "a""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIssue6() {
+        var serializer = SQLSerializer.test
         SELECT {
             f.$money / f.$money
             (f.$money / f.$money).as("money")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC, ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC AS "money""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

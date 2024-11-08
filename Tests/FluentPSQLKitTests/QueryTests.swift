@@ -1,48 +1,58 @@
 // QueryTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import FluentPSQLKit
 
-final class QueryTests: PSQLTestCase {
+@Suite
+struct QueryTests {
     let f = FluentModel.as("x")
 
-    func testQuery() {
+    @Test
+	func testQuery() {
+		var serializer = SQLSerializer.test
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."name"::TEXT FROM "my_model" AS "x""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testQueryAsSub() {
+    @Test
+	func testQueryAsSub() {
+		var serializer = SQLSerializer.test
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
         }
         .asSubquery(FluentModel.table)
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"(SELECT "x"."name"::TEXT FROM "my_model" AS "x") AS "my_model""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testQueryAsWith() {
+    @Test
+	func testQueryAsWith() {
+		var serializer = SQLSerializer.test
         QUERY {
             SELECT { f.$name }
             FROM { f.table }
         }
         .asWith(self.f.table)
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #""x" AS (SELECT "x"."name"::TEXT FROM "my_model" AS "x")"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testQueryN() {
+    @Test
+	func testQueryN() {
+		var serializer = SQLSerializer.test
         QUERY {
             SELECT {
                 f.$name
@@ -52,13 +62,15 @@ final class QueryTests: PSQLTestCase {
             GROUPBY { f.$name }
             ORDERBY { f.$name.desc() }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."name"::TEXT, "x"."title"::TEXT FROM "my_model" AS "x" GROUP BY "x"."name" ORDER BY "x"."name" DESC"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testUnion() {
+    @Test
+	func testUnion() {
+		var serializer = SQLSerializer.test
         QUERY {
             UNION {
                 QUERY { SELECT { f.$name } }
@@ -66,13 +78,15 @@ final class QueryTests: PSQLTestCase {
                 QUERY { SELECT { f.$name } }
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT UNION SELECT "x"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseTrue() {
+    @Test
+	func testIfElseTrue() {
+		var serializer = SQLSerializer.test
         let bool = true
         QUERY {
             if bool {
@@ -81,13 +95,15 @@ final class QueryTests: PSQLTestCase {
                 SELECT { f.$age }
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."name"::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseFalse() {
+    @Test
+	func testIfElseFalse() {
+		var serializer = SQLSerializer.test
         let bool = false
         QUERY {
             if bool {
@@ -96,13 +112,15 @@ final class QueryTests: PSQLTestCase {
                 SELECT { f.$age }
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."age"::INTEGER"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSwitch() {
+    @Test
+	func testSwitch() {
+		var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -120,13 +138,15 @@ final class QueryTests: PSQLTestCase {
                 FROM { f.table }
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT "x"."age"::INTEGER"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSelectSubquery() {
+    @Test
+	func testSelectSubquery() {
+		var serializer = SQLSerializer.test
         SELECT {
             QUERY {
                 SELECT { f.$age }
@@ -134,13 +154,15 @@ final class QueryTests: PSQLTestCase {
             }
             .asSubquery(f.table)
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT (SELECT "x"."age"::INTEGER FROM "my_model" AS "x") AS "x""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testReturning() {
+    @Test
+	func testReturning() {
+		var serializer = SQLSerializer.test
         QUERY {
             UPDATE(f.table) {
                 f.$name => "taylor"
@@ -148,17 +170,19 @@ final class QueryTests: PSQLTestCase {
             WHERE { f.$name == "tmac" }
             RETURNING { f.$id }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'taylor' WHERE ("x"."name" = 'tmac') RETURNING "x"."id"::UUID"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testEmpty() {
+    @Test
+	func testEmpty() {
+		var serializer = SQLSerializer.test
         QUERY {}
-            .serialize(to: &fluentSerializer)
+            .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

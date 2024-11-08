@@ -1,54 +1,66 @@
 // GroupByTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import FluentPSQLKit
 
-final class GroupByTests: PSQLTestCase {
+@Suite
+struct GroupByTests {
     let f = FluentModel.as("x")
 
-    func testGroupModel() {
+    @Test
+	func testGroupModel() {
+		var serializer = SQLSerializer.test
         GROUPBY {
             FluentModel.$name
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"GROUP BY "my_model"."name""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testGroupModelAlias() {
+    @Test
+	func testGroupModelAlias() {
+		var serializer = SQLSerializer.test
         GROUPBY {
             f.$name
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"GROUP BY "x"."name""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testGroupBoth() {
+    @Test
+	func testGroupBoth() {
+		var serializer = SQLSerializer.test
         GROUPBY {
             FluentModel.$name
             f.$name
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
         
         let compare = #"GROUP BY "my_model"."name", "x"."name""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testGroupRaw() {
+    @Test
+	func testGroupRaw() {
+		var serializer = SQLSerializer.test
         GROUPBY {
             RawColumn<String>("cool")
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"GROUP BY "cool""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseTrue() {
+    @Test
+	func testIfElseTrue() {
+		var serializer = SQLSerializer.test
         let bool = true
         GROUPBY {
             if bool {
@@ -57,13 +69,15 @@ final class GroupByTests: PSQLTestCase {
                 f.$age
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"GROUP BY "x"."name""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfElseFalse() {
+    @Test
+	func testIfElseFalse() {
+		var serializer = SQLSerializer.test
         let bool = false
         GROUPBY {
             if bool {
@@ -72,13 +86,15 @@ final class GroupByTests: PSQLTestCase {
                 f.$age
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"GROUP BY "x"."age""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testSwitch() {
+    @Test
+	func testSwitch() {
+		var serializer = SQLSerializer.test
         enum Test {
             case one
             case two
@@ -96,43 +112,49 @@ final class GroupByTests: PSQLTestCase {
                 f.$name
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"GROUP BY "x"."age""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfTrue() {
+    @Test
+	func testIfTrue() {
+		var serializer = SQLSerializer.test
         let bool = true
         GROUPBY {
             if bool {
                 f.$name
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"GROUP BY "x"."name""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testIfFalse() {
+    @Test
+	func testIfFalse() {
+		var serializer = SQLSerializer.test
         let bool = false
         GROUPBY {
             if bool {
                 f.$name
             }
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
-    func testEmpty() {
+    @Test
+	func testEmpty() {
+		var serializer = SQLSerializer.test
         GROUPBY {}
-            .serialize(to: &fluentSerializer)
+            .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

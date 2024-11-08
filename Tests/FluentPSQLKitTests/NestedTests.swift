@@ -1,20 +1,24 @@
 // NestedTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import FluentPSQLKit
 
-final class NestedTests: PSQLTestCase {
+@Suite
+struct NestedTests {
     let f = FluentModel.as("x")
 
-    func testGroup() {
+    @Test
+	func testGroup() {
+		var serializer = SQLSerializer.test
         SELECT {
             JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$name)
             JSONB_EXTRACT_PATH_TEXT(f.$pet, \.$info, \.$name)
         }
-        .serialize(to: &fluentSerializer)
+        .serialize(to: &serializer)
 
         let compare = #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet", 'name')::TEXT, JSONB_EXTRACT_PATH_TEXT("x"."pet", 'info', 'name')::TEXT"#
-        XCTAssertEqual(fluentSerializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

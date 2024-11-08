@@ -1,10 +1,10 @@
 // PSQLTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import Foundation
 import FluentKit
 import PostgresKit
 import SQLKit
-import XCTest
 @testable import FluentPSQLKit
 
 @FluentCTE("my_model")
@@ -56,6 +56,8 @@ final class FluentModel: Model, @unchecked Sendable {
     }
 }
 
-class PSQLTestCase: XCTestCase {
-    var fluentSerializer = SQLSerializer(database: TestSQLDatabase())
+extension SQLSerializer {
+    static var test: SQLSerializer {
+        SQLSerializer(database: TestSQLDatabase())
+    }
 }

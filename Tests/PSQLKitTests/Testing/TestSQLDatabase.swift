@@ -37,3 +37,9 @@ extension PSQLQuery {
 
     static var testDB: any SQLDatabase { TestSQLDatabase() }
 }
+
+extension SQLSerializer {
+    static var test: SQLSerializer {
+        SQLSerializer(database: TestSQLDatabase())
+    }
+}

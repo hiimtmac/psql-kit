@@ -1,11 +1,14 @@
 // FluentTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import Foundation
 import FluentKit
-import XCTest
+import SQLKit
+import Testing
 @testable import FluentPSQLKit
 
-final class FluentTests: PSQLTestCase {
+@Suite
+struct FluentTests {
     @FluentCTE("pet")
     final class Pet: Model, @unchecked Sendable {
         @ID
@@ -46,7 +49,9 @@ final class FluentTests: PSQLTestCase {
         init() {}
     }
 
-    func testRelationships() {
+    @Test
+	func testRelationships() {
+		var serializer = SQLSerializer.test
         let p = Pet.as("p")
         let o = Owner.as("o")
         let t = Thing.as("t")
@@ -72,11 +77,13 @@ final class FluentTests: PSQLTestCase {
             }
         }
 
-        b.serialize(to: &fluentSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"SELECT "p"."owner_id"::UUID, "pet"."owner_id"::UUID WHERE ("p"."owner_id" = "o"."id") AND ("t"."parent_id" = "o"."id") AND ("pet"."owner_id" = "owner"."id") AND ("thing"."parent_id" = "owner"."id") AND ("p"."owner_id" = "owner"."id") AND ("t"."parent_id" = "owner"."id") GROUP BY "p"."owner_id", "pet"."owner_id", "thing"."parent_id", "t"."parent_id""#)
+        b.serialize(to: &serializer)
+        #expect(serializer.sql == #"SELECT "p"."owner_id"::UUID, "pet"."owner_id"::UUID WHERE ("p"."owner_id" = "o"."id") AND ("t"."parent_id" = "o"."id") AND ("pet"."owner_id" = "owner"."id") AND ("thing"."parent_id" = "owner"."id") AND ("p"."owner_id" = "owner"."id") AND ("t"."parent_id" = "owner"."id") GROUP BY "p"."owner_id", "pet"."owner_id", "thing"."parent_id", "t"."parent_id""#)
     }
 
-    func testDates() {
+    @Test
+	func testDates() {
+		var serializer = SQLSerializer.test
         let p = Pet.as("p")
         let date1 = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 01, hour: 01, minute: 01, second: 01).date!
         let date2 = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 30, hour: 01, minute: 01, second: 01).date!
@@ -95,7 +102,7 @@ final class FluentTests: PSQLTestCase {
             }
         }
 
-        b.serialize(to: &fluentSerializer)
-        XCTAssertEqual(fluentSerializer.sql, #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30 01:01 AM') AND ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30') GROUP BY "p"."created_at""#)
+        b.serialize(to: &serializer)
+        #expect(serializer.sql == #"SELECT "pet"."created_at"::TIMESTAMP, "p"."created_at"::DATE WHERE ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30 01:01 AM') AND ("p"."created_at" BETWEEN '2020-01-01' AND '2020-01-30') GROUP BY "p"."created_at""#)
     }
 }

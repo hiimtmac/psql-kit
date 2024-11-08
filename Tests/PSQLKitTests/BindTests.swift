@@ -63,7 +63,6 @@ struct BindTests {
 
     @Test
     func testDateBindCodable() throws {
-        var serializer = SQLSerializer.test
         let swift = DateComponents(calendar: .current, timeZone: TimeZone(identifier: "UTC"), year: 2020, month: 01, day: 01, hour: 01, minute: 01, second: 01).date!
 
         let date = PSQLDate(swift)
