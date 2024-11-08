@@ -4,7 +4,7 @@
 import SQLKit
 
 public struct QueryDirective<T>: SQLExpression where T: QuerySQLExpression & Sendable {
-    let content: T
+    package let content: T
 
     init(_ content: T) {
         self.content = content
@@ -29,6 +29,11 @@ extension QueryDirective: UnionSQLExpression {
 public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let name: String
     let content: T
+    
+    package init(name: String, content: T) {
+        self.name = name
+        self.content = content
+    }
 
     public func serialize(to serializer: inout SQLSerializer) {
         guard !content.queryIsNull else { return }
@@ -45,14 +50,6 @@ public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable 
 }
 
 extension QueryDirective {
-    public func asSubquery<U>(_ table: U) -> SubQuery<T> where U: Table {
-        SubQuery(name: type(of: table).schema, content: self.content)
-    }
-
-    public func asSubquery<U>(_ alias: TableAlias<U>) -> SubQuery<T> where U: Table {
-        SubQuery(name: alias.alias, content: self.content)
-    }
-    
     public func asSubquery<U>(_ table: CTETable<U>) -> SubQuery<T> where U: CTE {
         SubQuery(name: U.tableName, content: self.content)
     }
@@ -90,7 +87,12 @@ extension QueryDirective: SelectSQLExpression {
 
 public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let name: String
-    let content: T
+    package let content: T
+    
+    package init(name: String, content: T) {
+        self.name = name
+        self.content = content
+    }
 
     public func serialize(to serializer: inout SQLSerializer) {
         guard !content.queryIsNull else { return }
@@ -107,14 +109,6 @@ public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable
 }
 
 extension QueryDirective {
-    public func asWith<U>(_ table: U) -> WithQuery<T> where U: Table {
-        WithQuery(name: type(of: table).schema, content: self.content)
-    }
-
-    public func asWith<U>(_ alias: TableAlias<U>) -> WithQuery<T> {
-        WithQuery(name: alias.alias, content: self.content)
-    }
-    
     public func asWith<U>(_ table: CTETable<U>) -> WithQuery<T> where U: CTE {
         WithQuery(name: U.tableName, content: self.content)
     }

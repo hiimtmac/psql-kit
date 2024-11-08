@@ -2,6 +2,7 @@
 // Copyright (c) 2024 hiimtmac inc.
 
 import FluentBenchmark
+import PSQLKit
 import FluentPSQLKit
 import XCTest
 
@@ -10,6 +11,26 @@ infix operator ~~: ComparisonPrecedence
 infix operator ...: LogicalConjunctionPrecedence
 
 final class ReadmeTests: PSQLTestCase {
+    final class Moon1: Model, FluentCTE, @unchecked Sendable {
+        @ID var id: UUID?
+        @Field(key: "name") var name: String
+        @Field(key: "craters") var craters: Int
+        static let space: String? = nil
+        static let schema: String = "moon1"
+    }
+    
+    func testWelcome1() {
+        QUERY {
+            SELECT {
+                Moon1.$name
+                Moon1.$craters
+            }
+            FROM { Moon1.table }
+        }
+        .serialize(to: &fluentSerializer)
+        print(fluentSerializer.sql)
+    }
+    
     func testWelcome() {
         QUERY {
             SELECT {
@@ -252,16 +273,16 @@ final class ReadmeTests: PSQLTestCase {
         print(fluentSerializer.sql)
     }
 
+    @FluentCTE("my_model")
+    final class FluentModel1: Model, @unchecked Sendable {
+        @ID
+        var id: UUID?
+        @Timestamp(key: "created_at", on: .create)
+        var createdAt: Date?
+        init() {}
+    }
     func testTransform() {
-        final class FluentModel: Model, Table, @unchecked Sendable {
-            static let schema = "my_model"
-            @ID
-            var id: UUID?
-            @Timestamp(key: "created_at", on: .create)
-            var createdAt: Date?
-        }
-
-        let m = FluentModel.as("m")
+        let m = FluentModel1.as("m")
         QUERY {
             SELECT {
                 m.$id
@@ -343,16 +364,16 @@ final class ReadmeTests: PSQLTestCase {
         print(fluentSerializer.sql)
     }
 
+    @FluentCTE("my_model", schemaName: "custom_path")
+    final class FluentModel2: Model, @unchecked Sendable {
+        @ID
+        var id: UUID?
+        @Field(key: "name")
+        var name: String
+        init() {}
+    }
     func testSchema() {
-        final class FluentModel: Model, Table, @unchecked Sendable {
-            static let schema = "my_model"
-            static let path: String? = "custom_path"
-            @ID
-            var id: UUID?
-            @Field(key: "name")
-            var name: String
-        }
-        let m = FluentModel.as("m")
+        let m = FluentModel2.as("m")
         QUERY {
             SELECT { m.* }
             FROM { m.table }
@@ -362,14 +383,32 @@ final class ReadmeTests: PSQLTestCase {
     }
 }
 
-extension Galaxy: Table {}
+extension Galaxy: FluentCTE {
+    public static var tableName: String { schema }
+    public static var schemaName: String? { space }
+}
 
-extension Moon: Table {}
+extension Moon: FluentCTE {
+    public static var tableName: String { schema }
+    public static var schemaName: String? { space }
+}
 
-extension Planet: Table {}
+extension Planet: FluentCTE {
+    public static var tableName: String { schema }
+    public static var schemaName: String? { space }
+}
 
-extension PlanetTag: Table {}
+extension PlanetTag: FluentCTE {
+    public static var tableName: String { schema }
+    public static var schemaName: String? { space }
+}
 
-extension Star: Table {}
+extension Star: FluentCTE {
+    public static var tableName: String { schema }
+    public static var schemaName: String? { space }
+}
 
-extension Tag: Table {}
+extension Tag: FluentCTE {
+    public static var tableName: String { schema }
+    public static var schemaName: String? { space }
+}

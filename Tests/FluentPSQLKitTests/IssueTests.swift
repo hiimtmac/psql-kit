@@ -19,7 +19,7 @@ final class IssueTests: PSQLTestCase {
     }
     
     @FluentCTE("test")
-    final class Test1: Model, @unchecked Sendable {
+    final class Test1: Model, @unchecked Sendable {        
         @ID
         var id: UUID?
         

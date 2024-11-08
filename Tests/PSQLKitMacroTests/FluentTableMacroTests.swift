@@ -14,10 +14,16 @@ final class FluentTableMacroTests: XCTestCase {
                 var another: String
             
                 @OptionalField(key: "next")
-                var next: Int
+                var next: Int?
             
                 @Group(key: "group")
                 var group: Group
+            
+                @Parent(key: "parent")
+                var parent: Parent
+            
+                @OptionalParent(key: "optional_parent")
+                var optionalParent: OptionalParent?
                 
                 var testIgnore: Int
             
@@ -34,27 +40,25 @@ final class FluentTableMacroTests: XCTestCase {
                 var another: String
             
                 @OptionalField(key: "next")
-                var next: Int
+                var next: Int?
             
                 @Group(key: "group")
                 var group: Group
+            
+                @Parent(key: "parent")
+                var parent: Parent
+            
+                @OptionalParent(key: "optional_parent")
+                var optionalParent: OptionalParent?
                 
                 var testIgnore: Int
             
                 var more: String { "" }
-            
-                public struct QueryContainer {
-                    @ColumnAccessor<UUID>("id") public var id: Never
-                    @ColumnAccessor<String>("another") var another: Never
-                    @ColumnAccessor<Int>("next") var next: Never
-                    @ColumnAccessor<Group>("group") var group: Never
-                }
             }
             
             extension Test: FluentCTE {
-                public static let tableName: String = "test_table"
-                public static let schemaName: String? = "test_schema"
-                public static let queryContainer = QueryContainer()
+                public static let schema: String = "test_table"
+                public static let space: String? = "test_schema"
             }
             """,
             macros: testMacros

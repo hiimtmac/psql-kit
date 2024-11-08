@@ -1,5 +1,4 @@
-@attached(extension, conformances: CTE, names: named(queryContainer), named(tableName), named(schemaName))
-@attached(member, names: named(queryContainer), named(tableName), named(schemaName), arbitrary)
+@attached(extension, conformances: FluentCTE, names: named(schema), named(space))
 public macro FluentCTE(
     _ tableName: String,
     schemaName: String? = nil

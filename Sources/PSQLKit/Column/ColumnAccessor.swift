@@ -8,7 +8,7 @@
 import Foundation
 
 @propertyWrapper
-public struct ColumnAccessor<Value>: Sendable where Value: PSQLExpression {
+public struct ColumnAccessor<Value>: Sendable {
     let column: String
     
     public init(_ column: String) {

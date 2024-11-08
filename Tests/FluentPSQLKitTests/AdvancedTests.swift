@@ -19,7 +19,7 @@ final class AdvancedTests: PSQLTestCase {
     }
 
     @FluentCTE("owner")
-    final class Owner: Model, NestedFluentCTE, @unchecked Sendable {
+    final class Owner: Model, @unchecked Sendable {
         @ID
         var id: UUID?
         @Field(key: "name")
