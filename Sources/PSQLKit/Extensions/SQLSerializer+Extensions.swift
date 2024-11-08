@@ -13,9 +13,9 @@ extension SQLSerializer {
     }
     
     mutating func writeSpaced(_ value: String) {
-        self.write(" ")
+        self.writeSpace()
         self.write(value)
-        self.write(" ")
+        self.writeSpace()
     }
     
     mutating func writeQuoted(_ value: String) {
