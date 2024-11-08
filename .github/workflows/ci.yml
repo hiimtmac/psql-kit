@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         images:
-          - swift:5.9-jammy
-          - swift:5.9-focal
+          - swift:6.0-jammy
+          - swift:6.0-focal
           # - swift:5.9-amazonlinux2
           # - swiftlang/swift:nightly-main
     container: ${{ matrix.images }}
@@ -33,7 +33,7 @@ jobs:
 
   test-macos:
     name: "Test macOS (${{ matrix.xcode }})"
-    runs-on: macos-14
+    runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
@@ -59,4 +59,4 @@ jobs:
         run: |
           swift test --parallel --sanitize=thread \
             -Xlinker -rpath \
-            -Xlinker $(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.9/macosx
+            -Xlinker $(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.0/macosx
