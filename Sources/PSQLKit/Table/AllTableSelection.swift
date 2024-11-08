@@ -4,7 +4,7 @@
 import SQLKit
 
 public struct AllCTESelection<T>: Sendable where T: Table {
-    let cte: CTETable<T>
+    let cte: TableInstance<T>
 }
 
 // MARK: Select

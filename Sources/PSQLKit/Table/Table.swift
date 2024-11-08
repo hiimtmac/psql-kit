@@ -32,12 +32,12 @@ extension Table {
         _From(schemaName: Self.schemaName, tableName: Self.tableName)
     }
 
-    public static var table: CTETable<Self> {
-        CTETable()
+    public static var table: TableInstance<Self> {
+        TableInstance()
     }
 }
 
-public struct CTETable<T>: FromSQLExpression where T: Table {
+public struct TableInstance<T>: FromSQLExpression where T: Table {
     public var fromSqlExpression: some SQLExpression {
         _From(schemaName: T.schemaName, tableName: T.tableName)
     }
@@ -51,7 +51,7 @@ public struct CTETable<T>: FromSQLExpression where T: Table {
     }
 }
 
-struct _From: SQLExpression, FromSQLExpression {
+fileprivate struct _From: SQLExpression, FromSQLExpression {
     let schemaName: String?
     let tableName: String
 

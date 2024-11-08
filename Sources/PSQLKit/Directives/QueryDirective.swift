@@ -50,7 +50,7 @@ public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable 
 }
 
 extension QueryDirective {
-    public func asSubquery<U>(_ table: CTETable<U>) -> SubQuery<T> where U: Table {
+    public func asSubquery<U>(_ table: TableInstance<U>) -> SubQuery<T> where U: Table {
         SubQuery(name: U.tableName, content: self.content)
     }
 
@@ -109,7 +109,7 @@ public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable
 }
 
 extension QueryDirective {
-    public func asWith<U>(_ table: CTETable<U>) -> WithQuery<T> where U: Table {
+    public func asWith<U>(_ table: TableInstance<U>) -> WithQuery<T> where U: Table {
         WithQuery(name: U.tableName, content: self.content)
     }
 
