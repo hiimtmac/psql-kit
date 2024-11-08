@@ -419,8 +419,6 @@ struct ReadmeTests {
 }
 
 extension Galaxy: Table {
-    public static let tableName: String = ""
-    public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
     public struct QueryContainer: Sendable {
         @ColumnAccessor<IDValue>("id") var id: Never
@@ -429,8 +427,6 @@ extension Galaxy: Table {
 }
 
 extension Moon: Table {
-    public static let tableName: String = ""
-    public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
     public struct QueryContainer: Sendable {
         @ColumnAccessor<IDValue>("id") var id: Never
@@ -442,8 +438,6 @@ extension Moon: Table {
 }
 
 extension Planet: Table {
-    public static let tableName: String = ""
-    public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
     public struct QueryContainer: Sendable {
         @ColumnAccessor<IDValue>("id") var id: Never
@@ -452,8 +446,6 @@ extension Planet: Table {
 }
 
 extension PlanetTag: Table {
-    public static let tableName: String = ""
-    public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
     public struct QueryContainer: Sendable {
         @ColumnAccessor<IDValue>("id") var id: Never
@@ -462,8 +454,6 @@ extension PlanetTag: Table {
 }
 
 extension Star: Table {
-    public static let tableName: String = ""
-    public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
     public struct QueryContainer: Sendable {
         @ColumnAccessor<IDValue>("id") var id: Never
@@ -472,8 +462,6 @@ extension Star: Table {
 }
 
 extension FluentBenchmark.Tag: Table {
-    public static let tableName: String = ""
-    public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
     public struct QueryContainer: Sendable {
         @ColumnAccessor<IDValue>("id") var id: Never
