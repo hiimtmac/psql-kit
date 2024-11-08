@@ -1,10 +1,12 @@
 // IssueTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class IssueTests: PSQLTestCase {
+@Suite
+struct IssueTests {
     let p = PSQLModel.as("x")
     
     struct Test: CTE {
@@ -22,7 +24,10 @@ final class IssueTests: PSQLTestCase {
         var test: String
     }
     
+    @Test
     func testNew() {
+        var serializer = SQLSerializer.test
+        
         let a = Test.as("a")
         
         SELECT {
@@ -34,10 +39,13 @@ final class IssueTests: PSQLTestCase {
         .serialize(to: &serializer)
         
         let compare = #"SELECT "test"."test"::TEXT, "a"."test"::TEXT, "test"."test"::TEXT AS "a", "a"."test"::TEXT AS "a""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
     
+    @Test
     func testNew1() {
+        var serializer = SQLSerializer.test
+        
         let a = Test1.as("a")
         
         SELECT {
@@ -49,10 +57,13 @@ final class IssueTests: PSQLTestCase {
         .serialize(to: &serializer)
         
         let compare = #"SELECT "test"."test"::TEXT, "a"."test"::TEXT, "test"."test"::TEXT AS "a", "a"."test"::TEXT AS "a""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIssue6() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             p.$money / p.$money
             (p.$money / p.$money).as("money")
@@ -60,6 +71,6 @@ final class IssueTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC, ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC AS "money""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

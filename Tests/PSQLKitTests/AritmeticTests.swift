@@ -1,13 +1,18 @@
 // AritmeticTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class ArithemticTests: PSQLTestCase {
+@Suite
+struct ArithemticTests {
     let p = PSQLModel.as("x")
 
+    @Test
     func testSelect() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             p.$money / p.$money
             p.$money + p.$money
@@ -16,30 +21,39 @@ final class ArithemticTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC, ("x"."money"::NUMERIC + "x"."money"::NUMERIC)::NUMERIC, ("x"."money"::NUMERIC * "x"."money"::NUMERIC)::NUMERIC AS "money""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testWhere() {
+        var serializer = SQLSerializer.test
+        
         WHERE {
             (p.$money / p.$money) > 4
         }
         .serialize(to: &serializer)
 
         let compare = #"WHERE (("x"."money" / "x"."money") > 4.0)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testTypeSwap() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             p.$money / p.$age.transform(to: Double.self)
         }
         .serialize(to: &serializer)
 
         let compare = #"SELECT ("x"."money"::NUMERIC / "x"."age"::NUMERIC)::NUMERIC"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testOptional() {
+        var serializer = SQLSerializer.test
+        
         let double: Double? = 8
 
         SELECT {
@@ -48,6 +62,6 @@ final class ArithemticTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ("x"."money"::NUMERIC / 8.0::NUMERIC)::NUMERIC"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

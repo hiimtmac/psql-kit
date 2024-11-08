@@ -1,13 +1,18 @@
 // WithTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class WithTests: PSQLTestCase {
+@Suite
+struct WithTests {
     let p = PSQLModel.as("x")
 
+    @Test
     func testWith1() {
+        var serializer = SQLSerializer.test
+        
         WITH {
             QUERY {
                 SELECT { PSQLModel.$name }
@@ -18,10 +23,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model")"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testWith2() {
+        var serializer = SQLSerializer.test
+        
         WITH {
             QUERY {
                 SELECT { p.$title }
@@ -32,10 +40,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "x" AS (SELECT "x"."title"::TEXT FROM "my_model" AS "x")"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testWithInQuery() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             WITH {
                 QUERY {
@@ -50,10 +61,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testWithErased() {
+        var serializer = SQLSerializer.test
+        
         let p = QUERY {
             SELECT { PSQLModel.$name }
             FROM { PSQLModel.table }
@@ -67,10 +81,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "my_model" AS (SELECT "my_model"."name"::TEXT FROM "my_model") SELECT "my_model"."name"::TEXT FROM "my_model""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         WITH {
@@ -83,10 +100,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "x" AS (SELECT "x"."title"::TEXT)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         WITH {
@@ -99,10 +119,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "x" AS (SELECT "x"."age"::INTEGER)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testSwitch() {
+        var serializer = SQLSerializer.test
+        
         enum Test {
             case one
             case two
@@ -123,10 +146,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "x" AS (SELECT "x"."age"::INTEGER)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         WITH {
@@ -137,10 +163,13 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WITH "x" AS (SELECT "x"."title"::TEXT)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         WITH {
@@ -151,14 +180,17 @@ final class WithTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testEmpty() {
+        var serializer = SQLSerializer.test
+        
         WITH {}
             .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

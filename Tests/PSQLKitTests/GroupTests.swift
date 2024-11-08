@@ -1,11 +1,16 @@
 // GroupTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class GroupTests: PSQLTestCase {
+@Suite
+struct GroupTests {
+    @Test
     func testLength() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             PSQLModel.$id
             PSQLModel.$age
@@ -27,6 +32,6 @@ final class GroupTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER, "my_model"."name"::TEXT, "my_model"."id"::UUID, "my_model"."age"::INTEGER"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

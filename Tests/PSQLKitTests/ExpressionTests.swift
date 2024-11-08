@@ -1,13 +1,19 @@
 // ExpressionTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import Foundation
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class ExpressionTests: PSQLTestCase {
+@Suite
+struct ExpressionTests {
     let p = PSQLModel.as("x")
 
+    @Test
     func testMax() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             MAX(p.$name)
             MAX(p.$age).as("age")
@@ -15,10 +21,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT MAX("x"."name"::TEXT), MAX("x"."age"::INTEGER) AS "age""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testMin() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             MIN(p.$name)
             MIN(p.$age).as("age")
@@ -26,10 +35,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT MIN("x"."name"::TEXT), MIN("x"."age"::INTEGER) AS "age""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testCount() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             COUNT(p.$name)
             COUNT(p.$age).as("age")
@@ -37,10 +49,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT COUNT("x"."name"::TEXT), COUNT("x"."age"::INTEGER) AS "age""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testCountDistinct() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             COUNT(p.$name)
                 .distinct()
@@ -51,10 +66,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT COUNT(DISTINCT "x"."name"::TEXT), COUNT(DISTINCT "x"."age"::INTEGER) AS "age""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testSum() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             SUM(p.$name)
             SUM(p.$age).as("age")
@@ -62,10 +80,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT SUM("x"."name"::TEXT), SUM("x"."age"::INTEGER) AS "age""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testGenerateSeries() {
+        var serializer = SQLSerializer.test
+        
         let date1 = DateComponents(calendar: .current, year: 2020, month: 01, day: 01).date!.psqlDate
         let date2 = DateComponents(calendar: .current, year: 2020, month: 01, day: 30).date!.psqlDate
 
@@ -76,10 +97,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT GENERATE_SERIES(8::INTEGER, 20::INTEGER, 10::INTERVAL), GENERATE_SERIES('2020-01-01'::DATE, '2020-01-30'::DATE, '1 day'::INTERVAL) AS "dates""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testConcat() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             CONCAT(p.$name, " ", p.$title, " ", p.$name)
             CONCAT(p.$name, " ", p.$title, " ").as("cool")
@@ -89,10 +113,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT CONCAT("x"."name", ' ', "x"."title", ' ', "x"."name")::TEXT, CONCAT("x"."name", ' ', "x"."title", ' ')::TEXT AS "cool", CONCAT("x"."name", ' ', "x"."title")::TEXT, CONCAT(8, 8)::TEXT AS "cool""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testCoalesce() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             COALESCE(p.$name, p.$name, p.$name, p.$name, "hello").as("cool")
             COALESCE(p.$name, p.$name, p.$name, "hello").as("cool")
@@ -103,10 +130,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT COALESCE("x"."name", "x"."name", "x"."name", "x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", "x"."name", "x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", "x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", COALESCE("x"."name", 'hello'))::TEXT"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testJsonExtractPathText() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello", as: String.self).as("cool")
             JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello", "cool", as: String.self)
@@ -114,10 +144,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet", 'hello')::TEXT AS "cool", JSONB_EXTRACT_PATH_TEXT("x"."pet", 'hello', 'cool')::TEXT"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testNestedJsonExtract() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             COALESCE(
                 JSONB_EXTRACT_PATH_TEXT(p.$pet, \.$name),
@@ -127,10 +160,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT COALESCE(JSONB_EXTRACT_PATH_TEXT("x"."pet", 'name'), JSONB_EXTRACT_PATH_TEXT("x"."pet", 'type'))::TEXT"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testCoalesceCompare() {
+        var serializer = SQLSerializer.test
+        
         let date = DateComponents(calendar: .current, year: 2021, month: 01, day: 21).date!
 
         WHERE {
@@ -140,20 +176,26 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WHERE (COALESCE("x"."name", 'tmac') = 'taylor') AND (COALESCE("x"."birthday", '2021-01-21') BETWEEN '2021-01-21' AND '2021-01-21')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testConcatCompare() {
+        var serializer = SQLSerializer.test
+        
         WHERE {
             CONCAT(p.$name, "tmac") == "taylor"
         }
         .serialize(to: &serializer)
 
         let compare = #"WHERE (CONCAT("x"."name", 'tmac') = 'taylor')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayAggregate() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             ARRAY_AGG(p.$name).as("agg")
             ARRAY_AGG(PSQLArray([1, 2, 3])).as("array")
@@ -161,10 +203,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_AGG("x"."name"::TEXT) AS "agg", ARRAY_AGG(ARRAY[1, 2, 3]::INTEGER[]) AS "array""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayToString() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_TO_STRING(p.$name, delimiter: ",", ifNull: "*")
@@ -178,10 +223,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_TO_STRING("x"."name"::TEXT, ',', '*')::TEXT, ARRAY_TO_STRING("x"."name"::TEXT, ',')::TEXT AS "agg", ARRAY_TO_STRING(ARRAY[1, 2, 3]::INTEGER[], ',')::TEXT AS "array" WHERE (ARRAY_TO_STRING("x"."name", ',') = 'taylor, tmac')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayUpper() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_UPPER(p.$name, dimension: 1).as("upp")
@@ -194,10 +242,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_UPPER("x"."name"::TEXT, 1)::INTEGER AS "upp", ARRAY_UPPER(ARRAY[1, 2, 3]::INTEGER[], 1)::INTEGER AS "upp" WHERE (ARRAY_UPPER("x"."name", 1) = 5)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayNDims() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_NDIMS(p.$name).as("upp")
@@ -210,10 +261,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_NDIMS("x"."name"::TEXT)::INTEGER AS "upp", ARRAY_NDIMS(ARRAY[1, 2, 3]::INTEGER[])::INTEGER WHERE (ARRAY_NDIMS("x"."name") = 5)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayLower() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_LOWER(p.$name, dimension: 1).as("low")
@@ -226,10 +280,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_LOWER("x"."name"::TEXT, 1)::INTEGER AS "low", ARRAY_LOWER(ARRAY[1, 2, 3]::INTEGER[], 1)::INTEGER AS "low" WHERE (ARRAY_LOWER("x"."name", 1) = 5)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayLength() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_LENGTH(p.$name, dimension: 1).as("low")
@@ -242,10 +299,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_LENGTH("x"."name"::TEXT, 1)::INTEGER AS "low", ARRAY_LENGTH(ARRAY[1, 2, 3]::INTEGER[], 1)::INTEGER AS "low" WHERE (ARRAY_LENGTH("x"."name", 1) = 5)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayDims() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_DIMS(p.$name).as("dim")
@@ -258,10 +318,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_DIMS("x"."name"::TEXT)::TEXT AS "dim", ARRAY_DIMS(ARRAY[1, 2, 3]::INTEGER[])::TEXT WHERE (ARRAY_DIMS("x"."name") = '[5]')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayReplace() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_REPLACE(p.$name, find: "hi", replace: "bye").as("rep")
@@ -274,10 +337,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_REPLACE("x"."name"::TEXT, 'hi'::TEXT, 'bye'::TEXT)::TEXT[] AS "rep", ARRAY_REPLACE(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER, 2::INTEGER)::INTEGER[] WHERE (ARRAY_REPLACE("x"."name", 'hi', 'by') = ('hello'))"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayRemove() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_REMOVE(p.$name, remove: "hi").as("rep")
@@ -290,10 +356,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_REMOVE("x"."name"::TEXT, 'hi'::TEXT)::TEXT[] AS "rep", ARRAY_REMOVE(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER)::INTEGER[] WHERE (ARRAY_REMOVE("x"."name", 'hi') = ('hello'))"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayPrepend() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_PREPEND(p.$name, prepend: "hi").as("pre")
@@ -306,10 +375,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_PREPEND('hi'::TEXT, "x"."name"::TEXT)::TEXT[] AS "pre", ARRAY_PREPEND(1::INTEGER, ARRAY[1, 2, 3]::INTEGER[])::INTEGER[] WHERE (ARRAY_PREPEND('hi', "x"."name") = ('hello'))"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayConcatenate() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_CAT(p.$name, p.$name).as("app")
@@ -322,10 +394,13 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_CAT("x"."name"::TEXT, "x"."name"::TEXT)::TEXT[] AS "app", ARRAY_CAT(ARRAY[1, 2, 3]::INTEGER[], ARRAY[1, 2, 3]::INTEGER[])::INTEGER[] WHERE (ARRAY_CAT("x"."name", ARRAY['hi']) = ('hello'))"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testArrayAppend() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT {
                 ARRAY_APPEND(p.$name, append: "hi").as("app")
@@ -338,36 +413,45 @@ final class ExpressionTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"SELECT ARRAY_APPEND("x"."name"::TEXT, 'hi'::TEXT)::TEXT[] AS "app", ARRAY_APPEND(ARRAY[1, 2, 3]::INTEGER[], 1::INTEGER)::INTEGER[] WHERE (ARRAY_APPEND("x"."name", 'hi') = ('hello'))"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testConcateWithCoalesce() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             CONCAT(COALESCE(p.$name, "hi"), " there")
         }
         .serialize(to: &serializer)
 
         let compare = #"SELECT CONCAT(COALESCE("x"."name", 'hi'), ' there')::TEXT"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testDateTrunc() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             DATE_TRUNC("hour", p.$birthday).as("datehour")
         }
         .serialize(to: &serializer)
 
         let compare = #"SELECT DATE_TRUNC('hour', "x"."birthday"::TIMESTAMP) AS "datehour""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testDatePart() {
+        var serializer = SQLSerializer.test
+        
         SELECT {
             DATE_PART("hour", p.$birthday).as("hour")
         }
         .serialize(to: &serializer)
 
         let compare = #"SELECT DATE_PART('hour', "x"."birthday"::TIMESTAMP) AS "hour""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

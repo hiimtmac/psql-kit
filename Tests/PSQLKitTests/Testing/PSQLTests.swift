@@ -3,7 +3,7 @@
 
 import PostgresKit
 import SQLKit
-import XCTest
+import Foundation
 @testable import PSQLKit
 
 @CTE("my_model")
@@ -35,8 +35,4 @@ struct PSQLModel {
 
         static var postgresDataType: PostgresDataType { .text }
     }
-}
-
-class PSQLTestCase: XCTestCase {
-    var serializer = SQLSerializer(database: TestSQLDatabase())
 }

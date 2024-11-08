@@ -1,33 +1,44 @@
 // UpdateTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class UpdateTests: PSQLTestCase {
+@Suite
+struct UpdateTests {
     let p = PSQLModel.as("x")
 
+    @Test
     func testModel() {
+        var serializer = SQLSerializer.test
+        
         UPDATE(PSQLModel.table) {
             PSQLModel.$name => "hi"
         }
         .serialize(to: &serializer)
 
         let compare = #"UPDATE "my_model" SET "name" = 'hi'"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testModelAlias() {
+        var serializer = SQLSerializer.test
+        
         UPDATE(self.p.table) {
             p.$name => "hi"
         }
         .serialize(to: &serializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi'"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testBoth() {
+        var serializer = SQLSerializer.test
+        
         UPDATE(self.p.table) {
             PSQLModel.$name => "hi"
             p.$name => "hi"
@@ -35,10 +46,13 @@ final class UpdateTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi', "name" = 'hi'"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         UPDATE(self.p.table) {
@@ -51,10 +65,13 @@ final class UpdateTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "name" = 'hi'"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         UPDATE(self.p.table) {
@@ -67,10 +84,13 @@ final class UpdateTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "age" = 29"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testSwitch() {
+        var serializer = SQLSerializer.test
+        
         enum Test {
             case one
             case two
@@ -91,14 +111,17 @@ final class UpdateTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"UPDATE "my_model" AS "x" SET "age" = 29"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testEmpty() {
+        var serializer = SQLSerializer.test
+        
         UPDATE(p.table) {}
             .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

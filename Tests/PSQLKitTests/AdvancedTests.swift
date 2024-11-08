@@ -1,10 +1,12 @@
 // AdvancedTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import SQLKit
 import PSQLKit
-import XCTest
+import Testing
 
-final class AdvancedTests: PSQLTestCase {
+@Suite
+struct AdvancedTests {
     @CTE("schema", schemaName: "space")
     struct TableSpace {
         var name: String
@@ -15,7 +17,10 @@ final class AdvancedTests: PSQLTestCase {
         var date: PSQLDate
     }
     
+    @Test
     func testSpaces() {
+        var serializer = SQLSerializer.test
+        
         QUERY {
             SELECT { TableSpace.$name }
             FROM { TableSpace.table }
@@ -23,10 +28,13 @@ final class AdvancedTests: PSQLTestCase {
         .serialize(to: &serializer)
         
         let compare = #"SELECT "space"."schema"."name"::TEXT FROM "space"."schema""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
     
+    @Test
     func testSpacesAlias() {
+        var serializer = SQLSerializer.test
+        
         let p = TableSpace.as("a")
         
         QUERY {
@@ -36,6 +44,6 @@ final class AdvancedTests: PSQLTestCase {
         .serialize(to: &serializer)
         
         let compare = #"SELECT "a"."name"::TEXT FROM "space"."schema" AS "a""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

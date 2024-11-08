@@ -1,33 +1,44 @@
 // InsertTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class InsertTests: PSQLTestCase {
+@Suite
+struct InsertTests {
     let p = PSQLModel.as("x")
 
+    @Test
     func testModel() {
+        var serializer = SQLSerializer.test
+        
         INSERT(into: PSQLModel.table) {
             PSQLModel.$name => "hi"
         }
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" ("name") VALUES ('hi')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testModelAlias() {
+        var serializer = SQLSerializer.test
+        
         INSERT(into: self.p.table) {
             p.$name => "hi"
         }
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" AS "x" ("name") VALUES ('hi')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testBoth() {
+        var serializer = SQLSerializer.test
+        
         INSERT(into: self.p.table) {
             PSQLModel.$name => "hi"
             p.$name => "hi"
@@ -35,10 +46,13 @@ final class InsertTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" AS "x" ("name", "name") VALUES ('hi', 'hi')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         INSERT(into: self.p.table) {
@@ -51,10 +65,13 @@ final class InsertTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" AS "x" ("name") VALUES ('hi')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         INSERT(into: self.p.table) {
@@ -67,10 +84,13 @@ final class InsertTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" AS "x" ("age") VALUES (29)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testSwitch() {
+        var serializer = SQLSerializer.test
+        
         enum Test {
             case one
             case two
@@ -91,10 +111,13 @@ final class InsertTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" AS "x" ("age") VALUES (29)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         INSERT(into: self.p.table) {
@@ -105,10 +128,13 @@ final class InsertTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" AS "x" ("name") VALUES ('hi')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         INSERT(into: self.p.table) {
@@ -120,14 +146,17 @@ final class InsertTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"INSERT INTO "my_model" AS "x" ("age") VALUES (29)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testEmpty() {
+        var serializer = SQLSerializer.test
+        
         INSERT(into: self.p.table) {}
             .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

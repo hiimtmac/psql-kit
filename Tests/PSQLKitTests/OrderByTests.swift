@@ -1,33 +1,44 @@
 // OrderByTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class OrderByTests: PSQLTestCase {
+@Suite
+struct OrderByTests {
     let p = PSQLModel.as("x")
 
+    @Test
     func testOrderModel() {
+        var serializer = SQLSerializer.test
+        
         ORDERBY {
             PSQLModel.$name
         }
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "my_model"."name""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testOrderModelAlias() {
+        var serializer = SQLSerializer.test
+        
         ORDERBY {
             p.$name.asc()
         }
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "x"."name" ASC"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testOrderMultiple() {
+        var serializer = SQLSerializer.test
+        
         ORDERBY {
             PSQLModel.$name.asc()
             p.$name.desc()
@@ -36,10 +47,13 @@ final class OrderByTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "my_model"."name" ASC, "x"."name" DESC, "x"."id""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testOrderDirections() {
+        var serializer = SQLSerializer.test
+        
         ORDERBY {
             p.$name
             PSQLModel.$name.asc()
@@ -49,20 +63,26 @@ final class OrderByTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "x"."name", "my_model"."name" ASC, "my_model"."name" DESC, "x"."name" ASC"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testOrderRaw() {
+        var serializer = SQLSerializer.test
+        
         ORDERBY {
             RawColumn<String>("cool").desc()
         }
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "cool" DESC"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         ORDERBY {
@@ -75,10 +95,13 @@ final class OrderByTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "x"."name""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         ORDERBY {
@@ -91,10 +114,13 @@ final class OrderByTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "x"."age""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testSwitch() {
+        var serializer = SQLSerializer.test
+        
         enum Test {
             case one
             case two
@@ -115,10 +141,13 @@ final class OrderByTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "x"."age""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         ORDERBY {
@@ -129,10 +158,13 @@ final class OrderByTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"ORDER BY "x"."name""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         ORDERBY {
@@ -143,14 +175,17 @@ final class OrderByTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testEmpty() {
+        var serializer = SQLSerializer.test
+        
         ORDERBY {}
             .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

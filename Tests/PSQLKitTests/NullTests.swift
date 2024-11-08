@@ -1,13 +1,18 @@
 // NullTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class NullTests: PSQLTestCase {
+@Suite
+struct NullTests {
     let p = PSQLModel.as("m")
 
+    @Test
     func testNullEqual() {
+        var serializer = SQLSerializer.test
+        
         let val = nil as String?
 
         WHERE {
@@ -20,10 +25,13 @@ final class NullTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WHERE ("m"."name" = 'hi') AND ("m"."name" = 'hi') AND ("m"."name" = NULL) AND ("m"."name" = 'hi') AND ("m"."name" = NULL)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testNullIs() {
+        var serializer = SQLSerializer.test
+        
         let val = nil as String?
 
         WHERE {
@@ -36,10 +44,13 @@ final class NullTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WHERE ("m"."name" IS 'hi') AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL) AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testNullNotEqual() {
+        var serializer = SQLSerializer.test
+        
         let val = nil as String?
 
         WHERE {
@@ -52,10 +63,13 @@ final class NullTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WHERE ("m"."name" != 'hi') AND ("m"."name" != 'hi') AND ("m"."name" != NULL) AND ("m"."name" != 'hi') AND ("m"."name" != NULL)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testNullIsNot() {
+        var serializer = SQLSerializer.test
+        
         let val = nil as String?
 
         WHERE {
@@ -68,6 +82,6 @@ final class NullTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"WHERE ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT NULL) AND ("m"."name" IS NOT 'hi') AND ("m"."name" IS NOT NULL)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }

@@ -1,33 +1,44 @@
 // HavingTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-import XCTest
+import SQLKit
+import Testing
 @testable import PSQLKit
 
-final class HavingTests: PSQLTestCase {
+@Suite
+struct HavingTests {
     let p = PSQLModel.as("x")
 
+    @Test
     func testHaving1() {
+        var serializer = SQLSerializer.test
+        
         HAVING {
             PSQLModel.$name == PSQLModel.$title
         }
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("my_model"."name" = "my_model"."title")"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testHaving2() {
+        var serializer = SQLSerializer.test
+        
         HAVING {
             p.$name != p.$name
         }
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("x"."name" != "x"."name")"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testHavingN() {
+        var serializer = SQLSerializer.test
+        
         HAVING {
             PSQLModel.$name == p.$name
             p.$name == PSQLModel.$name
@@ -36,10 +47,13 @@ final class HavingTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("my_model"."name" = "x"."name") AND ("x"."name" = "my_model"."name") AND (("x"."name" != "x"."name") OR ("my_model"."name" != "my_model"."name"))"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         HAVING {
@@ -52,10 +66,13 @@ final class HavingTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("x"."name" = 'tmac')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfElseFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         HAVING {
@@ -68,10 +85,13 @@ final class HavingTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("x"."age" = 29)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testSwitch() {
+        var serializer = SQLSerializer.test
+        
         enum Test {
             case one
             case two
@@ -92,10 +112,13 @@ final class HavingTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("x"."age" = 29)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfTrue() {
+        var serializer = SQLSerializer.test
+        
         let bool = true
 
         HAVING {
@@ -106,10 +129,13 @@ final class HavingTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("x"."name" = 'tmac')"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testIfFalse() {
+        var serializer = SQLSerializer.test
+        
         let bool = false
 
         HAVING {
@@ -121,14 +147,17 @@ final class HavingTests: PSQLTestCase {
         .serialize(to: &serializer)
 
         let compare = #"HAVING ("x"."age" = 29)"#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 
+    @Test
     func testEmpty() {
+        var serializer = SQLSerializer.test
+        
         HAVING {}
             .serialize(to: &serializer)
 
         let compare = #""#
-        XCTAssertEqual(serializer.sql, compare)
+        #expect(serializer.sql == compare)
     }
 }
