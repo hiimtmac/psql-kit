@@ -1,7 +1,8 @@
 // Macros.swift
 // Copyright (c) 2024 hiimtmac inc.
 
-@attached(extension, conformances: FluentCTE, names: named(schema), named(space))
+@attached(extension, conformances: CTE, names: named(queryContainer), named(tableName), named(schemaName))
+@attached(member, names: named(QueryContainer))
 public macro FluentCTE(
     _ tableName: String,
     schemaName: String? = nil

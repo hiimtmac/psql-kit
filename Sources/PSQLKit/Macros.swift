@@ -16,7 +16,7 @@ public macro CTEIgnore() = #externalMacro(
 )
 
 @attached(extension, conformances: CTE, names: named(queryContainer), named(tableName), named(schemaName))
-@attached(member, names: named(queryContainer), named(tableName), named(schemaName), arbitrary)
+@attached(member, names: named(QueryContainer))
 public macro CTE(
     _ tableName: String,
     schemaName: String? = nil

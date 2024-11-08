@@ -418,32 +418,65 @@ struct ReadmeTests {
     }
 }
 
-extension Galaxy: FluentCTE {
-    public static var tableName: String { schema }
-    public static var schemaName: String? { space }
+extension Galaxy: CTE {
+    public static let tableName: String = ""
+    public static let schemaName: String? = ""
+    public static let queryContainer = QueryContainer()
+    public struct QueryContainer: Sendable {
+        @ColumnAccessor<IDValue>("id") var id: Never
+        @ColumnAccessor<String>("name") var name: Never
+    }
 }
 
-extension Moon: FluentCTE {
-    public static var tableName: String { schema }
-    public static var schemaName: String? { space }
+extension Moon: CTE {
+    public static let tableName: String = ""
+    public static let schemaName: String? = ""
+    public static let queryContainer = QueryContainer()
+    public struct QueryContainer: Sendable {
+        @ColumnAccessor<IDValue>("id") var id: Never
+        @ColumnAccessor<String>("name") var name: Never
+        @ColumnAccessor<Int>("craters") var craters: Never
+        @ColumnAccessor<Int>("comets") var comets: Never
+        @ColumnAccessor<Planet.IDValue>("planet_id") var planet: Never
+    }
 }
 
-extension Planet: FluentCTE {
-    public static var tableName: String { schema }
-    public static var schemaName: String? { space }
+extension Planet: CTE {
+    public static let tableName: String = ""
+    public static let schemaName: String? = ""
+    public static let queryContainer = QueryContainer()
+    public struct QueryContainer: Sendable {
+        @ColumnAccessor<IDValue>("id") var id: Never
+        @ColumnAccessor<String>("name") var name: Never
+    }
 }
 
-extension PlanetTag: FluentCTE {
-    public static var tableName: String { schema }
-    public static var schemaName: String? { space }
+extension PlanetTag: CTE {
+    public static let tableName: String = ""
+    public static let schemaName: String? = ""
+    public static let queryContainer = QueryContainer()
+    public struct QueryContainer: Sendable {
+        @ColumnAccessor<IDValue>("id") var id: Never
+        @ColumnAccessor<String>("name") var name: Never
+    }
 }
 
-extension Star: FluentCTE {
-    public static var tableName: String { schema }
-    public static var schemaName: String? { space }
+extension Star: CTE {
+    public static let tableName: String = ""
+    public static let schemaName: String? = ""
+    public static let queryContainer = QueryContainer()
+    public struct QueryContainer: Sendable {
+        @ColumnAccessor<IDValue>("id") var id: Never
+        @ColumnAccessor<String>("name") var name: Never
+    }
 }
 
-extension FluentBenchmark.Tag: FluentCTE {
-    public static var tableName: String { schema }
-    public static var schemaName: String? { space }
+extension FluentBenchmark.Tag: CTE {
+    public static let tableName: String = ""
+    public static let schemaName: String? = ""
+    public static let queryContainer = QueryContainer()
+    public struct QueryContainer: Sendable {
+        @ColumnAccessor<IDValue>("id") var id: Never
+        @ColumnAccessor<String>("name") var name: Never
+    }
 }

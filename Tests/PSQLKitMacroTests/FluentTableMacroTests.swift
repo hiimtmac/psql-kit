@@ -57,11 +57,21 @@ final class FluentTableMacroTests: XCTestCase {
                     var testIgnore: Int
 
                     var more: String { "" }
+                
+                    public struct QueryContainer {
+                        @ColumnAccessor<UUID>("id") public var id: Never
+                        @ColumnAccessor<String>("another") var another: Never
+                        @ColumnAccessor<Int>("next") var next: Never
+                        @ColumnAccessor<Group>("group") var group: Never
+                        @ColumnAccessor<Parent.IDValue>("parent") var parent: Never
+                        @ColumnAccessor<OptionalParent.IDValue>("optional_parent") var optionalParent: Never
+                    }
                 }
 
-                extension Test: FluentCTE {
-                    public static let schema: String = "test_table"
-                    public static let space: String? = "test_schema"
+                extension Test: CTE {
+                    public static let tableName: String = "test_table"
+                    public static let schemaName: String? = "test_schema"
+                    public static let queryContainer = QueryContainer()
                 }
                 """,
             macros: testMacros
