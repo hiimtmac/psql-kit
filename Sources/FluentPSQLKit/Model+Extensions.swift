@@ -8,9 +8,7 @@
 import PSQLKit
 import FluentKit
 
-public protocol FluentCTE: CTE, AnyObject {}
-
-extension FluentCTE where Self: Model {
+extension CTE where Self: Schema {
     public static var schema: String { tableName }
     public static var space: String? { schemaName }
 }

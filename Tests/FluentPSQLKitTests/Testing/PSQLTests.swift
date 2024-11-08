@@ -7,9 +7,8 @@ import SQLKit
 import XCTest
 @testable import FluentPSQLKit
 
-final class FluentModel: Model, Table, @unchecked Sendable {
-    static let schema = "my_model"
-
+@FluentCTE("my_model")
+final class FluentModel: Model, @unchecked Sendable {    
     @ID
     var id: UUID?
     @OptionalField(key: "name")

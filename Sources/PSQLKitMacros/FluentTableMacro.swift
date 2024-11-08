@@ -170,7 +170,7 @@ extension FluentTableMacro: ExtensionMacro {
                 inheritedTypes: InheritedTypeListSyntax(
                     arrayLiteral: InheritedTypeListSyntax.Element(
                         type: IdentifierTypeSyntax(
-                            name: .identifier("FluentCTE")
+                            name: .identifier("CTE")
                         )
                     )
                 )
@@ -233,10 +233,18 @@ extension FluentTableMacro: MemberMacro {
                     let attribute = variable.attributes.first?.as(AttributeSyntax.self),
                     let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)
                 {
-                    if attributeName.name.text == "ID" {
+                    let isID = attributeName.name.text == "ID"
+                    let isField = attributeName.name.text == "Field"
+                    let isOptionalField = attributeName.name.text == "OptionalField"
+                    let isGroup = attributeName.name.text == "Group"
+                    let isParent = attributeName.name.text == "Parent"
+                    let isOptionalParent = attributeName.name.text == "OptionalParent"
+                    let isTimestamp = attributeName.name.text == "Timestamp"
+                    
+                    if isID {
                         columnName = identifier.identifier.text
                     } else if
-                        attributeName.name.text == "Field" || attributeName.name.text == "OptionalField" || attributeName.name.text == "Group",
+                        isField || isOptionalField || isGroup || isParent || isOptionalParent || isTimestamp,
                         let argumentList = attribute.arguments?.as(LabeledExprListSyntax.self),
                         let argument = argumentList.first,
                         let expression = argument.expression.as(StringLiteralExprSyntax.self),

@@ -8,7 +8,7 @@ import FluentKit
 final class IssueTests: PSQLTestCase {
     let f = FluentModel.as("x")
     
-    final class Test: FluentCTE {
+    final class Test: CTE {
         static let tableName: String = "test"
         static let schemaName: String? = nil
         

@@ -6,9 +6,8 @@ import FluentPSQLKit
 import XCTest
 
 final class AdvancedTests: PSQLTestCase {
-    final class Pet: Model, Table, @unchecked Sendable {
-        static let schema = "pet"
-
+    @FluentCTE("pet")
+    final class Pet: Model, @unchecked Sendable {
         @ID
         var id: UUID?
         @Field(key: "name")
@@ -19,9 +18,8 @@ final class AdvancedTests: PSQLTestCase {
         init() {}
     }
 
-    final class Owner: Model, Table, @unchecked Sendable {
-        static let schema = "owner"
-
+    @FluentCTE("owner")
+    final class Owner: Model, NestedFluentCTE, @unchecked Sendable {
         @ID
         var id: UUID?
         @Field(key: "name")
@@ -34,10 +32,8 @@ final class AdvancedTests: PSQLTestCase {
         init() {}
     }
     
-    final class ModelSpace: Model, Table, @unchecked Sendable {
-        static let schema = "schema"
-        static let space: String? = "space"
-
+    @FluentCTE("schema", schemaName: "space")
+    final class ModelSpace: Model, @unchecked Sendable {
         @ID
         var id: UUID?
         @Field(key: "name")
@@ -46,28 +42,24 @@ final class AdvancedTests: PSQLTestCase {
         init() {}
     }
     
-    struct TableSpace: Table, @unchecked Sendable {
-        static let schema: String = "schema"
-        static let path: String? = "space"
-        @Column(key: "name")
+    @CTE("schema", schemaName: "space")
+    struct TableSpace {
         var name: String
     }
 
-    struct DateRange: Table, @unchecked Sendable {
-        static let schema: String = "date_range"
-        @Column(key: "date")
+    @CTE("date_range")
+    struct DateRange {
         var date: PSQLDate
     }
 
-    struct OwnerFilter: Table, @unchecked Sendable {
-        @Column(key: "id")
+    @CTE("owner_filter")
+    struct OwnerFilter {
         var id: UUID
     }
 
-    struct OwnerDateSeries: Table, @unchecked Sendable {
-        @OptionalColumn(key: "id")
+    @CTE("owner_date_series")
+    struct OwnerDateSeries {
         var id: UUID?
-        @Column(key: "date")
         var date: PSQLDate
     }
     
@@ -168,7 +160,7 @@ final class AdvancedTests: PSQLTestCase {
 
         let sub3 = [
             #"SELECT "r"."date"::DATE, "f"."id"::UUID"#,
-            #"FROM "OwnerFilter" AS "f""#,
+            #"FROM "owner_filter" AS "f""#,
             #"INNER JOIN "date_range" AS "r" ON true"#,
         ].joined(separator: " ")
 
@@ -176,11 +168,11 @@ final class AdvancedTests: PSQLTestCase {
             "WITH",
             #""r" AS (\#(sub1)),"#,
             #""f" AS (\#(sub2)),"#,
-            #""OwnerDateSeries" AS (\#(sub3))"#,
-            #"SELECT "OwnerDateSeries"."date"::DATE, "o"."name"::TEXT"#,
-            #"FROM "OwnerFilter" AS "f""#,
+            #""owner_date_series" AS (\#(sub3))"#,
+            #"SELECT "owner_date_series"."date"::DATE, "o"."name"::TEXT"#,
+            #"FROM "owner_filter" AS "f""#,
             #"LEFT JOIN "owner" AS "o" ON ("f"."id" = "o"."id")"#,
-            #"INNER JOIN "OwnerDateSeries" ON ("o"."bday" = "OwnerDateSeries"."date")"#,
+            #"INNER JOIN "owner_date_series" ON ("o"."bday" = "owner_date_series"."date")"#,
         ].joined(separator: " ")
 
         XCTAssertEqual(fluentSerializer.sql, compare)
