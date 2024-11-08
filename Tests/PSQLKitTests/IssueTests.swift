@@ -9,7 +9,7 @@ import PSQLKit
 struct IssueTests {
     let p = PSQLModel.as("x")
 
-    struct Test: CTE {
+    struct Test: Table {
         static let tableName: String = "test"
         static let schemaName: String? = nil
 

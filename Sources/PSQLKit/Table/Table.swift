@@ -4,14 +4,14 @@
 import SQLKit
 
 @dynamicMemberLookup
-public protocol CTE: FromSQLExpression {
+public protocol Table: FromSQLExpression {
     associatedtype QueryContainer
     static var queryContainer: QueryContainer { get }
     static var tableName: String { get }
     static var schemaName: String? { get }
 }
 
-extension CTE {
+extension Table {
     public static subscript<T>(
         dynamicMember keyPath: KeyPath<QueryContainer, ColumnAccessor<T>>
     ) -> ColumnExpression<T> {
@@ -24,12 +24,12 @@ extension CTE {
         )
     }
 
-    public static func `as`(_ alias: String) -> CTEAlias<Self> {
+    public static func `as`(_ alias: String) -> TableAlias<Self> {
         .init(alias: alias)
     }
 
     public var fromSqlExpression: some SQLExpression {
-        _TableFrom(schemaName: Self.schemaName, tableName: Self.tableName)
+        _From(schemaName: Self.schemaName, tableName: Self.tableName)
     }
 
     public static var table: CTETable<Self> {
@@ -37,34 +37,34 @@ extension CTE {
     }
 }
 
-public struct CTETable<T>: FromSQLExpression where T: CTE {
+public struct CTETable<T>: FromSQLExpression where T: Table {
     public var fromSqlExpression: some SQLExpression {
-        _TableFrom(schemaName: T.schemaName, tableName: T.tableName)
+        _From(schemaName: T.schemaName, tableName: T.tableName)
     }
 
     public static postfix func .* (cte: Self) -> AllCTESelection<T> {
         .init(cte: cte)
     }
 
-    public func `as`(_ alias: String) -> CTEAlias<T> {
+    public func `as`(_ alias: String) -> TableAlias<T> {
         .init(alias: alias)
     }
 }
 
-package struct _TableFrom: SQLExpression, FromSQLExpression {
+struct _From: SQLExpression, FromSQLExpression {
     let schemaName: String?
     let tableName: String
 
-    package init(schemaName: String?, tableName: String) {
+    init(schemaName: String?, tableName: String) {
         self.schemaName = schemaName
         self.tableName = tableName
     }
 
-    package var fromSqlExpression: some SQLExpression {
+    var fromSqlExpression: some SQLExpression {
         self
     }
 
-    package func serialize(to serializer: inout SQLSerializer) {
+    func serialize(to serializer: inout SQLSerializer) {
         if let path = schemaName {
             serializer.writeQuote()
             serializer.write(path)

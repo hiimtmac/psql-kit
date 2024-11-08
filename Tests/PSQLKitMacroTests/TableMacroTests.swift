@@ -8,7 +8,7 @@ final class TableMacroTests: XCTestCase {
     func testMacro() {
         assertMacroExpansion(
             """
-            @CTE("test_table", schema: "test_schema")
+            @Table("test_table", schema: "test_schema")
             public struct Test {
                 @CTECol("test_column")
                 public var testColumn: Int
@@ -37,7 +37,7 @@ final class TableMacroTests: XCTestCase {
                     }
                 }
 
-                extension Test: CTE {
+                extension Test: Table {
                     public static let tableName: String = "test_table"
                     public static let schemaName: String? = "test_schema"
                     public static let queryContainer = QueryContainer()

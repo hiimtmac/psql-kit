@@ -173,7 +173,7 @@ extension FluentTableMacro: ExtensionMacro {
                 inheritedTypes: InheritedTypeListSyntax(
                     arrayLiteral: InheritedTypeListSyntax.Element(
                         type: IdentifierTypeSyntax(
-                            name: .identifier("CTE")
+                            name: .identifier("Table")
                         )
                     )
                 )

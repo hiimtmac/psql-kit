@@ -85,7 +85,7 @@ extension JsonbExtractPathTextExpression {
     public init<T>(
         _ group: ColumnExpression<T>,
         _ keyPath: KeyPath<T.QueryContainer, ColumnAccessor<Content>>
-    ) where T: CTE {
+    ) where T: Table {
         self.content = group.baseSqlExpression
         self.pathElements = [T.queryContainer[keyPath: keyPath].column]
     }
@@ -94,7 +94,7 @@ extension JsonbExtractPathTextExpression {
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T.QueryContainer, ColumnAccessor<U>>,
         _ second: KeyPath<U.QueryContainer, ColumnAccessor<Content>>
-    ) where T: CTE, U: CTE {
+    ) where T: Table, U: Table {
         self.content = group.baseSqlExpression
         self.pathElements = [
             T.queryContainer[keyPath: first].column,

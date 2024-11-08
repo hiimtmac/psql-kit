@@ -418,7 +418,7 @@ struct ReadmeTests {
     }
 }
 
-extension Galaxy: CTE {
+extension Galaxy: Table {
     public static let tableName: String = ""
     public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
@@ -428,7 +428,7 @@ extension Galaxy: CTE {
     }
 }
 
-extension Moon: CTE {
+extension Moon: Table {
     public static let tableName: String = ""
     public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
@@ -441,7 +441,7 @@ extension Moon: CTE {
     }
 }
 
-extension Planet: CTE {
+extension Planet: Table {
     public static let tableName: String = ""
     public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
@@ -451,7 +451,7 @@ extension Planet: CTE {
     }
 }
 
-extension PlanetTag: CTE {
+extension PlanetTag: Table {
     public static let tableName: String = ""
     public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
@@ -461,7 +461,7 @@ extension PlanetTag: CTE {
     }
 }
 
-extension Star: CTE {
+extension Star: Table {
     public static let tableName: String = ""
     public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()
@@ -471,7 +471,7 @@ extension Star: CTE {
     }
 }
 
-extension FluentBenchmark.Tag: CTE {
+extension FluentBenchmark.Tag: Table {
     public static let tableName: String = ""
     public static let schemaName: String? = ""
     public static let queryContainer = QueryContainer()

@@ -4,7 +4,7 @@
 import SQLKit
 
 public struct QueryDirective<T>: SQLExpression where T: QuerySQLExpression & Sendable {
-    package let content: T
+    let content: T
 
     init(_ content: T) {
         self.content = content
@@ -30,7 +30,7 @@ public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable 
     let name: String
     let content: T
 
-    package init(name: String, content: T) {
+    init(name: String, content: T) {
         self.name = name
         self.content = content
     }
@@ -50,11 +50,11 @@ public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable 
 }
 
 extension QueryDirective {
-    public func asSubquery<U>(_ table: CTETable<U>) -> SubQuery<T> where U: CTE {
+    public func asSubquery<U>(_ table: CTETable<U>) -> SubQuery<T> where U: Table {
         SubQuery(name: U.tableName, content: self.content)
     }
 
-    public func asSubquery<U>(_ alias: CTEAlias<U>) -> SubQuery<T> where U: CTE {
+    public func asSubquery<U>(_ alias: TableAlias<U>) -> SubQuery<T> where U: Table {
         SubQuery(name: alias.alias, content: self.content)
     }
 
@@ -87,9 +87,9 @@ extension QueryDirective: SelectSQLExpression {
 
 public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable {
     let name: String
-    package let content: T
+    let content: T
 
-    package init(name: String, content: T) {
+    init(name: String, content: T) {
         self.name = name
         self.content = content
     }
@@ -109,11 +109,11 @@ public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable
 }
 
 extension QueryDirective {
-    public func asWith<U>(_ table: CTETable<U>) -> WithQuery<T> where U: CTE {
+    public func asWith<U>(_ table: CTETable<U>) -> WithQuery<T> where U: Table {
         WithQuery(name: U.tableName, content: self.content)
     }
 
-    public func asWith<U>(_ alias: CTEAlias<U>) -> WithQuery<T> {
+    public func asWith<U>(_ alias: TableAlias<U>) -> WithQuery<T> {
         WithQuery(name: alias.alias, content: self.content)
     }
 

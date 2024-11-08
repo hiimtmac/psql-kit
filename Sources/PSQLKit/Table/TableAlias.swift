@@ -4,7 +4,7 @@
 import SQLKit
 
 @dynamicMemberLookup
-public struct CTEAlias<T>: Sendable where T: CTE {
+public struct TableAlias<T>: Sendable where T: Table {
     public let alias: String
 
     init(alias: String) {
@@ -12,7 +12,7 @@ public struct CTEAlias<T>: Sendable where T: CTE {
     }
 }
 
-extension CTEAlias {
+extension TableAlias {
     public subscript<U>(
         dynamicMember keyPath: KeyPath<T.QueryContainer, ColumnAccessor<U>>
     ) -> ColumnExpression<U> where U: PSQLExpression {
@@ -32,45 +32,45 @@ extension CTEAlias {
     public var table: Self { self }
 }
 
-extension CTEAlias: FromSQLExpression {
+extension TableAlias: FromSQLExpression {
     public var fromSqlExpression: some SQLExpression {
-        _TableAliasFrom(
+        _From(
             aliasName: self.alias,
             schemaName: T.schemaName,
             tableName: T.tableName
         )
     }
-}
+    
+    struct _From: SQLExpression {
+        let aliasName: String
+        let schemaName: String?
+        let tableName: String
 
-package struct _TableAliasFrom: SQLExpression {
-    let aliasName: String
-    let schemaName: String?
-    let tableName: String
-
-    package init(aliasName: String, schemaName: String?, tableName: String) {
-        self.aliasName = aliasName
-        self.schemaName = schemaName
-        self.tableName = tableName
-    }
-
-    package func serialize(to serializer: inout SQLSerializer) {
-        if let path = schemaName {
-            serializer.writeQuote()
-            serializer.write(path)
-            serializer.writeQuote()
-            serializer.writePeriod()
+        init(aliasName: String, schemaName: String?, tableName: String) {
+            self.aliasName = aliasName
+            self.schemaName = schemaName
+            self.tableName = tableName
         }
 
-        serializer.writeQuote()
-        serializer.write(self.tableName)
-        serializer.writeQuote()
+        func serialize(to serializer: inout SQLSerializer) {
+            if let path = schemaName {
+                serializer.writeQuote()
+                serializer.write(path)
+                serializer.writeQuote()
+                serializer.writePeriod()
+            }
 
-        serializer.writeSpace()
-        serializer.write("AS")
-        serializer.writeSpace()
+            serializer.writeQuote()
+            serializer.write(self.tableName)
+            serializer.writeQuote()
 
-        serializer.writeQuote()
-        serializer.write(self.aliasName)
-        serializer.writeQuote()
+            serializer.writeSpace()
+            serializer.write("AS")
+            serializer.writeSpace()
+
+            serializer.writeQuote()
+            serializer.write(self.aliasName)
+            serializer.writeQuote()
+        }
     }
 }

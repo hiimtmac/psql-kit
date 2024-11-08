@@ -11,7 +11,7 @@ import Testing
 struct IssueTests {
     let f = FluentModel.as("x")
 
-    final class Test: CTE {
+    final class Test: Table {
         static let tableName: String = "test"
         static let schemaName: String? = nil
 

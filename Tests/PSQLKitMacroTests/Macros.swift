@@ -6,7 +6,7 @@ import SwiftSyntaxMacros
 
 let testMacros: [String: Macro.Type] = [
     "CTECol": ColumnMacro.self,
-    "CTE": TableMacro.self,
+    "Table": TableMacro.self,
     "CTEIgnore": IgnoreMacro.self,
     "FluentCTE": FluentTableMacro.self
 ]

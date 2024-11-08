@@ -11,7 +11,7 @@ public enum TableMacro {
 
         var description: String {
             switch self {
-            case .nonStruct: "@CTE can only be applied to `struct`s"
+            case .nonStruct: "@Table can only be applied to `struct`s"
             }
         }
     }
@@ -173,7 +173,7 @@ extension TableMacro: ExtensionMacro {
                 inheritedTypes: InheritedTypeListSyntax(
                     arrayLiteral: InheritedTypeListSyntax.Element(
                         type: IdentifierTypeSyntax(
-                            name: .identifier("CTE")
+                            name: .identifier("Table")
                         )
                     )
                 )
