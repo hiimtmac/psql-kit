@@ -22,9 +22,7 @@ public struct UpdateDirective<Table, T>: SQLExpression where Table: FromSQLExpre
         serializer.write("UPDATE")
         serializer.writeSpace()
         self.table.fromSqlExpression.serialize(to: &serializer)
-        serializer.writeSpace()
-        serializer.write("SET")
-        serializer.writeSpace()
+        serializer.writeSpaced("SET")
         content.updateSqlExpression.serialize(to: &serializer)
     }
 }

@@ -59,13 +59,9 @@ extension RawValue.Alias: SelectSQLExpression {
             self.value.serialize(to: &serializer)
             T.postgresDataType.serialize(to: &serializer)
 
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
+            serializer.writeSpaced("AS")
 
-            serializer.writeQuote()
-            serializer.write(self.alias)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.alias)
         }
     }
 

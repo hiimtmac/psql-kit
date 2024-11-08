@@ -35,9 +35,7 @@ extension PSQLRange: CompareSQLExpression where
 
         func serialize(to serializer: inout SQLSerializer) {
             self.lower.compareSqlExpression.serialize(to: &serializer)
-            serializer.writeSpace()
-            serializer.write("AND")
-            serializer.writeSpace()
+            serializer.writeSpaced("AND")
             self.upper.compareSqlExpression.serialize(to: &serializer)
         }
     }

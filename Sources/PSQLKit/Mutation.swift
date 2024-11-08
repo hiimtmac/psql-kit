@@ -35,9 +35,7 @@ extension Mutation: UpdateSQLExpression where
 
         func serialize(to serializer: inout SQLSerializer) {
             self.column.mutationSqlExpression.serialize(to: &serializer)
-            serializer.writeSpace()
-            serializer.write("=")
-            serializer.writeSpace()
+            serializer.writeSpaced("=")
             self.value.mutationSqlExpression.serialize(to: &serializer)
         }
     }

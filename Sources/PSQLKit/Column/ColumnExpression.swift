@@ -44,29 +44,21 @@ extension ColumnExpression: BaseSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
+                serializer.writeQuoted(alias)
                 serializer.writePeriod()
             } else {
                 if let space = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(space)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(space)
                     serializer.writePeriod()
                 }
 
                 if let schema = tableName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(schema)
                     serializer.writePeriod()
                 }
             }
 
-            serializer.writeQuote()
-            serializer.write(self.columnName)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnName)
         }
     }
 }
@@ -93,29 +85,21 @@ extension ColumnExpression: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
+                serializer.writeQuoted(alias)
                 serializer.writePeriod()
             } else {
                 if let space = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(space)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(space)
                     serializer.writePeriod()
                 }
 
                 if let schema = tableName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(schema)
                     serializer.writePeriod()
                 }
             }
 
-            serializer.writeQuote()
-            serializer.write(self.columnName)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnName)
 
             dataType.serialize(to: &serializer)
         }
@@ -197,9 +181,7 @@ extension ColumnExpression: MutationSQLExpression {
         let columnName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuote()
-            serializer.write(self.columnName)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnName)
         }
     }
 }

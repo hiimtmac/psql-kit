@@ -26,13 +26,9 @@ extension ExpressionAlias: SelectSQLExpression where
         func serialize(to serializer: inout SQLSerializer) {
             self.expression.selectSqlExpression.serialize(to: &serializer)
 
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
+            serializer.writeSpaced("AS")
 
-            serializer.writeQuote()
-            serializer.write(self.alias)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.alias)
         }
     }
 }
@@ -51,13 +47,9 @@ extension ExpressionAlias: FromSQLExpression where
         func serialize(to serializer: inout SQLSerializer) {
             self.expression.fromSqlExpression.serialize(to: &serializer)
 
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
+            serializer.writeSpaced("AS")
 
-            serializer.writeQuote()
-            serializer.write(self.alias)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.alias)
         }
     }
 }

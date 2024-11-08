@@ -28,9 +28,7 @@ extension RawColumn: SelectSQLExpression {
         let dataType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuote()
-            serializer.write(self.column)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.column)
             self.dataType.serialize(to: &serializer)
         }
     }
@@ -45,9 +43,7 @@ extension RawColumn: GroupBySQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuote()
-            serializer.write(self.column)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.column)
         }
     }
 
@@ -61,9 +57,7 @@ extension RawColumn: OrderBySQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuote()
-            serializer.write(self.column)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.column)
         }
     }
 
@@ -89,9 +83,7 @@ extension RawColumn: CompareSQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuote()
-            serializer.write(self.column)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.column)
         }
     }
 
@@ -126,13 +118,9 @@ extension RawColumn.Alias: SelectSQLExpression {
         func serialize(to serializer: inout SQLSerializer) {
             self.column.selectSqlExpression.serialize(to: &serializer)
 
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
+            serializer.writeSpaced("AS")
 
-            serializer.writeQuote()
-            serializer.write(self.alias)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.alias)
         }
     }
 

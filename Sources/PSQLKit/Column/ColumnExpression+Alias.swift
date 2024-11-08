@@ -41,37 +41,25 @@ extension ColumnExpression.Alias: BaseSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
+                serializer.writeQuoted(alias)
                 serializer.writePeriod()
             } else {
                 if let space = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(space)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(space)
                     serializer.writePeriod()
                 }
 
                 if let schema = tableName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(schema)
                     serializer.writePeriod()
                 }
             }
 
-            serializer.writeQuote()
-            serializer.write(self.columnName)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnName)
 
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
+            serializer.writeSpaced("AS")
 
-            serializer.writeQuote()
-            serializer.write(self.columnAlias)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnAlias)
         }
     }
 }
@@ -100,39 +88,27 @@ extension ColumnExpression.Alias: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
+                serializer.writeQuoted(alias)
                 serializer.writePeriod()
             } else {
                 if let space = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(space)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(space)
                     serializer.writePeriod()
                 }
 
                 if let schema = tableName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(schema)
                     serializer.writePeriod()
                 }
             }
 
-            serializer.writeQuote()
-            serializer.write(self.columnName)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnName)
 
             dataType.serialize(to: &serializer)
 
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
+            serializer.writeSpaced("AS")
 
-            serializer.writeQuote()
-            serializer.write(self.columnAlias)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnAlias)
         }
     }
 }
@@ -159,39 +135,27 @@ extension ColumnExpression.Alias: MutationSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
-                serializer.writeQuote()
-                serializer.write(alias)
-                serializer.writeQuote()
+                serializer.writeQuoted(alias)
                 serializer.writePeriod()
             } else {
                 if let space = schemaName {
-                    serializer.writeQuote()
-                    serializer.write(space)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(space)
                     serializer.writePeriod()
                 }
 
                 if let schema = tableName {
-                    serializer.writeQuote()
-                    serializer.write(schema)
-                    serializer.writeQuote()
+                    serializer.writeQuoted(schema)
                     serializer.writePeriod()
                 }
             }
 
-            serializer.writeQuote()
-            serializer.write(self.columnName)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnName)
 
             self.dataType.serialize(to: &serializer)
 
-            serializer.writeSpace()
-            serializer.write("AS")
-            serializer.writeSpace()
+            serializer.writeSpaced("AS")
 
-            serializer.writeQuote()
-            serializer.write(self.columnAlias)
-            serializer.writeQuote()
+            serializer.writeQuoted(self.columnAlias)
         }
     }
 }
