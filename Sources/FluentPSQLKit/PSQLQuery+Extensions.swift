@@ -6,7 +6,7 @@ import PostgresKit
 import PSQLKit
 
 extension PSQLQuery {
-    public func execute(on database: some Database) -> PSQLQueryFetcher {
+    public func execute(on database: any Database) -> PSQLQueryFetcher {
         let psqlDatabase = database as! (any PostgresDatabase)
         let sqlDatabase = psqlDatabase.sql()
 

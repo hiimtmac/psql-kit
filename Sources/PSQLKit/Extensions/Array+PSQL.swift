@@ -4,6 +4,8 @@
 import PostgresNIO
 import SQLKit
 
+// TODO: support sequence/collection so Set can go here?
+
 extension Array: @retroactive SQLExpression where Element: SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
         serializer.write("(")
