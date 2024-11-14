@@ -40,10 +40,11 @@ struct NullTests {
             p.$name === val
             p.$name === String?.some("hi")
             p.$name === String?.none
+            p.$name === nil
         }
         .serialize(to: &serializer)
 
-        let compare = #"WHERE ("m"."name" IS 'hi') AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL) AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL)"#
+        let compare = #"WHERE ("m"."name" IS 'hi') AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL) AND ("m"."name" IS 'hi') AND ("m"."name" IS NULL) AND ("m"."name" IS NULL)"#
         #expect(serializer.sql == compare)
     }
 

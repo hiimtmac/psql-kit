@@ -33,4 +33,8 @@ extension SQLSerializer {
     mutating func writePeriod() {
         self.write(".")
     }
+    
+    mutating func writeNull() {
+        self.write("NULL")
+    }
 }

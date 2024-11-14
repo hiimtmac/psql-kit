@@ -9,7 +9,7 @@ extension Optional: @retroactive SQLExpression where Wrapped: SQLExpression {
         if let self = self {
             self.serialize(to: &serializer)
         } else {
-            serializer.write("NULL")
+            serializer.writeNull()
         }
     }
 }

@@ -28,6 +28,13 @@ public func === <T, U>(_ lhs: T, _ rhs: U) -> CompareExpression<T, U> where
     CompareExpression(lhs: lhs, operator: .is, rhs: rhs)
 }
 
+public func === <T>(_ lhs: T, _ rhs: Null) -> CompareExpression<T, Null> where
+    T: TypeEquatable,
+    T.CompareType: PSQLEquatable
+{
+    CompareExpression(lhs: lhs, operator: .is, rhs: rhs)
+}
+
 // MARK: - !=
 
 /// lhs != rhs
@@ -136,6 +143,15 @@ public func >< <T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
     CompareExpression(lhs: lhs, operator: .in, rhs: rhs)
 }
 
+/// lhs IN rhs
+public func >< <T, U>(_ lhs: T, _ rhs: Set<U>) -> CompareExpression<T, [U]> where
+    T: TypeEquatable,
+    U: TypeEquatable,
+    T.CompareType == U.CompareType
+{
+    CompareExpression(lhs: lhs, operator: .in, rhs: Array(rhs))
+}
+
 // MARK: - BETWEEN
 
 /// lhs BETWEEN rhs
@@ -158,6 +174,15 @@ public func <> <T, U>(_ lhs: T, _ rhs: [U]) -> CompareExpression<T, [U]> where
     T.CompareType == U.CompareType
 {
     CompareExpression(lhs: lhs, operator: .notIn, rhs: rhs)
+}
+
+/// lhs NOT IN rhs
+public func <> <T, U>(_ lhs: T, _ rhs: Set<U>) -> CompareExpression<T, [U]> where
+    T: TypeEquatable,
+    U: TypeEquatable,
+    T.CompareType == U.CompareType
+{
+    CompareExpression(lhs: lhs, operator: .notIn, rhs: Array(rhs))
 }
 
 // MARK: - NOT BETWEEN

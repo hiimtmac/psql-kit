@@ -69,7 +69,7 @@ struct WhereTests {
     }
 
     @Test
-    func testIn() {
+    func testNotIn() {
         var serializer = SQLSerializer.test
 
         WHERE {
@@ -82,7 +82,7 @@ struct WhereTests {
     }
 
     @Test
-    func testNotIn() {
+    func testIn() {
         var serializer = SQLSerializer.test
 
         WHERE {

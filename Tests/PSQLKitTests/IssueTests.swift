@@ -73,4 +73,17 @@ struct IssueTests {
         let compare = #"SELECT ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC, ("x"."money"::NUMERIC / "x"."money"::NUMERIC)::NUMERIC AS "money""#
         #expect(serializer.sql == compare)
     }
+    
+    @Test
+    func testEmptyIn() {
+        var serializer = SQLSerializer.test
+        
+        WHERE {
+            p.$name >< [String]()
+        }
+        .serialize(to: &serializer)
+
+        let compare = #"WHERE ("x"."name" IN (NULL))"#
+        #expect(serializer.sql == compare)
+    }
 }
