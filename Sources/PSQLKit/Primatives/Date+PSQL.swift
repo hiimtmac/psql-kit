@@ -36,6 +36,10 @@ extension Date: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
 
+extension Date: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
+}
+
 extension Date {
     public var psqlDate: PSQLDate { .init(self) }
     public var psqlTimestamp: PSQLTimestamp { .init(self) }
@@ -106,6 +110,10 @@ extension PSQLDate: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
 }
 
+extension PSQLDate: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
+}
+
 public struct PSQLTimestamp: PSQLDateTime {
     public let storage: Date
 
@@ -136,6 +144,10 @@ extension PSQLTimestamp: SelectSQLExpression {
 
 extension PSQLTimestamp: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression { self }
+}
+
+extension PSQLTimestamp: MutationSQLExpression {
+    public var mutationSqlExpression: some SQLExpression { self }
 }
 
 extension PSQLTimestamp: PSQLExpression {
