@@ -10,6 +10,14 @@ public struct FromDirective<T>: SQLExpression where T: FromSQLExpression & Senda
         self.content = content
     }
 
+    public init<U>(_ instance: TableInstance<U>) where U: Table, T == TableInstance<U> {
+        self.content = instance
+    }
+    
+    public init<U>(_ alias: TableAlias<U>) where U: Table, T == TableAlias<U> {
+        self.content = alias
+    }
+    
     public init(@FromBuilder content: () -> T) {
         self.content = content()
     }

@@ -1,6 +1,7 @@
 // UpdateTests.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import Foundation
 import SQLKit
 import Testing
 import PSQLKit
@@ -122,6 +123,33 @@ struct UpdateTests {
             .serialize(to: &serializer)
 
         let compare = #""#
+        #expect(serializer.sql == compare)
+    }
+    
+    @CTE("test")
+    struct Test {
+        var date: Date
+    }
+    
+    @Test
+    func testDate() {
+        let date = DateComponents(
+            calendar: Calendar(identifier: .gregorian),
+            year: 2024,
+            month: 11,
+            day: 16,
+            hour: 11,
+            minute: 52,
+            second: 30
+        ).date!
+        
+        var serializer = SQLSerializer.test
+        UPDATE(Test.table) {
+            Test.$date => date
+        }
+        .serialize(to: &serializer)
+
+        let compare = #"UPDATE "test" SET "date" = '2024-11-16 17:52:30 +0000'"#
         #expect(serializer.sql == compare)
     }
 }

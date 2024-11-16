@@ -201,4 +201,24 @@ struct FromTests {
         let compare = #""#
         #expect(serializer.sql == compare)
     }
+    
+    @Test
+    func testSingleAlias() {
+        var serializer = SQLSerializer.test
+        FROM(p.table)
+            .serialize(to: &serializer)
+
+        let compare = #"FROM "my_model" AS "x""#
+        #expect(serializer.sql == compare)
+    }
+    
+    @Test
+    func testSingleFull() {
+        var serializer = SQLSerializer.test
+        FROM(PSQLModel.table)
+            .serialize(to: &serializer)
+
+        let compare = #"FROM "my_model""#
+        #expect(serializer.sql == compare)
+    }
 }
