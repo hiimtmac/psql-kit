@@ -41,7 +41,7 @@ public struct SubQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable 
         content.querySqlExpression.serialize(to: &serializer)
         serializer.write(")")
         serializer.writeSpaced("AS")
-        serializer.writeQuoted(self.name)
+        serializer.writeIdentifier(self.name)
     }
 }
 
@@ -92,7 +92,7 @@ public struct WithQuery<T>: SQLExpression where T: QuerySQLExpression & Sendable
 
     public func serialize(to serializer: inout SQLSerializer) {
         guard !content.queryIsNull else { return }
-        serializer.writeQuoted(self.name)
+        serializer.writeIdentifier(self.name)
         serializer.writeSpaced("AS")
         serializer.write("(")
         content.querySqlExpression.serialize(to: &serializer)

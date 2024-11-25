@@ -36,7 +36,7 @@ extension PSQLArray: SelectSQLExpression where
             serializer.write("[")
             SQLList(self.items).serialize(to: &serializer)
             serializer.write("]")
-            self.arrayType.serialize(to: &serializer)
+            serializer.writeCast(arrayType)
         }
     }
 }

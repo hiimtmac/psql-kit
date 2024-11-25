@@ -11,7 +11,7 @@ public struct RawTable: SQLExpression {
     }
 
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.writeQuoted(self.table)
+        serializer.writeIdentifier(self.table)
     }
 }
 

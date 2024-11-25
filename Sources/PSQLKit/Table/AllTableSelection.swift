@@ -21,11 +21,11 @@ extension AllCTESelection: SelectSQLExpression {
         
         func serialize(to serializer: inout SQLSerializer) {
             if let space = schemaName {
-                serializer.writeQuoted(space)
+                serializer.writeIdentifier(space)
                 serializer.writePeriod()
             }
             
-            serializer.writeQuoted(self.tableName)
+            serializer.writeIdentifier(self.tableName)
             serializer.writePeriod()
             serializer.write("*")
         }
@@ -53,7 +53,7 @@ extension AllCTESelection.Alias: SelectSQLExpression {
         }
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuoted(self.aliasName)
+            serializer.writeIdentifier(self.aliasName)
             serializer.writePeriod()
             serializer.write("*")
         }

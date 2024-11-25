@@ -35,7 +35,7 @@ extension ArrayLowerExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.dimension.serialize(to: &serializer)
             serializer.write(")")
-            PostgresDataType.int4.serialize(to: &serializer)
+            serializer.writeCast(.int4)
         }
     }
 }

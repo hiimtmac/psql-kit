@@ -454,4 +454,58 @@ struct ExpressionTests {
         let compare = #"SELECT DATE_PART('hour', "x"."birthday"::TIMESTAMP) AS "hour""#
         #expect(serializer.sql == compare)
     }
+    
+    @Test
+    func testCrosstab() {
+        var serializer = SQLSerializer.test
+
+        QUERY {
+            SELECT(.all)
+            FROM {
+                CROSSTAB([
+                    ColumnDefinition(p.$title),
+                    ColumnDefinition("Jan", type: Int.self),
+                    ColumnDefinition("Feb", type: Int.self),
+                    ColumnDefinition("Mar", type: Int.self),
+                    ColumnDefinition("Apr", type: Int.self)
+                ]) {
+                    SELECT {
+                        p.$title
+                        p.$age
+                        p.$money
+                    }
+                    FROM(p.table)
+                    ORDERBY { 1 }
+                } category: {
+                    SELECT { GENERATE_SERIES(from: 1, to: 4, interval: 1).as("months") }
+                }
+            }
+        }
+        .serialize(to: &serializer)
+
+        let source = [
+            #"SELECT "x"."title"::TEXT, "x"."age"::INTEGER, "x"."money"::NUMERIC"#,
+            #"FROM "my_model" AS "x""#,
+            #"ORDER BY 1"#
+        ].joined(separator: " ")
+        
+        let category = [
+            #"SELECT GENERATE_SERIES(1::INTEGER, 4::INTEGER, 1::INTERVAL) AS "months""#
+        ].joined(separator: " ")
+        
+        let record = [
+            #""title" TEXT"#,
+            #""Jan" INTEGER"#,
+            #""Feb" INTEGER"#,
+            #""Mar" INTEGER"#,
+            #""Apr" INTEGER"#
+        ].joined(separator: ", ")
+        
+        let compare = [
+            #"SELECT * FROM"#,
+            #"CROSSTAB('\#(source)', '\#(category)') AS (\#(record))"#
+        ].joined(separator: " ")
+
+        #expect(serializer.sql == compare)
+    }
 }

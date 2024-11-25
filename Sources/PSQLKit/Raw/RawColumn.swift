@@ -28,8 +28,8 @@ extension RawColumn: SelectSQLExpression {
         let dataType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuoted(self.column)
-            self.dataType.serialize(to: &serializer)
+            serializer.writeIdentifier(self.column)
+            serializer.writeCast(dataType)
         }
     }
 
@@ -43,7 +43,7 @@ extension RawColumn: GroupBySQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuoted(self.column)
+            serializer.writeIdentifier(self.column)
         }
     }
 
@@ -57,7 +57,7 @@ extension RawColumn: OrderBySQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuoted(self.column)
+            serializer.writeIdentifier(self.column)
         }
     }
 
@@ -83,7 +83,7 @@ extension RawColumn: CompareSQLExpression {
         let column: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuoted(self.column)
+            serializer.writeIdentifier(self.column)
         }
     }
 
@@ -120,11 +120,17 @@ extension RawColumn.Alias: SelectSQLExpression {
 
             serializer.writeSpaced("AS")
 
-            serializer.writeQuoted(self.alias)
+            serializer.writeIdentifier(self.alias)
         }
     }
 
     public var selectSqlExpression: some SQLExpression {
         _Select(column: self.column, alias: alias)
+    }
+}
+
+extension String {
+    public func `as`<T>(columnOf type: T.Type) -> RawColumn<T> where T: PSQLExpression {
+        RawColumn(self)
     }
 }

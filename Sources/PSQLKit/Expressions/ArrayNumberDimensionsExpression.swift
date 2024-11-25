@@ -29,7 +29,7 @@ extension ArrayNumberDimensionsExpression: SelectSQLExpression where
             serializer.write("(")
             self.content.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            PostgresDataType.int4.serialize(to: &serializer)
+            serializer.writeCast(.int4)
         }
     }
 }

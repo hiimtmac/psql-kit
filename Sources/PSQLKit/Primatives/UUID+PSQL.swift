@@ -11,7 +11,7 @@ extension UUID: PSQLExpression {
 
 extension UUID: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.writeSingleQuoted(self.uuidString)
+        serializer.writeLiteral(self.uuidString)
     }
 }
 

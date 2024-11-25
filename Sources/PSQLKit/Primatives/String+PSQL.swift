@@ -10,7 +10,7 @@ extension String: PSQLExpression {
 
 extension String: @retroactive SQLExpression {
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.writeSingleQuoted(self)
+        serializer.writeLiteral(self)
     }
 }
 

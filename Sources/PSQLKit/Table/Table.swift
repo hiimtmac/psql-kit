@@ -66,10 +66,10 @@ fileprivate struct _From: SQLExpression, FromSQLExpression {
 
     func serialize(to serializer: inout SQLSerializer) {
         if let path = schemaName {
-            serializer.writeQuoted(path)
+            serializer.writeIdentifier(path)
             serializer.writePeriod()
         }
 
-        serializer.writeQuoted(self.tableName)
+        serializer.writeIdentifier(self.tableName)
     }
 }

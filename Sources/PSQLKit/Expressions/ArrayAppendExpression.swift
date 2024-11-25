@@ -38,7 +38,7 @@ extension ArrayAppendExpression: SelectSQLExpression where
             serializer.writeSpace()
             self.append.selectSqlExpression.serialize(to: &serializer)
             serializer.write(")")
-            PostgresDataType.array(T.postgresDataType).serialize(to: &serializer)
+            serializer.writeCast(PostgresDataType.array(T.postgresDataType))
         }
     }
 }

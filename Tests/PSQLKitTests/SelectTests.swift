@@ -119,8 +119,11 @@ struct SelectTests {
         SELECT {
             RawColumn<String>("cool")
             RawColumn<String>("cool").as("yes")
+            "cool".raw
+            "cool".as(columnOf: String.self)
             8
             8.as("cool")
+            8.raw
             PSQLDate(date)
             RawValue(PSQLDate(date))
             date.psqlDate
@@ -129,7 +132,7 @@ struct SelectTests {
         }
         .serialize(to: &serializer)
 
-        let compare = #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 8::INTEGER, 8::INTEGER AS "cool", '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE AS "date_alias", '2020-01-01'::DATE AS "raw_date_alias""#
+        let compare = #"SELECT "cool"::TEXT, "cool"::TEXT AS "yes", 'cool'::TEXT, "cool"::TEXT, 8::INTEGER, 8::INTEGER AS "cool", 8::INTEGER, '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE, '2020-01-01'::DATE AS "date_alias", '2020-01-01'::DATE AS "raw_date_alias""#
         #expect(serializer.sql == compare)
     }
 

@@ -143,7 +143,7 @@ extension CoalesceExpression: SelectSQLExpression where
             serializer.write("(")
             SQLList(self.values).serialize(to: &serializer)
             serializer.write(")")
-            T.postgresDataType.serialize(to: &serializer)
+            serializer.writeCast(T.postgresDataType)
         }
     }
 }

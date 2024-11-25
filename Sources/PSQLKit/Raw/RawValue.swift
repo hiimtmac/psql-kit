@@ -1,6 +1,7 @@
 // RawValue.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import Foundation
 import SQLKit
 
 public struct RawValue<T>: Sendable where T: PSQLExpression & SQLExpression {
@@ -27,7 +28,7 @@ extension RawValue: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             self.value.serialize(to: &serializer)
-            T.postgresDataType.serialize(to: &serializer)
+            serializer.writeCast(T.postgresDataType)
         }
     }
 
@@ -57,11 +58,11 @@ extension RawValue.Alias: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             self.value.serialize(to: &serializer)
-            T.postgresDataType.serialize(to: &serializer)
+            serializer.writeCast(T.postgresDataType)
 
             serializer.writeSpaced("AS")
 
-            serializer.writeQuoted(self.alias)
+            serializer.writeIdentifier(self.alias)
         }
     }
 
@@ -72,4 +73,41 @@ extension RawValue.Alias: SelectSQLExpression {
 
 extension RawValue.Alias: TypeEquatable where T: TypeEquatable {
     public typealias CompareType = T.CompareType
+}
+
+extension UUID {
+    public var raw: RawValue<Self> {
+        RawValue(self)
+    }
+}
+
+extension String {
+    public var raw: RawValue<Self> {
+        RawValue(self)
+    }
+}
+
+extension Int {
+    public var raw: RawValue<Self> {
+        RawValue(self)
+    }
+}
+
+
+extension Double {
+    public var raw: RawValue<Self> {
+        RawValue(self)
+    }
+}
+
+extension Float {
+    public var raw: RawValue<Self> {
+        RawValue(self)
+    }
+}
+
+extension Bool {
+    public var raw: RawValue<Self> {
+        RawValue(self)
+    }
 }

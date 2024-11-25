@@ -44,21 +44,21 @@ extension ColumnExpression: BaseSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
-                serializer.writeQuoted(alias)
+                serializer.writeIdentifier(alias)
                 serializer.writePeriod()
             } else {
                 if let space = schemaName {
-                    serializer.writeQuoted(space)
+                    serializer.writeIdentifier(space)
                     serializer.writePeriod()
                 }
 
                 if let schema = tableName {
-                    serializer.writeQuoted(schema)
+                    serializer.writeIdentifier(schema)
                     serializer.writePeriod()
                 }
             }
 
-            serializer.writeQuoted(self.columnName)
+            serializer.writeIdentifier(self.columnName)
         }
     }
 }
@@ -85,23 +85,22 @@ extension ColumnExpression: SelectSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let alias = aliasName {
-                serializer.writeQuoted(alias)
+                serializer.writeIdentifier(alias)
                 serializer.writePeriod()
             } else {
                 if let space = schemaName {
-                    serializer.writeQuoted(space)
+                    serializer.writeIdentifier(space)
                     serializer.writePeriod()
                 }
 
                 if let schema = tableName {
-                    serializer.writeQuoted(schema)
+                    serializer.writeIdentifier(schema)
                     serializer.writePeriod()
                 }
             }
 
-            serializer.writeQuoted(self.columnName)
-
-            dataType.serialize(to: &serializer)
+            serializer.writeIdentifier(self.columnName)
+            serializer.writeCast(dataType)
         }
     }
 }
@@ -181,7 +180,7 @@ extension ColumnExpression: MutationSQLExpression {
         let columnName: String
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.writeQuoted(self.columnName)
+            serializer.writeIdentifier(self.columnName)
         }
     }
 }

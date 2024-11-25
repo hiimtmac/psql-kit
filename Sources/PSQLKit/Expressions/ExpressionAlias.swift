@@ -28,7 +28,7 @@ extension ExpressionAlias: SelectSQLExpression where
 
             serializer.writeSpaced("AS")
 
-            serializer.writeQuoted(self.alias)
+            serializer.writeIdentifier(self.alias)
         }
     }
 }
@@ -49,7 +49,7 @@ extension ExpressionAlias: FromSQLExpression where
 
             serializer.writeSpaced("AS")
 
-            serializer.writeQuoted(self.alias)
+            serializer.writeIdentifier(self.alias)
         }
     }
 }

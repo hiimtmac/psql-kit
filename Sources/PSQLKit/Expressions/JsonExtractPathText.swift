@@ -1,6 +1,7 @@
 // JsonExtractPathText.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import PostgresNIO
 import SQLKit
 
 public protocol JsonbExtractable: BaseSQLExpression {}
@@ -10,6 +11,13 @@ public struct JsonbExtractPathTextExpression<Content>: Sendable {
     let pathElements: [String]
 
     public init<T>(_ content: T, _ paths: String..., as _: Content.Type) where
+        T: JsonbExtractable
+    {
+        self.content = content.baseSqlExpression
+        self.pathElements = paths
+    }
+    
+    public init<T>(_ content: T, _ paths: [String], as _: Content.Type) where
         T: JsonbExtractable
     {
         self.content = content.baseSqlExpression
@@ -54,7 +62,7 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
     struct _Select: SQLExpression {
         let content: any SQLExpression
         let pathElements: [String]
-        let dataType: any SQLExpression
+        let dataType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("JSONB_EXTRACT_PATH_TEXT")
@@ -64,7 +72,7 @@ extension JsonbExtractPathTextExpression: SelectSQLExpression where
             serializer.writeSpace()
             SQLList(self.pathElements).serialize(to: &serializer)
             serializer.write(")")
-            self.dataType.serialize(to: &serializer)
+            serializer.writeCast(dataType)
         }
     }
 }

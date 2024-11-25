@@ -11,6 +11,10 @@ public struct SelectDirective<T>: SelectSQLExpression, SQLExpression, Sendable w
     init(_ content: T) {
         self.content = content
     }
+    
+    public init(_ scope: SelectScope) where T == SelectScope {
+        self.content = scope
+    }
 
     public init(@SelectBuilder content: () -> T) {
         self.content = content()
@@ -25,6 +29,20 @@ public struct SelectDirective<T>: SelectSQLExpression, SQLExpression, Sendable w
         serializer.write("SELECT")
         serializer.writeSpace()
         content.selectSqlExpression.serialize(to: &serializer)
+    }
+}
+
+public enum SelectScope: SelectSQLExpression {
+    case all
+    
+    public var selectSqlExpression: some SQLExpression {
+        _Select()
+    }
+
+    struct _Select: SQLExpression {
+        func serialize(to serializer: inout SQLSerializer) {
+            serializer.write("*")
+        }
     }
 }
 

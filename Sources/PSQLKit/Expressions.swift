@@ -27,5 +27,7 @@ public typealias CONCAT = ConcatenateExpression
 public typealias DATE_TRUNC = DateTruncExpression
 public typealias DATE_PART = DatePartExpression
 
+public typealias CROSSTAB = CrosstabExpression
+
 public protocol Expression {}
 public protocol AggregateExpression: Expression {}

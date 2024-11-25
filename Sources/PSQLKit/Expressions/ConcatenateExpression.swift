@@ -58,7 +58,7 @@ extension ConcatenateExpression: SelectSQLExpression {
             serializer.write("(")
             SQLList(concatSQLExpressions: repeat each content).serialize(to: &serializer)
             serializer.write(")")
-            PostgresDataType.text.serialize(to: &serializer)
+            serializer.writeCast(.text)
         }
     }
 }

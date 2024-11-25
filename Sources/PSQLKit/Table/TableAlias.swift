@@ -54,15 +54,15 @@ extension TableAlias: FromSQLExpression {
 
         func serialize(to serializer: inout SQLSerializer) {
             if let path = schemaName {
-                serializer.writeQuoted(path)
+                serializer.writeIdentifier(path)
                 serializer.writePeriod()
             }
 
-            serializer.writeQuoted(self.tableName)
+            serializer.writeIdentifier(self.tableName)
 
             serializer.writeSpaced("AS")
 
-            serializer.writeQuoted(self.aliasName)
+            serializer.writeIdentifier(self.aliasName)
         }
     }
 }

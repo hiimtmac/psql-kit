@@ -4,13 +4,7 @@
 import PostgresNIO
 import SQLKit
 
-extension PostgresDataType: @retroactive SQLExpression {
-    public func serialize(to serializer: inout SQLSerializer) {
-        guard let knownSQLName else { return }
-        serializer.write("::")
-        serializer.write(knownSQLName)
-    }
-
+extension PostgresDataType {
     static func array(_ type: Self) -> Self {
         switch type {
         case .text: .textArray

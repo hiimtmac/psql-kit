@@ -38,3 +38,7 @@ extension Int: CompareSQLExpression {
 extension Int: MutationSQLExpression {
     public var mutationSqlExpression: some SQLExpression { self }
 }
+
+extension Int: OrderBySQLExpression {
+    public var orderBySqlExpression: some SQLExpression { self }
+}
