@@ -18,13 +18,13 @@ struct PSQLModel {
     var pet: Pet
 
     @CTE("pets")
-    struct Pet: NestedCTE {
+    struct Pet: JSONBCol {
         var name: String
         var type: String
         var info: Info
 
         @CTE("infos")
-        struct Info: NestedCTE {
+        struct Info: JSONBCol {
             var name: String
         }
     }

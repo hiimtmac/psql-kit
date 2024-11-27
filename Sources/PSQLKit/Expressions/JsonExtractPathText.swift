@@ -78,7 +78,7 @@ extension JsonExtractPathTextExpression {
     public init<T, U>(
         _ group: ColumnExpression<T>,
         _ keyPath: KeyPath<T.QueryContainer, ColumnAccessor<U>>
-    ) where T: Table {
+    ) where T: Table & JSONBCol {
         let accessor = T.queryContainer[keyPath: keyPath]
         
         self.init(
@@ -91,7 +91,7 @@ extension JsonExtractPathTextExpression {
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T.QueryContainer, ColumnAccessor<U>>,
         _ second: KeyPath<U.QueryContainer, ColumnAccessor<V>>
-    ) where T: Table, U: Table {
+    ) where T: Table & JSONBCol, U: Table & JSONBCol {
         let accessor1 = T.queryContainer[keyPath: first]
         let accessor2 = U.queryContainer[keyPath: second]
         
@@ -106,7 +106,7 @@ extension JsonExtractPathTextExpression {
         _ first: KeyPath<T.QueryContainer, ColumnAccessor<U>>,
         _ second: KeyPath<U.QueryContainer, ColumnAccessor<V>>,
         _ third: KeyPath<V.QueryContainer, ColumnAccessor<W>>
-    ) where T: Table, U: Table, V: Table {
+    ) where T: Table & JSONBCol, U: Table & JSONBCol, V: Table & JSONBCol {
         let accessor1 = T.queryContainer[keyPath: first]
         let accessor2 = U.queryContainer[keyPath: second]
         let accessor3 = V.queryContainer[keyPath: third]

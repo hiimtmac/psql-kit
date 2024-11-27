@@ -143,10 +143,22 @@ struct ExpressionTests {
             p.$pet --> "hello" -->> "cool"
             p.$pet -->> "cool"
             p.$pet --> "hello"
+            p.$pet --> p.$name --> "hello"
+            (p.$pet -->> "cool").as("cool")
+            (p.$pet --> "hello").as("hello")
         }
         .serialize(to: &serializer)
 
-        let compare = #"SELECT ("x"."pet"->'hello'->'there'->>'cool')::TEXT, "x"."pet"->'hello'->'there', ("x"."pet"->'hello'->>'cool')::TEXT, ("x"."pet"->>'cool')::TEXT, "x"."pet"->'hello'"#
+        let compare = [
+            #"SELECT ("x"."pet"->'hello'->'there'->>'cool')::TEXT"#,
+            #""x"."pet"->'hello'->'there'"#,
+            #"("x"."pet"->'hello'->>'cool')::TEXT"#,
+            #"("x"."pet"->>'cool')::TEXT"#,
+            #""x"."pet"->'hello'"#,
+            #""x"."pet"->"x"."name"->'hello'"#,
+            #"("x"."pet"->>'cool')::TEXT AS "cool""#,
+            #""x"."pet"->'hello' AS "hello""#
+        ].joined(separator: ", ")
         #expect(serializer.sql == compare)
     }
 
