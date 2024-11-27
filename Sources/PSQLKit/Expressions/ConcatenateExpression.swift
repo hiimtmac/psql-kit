@@ -8,11 +8,11 @@ public protocol Concatenatable: BaseSQLExpression {}
 
 // MARK: ConcatenateExpression
 
-public struct ConcatenateExpression<each T>: Sendable where repeat each T: Concatenatable & Sendable {
-    let content: (repeat each T)
+public struct ConcatenateExpression: Sendable {
+    let elements: SQLList
 
-    public init(_ content: repeat each T) {
-        self.content = (repeat each content)
+    public init<each T>(_ content: repeat each T) where repeat each T: Concatenatable & Sendable {
+        self.elements = SQLList(concatSQLExpressions: repeat each content)
     }
 }
 
@@ -22,20 +22,16 @@ extension ConcatenateExpression: TypeEquatable {
 
 extension ConcatenateExpression: BaseSQLExpression {
     public var baseSqlExpression: some SQLExpression {
-        _Base(content: repeat each content)
+        _Base(elements: self.elements)
     }
 
     struct _Base: SQLExpression {
-        let content: (repeat each T)
-
-        init(content: repeat each T) {
-            self.content = (repeat each content)
-        }
+        let elements: SQLList
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            SQLList(concatSQLExpressions: repeat each content).serialize(to: &serializer)
+            self.elements.serialize(to: &serializer)
             serializer.write(")")
         }
     }
@@ -43,20 +39,16 @@ extension ConcatenateExpression: BaseSQLExpression {
 
 extension ConcatenateExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
-        _Select(content: repeat each content)
+        _Select(elements: self.elements)
     }
 
     struct _Select: SQLExpression {
-        let content: (repeat each T)
-
-        init(content: repeat each T) {
-            self.content = (repeat each content)
-        }
+        let elements: SQLList
 
         func serialize(to serializer: inout SQLSerializer) {
             serializer.write("CONCAT")
             serializer.write("(")
-            SQLList(concatSQLExpressions: repeat each content).serialize(to: &serializer)
+            self.elements.serialize(to: &serializer)
             serializer.write(")")
             serializer.writeCast(.text)
         }
@@ -65,13 +57,13 @@ extension ConcatenateExpression: SelectSQLExpression {
 
 extension ConcatenateExpression: GroupBySQLExpression {
     public var groupBySqlExpression: some SQLExpression {
-        _Base(content: repeat each content)
+        baseSqlExpression
     }
 }
 
 extension ConcatenateExpression: CompareSQLExpression {
     public var compareSqlExpression: some SQLExpression {
-        _Base(content: repeat each content)
+        baseSqlExpression
     }
 }
 

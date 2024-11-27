@@ -163,5 +163,3 @@ extension ColumnExpression.Alias: MutationSQLExpression {
 extension ColumnExpression.Alias: Coalescable {}
 
 extension ColumnExpression.Alias: Concatenatable where T: CustomStringConvertible {}
-
-extension ColumnExpression.Alias: JsonbExtractable where T: Codable {}

@@ -1,13 +1,14 @@
-// JsonbExtractPathText.swift
+// JsonExtractPath.swift
 // Copyright (c) 2024 hiimtmac inc.
 
+import PostgresNIO
 import SQLKit
 
-public struct JsonExtractPathTextExpression: Sendable {
+public struct JsonExtractPathExpression<Content>: Sendable where Content: PSQLExpression & Decodable {
     let content: any SQLExpression
     let elements: SQLList
 
-    public init<T, each U>(_ content: T, _ paths: repeat each U) where
+    public init<T, each U>(_ content: T, _ paths: repeat each U, as _: Content.Type) where
         T: SelectSQLExpression,
         repeat each U: BaseSQLExpression
     {
@@ -16,11 +17,14 @@ public struct JsonExtractPathTextExpression: Sendable {
     }
 }
 
-extension JsonExtractPathTextExpression: Coalescable {}
+extension JsonExtractPathExpression: Coalescable {}
 
-extension JsonExtractPathTextExpression: BaseSQLExpression {
+extension JsonExtractPathExpression: BaseSQLExpression {
     public var baseSqlExpression: some SQLExpression {
-        _Base(content: self.content, elements: self.elements)
+        _Base(
+            content: self.content,
+            elements: self.elements
+        )
     }
 
     struct _Base: SQLExpression {
@@ -28,7 +32,7 @@ extension JsonExtractPathTextExpression: BaseSQLExpression {
         let elements: SQLList
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("JSON_EXTRACT_PATH_TEXT")
+            serializer.write("JSON_EXTRACT_PATH")
             serializer.write("(")
             self.content.serialize(to: &serializer)
             serializer.write(",")
@@ -39,73 +43,77 @@ extension JsonExtractPathTextExpression: BaseSQLExpression {
     }
 }
 
-extension JsonExtractPathTextExpression: SelectSQLExpression {
+extension JsonExtractPathExpression: SelectSQLExpression {
     public var selectSqlExpression: some SQLExpression {
         _Select(
             content: self.content,
-            elements: self.elements
+            elements: self.elements,
+            dataType: Content.postgresDataType
         )
     }
 
     struct _Select: SQLExpression {
         let content: any SQLExpression
         let elements: SQLList
+        let dataType: PostgresDataType
 
         func serialize(to serializer: inout SQLSerializer) {
-            serializer.write("JSON_EXTRACT_PATH_TEXT")
+            serializer.write("JSON_EXTRACT_PATH")
             serializer.write("(")
             self.content.serialize(to: &serializer)
             serializer.write(",")
             serializer.writeSpace()
             self.elements.serialize(to: &serializer)
             serializer.write(")")
-            serializer.writeCast(.text)
+            serializer.writeCast(dataType)
         }
     }
 }
 
-extension JsonExtractPathTextExpression {
-    public func `as`(_ alias: String) -> ExpressionAlias<JsonExtractPathTextExpression> {
+extension JsonExtractPathExpression {
+    public func `as`(_ alias: String) -> ExpressionAlias<JsonExtractPathExpression> {
         ExpressionAlias(expression: self, alias: alias)
     }
 }
 
-extension JsonExtractPathTextExpression: TypeEquatable {
-    public typealias CompareType = String
+extension JsonExtractPathExpression: TypeEquatable where Content: TypeEquatable {
+    public typealias CompareType = Content.CompareType
 }
 
-extension JsonExtractPathTextExpression {
-    public init<T, U>(
+extension JsonExtractPathExpression {
+    public init<T>(
         _ group: ColumnExpression<T>,
-        _ keyPath: KeyPath<T.QueryContainer, ColumnAccessor<U>>
+        _ keyPath: KeyPath<T.QueryContainer, ColumnAccessor<Content>>
     ) where T: Table {
         let accessor = T.queryContainer[keyPath: keyPath]
         
         self.init(
             group,
-            accessor.column
+            accessor.column,
+            as: Content.self
         )
     }
 
-    public init<T, U, V>(
+    public init<T, U>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T.QueryContainer, ColumnAccessor<U>>,
-        _ second: KeyPath<U.QueryContainer, ColumnAccessor<V>>
+        _ second: KeyPath<U.QueryContainer, ColumnAccessor<Content>>
     ) where T: Table, U: Table {
         let accessor1 = T.queryContainer[keyPath: first]
         let accessor2 = U.queryContainer[keyPath: second]
         
         self.init(
             group,
-            accessor1.column, accessor2.column
+            accessor1.column, accessor2.column,
+            as: Content.self
         )
     }
     
-    public init<T, U, V, W>(
+    public init<T, U, V>(
         _ group: ColumnExpression<T>,
         _ first: KeyPath<T.QueryContainer, ColumnAccessor<U>>,
         _ second: KeyPath<U.QueryContainer, ColumnAccessor<V>>,
-        _ third: KeyPath<V.QueryContainer, ColumnAccessor<W>>
+        _ third: KeyPath<V.QueryContainer, ColumnAccessor<Content>>
     ) where T: Table, U: Table, V: Table {
         let accessor1 = T.queryContainer[keyPath: first]
         let accessor2 = U.queryContainer[keyPath: second]
@@ -113,7 +121,8 @@ extension JsonExtractPathTextExpression {
         
         self.init(
             group,
-            accessor1.column, accessor2.column, accessor3.column
+            accessor1.column, accessor2.column, accessor3.column,
+            as: Content.self
         )
     }
 }

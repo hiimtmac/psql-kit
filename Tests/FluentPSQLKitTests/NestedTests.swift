@@ -18,7 +18,7 @@ struct NestedTests {
         }
         .serialize(to: &serializer)
 
-        let compare = #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet", 'name')::TEXT, JSONB_EXTRACT_PATH_TEXT("x"."pet", 'info', 'name')::TEXT"#
+        let compare = #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'name')::TEXT, JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'info', 'name')::TEXT"#
         #expect(serializer.sql == compare)
     }
 }

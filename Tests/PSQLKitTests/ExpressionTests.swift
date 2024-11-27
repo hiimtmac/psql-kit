@@ -132,18 +132,49 @@ struct ExpressionTests {
         let compare = #"SELECT COALESCE("x"."name", "x"."name", "x"."name", "x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", "x"."name", "x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", "x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", 'hello')::TEXT AS "cool", COALESCE("x"."name", COALESCE("x"."name", 'hello'))::TEXT"#
         #expect(serializer.sql == compare)
     }
+    
+    @Test
+    func testJsonAccessors() {
+        var serializer = SQLSerializer.test
+
+        SELECT {
+            p.$pet --> "hello" --> "there" -->> "cool"
+            p.$pet --> "hello" --> "there"
+            p.$pet --> "hello" -->> "cool"
+            p.$pet -->> "cool"
+            p.$pet --> "hello"
+        }
+        .serialize(to: &serializer)
+
+        let compare = #"SELECT ("x"."pet"->'hello'->'there'->>'cool')::TEXT, "x"."pet"->'hello'->'there', ("x"."pet"->'hello'->>'cool')::TEXT, ("x"."pet"->>'cool')::TEXT, "x"."pet"->'hello'"#
+        #expect(serializer.sql == compare)
+    }
 
     @Test
     func testJsonExtractPathText() {
         var serializer = SQLSerializer.test
 
         SELECT {
-            JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello", as: String.self).as("cool")
-            JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello", "cool", as: String.self)
+            JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello").as("cool")
+            JSONB_EXTRACT_PATH_TEXT(p.$pet, "hello", "cool")
         }
         .serialize(to: &serializer)
 
-        let compare = #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet", 'hello')::TEXT AS "cool", JSONB_EXTRACT_PATH_TEXT("x"."pet", 'hello', 'cool')::TEXT"#
+        let compare = #"SELECT JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'hello')::TEXT AS "cool", JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'hello', 'cool')::TEXT"#
+        #expect(serializer.sql == compare)
+    }
+    
+    @Test
+    func testJsonExtractPath() {
+        var serializer = SQLSerializer.test
+
+        SELECT {
+            JSONB_EXTRACT_PATH(p.$pet, "hello", as: String.self).as("cool")
+            JSONB_EXTRACT_PATH(p.$pet, "hello", "cool", as: String.self)
+        }
+        .serialize(to: &serializer)
+
+        let compare = #"SELECT JSONB_EXTRACT_PATH("x"."pet"::JSONB, 'hello')::TEXT AS "cool", JSONB_EXTRACT_PATH("x"."pet"::JSONB, 'hello', 'cool')::TEXT"#
         #expect(serializer.sql == compare)
     }
 
@@ -159,7 +190,7 @@ struct ExpressionTests {
         }
         .serialize(to: &serializer)
 
-        let compare = #"SELECT COALESCE(JSONB_EXTRACT_PATH_TEXT("x"."pet", 'name'), JSONB_EXTRACT_PATH_TEXT("x"."pet", 'type'))::TEXT"#
+        let compare = #"SELECT COALESCE(JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'name'), JSONB_EXTRACT_PATH_TEXT("x"."pet"::JSONB, 'type'))::TEXT"#
         #expect(serializer.sql == compare)
     }
 

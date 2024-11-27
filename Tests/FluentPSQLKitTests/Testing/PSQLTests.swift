@@ -28,7 +28,8 @@ final class FluentModel: Model, @unchecked Sendable {
 
     init() {}
 
-    final class Pet: Fields, NestedCTE, @unchecked Sendable {
+    @FluentCTE("pets")
+    final class Pet: Model, NestedCTE, @unchecked Sendable {
         @ID
         var id: UUID?
         @Field(key: "name")
@@ -40,7 +41,10 @@ final class FluentModel: Model, @unchecked Sendable {
 
         init() {}
 
-        final class Info: Fields, NestedCTE, @unchecked Sendable {
+        @FluentCTE("infos")
+        final class Info: Model, NestedCTE, @unchecked Sendable {
+            @ID
+            var id: UUID?
             @Field(key: "name")
             var name: String
 

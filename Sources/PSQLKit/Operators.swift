@@ -10,5 +10,17 @@ infix operator !~~: ComparisonPrecedence
 infix operator ~~*: ComparisonPrecedence
 infix operator !~~*: ComparisonPrecedence
 infix operator =>: ComparisonPrecedence
-infix operator -->: ComparisonPrecedence
-infix operator -->>: ComparisonPrecedence
+
+precedencegroup JsonTextAccessorPrecedence {
+    associativity: left
+    higherThan: ComparisonPrecedence
+}
+
+precedencegroup JsonAccessorPrecedence {
+    associativity: left
+    higherThan: JsonTextAccessorPrecedence
+}
+
+infix operator -->: JsonAccessorPrecedence
+infix operator -->>: JsonTextAccessorPrecedence
+

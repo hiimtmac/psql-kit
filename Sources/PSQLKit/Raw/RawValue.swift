@@ -22,7 +22,17 @@ extension RawValue: TypeEquatable where T: TypeEquatable {
     public typealias CompareType = T.CompareType
 }
 
+extension RawValue: BaseSQLExpression {
+    public var baseSqlExpression: some SQLExpression {
+        self.value
+    }
+}
+
 extension RawValue: SelectSQLExpression {
+    public var selectSqlExpression: some SQLExpression {
+        _Select(value: self.value)
+    }
+    
     struct _Select: SQLExpression {
         let value: T
 
@@ -30,10 +40,6 @@ extension RawValue: SelectSQLExpression {
             self.value.serialize(to: &serializer)
             serializer.writeCast(T.postgresDataType)
         }
-    }
-
-    public var selectSqlExpression: some SQLExpression {
-        _Select(value: self.value)
     }
 }
 
@@ -92,7 +98,6 @@ extension Int {
         RawValue(self)
     }
 }
-
 
 extension Double {
     public var raw: RawValue<Self> {

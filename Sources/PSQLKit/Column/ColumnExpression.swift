@@ -209,5 +209,3 @@ extension ColumnExpression: PSQLArrayRepresentable {}
 extension ColumnExpression: Coalescable {}
 
 extension ColumnExpression: Concatenatable where T: CustomStringConvertible {}
-
-extension ColumnExpression: JsonbExtractable where T: Decodable {}
