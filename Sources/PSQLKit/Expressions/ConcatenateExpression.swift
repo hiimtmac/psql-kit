@@ -12,7 +12,11 @@ public struct ConcatenateExpression: Sendable {
     let elements: SQLList
 
     public init<each T>(_ content: repeat each T) where repeat each T: Concatenatable & Sendable {
-        self.elements = SQLList(concatSQLExpressions: repeat each content)
+        var collector = [any SQLExpression]()
+        for expression in repeat each content {
+            collector.append(expression.baseSqlExpression)
+        }
+        self.elements = SQLList(collector, separator: SQLRaw(", "))
     }
 }
 
