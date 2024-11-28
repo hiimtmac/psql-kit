@@ -4,34 +4,28 @@
 import PostgresNIO
 import SQLKit
 
-public struct JsonExtractPathExpression<Content>: Sendable where Content: PSQLExpression & Decodable {
+public struct JsonExtractPathExpression<Content>: Sendable where Content: PSQLExpression {
     let content: _JsonExtractPathExpression
 
-    public init<T, each U>(_ content: T, _ paths: repeat each U, as _: Content.Type) where
-        T: SelectSQLExpression,
-        repeat each U: BaseSQLExpression
-    {
+    public init<T>(_ content: T, _ paths: String..., as _: Content.Type) where T: SelectSQLExpression {
         self.content = _JsonExtractPathExpression(
             variant: .json,
             dataType: Content.postgresDataType,
             content: content,
-            paths: repeat each paths
+            paths: paths
         )
     }
 }
 
-public struct JsonbExtractPathExpression<Content>: Sendable where Content: PSQLExpression & Decodable {
+public struct JsonbExtractPathExpression<Content>: Sendable where Content: PSQLExpression {
     let content: _JsonExtractPathExpression
 
-    public init<T, each U>(_ content: T, _ paths: repeat each U, as _: Content.Type) where
-        T: SelectSQLExpression,
-        repeat each U: BaseSQLExpression
-    {
+    public init<T>(_ content: T, _ paths: String..., as _: Content.Type) where T: SelectSQLExpression {
         self.content = _JsonExtractPathExpression(
             variant: .jsonb,
             dataType: Content.postgresDataType,
             content: content,
-            paths: repeat each paths
+            paths: paths
         )
     }
 }
@@ -184,17 +178,14 @@ struct _JsonExtractPathExpression: Sendable {
     let dataType: PostgresDataType
     let variant: Variant
 
-    init<T, each U>(
+    init<T>(
         variant: Variant,
         dataType: PostgresDataType,
         content: T,
-        paths: repeat each U
-    ) where
-        T: SelectSQLExpression,
-        repeat each U: BaseSQLExpression
-    {
+        paths: [String]
+    ) where T: SelectSQLExpression {
         self.content = content.selectSqlExpression
-        self.elements = SQLList(jsonSQLExpressions: repeat each paths)
+        self.elements = SQLList(paths)
         self.dataType = dataType
         self.variant = variant
     }

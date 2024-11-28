@@ -12,13 +12,3 @@ extension SQLList {
         self.init(collector, separator: SQLRaw("->"))
     }
 }
-
-extension SQLList {
-    init<each T>(jsonSQLExpressions expressions: repeat each T) where repeat each T: BaseSQLExpression {
-        var collector = [any SQLExpression]()
-        for expression in repeat each expressions {
-            collector.append(expression.baseSqlExpression)
-        }
-        self.init(collector, separator: SQLRaw(", "))
-    }
-}

@@ -6,14 +6,11 @@ import SQLKit
 public struct JsonExtractPathTextExpression: Sendable {
     let content: _JsonExtractPathTextExpression
 
-    public init<T, each U>(_ content: T, _ paths: repeat each U) where
-        T: SelectSQLExpression,
-        repeat each U: BaseSQLExpression
-    {
+    public init<T>(_ content: T, _ paths: String...) where T: SelectSQLExpression {
         self.content = _JsonExtractPathTextExpression(
             variant: .json,
             content: content,
-            paths: repeat each paths
+            paths: paths
         )
     }
 }
@@ -21,14 +18,11 @@ public struct JsonExtractPathTextExpression: Sendable {
 public struct JsonbExtractPathTextExpression: Sendable {
     let content: _JsonExtractPathTextExpression
 
-    public init<T, each U>(_ content: T, _ paths: repeat each U) where
-        T: SelectSQLExpression,
-        repeat each U: BaseSQLExpression
-    {
+    public init<T>(_ content: T, _ paths: String...) where T: SelectSQLExpression {
         self.content = _JsonExtractPathTextExpression(
             variant: .jsonb,
             content: content,
-            paths: repeat each paths
+            paths: paths
         )
     }
 }
@@ -173,16 +167,13 @@ struct _JsonExtractPathTextExpression: Sendable {
     let elements: SQLList
     let variant: Variant
 
-    init<T, each U>(
+    init<T>(
         variant: Variant,
         content: T,
-        paths: repeat each U
-    ) where
-        T: SelectSQLExpression,
-        repeat each U: BaseSQLExpression
-    {
+        paths: [String]
+    ) where T: SelectSQLExpression {
         self.content = content.selectSqlExpression
-        self.elements = SQLList(jsonSQLExpressions: repeat each paths)
+        self.elements = SQLList(paths)
         self.variant = variant
     }
     
