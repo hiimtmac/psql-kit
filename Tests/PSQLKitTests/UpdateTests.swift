@@ -135,6 +135,7 @@ struct UpdateTests {
     func testDate() {
         let date = DateComponents(
             calendar: Calendar(identifier: .gregorian),
+            timeZone: TimeZone(abbreviation: "UTC"),
             year: 2024,
             month: 11,
             day: 16,
@@ -149,7 +150,7 @@ struct UpdateTests {
         }
         .serialize(to: &serializer)
 
-        let compare = #"UPDATE "test" SET "date" = '2024-11-16 17:52:30 +0000'"#
+        let compare = #"UPDATE "test" SET "date" = '2024-11-16 11:52:30 +0000'"#
         #expect(serializer.sql == compare)
     }
 }
